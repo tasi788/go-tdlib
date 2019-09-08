@@ -2,10 +2,10 @@ package tdlib
 
 //#cgo linux CFLAGS: -I/usr/local/include
 //#cgo darwin CFLAGS: -I/usr/local/include
-//#cgo windows CFLAGS: -IC:/src/td -IC:/src/td/build
+//#cgo windows CFLAGS: -IC:/src/tdlib -IC:/src/tdlib/build
 //#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
 //#cgo darwin LDFLAGS: -L/usr/local/lib -L/usr/local/opt/openssl/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
-//#cgo windows LDFLAGS: -LC:/src/td/build/Debug -ltdjson
+//#cgo windows LDFLAGS: -LC:/src/tdlib/build/Release -ltdjson
 //#include <stdlib.h>
 //#include <td/telegram/td_json_client.h>
 //#include <td/telegram/td_log.h>
@@ -314,7 +314,7 @@ func (client *Client) sendTdLibParams() {
 
 // SendPhoneNumber sends phone number to tdlib
 func (client *Client) SendPhoneNumber(phoneNumber string) (AuthorizationState, error) {
-	_, err := client.SetAuthenticationPhoneNumber(phoneNumber, false, false)
+	_, err := client.SetAuthenticationPhoneNumber(phoneNumber, NewPhoneNumberAuthenticationSettings(false, true, false))
 
 	if err != nil {
 		return nil, err
@@ -326,7 +326,7 @@ func (client *Client) SendPhoneNumber(phoneNumber string) (AuthorizationState, e
 
 // SendAuthCode sends auth code to tdlib
 func (client *Client) SendAuthCode(code string) (AuthorizationState, error) {
-	_, err := client.CheckAuthenticationCode(code, "", "")
+	_, err := client.CheckAuthenticationCode(code)
 
 	if err != nil {
 		return nil, err

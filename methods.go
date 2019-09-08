@@ -41,6 +41,11 @@ func (client *Client) GetAuthorizationState() (AuthorizationState, error) {
 		err = json.Unmarshal(result.Raw, &authorizationState)
 		return &authorizationState, err
 
+	case AuthorizationStateWaitRegistrationType:
+		var authorizationState AuthorizationStateWaitRegistration
+		err = json.Unmarshal(result.Raw, &authorizationState)
+		return &authorizationState, err
+
 	case AuthorizationStateWaitPasswordType:
 		var authorizationState AuthorizationStateWaitPassword
 		err = json.Unmarshal(result.Raw, &authorizationState)
@@ -115,16 +120,14 @@ func (client *Client) CheckDatabaseEncryptionKey(encryptionKey []byte) (*Ok, err
 
 }
 
-// SetAuthenticationPhoneNumber Sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber
+// SetAuthenticationPhoneNumber Sets the phone number of the user and sends an authentication code to the user. Works only when the current authorization state is authorizationStateWaitPhoneNumber,
 // @param phoneNumber The phone number of the user, in international format
-// @param allowFlashCall Pass true if the authentication code may be sent via flash call to the specified phone number
-// @param isCurrentPhoneNumber Pass true if the phone number is used on the current device. Ignored if allow_flash_call is false
-func (client *Client) SetAuthenticationPhoneNumber(phoneNumber string, allowFlashCall bool, isCurrentPhoneNumber bool) (*Ok, error) {
+// @param settings Settings for the authentication of the user's phone number
+func (client *Client) SetAuthenticationPhoneNumber(phoneNumber string, settings *PhoneNumberAuthenticationSettings) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                   "setAuthenticationPhoneNumber",
-		"phone_number":            phoneNumber,
-		"allow_flash_call":        allowFlashCall,
-		"is_current_phone_number": isCurrentPhoneNumber,
+		"@type":        "setAuthenticationPhoneNumber",
+		"phone_number": phoneNumber,
+		"settings":     settings,
 	})
 
 	if err != nil {
@@ -163,12 +166,32 @@ func (client *Client) ResendAuthenticationCode() (*Ok, error) {
 
 // CheckAuthenticationCode Checks the authentication code. Works only when the current authorization state is authorizationStateWaitCode
 // @param code The verification code received via SMS, Telegram message, phone call, or flash call
-// @param firstName If the user is not yet registered, the first name of the user; 1-64 characters. You can also pass an empty string for unregistered user there to check verification code validness. In the latter case PHONE_NUMBER_UNOCCUPIED error will be returned for a valid code
-// @param lastName If the user is not yet registered; the last name of the user; optional; 0-64 characters
-func (client *Client) CheckAuthenticationCode(code string, firstName string, lastName string) (*Ok, error) {
+func (client *Client) CheckAuthenticationCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":      "checkAuthenticationCode",
-		"code":       code,
+		"@type": "checkAuthenticationCode",
+		"code":  code,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// RegisterUser Finishes user registration. Works only when the current authorization state is authorizationStateWaitRegistration
+// @param firstName The first name of the user; 1-64 characters
+// @param lastName The last name of the user; 0-64 characters
+func (client *Client) RegisterUser(firstName string, lastName string) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":      "registerUser",
 		"first_name": firstName,
 		"last_name":  lastName,
 	})
@@ -447,7 +470,7 @@ func (client *Client) GetRecoveryEmailAddress(password string) (*RecoveryEmailAd
 
 }
 
-// SetRecoveryEmailAddress Changes the 2-step verification recovery email address of the user. If a new recovery email address is specified, then the change will not be applied until the new recovery email address is confirmed
+// SetRecoveryEmailAddress Changes the 2-step verification recovery email address of the user. If a new recovery email address is specified, then the change will not be applied until the new recovery email address is confirmed.
 // @param password
 // @param newRecoveryEmailAddress
 func (client *Client) SetRecoveryEmailAddress(password string, newRecoveryEmailAddress string) (*PasswordState, error) {
@@ -1239,7 +1262,7 @@ func (client *Client) CheckChatUsername(chatId int64, username string) (CheckCha
 	}
 }
 
-// GetCreatedPublicChats Returns a list of public chats created by the user
+// GetCreatedPublicChats Returns a list of public chats with username created by the user
 func (client *Client) GetCreatedPublicChats() (*Chats, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getCreatedPublicChats",
@@ -1603,7 +1626,7 @@ func (client *Client) RemoveNotificationGroup(notificationGroupId int32, maxNoti
 
 }
 
-// GetPublicMessageLink Returns a public HTTPS link to a message. Available only for messages in public supergroups and channels
+// GetPublicMessageLink Returns a public HTTPS link to a message. Available only for messages in supergroups and channels with username
 // @param chatId Identifier of the chat to which the message belongs
 // @param messageId Identifier of the message
 // @param forAlbum Pass true if a link for a whole media album should be returned
@@ -1650,6 +1673,28 @@ func (client *Client) GetMessageLink(chatId int64, messageId int64) (*HttpUrl, e
 	var httpUrl HttpUrl
 	err = json.Unmarshal(result.Raw, &httpUrl)
 	return &httpUrl, err
+
+}
+
+// GetMessageLinkInfo Returns information about a public or private message link
+// @param url The message link in the format "https://t.me/c/...", or "tg://privatepost?...", or "https://t.me/username/...", or "tg://resolve?..."
+func (client *Client) GetMessageLinkInfo(url string) (*MessageLinkInfo, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getMessageLinkInfo",
+		"url":   url,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var messageLinkInfo MessageLinkInfo
+	err = json.Unmarshal(result.Raw, &messageLinkInfo)
+	return &messageLinkInfo, err
 
 }
 
@@ -1718,7 +1763,7 @@ func (client *Client) SendMessageAlbum(chatId int64, replyToMessageId int64, dis
 // SendBotStartMessage Invites a bot to a chat (if it is not yet a member) and sends it the /start command. Bots can't be invited to a private chat other than the chat with the bot. Bots can't be invited to channels (although they can be added as admins) and secret chats. Returns the sent message
 // @param botUserId Identifier of the bot
 // @param chatId Identifier of the target chat
-// @param parameter A hidden parameter sent to the bot for deep linking purposes (https://api.telegram.org/bots#deep-linking)
+// @param parameter A hidden parameter sent to the bot for deep linking purposes (https://core.telegram.org/bots#deep-linking)
 func (client *Client) SendBotStartMessage(botUserId int32, chatId int64, parameter string) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "sendBotStartMessage",
@@ -1780,9 +1825,11 @@ func (client *Client) SendInlineQueryResultMessage(chatId int64, replyToMessageI
 // @param fromChatId Identifier of the chat from which to forward messages
 // @param messageIds Identifiers of the messages to forward
 // @param disableNotification Pass true to disable notification for the message, doesn't work if messages are forwarded to a secret chat
-// @param fromBackground Pass true if the message is sent from the background
+// @param fromBackground Pass true if the messages are sent from the background
 // @param asAlbum True, if the messages should be grouped into an album after forwarding. For this to work, no more than 10 messages may be forwarded, and all of them must be photo or video messages
-func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds []int64, disableNotification bool, fromBackground bool, asAlbum bool) (*Messages, error) {
+// @param sendCopy True, if content of the messages needs to be copied without links to the original messages. Always true if the messages are forwarded to a secret chat
+// @param removeCaption True, if media captions of message copies needs to be removed. Ignored if send_copy is false
+func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds []int64, disableNotification bool, fromBackground bool, asAlbum bool, sendCopy bool, removeCaption bool) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                "forwardMessages",
 		"chat_id":              chatId,
@@ -1791,6 +1838,32 @@ func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds
 		"disable_notification": disableNotification,
 		"from_background":      fromBackground,
 		"as_album":             asAlbum,
+		"send_copy":            sendCopy,
+		"remove_caption":       removeCaption,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var messages Messages
+	err = json.Unmarshal(result.Raw, &messages)
+	return &messages, err
+
+}
+
+// ResendMessages Resends messages which failed to send. Can be called only for messages for which messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed.
+// @param chatId Identifier of the chat to send messages
+// @param messageIds Identifiers of the messages to resend. Message identifiers must be in a strictly increasing order
+func (client *Client) ResendMessages(chatId int64, messageIds []int64) (*Messages, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "resendMessages",
+		"chat_id":     chatId,
+		"message_ids": messageIds,
 	})
 
 	if err != nil {
@@ -3094,7 +3167,7 @@ func (client *Client) CreateNewSecretChat(userId int32) (*Chat, error) {
 
 }
 
-// UpgradeBasicGroupChatToSupergroupChat Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and messageChatUpgradeFrom. Deactivates the original basic group
+// UpgradeBasicGroupChatToSupergroupChat Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and messageChatUpgradeFrom; requires creator privileges. Deactivates the original basic group
 // @param chatId Identifier of the chat to upgrade
 func (client *Client) UpgradeBasicGroupChatToSupergroupChat(chatId int64) (*Chat, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -3116,7 +3189,7 @@ func (client *Client) UpgradeBasicGroupChatToSupergroupChat(chatId int64) (*Chat
 
 }
 
-// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires administrator rights in basic groups and the appropriate administrator rights in supergroups and channels. The title will not be changed until the request to the server has been completed
+// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info rights. The title will not be changed until the request to the server has been completed
 // @param chatId Chat identifier
 // @param title New title of the chat; 1-128 characters
 func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
@@ -3140,7 +3213,7 @@ func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
 
 }
 
-// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires administrator rights in basic groups and the appropriate administrator rights in supergroups and channels. The photo will not be changed before request to the server has been completed
+// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info rights. The photo will not be changed before request to the server has been completed
 // @param chatId Chat identifier
 // @param photo New chat photo. You can use a zero InputFileId to delete the chat photo. Files that are accessible only by HTTP URL are not acceptable
 func (client *Client) SetChatPhoto(chatId int64, photo InputFile) (*Ok, error) {
@@ -3148,6 +3221,30 @@ func (client *Client) SetChatPhoto(chatId int64, photo InputFile) (*Ok, error) {
 		"@type":   "setChatPhoto",
 		"chat_id": chatId,
 		"photo":   photo,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// SetChatPermissions Changes the chat members permissions. Supported only for basic groups and supergroups. Requires can_restrict_members administrator right
+// @param chatId Chat identifier
+// @param permissions New non-administrator members permissions in the chat
+func (client *Client) SetChatPermissions(chatId int64, permissions *ChatPermissions) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "setChatPermissions",
+		"chat_id":     chatId,
+		"permissions": permissions,
 	})
 
 	if err != nil {
@@ -3308,7 +3405,31 @@ func (client *Client) SetChatClientData(chatId int64, clientData string) (*Ok, e
 
 }
 
-// PinChatMessage Pins a message in a chat; requires appropriate administrator rights in the group or channel
+// SetChatDescription Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info rights
+// @param chatId Identifier of the chat
+// @param description
+func (client *Client) SetChatDescription(chatId int64, description string) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "setChatDescription",
+		"chat_id":     chatId,
+		"description": description,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// PinChatMessage Pins a message in a chat; requires can_pin_messages rights
 // @param chatId Identifier of the chat
 // @param messageId Identifier of the new pinned message
 // @param disableNotification True, if there should be no notification about the pinned message
@@ -3334,7 +3455,7 @@ func (client *Client) PinChatMessage(chatId int64, messageId int64, disableNotif
 
 }
 
-// UnpinChatMessage Removes the pinned message from a chat; requires appropriate administrator rights in the group or channel
+// UnpinChatMessage Removes the pinned message from a chat; requires can_pin_messages rights in the group or channel
 // @param chatId Identifier of the chat
 func (client *Client) UnpinChatMessage(chatId int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -3934,7 +4055,7 @@ func (client *Client) DeleteFile(fileId int32) (*Ok, error) {
 
 }
 
-// GenerateChatInviteLink Generates a new invite link for a chat; the previously generated link is revoked. Available for basic groups, supergroups, and channels. In basic groups this can be called only by the group's creator; in supergroups and channels this requires appropriate administrator rights
+// GenerateChatInviteLink Generates a new invite link for a chat; the previously generated link is revoked. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right
 // @param chatId Chat identifier
 func (client *Client) GenerateChatInviteLink(chatId int64) (*ChatInviteLink, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -4080,12 +4201,14 @@ func (client *Client) DiscardCall(callId int32, isDisconnected bool, duration in
 // @param callId Call identifier
 // @param rating Call rating; 1-5
 // @param comment An optional user comment if the rating is less than 5
-func (client *Client) SendCallRating(callId int32, rating int32, comment string) (*Ok, error) {
+// @param problems List of the exact types of problems with the call, specified by the user
+func (client *Client) SendCallRating(callId int32, rating int32, comment string, problems []CallProblem) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "sendCallRating",
-		"call_id": callId,
-		"rating":  rating,
-		"comment": comment,
+		"@type":    "sendCallRating",
+		"call_id":  callId,
+		"rating":   rating,
+		"comment":  comment,
+		"problems": problems,
 	})
 
 	if err != nil {
@@ -4828,9 +4951,9 @@ func (client *Client) RemoveFavoriteSticker(sticker InputFile) (*Ok, error) {
 
 }
 
-// GetStickerEmojis Returns emoji corresponding to a sticker
+// GetStickerEmojis Returns emoji corresponding to a sticker. The list is only for informational purposes, because a sticker is always sent with a fixed emoji from the corresponding Sticker object
 // @param sticker Sticker file identifier
-func (client *Client) GetStickerEmojis(sticker InputFile) (*StickerEmojis, error) {
+func (client *Client) GetStickerEmojis(sticker InputFile) (*Emojis, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":   "getStickerEmojis",
 		"sticker": sticker,
@@ -4844,9 +4967,55 @@ func (client *Client) GetStickerEmojis(sticker InputFile) (*StickerEmojis, error
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	var stickerEmojis StickerEmojis
-	err = json.Unmarshal(result.Raw, &stickerEmojis)
-	return &stickerEmojis, err
+	var emojis Emojis
+	err = json.Unmarshal(result.Raw, &emojis)
+	return &emojis, err
+
+}
+
+// SearchEmojis Searches for emojis by keywords. Supported only if the file database is enabled
+// @param text Text to search for
+// @param exactMatch True, if only emojis, which exactly match text needs to be returned
+func (client *Client) SearchEmojis(text string, exactMatch bool) (*Emojis, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "searchEmojis",
+		"text":        text,
+		"exact_match": exactMatch,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var emojis Emojis
+	err = json.Unmarshal(result.Raw, &emojis)
+	return &emojis, err
+
+}
+
+// GetEmojiSuggestionsUrl Returns an HTTP URL which can be used to automatically log in to the translation platform and suggest new emoji replacements. The URL will be valid for 30 seconds after generation
+// @param languageCode Language code for which the emoji replacements will be suggested
+func (client *Client) GetEmojiSuggestionsUrl(languageCode string) (*HttpUrl, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "getEmojiSuggestionsUrl",
+		"language_code": languageCode,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var httpUrl HttpUrl
+	err = json.Unmarshal(result.Raw, &httpUrl)
+	return &httpUrl, err
 
 }
 
@@ -5140,14 +5309,12 @@ func (client *Client) SetUsername(username string) (*Ok, error) {
 
 // ChangePhoneNumber Changes the phone number of the user and sends an authentication code to the user's new phone number. On success, returns information about the sent code
 // @param phoneNumber The new phone number of the user in international format
-// @param allowFlashCall Pass true if the code can be sent via flash call to the specified phone number
-// @param isCurrentPhoneNumber Pass true if the phone number is used on the current device. Ignored if allow_flash_call is false
-func (client *Client) ChangePhoneNumber(phoneNumber string, allowFlashCall bool, isCurrentPhoneNumber bool) (*AuthenticationCodeInfo, error) {
+// @param settings Settings for the authentication of the user's phone number
+func (client *Client) ChangePhoneNumber(phoneNumber string, settings *PhoneNumberAuthenticationSettings) (*AuthenticationCodeInfo, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                   "changePhoneNumber",
-		"phone_number":            phoneNumber,
-		"allow_flash_call":        allowFlashCall,
-		"is_current_phone_number": isCurrentPhoneNumber,
+		"@type":        "changePhoneNumber",
+		"phone_number": phoneNumber,
+		"settings":     settings,
 	})
 
 	if err != nil {
@@ -5330,30 +5497,6 @@ func (client *Client) DisconnectAllWebsites() (*Ok, error) {
 
 }
 
-// ToggleBasicGroupAdministrators Toggles the "All members are admins" setting in basic groups; requires creator privileges in the group
-// @param basicGroupId Identifier of the basic group
-// @param everyoneIsAdministrator New value of everyone_is_administrator
-func (client *Client) ToggleBasicGroupAdministrators(basicGroupId int32, everyoneIsAdministrator bool) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":                     "toggleBasicGroupAdministrators",
-		"basic_group_id":            basicGroupId,
-		"everyone_is_administrator": everyoneIsAdministrator,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
-
-}
-
 // SetSupergroupUsername Changes the username of a supergroup or channel, requires creator privileges in the supergroup or channel
 // @param supergroupId Identifier of the supergroup or channel
 // @param username New value of the username. Use an empty string to remove the username
@@ -5378,7 +5521,7 @@ func (client *Client) SetSupergroupUsername(supergroupId int32, username string)
 
 }
 
-// SetSupergroupStickerSet Changes the sticker set of a supergroup; requires appropriate rights in the supergroup
+// SetSupergroupStickerSet Changes the sticker set of a supergroup; requires can_change_info rights
 // @param supergroupId Identifier of the supergroup
 // @param stickerSetId New value of the supergroup sticker set identifier. Use 0 to remove the supergroup sticker set
 func (client *Client) SetSupergroupStickerSet(supergroupId int32, stickerSetId JSONInt64) (*Ok, error) {
@@ -5402,31 +5545,7 @@ func (client *Client) SetSupergroupStickerSet(supergroupId int32, stickerSetId J
 
 }
 
-// ToggleSupergroupInvites Toggles whether all members of a supergroup can add new members; requires appropriate administrator rights in the supergroup.
-// @param supergroupId Identifier of the supergroup
-// @param anyoneCanInvite New value of anyone_can_invite
-func (client *Client) ToggleSupergroupInvites(supergroupId int32, anyoneCanInvite bool) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":             "toggleSupergroupInvites",
-		"supergroup_id":     supergroupId,
-		"anyone_can_invite": anyoneCanInvite,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
-
-}
-
-// ToggleSupergroupSignMessages Toggles sender signatures messages sent in a channel; requires appropriate administrator rights in the channel.
+// ToggleSupergroupSignMessages Toggles sender signatures messages sent in a channel; requires can_change_info rights
 // @param supergroupId Identifier of the channel
 // @param signMessages New value of sign_messages
 func (client *Client) ToggleSupergroupSignMessages(supergroupId int32, signMessages bool) (*Ok, error) {
@@ -5450,7 +5569,7 @@ func (client *Client) ToggleSupergroupSignMessages(supergroupId int32, signMessa
 
 }
 
-// ToggleSupergroupIsAllHistoryAvailable Toggles whether the message history of a supergroup is available to new members; requires appropriate administrator rights in the supergroup.
+// ToggleSupergroupIsAllHistoryAvailable Toggles whether the message history of a supergroup is available to new members; requires can_change_info rights
 // @param supergroupId The identifier of the supergroup
 // @param isAllHistoryAvailable The new value of is_all_history_available
 func (client *Client) ToggleSupergroupIsAllHistoryAvailable(supergroupId int32, isAllHistoryAvailable bool) (*Ok, error) {
@@ -5458,30 +5577,6 @@ func (client *Client) ToggleSupergroupIsAllHistoryAvailable(supergroupId int32, 
 		"@type":                    "toggleSupergroupIsAllHistoryAvailable",
 		"supergroup_id":            supergroupId,
 		"is_all_history_available": isAllHistoryAvailable,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
-
-}
-
-// SetSupergroupDescription Changes information about a supergroup or channel; requires appropriate administrator rights
-// @param supergroupId Identifier of the supergroup or channel
-// @param description
-func (client *Client) SetSupergroupDescription(supergroupId int32, description string) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":         "setSupergroupDescription",
-		"supergroup_id": supergroupId,
-		"description":   description,
 	})
 
 	if err != nil {
@@ -5814,10 +5909,12 @@ func (client *Client) GetSupportUser() (*User, error) {
 
 }
 
-// GetWallpapers Returns background wallpapers
-func (client *Client) GetWallpapers() (*Wallpapers, error) {
+// GetBackgrounds Returns backgrounds installed by the user
+// @param forDarkTheme True, if the backgrounds needs to be ordered for dark theme
+func (client *Client) GetBackgrounds(forDarkTheme bool) (*Backgrounds, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type": "getWallpapers",
+		"@type":          "getBackgrounds",
+		"for_dark_theme": forDarkTheme,
 	})
 
 	if err != nil {
@@ -5828,9 +5925,123 @@ func (client *Client) GetWallpapers() (*Wallpapers, error) {
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	var wallpapers Wallpapers
-	err = json.Unmarshal(result.Raw, &wallpapers)
-	return &wallpapers, err
+	var backgrounds Backgrounds
+	err = json.Unmarshal(result.Raw, &backgrounds)
+	return &backgrounds, err
+
+}
+
+// GetBackgroundUrl Constructs a persistent HTTP URL for a background
+// @param name Background name
+// @param typeParam Background type
+func (client *Client) GetBackgroundUrl(name string, typeParam BackgroundType) (*HttpUrl, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getBackgroundUrl",
+		"name":  name,
+		"type":  typeParam,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var httpUrl HttpUrl
+	err = json.Unmarshal(result.Raw, &httpUrl)
+	return &httpUrl, err
+
+}
+
+// SearchBackground Searches for a background by its name
+// @param name The name of the background
+func (client *Client) SearchBackground(name string) (*Background, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "searchBackground",
+		"name":  name,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var background Background
+	err = json.Unmarshal(result.Raw, &background)
+	return &background, err
+
+}
+
+// SetBackground Changes the background selected by the user; adds background to the list of installed backgrounds
+// @param background The input background to use, null for solid backgrounds
+// @param typeParam Background type; null for default background. The method will return error 404 if type is null
+// @param forDarkTheme True, if the background is chosen for dark theme
+func (client *Client) SetBackground(background InputBackground, typeParam BackgroundType, forDarkTheme bool) (*Background, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "setBackground",
+		"background":     background,
+		"type":           typeParam,
+		"for_dark_theme": forDarkTheme,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var backgroundDummy Background
+	err = json.Unmarshal(result.Raw, &backgroundDummy)
+	return &backgroundDummy, err
+
+}
+
+// RemoveBackground Removes background from the list of installed backgrounds
+// @param backgroundId The background indentifier
+func (client *Client) RemoveBackground(backgroundId JSONInt64) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "removeBackground",
+		"background_id": backgroundId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ResetBackgrounds Resets list of installed backgrounds to its default value
+func (client *Client) ResetBackgrounds() (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "resetBackgrounds",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
 
 }
 
@@ -6377,7 +6588,7 @@ func (client *Client) ReportChat(chatId int64, reason ChatReportReason, messageI
 
 }
 
-// GetChatStatisticsUrl Returns URL with the chat statistics. Currently this method can be used only for channels
+// GetChatStatisticsUrl Returns an HTTP URL with the chat statistics. Currently this method can be used only for channels
 // @param chatId Chat identifier
 // @param parameters Parameters from "tg://statsrefresh?params=******" link
 // @param isDark Pass true if a URL with the dark theme must be returned
@@ -6571,6 +6782,50 @@ func (client *Client) AddNetworkStatistics(entry NetworkStatisticsEntry) (*Ok, e
 func (client *Client) ResetNetworkStatistics() (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "resetNetworkStatistics",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// GetAutoDownloadSettingsPresets Returns auto-download settings presets for the currently logged in user
+func (client *Client) GetAutoDownloadSettingsPresets() (*AutoDownloadSettingsPresets, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getAutoDownloadSettingsPresets",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var autoDownloadSettingsPresets AutoDownloadSettingsPresets
+	err = json.Unmarshal(result.Raw, &autoDownloadSettingsPresets)
+	return &autoDownloadSettingsPresets, err
+
+}
+
+// SetAutoDownloadSettings Sets auto-download settings
+// @param settings New user auto-download settings
+// @param typeParam Type of the network for which the new settings are applied
+func (client *Client) SetAutoDownloadSettings(settings *AutoDownloadSettings, typeParam NetworkType) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":    "setAutoDownloadSettings",
+		"settings": settings,
+		"type":     typeParam,
 	})
 
 	if err != nil {
@@ -6859,14 +7114,12 @@ func (client *Client) GetPreferredCountryLanguage(countryCode string) (*Text, er
 
 // SendPhoneNumberVerificationCode Sends a code to verify a phone number to be added to a user's Telegram Passport
 // @param phoneNumber The phone number of the user, in international format
-// @param allowFlashCall Pass true if the authentication code may be sent via flash call to the specified phone number
-// @param isCurrentPhoneNumber Pass true if the phone number is used on the current device. Ignored if allow_flash_call is false
-func (client *Client) SendPhoneNumberVerificationCode(phoneNumber string, allowFlashCall bool, isCurrentPhoneNumber bool) (*AuthenticationCodeInfo, error) {
+// @param settings Settings for the authentication of the user's phone number
+func (client *Client) SendPhoneNumberVerificationCode(phoneNumber string, settings *PhoneNumberAuthenticationSettings) (*AuthenticationCodeInfo, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                   "sendPhoneNumberVerificationCode",
-		"phone_number":            phoneNumber,
-		"allow_flash_call":        allowFlashCall,
-		"is_current_phone_number": isCurrentPhoneNumber,
+		"@type":        "sendPhoneNumberVerificationCode",
+		"phone_number": phoneNumber,
+		"settings":     settings,
 	})
 
 	if err != nil {
@@ -7068,15 +7321,13 @@ func (client *Client) SendPassportAuthorizationForm(autorizationFormId int32, ty
 // SendPhoneNumberConfirmationCode Sends phone number confirmation code. Should be called when user presses "https://t.me/confirmphone?phone=*******&hash=**********" or "tg://confirmphone?phone=*******&hash=**********" link
 // @param hash Value of the "hash" parameter from the link
 // @param phoneNumber Value of the "phone" parameter from the link
-// @param allowFlashCall Pass true if the authentication code may be sent via flash call to the specified phone number
-// @param isCurrentPhoneNumber Pass true if the phone number is used on the current device. Ignored if allow_flash_call is false
-func (client *Client) SendPhoneNumberConfirmationCode(hash string, phoneNumber string, allowFlashCall bool, isCurrentPhoneNumber bool) (*AuthenticationCodeInfo, error) {
+// @param settings Settings for the authentication of the user's phone number
+func (client *Client) SendPhoneNumberConfirmationCode(hash string, phoneNumber string, settings *PhoneNumberAuthenticationSettings) (*AuthenticationCodeInfo, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                   "sendPhoneNumberConfirmationCode",
-		"hash":                    hash,
-		"phone_number":            phoneNumber,
-		"allow_flash_call":        allowFlashCall,
-		"is_current_phone_number": isCurrentPhoneNumber,
+		"@type":        "sendPhoneNumberConfirmationCode",
+		"hash":         hash,
+		"phone_number": phoneNumber,
+		"settings":     settings,
 	})
 
 	if err != nil {
@@ -7409,7 +7660,7 @@ func (client *Client) SetAlarm(seconds float64) (*Ok, error) {
 
 }
 
-// GetCountryCode Uses current user IP to found his country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
+// GetCountryCode Uses current user IP to found their country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
 func (client *Client) GetCountryCode() (*Text, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getCountryCode",
@@ -8118,6 +8369,32 @@ func (client *Client) TestNetwork() (*Ok, error) {
 
 }
 
+// TestProxy Sends a simple network request to the Telegram servers via proxy; for testing only. Can be called before authorization
+// @param server Proxy server IP address
+// @param port Proxy server port
+// @param typeParam Proxy type
+func (client *Client) TestProxy(server string, port int32, typeParam ProxyType) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":  "testProxy",
+		"server": server,
+		"port":   port,
+		"type":   typeParam,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // TestGetDifference Forces an updates.getDifference call to the Telegram servers; for testing only
 func (client *Client) TestGetDifference() (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -8216,6 +8493,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateChatPhotoType:
 		var update UpdateChatPhoto
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatPermissionsType:
+		var update UpdateChatPermissions
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -8434,6 +8716,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
+	case UpdateSelectedBackgroundType:
+		var update UpdateSelectedBackground
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
 	case UpdateLanguagePackStringsType:
 		var update UpdateLanguagePackStrings
 		err = json.Unmarshal(result.Raw, &update)
@@ -8497,4 +8784,26 @@ func (client *Client) TestUseUpdate() (Update, error) {
 	default:
 		return nil, fmt.Errorf("Invalid type")
 	}
+}
+
+// TestReturnError Returns the specified error and ensures that the Error object is used; for testing only. This is an offline method. Can be called before authorization. Can be called synchronously
+// @param error The error to be returned
+func (client *Client) TestReturnError(error *Error) (*Error, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "testReturnError",
+		"error": error,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var errorDummy Error
+	err = json.Unmarshal(result.Raw, &errorDummy)
+	return &errorDummy, err
+
 }
