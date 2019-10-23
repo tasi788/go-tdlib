@@ -298,6 +298,7 @@ const (
 	PageBlockAudioType           PageBlockEnum = "pageBlockAudio"
 	PageBlockPhotoType           PageBlockEnum = "pageBlockPhoto"
 	PageBlockVideoType           PageBlockEnum = "pageBlockVideo"
+	PageBlockVoiceNoteType       PageBlockEnum = "pageBlockVoiceNote"
 	PageBlockCoverType           PageBlockEnum = "pageBlockCover"
 	PageBlockEmbeddedType        PageBlockEnum = "pageBlockEmbedded"
 	PageBlockEmbeddedPostType    PageBlockEnum = "pageBlockEmbeddedPost"
@@ -2286,7 +2287,7 @@ func (inputFileId *InputFileId) GetInputFileEnum() InputFileEnum {
 	return InputFileIdType
 }
 
-// InputFileRemote A file defined by its remote ID
+// InputFileRemote A file defined by its remote ID. The remote ID is guaranteed to work only if it was received after TDLib launch and the corresponding file is still accessible to the user.
 type InputFileRemote struct {
 	tdCommon
 	Id string `json:"id"` // Remote file identifier
@@ -2677,7 +2678,7 @@ func NewAnimation(duration int32, width int32, height int32, fileName string, mi
 	return &animationTemp
 }
 
-// Audio Describes an audio file. Audio is usually in MP3 format
+// Audio Describes an audio file. Audio is usually in MP3 or M4A format
 type Audio struct {
 	tdCommon
 	Duration                int32          `json:"duration"`                  // Duration of the audio, in seconds; as defined by the sender
@@ -2840,7 +2841,7 @@ type Video struct {
 	Height            int32          `json:"height"`             // Video height; as defined by the sender
 	FileName          string         `json:"file_name"`          // Original name of the file; as defined by the sender
 	MimeType          string         `json:"mime_type"`          // MIME type of the file; as defined by the sender
-	HasStickers       bool           `json:"has_stickers"`       // True, if stickers were added to the photo
+	HasStickers       bool           `json:"has_stickers"`       // True, if stickers were added to the video
 	SupportsStreaming bool           `json:"supports_streaming"` // True, if the video should be tried to be streamed
 	Minithumbnail     *Minithumbnail `json:"minithumbnail"`      // Video minithumbnail; may be null
 	Thumbnail         *PhotoSize     `json:"thumbnail"`          // Video thumbnail; as defined by the sender; may be null
@@ -2859,7 +2860,7 @@ func (video *Video) MessageType() string {
 // @param height Video height; as defined by the sender
 // @param fileName Original name of the file; as defined by the sender
 // @param mimeType MIME type of the file; as defined by the sender
-// @param hasStickers True, if stickers were added to the photo
+// @param hasStickers True, if stickers were added to the video
 // @param supportsStreaming True, if the video should be tried to be streamed
 // @param minithumbnail Video minithumbnail; may be null
 // @param thumbnail Video thumbnail; as defined by the sender; may be null
@@ -6538,8 +6539,9 @@ func (richTextFixed *RichTextFixed) GetRichTextEnum() RichTextEnum {
 // RichTextUrl A rich text URL link
 type RichTextUrl struct {
 	tdCommon
-	Text RichText `json:"text"` // Text
-	Url  string   `json:"url"`  // URL
+	Text     RichText `json:"text"`      // Text
+	Url      string   `json:"url"`       // URL
+	IsCached bool     `json:"is_cached"` // True, if the URL has cached instant view server-side
 }
 
 // MessageType return the string telegram-type of RichTextUrl
@@ -6551,11 +6553,13 @@ func (richTextUrl *RichTextUrl) MessageType() string {
 //
 // @param text Text
 // @param url URL
-func NewRichTextUrl(text RichText, url string) *RichTextUrl {
+// @param isCached True, if the URL has cached instant view server-side
+func NewRichTextUrl(text RichText, url string, isCached bool) *RichTextUrl {
 	richTextUrlTemp := RichTextUrl{
 		tdCommon: tdCommon{Type: "richTextUrl"},
 		Text:     text,
 		Url:      url,
+		IsCached: isCached,
 	}
 
 	return &richTextUrlTemp
@@ -6570,7 +6574,8 @@ func (richTextUrl *RichTextUrl) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Url string `json:"url"` // URL
+		Url      string `json:"url"`       // URL
+		IsCached bool   `json:"is_cached"` // True, if the URL has cached instant view server-side
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -6579,6 +6584,7 @@ func (richTextUrl *RichTextUrl) UnmarshalJSON(b []byte) error {
 
 	richTextUrl.tdCommon = tempObj.tdCommon
 	richTextUrl.Url = tempObj.Url
+	richTextUrl.IsCached = tempObj.IsCached
 
 	fieldText, _ := unmarshalRichText(objMap["text"])
 	richTextUrl.Text = fieldText
@@ -7205,7 +7211,7 @@ func (pageBlockVerticalAlignmentBottom *PageBlockVerticalAlignmentBottom) GetPag
 // PageBlockTableCell Represents a cell of a table
 type PageBlockTableCell struct {
 	tdCommon
-	Text     RichText                     `json:"text"`      // Cell text
+	Text     RichText                     `json:"text"`      // Cell text; may be null. If the text is null, then the cell should be invisible
 	IsHeader bool                         `json:"is_header"` // True, if it is a header cell
 	Colspan  int32                        `json:"colspan"`   // The number of columns the cell should span
 	Rowspan  int32                        `json:"rowspan"`   // The number of rows the cell should span
@@ -7220,7 +7226,7 @@ func (pageBlockTableCell *PageBlockTableCell) MessageType() string {
 
 // NewPageBlockTableCell creates a new PageBlockTableCell
 //
-// @param text Cell text
+// @param text Cell text; may be null. If the text is null, then the cell should be invisible
 // @param isHeader True, if it is a header cell
 // @param colspan The number of columns the cell should span
 // @param rowspan The number of rows the cell should span
@@ -8112,6 +8118,37 @@ func NewPageBlockVideo(video *Video, caption *PageBlockCaption, needAutoplay boo
 // GetPageBlockEnum return the enum type of this object
 func (pageBlockVideo *PageBlockVideo) GetPageBlockEnum() PageBlockEnum {
 	return PageBlockVideoType
+}
+
+// PageBlockVoiceNote A voice note
+type PageBlockVoiceNote struct {
+	tdCommon
+	VoiceNote *VoiceNote        `json:"voice_note"` // Voice note; may be null
+	Caption   *PageBlockCaption `json:"caption"`    // Voice note caption
+}
+
+// MessageType return the string telegram-type of PageBlockVoiceNote
+func (pageBlockVoiceNote *PageBlockVoiceNote) MessageType() string {
+	return "pageBlockVoiceNote"
+}
+
+// NewPageBlockVoiceNote creates a new PageBlockVoiceNote
+//
+// @param voiceNote Voice note; may be null
+// @param caption Voice note caption
+func NewPageBlockVoiceNote(voiceNote *VoiceNote, caption *PageBlockCaption) *PageBlockVoiceNote {
+	pageBlockVoiceNoteTemp := PageBlockVoiceNote{
+		tdCommon:  tdCommon{Type: "pageBlockVoiceNote"},
+		VoiceNote: voiceNote,
+		Caption:   caption,
+	}
+
+	return &pageBlockVoiceNoteTemp
+}
+
+// GetPageBlockEnum return the enum type of this object
+func (pageBlockVoiceNote *PageBlockVoiceNote) GetPageBlockEnum() PageBlockEnum {
+	return PageBlockVoiceNoteType
 }
 
 // PageBlockCover A page cover
@@ -17497,6 +17534,52 @@ func NewGameHighScores(scores []GameHighScore) *GameHighScores {
 	return &gameHighScoresTemp
 }
 
+// TonLiteServerResponse Contains the response of a request to TON lite server
+type TonLiteServerResponse struct {
+	tdCommon
+	Response []byte `json:"response"` // The response
+}
+
+// MessageType return the string telegram-type of TonLiteServerResponse
+func (tonLiteServerResponse *TonLiteServerResponse) MessageType() string {
+	return "tonLiteServerResponse"
+}
+
+// NewTonLiteServerResponse creates a new TonLiteServerResponse
+//
+// @param response The response
+func NewTonLiteServerResponse(response []byte) *TonLiteServerResponse {
+	tonLiteServerResponseTemp := TonLiteServerResponse{
+		tdCommon: tdCommon{Type: "tonLiteServerResponse"},
+		Response: response,
+	}
+
+	return &tonLiteServerResponseTemp
+}
+
+// TonWalletPasswordSalt Contains the salt to be used with locally stored password to access a local TON-based wallet
+type TonWalletPasswordSalt struct {
+	tdCommon
+	Salt []byte `json:"salt"` // The salt
+}
+
+// MessageType return the string telegram-type of TonWalletPasswordSalt
+func (tonWalletPasswordSalt *TonWalletPasswordSalt) MessageType() string {
+	return "tonWalletPasswordSalt"
+}
+
+// NewTonWalletPasswordSalt creates a new TonWalletPasswordSalt
+//
+// @param salt The salt
+func NewTonWalletPasswordSalt(salt []byte) *TonWalletPasswordSalt {
+	tonWalletPasswordSaltTemp := TonWalletPasswordSalt{
+		tdCommon: tdCommon{Type: "tonWalletPasswordSalt"},
+		Salt:     salt,
+	}
+
+	return &tonWalletPasswordSaltTemp
+}
+
 // ChatEventMessageEdited A message was edited
 type ChatEventMessageEdited struct {
 	tdCommon
@@ -20335,9 +20418,10 @@ func (notificationGroupTypeCalls *NotificationGroupTypeCalls) GetNotificationGro
 // Notification Contains information about a notification
 type Notification struct {
 	tdCommon
-	Id   int32            `json:"id"`   // Unique persistent identifier of this notification
-	Date int32            `json:"date"` // Notification date
-	Type NotificationType `json:"type"` // Notification type
+	Id       int32            `json:"id"`        // Unique persistent identifier of this notification
+	Date     int32            `json:"date"`      // Notification date
+	IsSilent bool             `json:"is_silent"` // True, if the notification was initially silent
+	Type     NotificationType `json:"type"`      // Notification type
 }
 
 // MessageType return the string telegram-type of Notification
@@ -20349,12 +20433,14 @@ func (notification *Notification) MessageType() string {
 //
 // @param id Unique persistent identifier of this notification
 // @param date Notification date
+// @param isSilent True, if the notification was initially silent
 // @param typeParam Notification type
-func NewNotification(id int32, date int32, typeParam NotificationType) *Notification {
+func NewNotification(id int32, date int32, isSilent bool, typeParam NotificationType) *Notification {
 	notificationTemp := Notification{
 		tdCommon: tdCommon{Type: "notification"},
 		Id:       id,
 		Date:     date,
+		IsSilent: isSilent,
 		Type:     typeParam,
 	}
 
@@ -20370,8 +20456,9 @@ func (notification *Notification) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id   int32 `json:"id"`   // Unique persistent identifier of this notification
-		Date int32 `json:"date"` // Notification date
+		Id       int32 `json:"id"`        // Unique persistent identifier of this notification
+		Date     int32 `json:"date"`      // Notification date
+		IsSilent bool  `json:"is_silent"` // True, if the notification was initially silent
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -20382,6 +20469,7 @@ func (notification *Notification) UnmarshalJSON(b []byte) error {
 	notification.tdCommon = tempObj.tdCommon
 	notification.Id = tempObj.Id
 	notification.Date = tempObj.Date
+	notification.IsSilent = tempObj.IsSilent
 
 	fieldType, _ := unmarshalNotificationType(objMap["type"])
 	notification.Type = fieldType
@@ -23855,7 +23943,7 @@ func (updateChatPermissions *UpdateChatPermissions) GetUpdateEnum() UpdateEnum {
 	return UpdateChatPermissionsType
 }
 
-// UpdateChatLastMessage The last message of a chat was changed. If last_message is null then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
+// UpdateChatLastMessage The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
 type UpdateChatLastMessage struct {
 	tdCommon
 	ChatId      int64     `json:"chat_id"`      // Chat identifier
@@ -27188,6 +27276,11 @@ func unmarshalPageBlock(rawMsg *json.RawMessage) (PageBlock, error) {
 		var pageBlockVideo PageBlockVideo
 		err := json.Unmarshal(*rawMsg, &pageBlockVideo)
 		return &pageBlockVideo, err
+
+	case PageBlockVoiceNoteType:
+		var pageBlockVoiceNote PageBlockVoiceNote
+		err := json.Unmarshal(*rawMsg, &pageBlockVoiceNote)
+		return &pageBlockVoiceNote, err
 
 	case PageBlockCoverType:
 		var pageBlockCover PageBlockCover

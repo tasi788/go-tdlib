@@ -958,7 +958,7 @@ func (client *Client) GetFile(fileId int32) (*File, error) {
 
 }
 
-// GetRemoteFile Returns information about a file by its remote ID; this is an offline request. Can be used to register a URL as a file for further uploading, or sending as a message
+// GetRemoteFile Returns information about a file by its remote ID; this is an offline request. Can be used to register a URL as a file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still accessible to the user.
 // @param remoteFileId Remote identifier of the file to get
 // @param fileType File type, if known
 func (client *Client) GetRemoteFile(remoteFileId string, fileType FileType) (*File, error) {
@@ -2429,11 +2429,11 @@ func (client *Client) GetLanguagePackString(languagePackDatabasePath string, loc
 }
 
 // GetJsonValue Converts a JSON-serialized string to corresponding JsonValue object. This is an offline method. Can be called before authorization. Can be called synchronously
-// @param jsonstring
-func (client *Client) GetJsonValue(jsonstring string) (JsonValue, error) {
+// @param json The JSON-serialized string
+func (client *Client) GetJsonValue(jsons string) (JsonValue, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":      "getJsonValue",
-		"jsonString": jsonstring,
+		"@type": "getJsonValue",
+		"json":  jsons,
 	})
 
 	if err != nil {
@@ -7638,6 +7638,48 @@ func (client *Client) AnswerCustomQuery(customQueryId JSONInt64, data string) (*
 
 }
 
+// SendTonLiteServerRequest Sends a request to TON lite server through Telegram servers
+// @param request The request
+func (client *Client) SendTonLiteServerRequest(request []byte) (*TonLiteServerResponse, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "sendTonLiteServerRequest",
+		"request": request,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var tonLiteServerResponse TonLiteServerResponse
+	err = json.Unmarshal(result.Raw, &tonLiteServerResponse)
+	return &tonLiteServerResponse, err
+
+}
+
+// GetTonWalletPasswordSalt Returns a salt to be used with locally stored password to access a local TON-based wallet
+func (client *Client) GetTonWalletPasswordSalt() (*TonWalletPasswordSalt, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getTonWalletPasswordSalt",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var tonWalletPasswordSalt TonWalletPasswordSalt
+	err = json.Unmarshal(result.Raw, &tonWalletPasswordSalt)
+	return &tonWalletPasswordSalt, err
+
+}
+
 // SetAlarm Succeeds after a specified amount of time has passed. Can be called before authorization. Can be called before initialization
 // @param seconds Number of seconds before the function returns
 func (client *Client) SetAlarm(seconds float64) (*Ok, error) {
@@ -8373,12 +8415,16 @@ func (client *Client) TestNetwork() (*Ok, error) {
 // @param server Proxy server IP address
 // @param port Proxy server port
 // @param typeParam Proxy type
-func (client *Client) TestProxy(server string, port int32, typeParam ProxyType) (*Ok, error) {
+// @param dcId Identifier of a datacenter, with which to test connection
+// @param timeout Maximum overall timeout for the request
+func (client *Client) TestProxy(server string, port int32, typeParam ProxyType, dcId int32, timeout float64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":  "testProxy",
-		"server": server,
-		"port":   port,
-		"type":   typeParam,
+		"@type":   "testProxy",
+		"server":  server,
+		"port":    port,
+		"type":    typeParam,
+		"dc_id":   dcId,
+		"timeout": timeout,
 	})
 
 	if err != nil {
