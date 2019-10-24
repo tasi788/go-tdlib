@@ -12,11 +12,13 @@ package tdlib
 import "C"
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
 	"reflect"
+	"strconv"
 	"sync"
 	"time"
 	"unsafe"
@@ -48,6 +50,7 @@ type Client struct {
 	rawUpdates   chan UpdateMsg
 	receivers    []EventReceiver
 	waiters      sync.Map
+	msgWaiters   sync.Map
 	receiverLock *sync.Mutex
 }
 
@@ -104,6 +107,16 @@ func NewClient(config Config) *Client {
 			} else {
 				// does new updates has @type field?
 				if msgType, hasType := updateData["@type"]; hasType {
+
+					if msgType == "updateMessageSendSucceeded" {
+						if waiter, found := client.msgWaiters.Load(int64(updateData["old_message_id"].(float64))); found {
+							// found? send it to waiter channel
+							waiter.(chan UpdateMsg) <- UpdateMsg{Data: updateData, Raw: updateBytes}
+
+							// trying to prevent memory leak
+							close(waiter.(chan UpdateMsg))
+						}
+					}
 
 					if client.rawUpdates != nil {
 						// if rawUpdates is initialized, send the update in rawUpdates channel
@@ -214,8 +227,8 @@ func SetFilePath(path string) {
 	bytes, _ := json.Marshal(UpdateData{
 		"@type": "setLogStream",
 		"log_stream": UpdateData{
-			"@type": "logStreamFile",
-			"path": path,
+			"@type":         "logStreamFile",
+			"path":          path,
 			"max_file_size": 10485760,
 		},
 	})
@@ -229,7 +242,7 @@ func SetFilePath(path string) {
 // By default the TDLib uses a verbosity level of 5 for logging.
 func SetLogVerbosityLevel(level int) {
 	bytes, _ := json.Marshal(UpdateData{
-		"@type": "setLogVerbosityLevel",
+		"@type":               "setLogVerbosityLevel",
 		"new_verbosity_level": level,
 	})
 
@@ -274,6 +287,29 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 	select {
 	// wait response from main loop in NewClient()
 	case response := <-waiter:
+		var messageDummy Message
+		json.Unmarshal(response.Raw, &messageDummy)
+
+		if messageDummy.Type == "message" {
+			if messageDummy.Content.GetMessageContentEnum() == "messageText" {
+				msgWaiter := make(chan UpdateMsg, 1)
+				client.msgWaiters.Store(messageDummy.Id, msgWaiter)
+
+				select {
+				case updateResp := <-msgWaiter:
+					var successMsg UpdateMessageSendSucceeded
+					json.Unmarshal(updateResp.Raw, &successMsg)
+
+					response.Raw = bytes.Replace(response.Raw, []byte("{\"@type\":\"messageSendingStatePending\"}"), []byte("{\"@type\":\"updateMessageSendSucceeded\"}"), 1)
+					response.Raw = bytes.Replace(response.Raw, []byte(strconv.FormatInt(messageDummy.Id, 10)), []byte(strconv.FormatInt(successMsg.Message.Id, 10)), 1)
+
+					return response, nil
+				case <-time.After(10 * time.Second):
+					client.msgWaiters.Delete(messageDummy.Id)
+				}
+			}
+		}
+
 		return response, nil
 		// or timeout
 	case <-time.After(10 * time.Second):
