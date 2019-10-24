@@ -300,8 +300,13 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 					var successMsg UpdateMessageSendSucceeded
 					json.Unmarshal(updateResp.Raw, &successMsg)
 
-					response.Raw = bytes.Replace(response.Raw, []byte("{\"@type\":\"messageSendingStatePending\"}"), []byte("{\"@type\":\"updateMessageSendSucceeded\"}"), 1)
-					response.Raw = bytes.Replace(response.Raw, []byte(strconv.FormatInt(messageDummy.Id, 10)), []byte(strconv.FormatInt(successMsg.Message.Id, 10)), 1)
+					response.Data = updateResp.Data["message"].(map[string]interface {})
+					if str, err := json.Marshal(updateResp.Data["message"].(map[string]interface {})); err == nil {
+						response.Raw = []byte(str)
+					} else {
+						response.Raw = bytes.Replace(response.Raw, []byte("{\"@type\":\"messageSendingStatePending\"}"), []byte("{\"@type\":\"updateMessageSendSucceeded\"}"), 1)
+						response.Raw = bytes.Replace(response.Raw, []byte(strconv.FormatInt(messageDummy.Id, 10)), []byte(strconv.FormatInt(successMsg.Message.Id, 10)), 1)
+					}
 
 					return response, nil
 				case <-time.After(10 * time.Second):
