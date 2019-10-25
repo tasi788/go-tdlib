@@ -287,10 +287,10 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 	select {
 	// wait response from main loop in NewClient()
 	case response := <-waiter:
-		var messageDummy Message
-		json.Unmarshal(response.Raw, &messageDummy)
+		if update["@type"] == "sendMessage" {
+			var messageDummy Message
+			json.Unmarshal(response.Raw, &messageDummy)
 
-		if messageDummy.Type == "message" {
 			if messageDummy.Content.GetMessageContentEnum() == "messageText" {
 				msgWaiter := make(chan UpdateMsg, 1)
 				client.msgWaiters.Store(messageDummy.Id, msgWaiter)
@@ -309,7 +309,7 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 					}
 
 					return response, nil
-				case <-time.After(10 * time.Second):
+				case <-time.After(1 * time.Second):
 					client.msgWaiters.Delete(messageDummy.Id)
 				}
 			}
