@@ -54,16 +54,17 @@ type AuthorizationStateEnum string
 
 // AuthorizationState enums
 const (
-	AuthorizationStateWaitTdlibParametersType AuthorizationStateEnum = "authorizationStateWaitTdlibParameters"
-	AuthorizationStateWaitEncryptionKeyType   AuthorizationStateEnum = "authorizationStateWaitEncryptionKey"
-	AuthorizationStateWaitPhoneNumberType     AuthorizationStateEnum = "authorizationStateWaitPhoneNumber"
-	AuthorizationStateWaitCodeType            AuthorizationStateEnum = "authorizationStateWaitCode"
-	AuthorizationStateWaitRegistrationType    AuthorizationStateEnum = "authorizationStateWaitRegistration"
-	AuthorizationStateWaitPasswordType        AuthorizationStateEnum = "authorizationStateWaitPassword"
-	AuthorizationStateReadyType               AuthorizationStateEnum = "authorizationStateReady"
-	AuthorizationStateLoggingOutType          AuthorizationStateEnum = "authorizationStateLoggingOut"
-	AuthorizationStateClosingType             AuthorizationStateEnum = "authorizationStateClosing"
-	AuthorizationStateClosedType              AuthorizationStateEnum = "authorizationStateClosed"
+	AuthorizationStateWaitTdlibParametersType         AuthorizationStateEnum = "authorizationStateWaitTdlibParameters"
+	AuthorizationStateWaitEncryptionKeyType           AuthorizationStateEnum = "authorizationStateWaitEncryptionKey"
+	AuthorizationStateWaitPhoneNumberType             AuthorizationStateEnum = "authorizationStateWaitPhoneNumber"
+	AuthorizationStateWaitCodeType                    AuthorizationStateEnum = "authorizationStateWaitCode"
+	AuthorizationStateWaitOtherDeviceConfirmationType AuthorizationStateEnum = "authorizationStateWaitOtherDeviceConfirmation"
+	AuthorizationStateWaitRegistrationType            AuthorizationStateEnum = "authorizationStateWaitRegistration"
+	AuthorizationStateWaitPasswordType                AuthorizationStateEnum = "authorizationStateWaitPassword"
+	AuthorizationStateReadyType                       AuthorizationStateEnum = "authorizationStateReady"
+	AuthorizationStateLoggingOutType                  AuthorizationStateEnum = "authorizationStateLoggingOut"
+	AuthorizationStateClosingType                     AuthorizationStateEnum = "authorizationStateClosing"
+	AuthorizationStateClosedType                      AuthorizationStateEnum = "authorizationStateClosed"
 )
 
 // InputFileEnum Alias for abstract InputFile 'Sub-Classes', used as constant-enum here
@@ -86,16 +87,6 @@ const (
 	MaskPointEyesType     MaskPointEnum = "maskPointEyes"
 	MaskPointMouthType    MaskPointEnum = "maskPointMouth"
 	MaskPointChinType     MaskPointEnum = "maskPointChin"
-)
-
-// LinkStateEnum Alias for abstract LinkState 'Sub-Classes', used as constant-enum here
-type LinkStateEnum string
-
-// LinkState enums
-const (
-	LinkStateNoneType             LinkStateEnum = "linkStateNone"
-	LinkStateKnowsPhoneNumberType LinkStateEnum = "linkStateKnowsPhoneNumber"
-	LinkStateIsContactType        LinkStateEnum = "linkStateIsContact"
 )
 
 // UserTypeEnum Alias for abstract UserType 'Sub-Classes', used as constant-enum here
@@ -199,6 +190,36 @@ const (
 	ChatTypeSecretType     ChatTypeEnum = "chatTypeSecret"
 )
 
+// ChatListEnum Alias for abstract ChatList 'Sub-Classes', used as constant-enum here
+type ChatListEnum string
+
+// ChatList enums
+const (
+	ChatListMainType    ChatListEnum = "chatListMain"
+	ChatListArchiveType ChatListEnum = "chatListArchive"
+)
+
+// PublicChatTypeEnum Alias for abstract PublicChatType 'Sub-Classes', used as constant-enum here
+type PublicChatTypeEnum string
+
+// PublicChatType enums
+const (
+	PublicChatTypeHasUsernameType     PublicChatTypeEnum = "publicChatTypeHasUsername"
+	PublicChatTypeIsLocationBasedType PublicChatTypeEnum = "publicChatTypeIsLocationBased"
+)
+
+// ChatActionBarEnum Alias for abstract ChatActionBar 'Sub-Classes', used as constant-enum here
+type ChatActionBarEnum string
+
+// ChatActionBar enums
+const (
+	ChatActionBarReportSpamType              ChatActionBarEnum = "chatActionBarReportSpam"
+	ChatActionBarReportUnrelatedLocationType ChatActionBarEnum = "chatActionBarReportUnrelatedLocation"
+	ChatActionBarReportAddBlockType          ChatActionBarEnum = "chatActionBarReportAddBlock"
+	ChatActionBarAddContactType              ChatActionBarEnum = "chatActionBarAddContact"
+	ChatActionBarSharePhoneNumberType        ChatActionBarEnum = "chatActionBarSharePhoneNumber"
+)
+
 // KeyboardButtonTypeEnum Alias for abstract KeyboardButtonType 'Sub-Classes', used as constant-enum here
 type KeyboardButtonTypeEnum string
 
@@ -231,6 +252,15 @@ const (
 	ReplyMarkupForceReplyType     ReplyMarkupEnum = "replyMarkupForceReply"
 	ReplyMarkupShowKeyboardType   ReplyMarkupEnum = "replyMarkupShowKeyboard"
 	ReplyMarkupInlineKeyboardType ReplyMarkupEnum = "replyMarkupInlineKeyboard"
+)
+
+// LoginUrlInfoEnum Alias for abstract LoginUrlInfo 'Sub-Classes', used as constant-enum here
+type LoginUrlInfoEnum string
+
+// LoginUrlInfo enums
+const (
+	LoginUrlInfoOpenType                LoginUrlInfoEnum = "loginUrlInfoOpen"
+	LoginUrlInfoRequestConfirmationType LoginUrlInfoEnum = "loginUrlInfoRequestConfirmation"
 )
 
 // RichTextEnum Alias for abstract RichText 'Sub-Classes', used as constant-enum here
@@ -466,20 +496,31 @@ type TextEntityTypeEnum string
 
 // TextEntityType enums
 const (
-	TextEntityTypeMentionType      TextEntityTypeEnum = "textEntityTypeMention"
-	TextEntityTypeHashtagType      TextEntityTypeEnum = "textEntityTypeHashtag"
-	TextEntityTypeCashtagType      TextEntityTypeEnum = "textEntityTypeCashtag"
-	TextEntityTypeBotCommandType   TextEntityTypeEnum = "textEntityTypeBotCommand"
-	TextEntityTypeUrlType          TextEntityTypeEnum = "textEntityTypeUrl"
-	TextEntityTypeEmailAddressType TextEntityTypeEnum = "textEntityTypeEmailAddress"
-	TextEntityTypeBoldType         TextEntityTypeEnum = "textEntityTypeBold"
-	TextEntityTypeItalicType       TextEntityTypeEnum = "textEntityTypeItalic"
-	TextEntityTypeCodeType         TextEntityTypeEnum = "textEntityTypeCode"
-	TextEntityTypePreType          TextEntityTypeEnum = "textEntityTypePre"
-	TextEntityTypePreCodeType      TextEntityTypeEnum = "textEntityTypePreCode"
-	TextEntityTypeTextUrlType      TextEntityTypeEnum = "textEntityTypeTextUrl"
-	TextEntityTypeMentionNameType  TextEntityTypeEnum = "textEntityTypeMentionName"
-	TextEntityTypePhoneNumberType  TextEntityTypeEnum = "textEntityTypePhoneNumber"
+	TextEntityTypeMentionType       TextEntityTypeEnum = "textEntityTypeMention"
+	TextEntityTypeHashtagType       TextEntityTypeEnum = "textEntityTypeHashtag"
+	TextEntityTypeCashtagType       TextEntityTypeEnum = "textEntityTypeCashtag"
+	TextEntityTypeBotCommandType    TextEntityTypeEnum = "textEntityTypeBotCommand"
+	TextEntityTypeUrlType           TextEntityTypeEnum = "textEntityTypeUrl"
+	TextEntityTypeEmailAddressType  TextEntityTypeEnum = "textEntityTypeEmailAddress"
+	TextEntityTypePhoneNumberType   TextEntityTypeEnum = "textEntityTypePhoneNumber"
+	TextEntityTypeBoldType          TextEntityTypeEnum = "textEntityTypeBold"
+	TextEntityTypeItalicType        TextEntityTypeEnum = "textEntityTypeItalic"
+	TextEntityTypeUnderlineType     TextEntityTypeEnum = "textEntityTypeUnderline"
+	TextEntityTypeStrikethroughType TextEntityTypeEnum = "textEntityTypeStrikethrough"
+	TextEntityTypeCodeType          TextEntityTypeEnum = "textEntityTypeCode"
+	TextEntityTypePreType           TextEntityTypeEnum = "textEntityTypePre"
+	TextEntityTypePreCodeType       TextEntityTypeEnum = "textEntityTypePreCode"
+	TextEntityTypeTextUrlType       TextEntityTypeEnum = "textEntityTypeTextUrl"
+	TextEntityTypeMentionNameType   TextEntityTypeEnum = "textEntityTypeMentionName"
+)
+
+// MessageSchedulingStateEnum Alias for abstract MessageSchedulingState 'Sub-Classes', used as constant-enum here
+type MessageSchedulingStateEnum string
+
+// MessageSchedulingState enums
+const (
+	MessageSchedulingStateSendAtDateType     MessageSchedulingStateEnum = "messageSchedulingStateSendAtDate"
+	MessageSchedulingStateSendWhenOnlineType MessageSchedulingStateEnum = "messageSchedulingStateSendWhenOnline"
 )
 
 // InputMessageContentEnum Alias for abstract InputMessageContent 'Sub-Classes', used as constant-enum here
@@ -669,8 +710,11 @@ const (
 	ChatEventUsernameChangedType              ChatEventActionEnum = "chatEventUsernameChanged"
 	ChatEventPhotoChangedType                 ChatEventActionEnum = "chatEventPhotoChanged"
 	ChatEventInvitesToggledType               ChatEventActionEnum = "chatEventInvitesToggled"
+	ChatEventLinkedChatChangedType            ChatEventActionEnum = "chatEventLinkedChatChanged"
+	ChatEventSlowModeDelayChangedType         ChatEventActionEnum = "chatEventSlowModeDelayChanged"
 	ChatEventSignMessagesToggledType          ChatEventActionEnum = "chatEventSignMessagesToggled"
 	ChatEventStickerSetChangedType            ChatEventActionEnum = "chatEventStickerSetChanged"
+	ChatEventLocationChangedType              ChatEventActionEnum = "chatEventLocationChanged"
 	ChatEventIsAllHistoryAvailableToggledType ChatEventActionEnum = "chatEventIsAllHistoryAvailableToggled"
 )
 
@@ -702,6 +746,15 @@ const (
 	DeviceTokenTizenPushType              DeviceTokenEnum = "deviceTokenTizenPush"
 )
 
+// BackgroundFillEnum Alias for abstract BackgroundFill 'Sub-Classes', used as constant-enum here
+type BackgroundFillEnum string
+
+// BackgroundFill enums
+const (
+	BackgroundFillSolidType    BackgroundFillEnum = "backgroundFillSolid"
+	BackgroundFillGradientType BackgroundFillEnum = "backgroundFillGradient"
+)
+
 // BackgroundTypeEnum Alias for abstract BackgroundType 'Sub-Classes', used as constant-enum here
 type BackgroundTypeEnum string
 
@@ -709,7 +762,7 @@ type BackgroundTypeEnum string
 const (
 	BackgroundTypeWallpaperType BackgroundTypeEnum = "backgroundTypeWallpaper"
 	BackgroundTypePatternType   BackgroundTypeEnum = "backgroundTypePattern"
-	BackgroundTypeSolidType     BackgroundTypeEnum = "backgroundTypeSolid"
+	BackgroundTypeFillType      BackgroundTypeEnum = "backgroundTypeFill"
 )
 
 // InputBackgroundEnum Alias for abstract InputBackground 'Sub-Classes', used as constant-enum here
@@ -719,6 +772,17 @@ type InputBackgroundEnum string
 const (
 	InputBackgroundLocalType  InputBackgroundEnum = "inputBackgroundLocal"
 	InputBackgroundRemoteType InputBackgroundEnum = "inputBackgroundRemote"
+)
+
+// CanTransferOwnershipResultEnum Alias for abstract CanTransferOwnershipResult 'Sub-Classes', used as constant-enum here
+type CanTransferOwnershipResultEnum string
+
+// CanTransferOwnershipResult enums
+const (
+	CanTransferOwnershipResultOkType               CanTransferOwnershipResultEnum = "canTransferOwnershipResultOk"
+	CanTransferOwnershipResultPasswordNeededType   CanTransferOwnershipResultEnum = "canTransferOwnershipResultPasswordNeeded"
+	CanTransferOwnershipResultPasswordTooFreshType CanTransferOwnershipResultEnum = "canTransferOwnershipResultPasswordTooFresh"
+	CanTransferOwnershipResultSessionTooFreshType  CanTransferOwnershipResultEnum = "canTransferOwnershipResultSessionTooFresh"
 )
 
 // CheckChatUsernameResultEnum Alias for abstract CheckChatUsernameResult 'Sub-Classes', used as constant-enum here
@@ -817,12 +881,14 @@ type UserPrivacySettingRuleEnum string
 
 // UserPrivacySettingRule enums
 const (
-	UserPrivacySettingRuleAllowAllType         UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowAll"
-	UserPrivacySettingRuleAllowContactsType    UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowContacts"
-	UserPrivacySettingRuleAllowUsersType       UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowUsers"
-	UserPrivacySettingRuleRestrictAllType      UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictAll"
-	UserPrivacySettingRuleRestrictContactsType UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictContacts"
-	UserPrivacySettingRuleRestrictUsersType    UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictUsers"
+	UserPrivacySettingRuleAllowAllType            UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowAll"
+	UserPrivacySettingRuleAllowContactsType       UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowContacts"
+	UserPrivacySettingRuleAllowUsersType          UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowUsers"
+	UserPrivacySettingRuleAllowChatMembersType    UserPrivacySettingRuleEnum = "userPrivacySettingRuleAllowChatMembers"
+	UserPrivacySettingRuleRestrictAllType         UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictAll"
+	UserPrivacySettingRuleRestrictContactsType    UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictContacts"
+	UserPrivacySettingRuleRestrictUsersType       UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictUsers"
+	UserPrivacySettingRuleRestrictChatMembersType UserPrivacySettingRuleEnum = "userPrivacySettingRuleRestrictChatMembers"
 )
 
 // UserPrivacySettingEnum Alias for abstract UserPrivacySetting 'Sub-Classes', used as constant-enum here
@@ -833,9 +899,11 @@ const (
 	UserPrivacySettingShowStatusType                  UserPrivacySettingEnum = "userPrivacySettingShowStatus"
 	UserPrivacySettingShowProfilePhotoType            UserPrivacySettingEnum = "userPrivacySettingShowProfilePhoto"
 	UserPrivacySettingShowLinkInForwardedMessagesType UserPrivacySettingEnum = "userPrivacySettingShowLinkInForwardedMessages"
+	UserPrivacySettingShowPhoneNumberType             UserPrivacySettingEnum = "userPrivacySettingShowPhoneNumber"
 	UserPrivacySettingAllowChatInvitesType            UserPrivacySettingEnum = "userPrivacySettingAllowChatInvites"
 	UserPrivacySettingAllowCallsType                  UserPrivacySettingEnum = "userPrivacySettingAllowCalls"
 	UserPrivacySettingAllowPeerToPeerCallsType        UserPrivacySettingEnum = "userPrivacySettingAllowPeerToPeerCalls"
+	UserPrivacySettingAllowFindingByPhoneNumberType   UserPrivacySettingEnum = "userPrivacySettingAllowFindingByPhoneNumber"
 )
 
 // ChatReportReasonEnum Alias for abstract ChatReportReason 'Sub-Classes', used as constant-enum here
@@ -843,12 +911,13 @@ type ChatReportReasonEnum string
 
 // ChatReportReason enums
 const (
-	ChatReportReasonSpamType        ChatReportReasonEnum = "chatReportReasonSpam"
-	ChatReportReasonViolenceType    ChatReportReasonEnum = "chatReportReasonViolence"
-	ChatReportReasonPornographyType ChatReportReasonEnum = "chatReportReasonPornography"
-	ChatReportReasonChildAbuseType  ChatReportReasonEnum = "chatReportReasonChildAbuse"
-	ChatReportReasonCopyrightType   ChatReportReasonEnum = "chatReportReasonCopyright"
-	ChatReportReasonCustomType      ChatReportReasonEnum = "chatReportReasonCustom"
+	ChatReportReasonSpamType              ChatReportReasonEnum = "chatReportReasonSpam"
+	ChatReportReasonViolenceType          ChatReportReasonEnum = "chatReportReasonViolence"
+	ChatReportReasonPornographyType       ChatReportReasonEnum = "chatReportReasonPornography"
+	ChatReportReasonChildAbuseType        ChatReportReasonEnum = "chatReportReasonChildAbuse"
+	ChatReportReasonCopyrightType         ChatReportReasonEnum = "chatReportReasonCopyright"
+	ChatReportReasonUnrelatedLocationType ChatReportReasonEnum = "chatReportReasonUnrelatedLocation"
+	ChatReportReasonCustomType            ChatReportReasonEnum = "chatReportReasonCustom"
 )
 
 // FileTypeEnum Alias for abstract FileType 'Sub-Classes', used as constant-enum here
@@ -912,12 +981,13 @@ type TopChatCategoryEnum string
 
 // TopChatCategory enums
 const (
-	TopChatCategoryUsersType      TopChatCategoryEnum = "topChatCategoryUsers"
-	TopChatCategoryBotsType       TopChatCategoryEnum = "topChatCategoryBots"
-	TopChatCategoryGroupsType     TopChatCategoryEnum = "topChatCategoryGroups"
-	TopChatCategoryChannelsType   TopChatCategoryEnum = "topChatCategoryChannels"
-	TopChatCategoryInlineBotsType TopChatCategoryEnum = "topChatCategoryInlineBots"
-	TopChatCategoryCallsType      TopChatCategoryEnum = "topChatCategoryCalls"
+	TopChatCategoryUsersType        TopChatCategoryEnum = "topChatCategoryUsers"
+	TopChatCategoryBotsType         TopChatCategoryEnum = "topChatCategoryBots"
+	TopChatCategoryGroupsType       TopChatCategoryEnum = "topChatCategoryGroups"
+	TopChatCategoryChannelsType     TopChatCategoryEnum = "topChatCategoryChannels"
+	TopChatCategoryInlineBotsType   TopChatCategoryEnum = "topChatCategoryInlineBots"
+	TopChatCategoryCallsType        TopChatCategoryEnum = "topChatCategoryCalls"
+	TopChatCategoryForwardChatsType TopChatCategoryEnum = "topChatCategoryForwardChats"
 )
 
 // TMeUrlTypeEnum Alias for abstract TMeUrlType 'Sub-Classes', used as constant-enum here
@@ -965,7 +1035,9 @@ const (
 	UpdateMessageViewsType                   UpdateEnum = "updateMessageViews"
 	UpdateMessageContentOpenedType           UpdateEnum = "updateMessageContentOpened"
 	UpdateMessageMentionReadType             UpdateEnum = "updateMessageMentionRead"
+	UpdateMessageLiveLocationViewedType      UpdateEnum = "updateMessageLiveLocationViewed"
 	UpdateNewChatType                        UpdateEnum = "updateNewChat"
+	UpdateChatChatListType                   UpdateEnum = "updateChatChatList"
 	UpdateChatTitleType                      UpdateEnum = "updateChatTitle"
 	UpdateChatPhotoType                      UpdateEnum = "updateChatPhoto"
 	UpdateChatPermissionsType                UpdateEnum = "updateChatPermissions"
@@ -974,12 +1046,14 @@ const (
 	UpdateChatIsPinnedType                   UpdateEnum = "updateChatIsPinned"
 	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
 	UpdateChatIsSponsoredType                UpdateEnum = "updateChatIsSponsored"
+	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
 	UpdateChatDefaultDisableNotificationType UpdateEnum = "updateChatDefaultDisableNotification"
 	UpdateChatReadInboxType                  UpdateEnum = "updateChatReadInbox"
 	UpdateChatReadOutboxType                 UpdateEnum = "updateChatReadOutbox"
 	UpdateChatUnreadMentionCountType         UpdateEnum = "updateChatUnreadMentionCount"
 	UpdateChatNotificationSettingsType       UpdateEnum = "updateChatNotificationSettings"
 	UpdateScopeNotificationSettingsType      UpdateEnum = "updateScopeNotificationSettings"
+	UpdateChatActionBarType                  UpdateEnum = "updateChatActionBar"
 	UpdateChatPinnedMessageType              UpdateEnum = "updateChatPinnedMessage"
 	UpdateChatReplyMarkupType                UpdateEnum = "updateChatReplyMarkup"
 	UpdateChatDraftMessageType               UpdateEnum = "updateChatDraftMessage"
@@ -1016,6 +1090,7 @@ const (
 	UpdateLanguagePackStringsType            UpdateEnum = "updateLanguagePackStrings"
 	UpdateConnectionStateType                UpdateEnum = "updateConnectionState"
 	UpdateTermsOfServiceType                 UpdateEnum = "updateTermsOfService"
+	UpdateUsersNearbyType                    UpdateEnum = "updateUsersNearby"
 	UpdateNewInlineQueryType                 UpdateEnum = "updateNewInlineQuery"
 	UpdateNewChosenInlineResultType          UpdateEnum = "updateNewChosenInlineResult"
 	UpdateNewCallbackQueryType               UpdateEnum = "updateNewCallbackQuery"
@@ -1053,11 +1128,6 @@ type InputFile interface {
 // MaskPoint Part of the face, relative to which a mask should be placed
 type MaskPoint interface {
 	GetMaskPointEnum() MaskPointEnum
-}
-
-// LinkState Represents the relationship between user A and user B. For incoming_link, user A is the current user; for outgoing_link, user B is the current user
-type LinkState interface {
-	GetLinkStateEnum() LinkStateEnum
 }
 
 // UserType Represents the type of the user. The following types are possible: regular users, deleted users and bots
@@ -1105,6 +1175,21 @@ type ChatType interface {
 	GetChatTypeEnum() ChatTypeEnum
 }
 
+// ChatList Describes a list of chats
+type ChatList interface {
+	GetChatListEnum() ChatListEnum
+}
+
+// PublicChatType Describes a type of public chats
+type PublicChatType interface {
+	GetPublicChatTypeEnum() PublicChatTypeEnum
+}
+
+// ChatActionBar Describes actions which should be possible to do through a chat action bar
+type ChatActionBar interface {
+	GetChatActionBarEnum() ChatActionBarEnum
+}
+
 // KeyboardButtonType Describes a keyboard button type
 type KeyboardButtonType interface {
 	GetKeyboardButtonTypeEnum() KeyboardButtonTypeEnum
@@ -1118,6 +1203,11 @@ type InlineKeyboardButtonType interface {
 // ReplyMarkup Contains a description of a custom keyboard and actions that can be done with it to quickly reply to bots
 type ReplyMarkup interface {
 	GetReplyMarkupEnum() ReplyMarkupEnum
+}
+
+// LoginUrlInfo Contains information about an inline button of type inlineKeyboardButtonTypeLoginUrl
+type LoginUrlInfo interface {
+	GetLoginUrlInfoEnum() LoginUrlInfoEnum
 }
 
 // RichText Describes a text object inside an instant-view web page
@@ -1178,6 +1268,11 @@ type MessageContent interface {
 // TextEntityType Represents a part of the text which must be formatted differently
 type TextEntityType interface {
 	GetTextEntityTypeEnum() TextEntityTypeEnum
+}
+
+// MessageSchedulingState Contains information about the time when a scheduled message will be sent
+type MessageSchedulingState interface {
+	GetMessageSchedulingStateEnum() MessageSchedulingStateEnum
 }
 
 // InputMessageContent The content of a message to send
@@ -1245,6 +1340,11 @@ type DeviceToken interface {
 	GetDeviceTokenEnum() DeviceTokenEnum
 }
 
+// BackgroundFill Describes a fill of a background
+type BackgroundFill interface {
+	GetBackgroundFillEnum() BackgroundFillEnum
+}
+
 // BackgroundType Describes a type of a background
 type BackgroundType interface {
 	GetBackgroundTypeEnum() BackgroundTypeEnum
@@ -1253,6 +1353,11 @@ type BackgroundType interface {
 // InputBackground Contains information about background to set
 type InputBackground interface {
 	GetInputBackgroundEnum() InputBackgroundEnum
+}
+
+// CanTransferOwnershipResult Represents result of checking whether the current session can be used to transfer a chat ownership to another user
+type CanTransferOwnershipResult interface {
+	GetCanTransferOwnershipResultEnum() CanTransferOwnershipResultEnum
 }
 
 // CheckChatUsernameResult Represents result of checking whether a username can be set for a chat
@@ -1745,7 +1850,7 @@ func NewTextEntities(entities []TextEntity) *TextEntities {
 type FormattedText struct {
 	tdCommon
 	Text     string       `json:"text"`     // The text
-	Entities []TextEntity `json:"entities"` // Entities contained in the text
+	Entities []TextEntity `json:"entities"` // Entities contained in the text. Entities can be nested, but must not mutually intersect with each other.
 }
 
 // MessageType return the string telegram-type of FormattedText
@@ -1756,7 +1861,7 @@ func (formattedText *FormattedText) MessageType() string {
 // NewFormattedText creates a new FormattedText
 //
 // @param text The text
-// @param entities Entities contained in the text
+// @param entities Entities contained in the text. Entities can be nested, but must not mutually intersect with each other.
 func NewFormattedText(text string, entities []TextEntity) *FormattedText {
 	formattedTextTemp := FormattedText{
 		tdCommon: tdCommon{Type: "formattedText"},
@@ -1771,7 +1876,7 @@ func NewFormattedText(text string, entities []TextEntity) *FormattedText {
 type TermsOfService struct {
 	tdCommon
 	Text       *FormattedText `json:"text"`         // Text of the terms of service
-	MinUserAge int32          `json:"min_user_age"` // Minimum age of a user to be able to accept the terms; 0 if any
+	MinUserAge int32          `json:"min_user_age"` // The minimum age of a user to be able to accept the terms; 0 if any
 	ShowPopup  bool           `json:"show_popup"`   // True, if a blocking popup with terms of service must be shown to the user
 }
 
@@ -1783,7 +1888,7 @@ func (termsOfService *TermsOfService) MessageType() string {
 // NewTermsOfService creates a new TermsOfService
 //
 // @param text Text of the terms of service
-// @param minUserAge Minimum age of a user to be able to accept the terms; 0 if any
+// @param minUserAge The minimum age of a user to be able to accept the terms; 0 if any
 // @param showPopup True, if a blocking popup with terms of service must be shown to the user
 func NewTermsOfService(text *FormattedText, minUserAge int32, showPopup bool) *TermsOfService {
 	termsOfServiceTemp := TermsOfService{
@@ -1849,7 +1954,7 @@ func (authorizationStateWaitEncryptionKey *AuthorizationStateWaitEncryptionKey) 
 	return AuthorizationStateWaitEncryptionKeyType
 }
 
-// AuthorizationStateWaitPhoneNumber TDLib needs the user's phone number to authorize
+// AuthorizationStateWaitPhoneNumber TDLib needs the user's phone number to authorize. Call `setAuthenticationPhoneNumber` to provide the phone number, or use `requestQrCodeAuthentication`, or `checkAuthenticationBotToken` for other authentication options
 type AuthorizationStateWaitPhoneNumber struct {
 	tdCommon
 }
@@ -1900,6 +2005,34 @@ func NewAuthorizationStateWaitCode(codeInfo *AuthenticationCodeInfo) *Authorizat
 // GetAuthorizationStateEnum return the enum type of this object
 func (authorizationStateWaitCode *AuthorizationStateWaitCode) GetAuthorizationStateEnum() AuthorizationStateEnum {
 	return AuthorizationStateWaitCodeType
+}
+
+// AuthorizationStateWaitOtherDeviceConfirmation The user needs to confirm authorization on another logged in device by scanning a QR code with the provided link
+type AuthorizationStateWaitOtherDeviceConfirmation struct {
+	tdCommon
+	Link string `json:"link"` // A tg:// URL for the QR code. The link will be updated frequently
+}
+
+// MessageType return the string telegram-type of AuthorizationStateWaitOtherDeviceConfirmation
+func (authorizationStateWaitOtherDeviceConfirmation *AuthorizationStateWaitOtherDeviceConfirmation) MessageType() string {
+	return "authorizationStateWaitOtherDeviceConfirmation"
+}
+
+// NewAuthorizationStateWaitOtherDeviceConfirmation creates a new AuthorizationStateWaitOtherDeviceConfirmation
+//
+// @param link A tg:// URL for the QR code. The link will be updated frequently
+func NewAuthorizationStateWaitOtherDeviceConfirmation(link string) *AuthorizationStateWaitOtherDeviceConfirmation {
+	authorizationStateWaitOtherDeviceConfirmationTemp := AuthorizationStateWaitOtherDeviceConfirmation{
+		tdCommon: tdCommon{Type: "authorizationStateWaitOtherDeviceConfirmation"},
+		Link:     link,
+	}
+
+	return &authorizationStateWaitOtherDeviceConfirmationTemp
+}
+
+// GetAuthorizationStateEnum return the enum type of this object
+func (authorizationStateWaitOtherDeviceConfirmation *AuthorizationStateWaitOtherDeviceConfirmation) GetAuthorizationStateEnum() AuthorizationStateEnum {
+	return AuthorizationStateWaitOtherDeviceConfirmationType
 }
 
 // AuthorizationStateWaitRegistration The user is unregistered and need to accept terms of service and enter their first name and last name to finish registration
@@ -2195,7 +2328,8 @@ func NewLocalFile(path string, canBeDownloaded bool, canBeDeleted bool, isDownlo
 // RemoteFile Represents a remote file
 type RemoteFile struct {
 	tdCommon
-	Id                   string `json:"id"`                     // Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. If the ID starts with "http://" or "https://", it represents the HTTP URL of the file. TDLib is currently unable to download files if only their URL is known.
+	Id                   string `json:"id"`                     // Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
+	UniqueId             string `json:"unique_id"`              // Unique file identifier; may be empty if unknown. The unique file identifier which is the same for the same file even for different users and is persistent over time
 	IsUploadingActive    bool   `json:"is_uploading_active"`    // True, if the file is currently being uploaded (or a remote copy is being generated by some other means)
 	IsUploadingCompleted bool   `json:"is_uploading_completed"` // True, if a remote copy is fully available
 	UploadedSize         int32  `json:"uploaded_size"`          // Size of the remote available part of the file; 0 if unknown
@@ -2208,14 +2342,16 @@ func (remoteFile *RemoteFile) MessageType() string {
 
 // NewRemoteFile creates a new RemoteFile
 //
-// @param id Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. If the ID starts with "http://" or "https://", it represents the HTTP URL of the file. TDLib is currently unable to download files if only their URL is known.
+// @param id Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
+// @param uniqueId Unique file identifier; may be empty if unknown. The unique file identifier which is the same for the same file even for different users and is persistent over time
 // @param isUploadingActive True, if the file is currently being uploaded (or a remote copy is being generated by some other means)
 // @param isUploadingCompleted True, if a remote copy is fully available
 // @param uploadedSize Size of the remote available part of the file; 0 if unknown
-func NewRemoteFile(id string, isUploadingActive bool, isUploadingCompleted bool, uploadedSize int32) *RemoteFile {
+func NewRemoteFile(id string, uniqueId string, isUploadingActive bool, isUploadingCompleted bool, uploadedSize int32) *RemoteFile {
 	remoteFileTemp := RemoteFile{
 		tdCommon:             tdCommon{Type: "remoteFile"},
 		Id:                   id,
+		UniqueId:             uniqueId,
 		IsUploadingActive:    isUploadingActive,
 		IsUploadingCompleted: isUploadingCompleted,
 		UploadedSize:         uploadedSize,
@@ -2228,6 +2364,7 @@ func NewRemoteFile(id string, isUploadingActive bool, isUploadingCompleted bool,
 type File struct {
 	tdCommon
 	Id           int32       `json:"id"`            // Unique file identifier
+	DcId         int32       `json:"dc_id"`         // File data center
 	Size         int32       `json:"size"`          // File size; 0 if unknown
 	ExpectedSize int32       `json:"expected_size"` // Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 	Local        *LocalFile  `json:"local"`         // Information about the local copy of the file
@@ -2242,14 +2379,16 @@ func (file *File) MessageType() string {
 // NewFile creates a new File
 //
 // @param id Unique file identifier
+// @param dcId File data center
 // @param size File size; 0 if unknown
 // @param expectedSize Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 // @param local Information about the local copy of the file
 // @param remote Information about the remote copy of the file
-func NewFile(id int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
+func NewFile(id int32, dcId int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
 	fileTemp := File{
 		tdCommon:     tdCommon{Type: "file"},
 		Id:           id,
+		DcId:         dcId,
 		Size:         size,
 		ExpectedSize: expectedSize,
 		Local:        local,
@@ -2287,7 +2426,7 @@ func (inputFileId *InputFileId) GetInputFileEnum() InputFileEnum {
 	return InputFileIdType
 }
 
-// InputFileRemote A file defined by its remote ID. The remote ID is guaranteed to work only if it was received after TDLib launch and the corresponding file is still accessible to the user.
+// InputFileRemote A file defined by its remote ID. The remote ID is guaranteed to be usable only if the corresponding file is still accessible to the user and known to TDLib.
 type InputFileRemote struct {
 	tdCommon
 	Id string `json:"id"` // Remote file identifier
@@ -3180,81 +3319,6 @@ func NewChatPhoto(small *File, big *File) *ChatPhoto {
 	return &chatPhotoTemp
 }
 
-// LinkStateNone The phone number of user A is not known to user B
-type LinkStateNone struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of LinkStateNone
-func (linkStateNone *LinkStateNone) MessageType() string {
-	return "linkStateNone"
-}
-
-// NewLinkStateNone creates a new LinkStateNone
-//
-func NewLinkStateNone() *LinkStateNone {
-	linkStateNoneTemp := LinkStateNone{
-		tdCommon: tdCommon{Type: "linkStateNone"},
-	}
-
-	return &linkStateNoneTemp
-}
-
-// GetLinkStateEnum return the enum type of this object
-func (linkStateNone *LinkStateNone) GetLinkStateEnum() LinkStateEnum {
-	return LinkStateNoneType
-}
-
-// LinkStateKnowsPhoneNumber The phone number of user A is known but that number has not been saved to the contact list of user B
-type LinkStateKnowsPhoneNumber struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of LinkStateKnowsPhoneNumber
-func (linkStateKnowsPhoneNumber *LinkStateKnowsPhoneNumber) MessageType() string {
-	return "linkStateKnowsPhoneNumber"
-}
-
-// NewLinkStateKnowsPhoneNumber creates a new LinkStateKnowsPhoneNumber
-//
-func NewLinkStateKnowsPhoneNumber() *LinkStateKnowsPhoneNumber {
-	linkStateKnowsPhoneNumberTemp := LinkStateKnowsPhoneNumber{
-		tdCommon: tdCommon{Type: "linkStateKnowsPhoneNumber"},
-	}
-
-	return &linkStateKnowsPhoneNumberTemp
-}
-
-// GetLinkStateEnum return the enum type of this object
-func (linkStateKnowsPhoneNumber *LinkStateKnowsPhoneNumber) GetLinkStateEnum() LinkStateEnum {
-	return LinkStateKnowsPhoneNumberType
-}
-
-// LinkStateIsContact The phone number of user A has been saved to the contact list of user B
-type LinkStateIsContact struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of LinkStateIsContact
-func (linkStateIsContact *LinkStateIsContact) MessageType() string {
-	return "linkStateIsContact"
-}
-
-// NewLinkStateIsContact creates a new LinkStateIsContact
-//
-func NewLinkStateIsContact() *LinkStateIsContact {
-	linkStateIsContactTemp := LinkStateIsContact{
-		tdCommon: tdCommon{Type: "linkStateIsContact"},
-	}
-
-	return &linkStateIsContactTemp
-}
-
-// GetLinkStateEnum return the enum type of this object
-func (linkStateIsContact *LinkStateIsContact) GetLinkStateEnum() LinkStateEnum {
-	return LinkStateIsContactType
-}
-
 // UserTypeRegular A regular user
 type UserTypeRegular struct {
 	tdCommon
@@ -3280,7 +3344,7 @@ func (userTypeRegular *UserTypeRegular) GetUserTypeEnum() UserTypeEnum {
 	return UserTypeRegularType
 }
 
-// UserTypeDeleted A deleted user or deleted bot. No information on the user besides the user_id is available. It is not possible to perform any active actions on this type of user
+// UserTypeDeleted A deleted user or deleted bot. No information on the user besides the user identifier is available. It is not possible to perform any active actions on this type of user
 type UserTypeDeleted struct {
 	tdCommon
 }
@@ -3345,7 +3409,7 @@ func (userTypeBot *UserTypeBot) GetUserTypeEnum() UserTypeEnum {
 	return UserTypeBotType
 }
 
-// UserTypeUnknown No information on the user besides the user_id is available, yet this user has not been deleted. This object is extremely rare and must be handled like a deleted user. It is not possible to perform any actions on users of this type
+// UserTypeUnknown No information on the user besides the user identifier is available, yet this user has not been deleted. This object is extremely rare and must be handled like a deleted user. It is not possible to perform any actions on users of this type
 type UserTypeUnknown struct {
 	tdCommon
 }
@@ -3422,6 +3486,32 @@ func NewBotInfo(description string, commands []BotCommand) *BotInfo {
 	return &botInfoTemp
 }
 
+// ChatLocation Represents a location to which a chat is connected
+type ChatLocation struct {
+	tdCommon
+	Location *Location `json:"location"` // The location
+	Address  string    `json:"address"`  // Location address; 1-64 characters, as defined by the chat owner
+}
+
+// MessageType return the string telegram-type of ChatLocation
+func (chatLocation *ChatLocation) MessageType() string {
+	return "chatLocation"
+}
+
+// NewChatLocation creates a new ChatLocation
+//
+// @param location The location
+// @param address Location address; 1-64 characters, as defined by the chat owner
+func NewChatLocation(location *Location, address string) *ChatLocation {
+	chatLocationTemp := ChatLocation{
+		tdCommon: tdCommon{Type: "chatLocation"},
+		Location: location,
+		Address:  address,
+	}
+
+	return &chatLocationTemp
+}
+
 // User Represents a user
 type User struct {
 	tdCommon
@@ -3433,11 +3523,11 @@ type User struct {
 	PhoneNumber       string        `json:"phone_number"`       // Phone number of the user
 	Status            UserStatus    `json:"status"`             // Current online status of the user
 	ProfilePhoto      *ProfilePhoto `json:"profile_photo"`      // Profile photo of the user; may be null
-	OutgoingLink      LinkState     `json:"outgoing_link"`      // Relationship from the current user to the other user
-	IncomingLink      LinkState     `json:"incoming_link"`      // Relationship from the other user to the current user
+	IsContact         bool          `json:"is_contact"`         // The user is a contact of the current user
+	IsMutualContact   bool          `json:"is_mutual_contact"`  // The user is a contact of the current user and the current user is a contact of the user
 	IsVerified        bool          `json:"is_verified"`        // True, if the user is verified
 	IsSupport         bool          `json:"is_support"`         // True, if the user is Telegram support account
-	RestrictionReason string        `json:"restriction_reason"` // If non-empty, it contains the reason why access to this user must be restricted. The format of the string is "{type}: {description}".
+	RestrictionReason string        `json:"restriction_reason"` // If non-empty, it contains a human-readable description of the reason why access to this user must be restricted
 	IsScam            bool          `json:"is_scam"`            // True, if many users reported this user as a scam
 	HaveAccess        bool          `json:"have_access"`        // If false, the user is inaccessible, and the only information known about the user is inside this class. It can't be passed to any method except GetUser
 	Type              UserType      `json:"type"`               // Type of the user
@@ -3459,16 +3549,16 @@ func (user *User) MessageType() string {
 // @param phoneNumber Phone number of the user
 // @param status Current online status of the user
 // @param profilePhoto Profile photo of the user; may be null
-// @param outgoingLink Relationship from the current user to the other user
-// @param incomingLink Relationship from the other user to the current user
+// @param isContact The user is a contact of the current user
+// @param isMutualContact The user is a contact of the current user and the current user is a contact of the user
 // @param isVerified True, if the user is verified
 // @param isSupport True, if the user is Telegram support account
-// @param restrictionReason If non-empty, it contains the reason why access to this user must be restricted. The format of the string is "{type}: {description}".
+// @param restrictionReason If non-empty, it contains a human-readable description of the reason why access to this user must be restricted
 // @param isScam True, if many users reported this user as a scam
 // @param haveAccess If false, the user is inaccessible, and the only information known about the user is inside this class. It can't be passed to any method except GetUser
 // @param typeParam Type of the user
 // @param languageCode IETF language tag of the user's language; only available to bots
-func NewUser(id int32, accessHash JSONInt64, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, outgoingLink LinkState, incomingLink LinkState, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
+func NewUser(id int32, accessHash JSONInt64, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, isContact bool, isMutualContact bool, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
 	userTemp := User{
 		tdCommon:          tdCommon{Type: "user"},
 		Id:                id,
@@ -3479,8 +3569,8 @@ func NewUser(id int32, accessHash JSONInt64, firstName string, lastName string, 
 		PhoneNumber:       phoneNumber,
 		Status:            status,
 		ProfilePhoto:      profilePhoto,
-		OutgoingLink:      outgoingLink,
-		IncomingLink:      incomingLink,
+		IsContact:         isContact,
+		IsMutualContact:   isMutualContact,
 		IsVerified:        isVerified,
 		IsSupport:         isSupport,
 		RestrictionReason: restrictionReason,
@@ -3509,9 +3599,11 @@ func (user *User) UnmarshalJSON(b []byte) error {
 		Username          string        `json:"username"`           // Username of the user
 		PhoneNumber       string        `json:"phone_number"`       // Phone number of the user
 		ProfilePhoto      *ProfilePhoto `json:"profile_photo"`      // Profile photo of the user; may be null
+		IsContact         bool          `json:"is_contact"`         // The user is a contact of the current user
+		IsMutualContact   bool          `json:"is_mutual_contact"`  // The user is a contact of the current user and the current user is a contact of the user
 		IsVerified        bool          `json:"is_verified"`        // True, if the user is verified
 		IsSupport         bool          `json:"is_support"`         // True, if the user is Telegram support account
-		RestrictionReason string        `json:"restriction_reason"` // If non-empty, it contains the reason why access to this user must be restricted. The format of the string is "{type}: {description}".
+		RestrictionReason string        `json:"restriction_reason"` // If non-empty, it contains a human-readable description of the reason why access to this user must be restricted
 		IsScam            bool          `json:"is_scam"`            // True, if many users reported this user as a scam
 		HaveAccess        bool          `json:"have_access"`        // If false, the user is inaccessible, and the only information known about the user is inside this class. It can't be passed to any method except GetUser
 		LanguageCode      string        `json:"language_code"`      // IETF language tag of the user's language; only available to bots
@@ -3529,6 +3621,8 @@ func (user *User) UnmarshalJSON(b []byte) error {
 	user.Username = tempObj.Username
 	user.PhoneNumber = tempObj.PhoneNumber
 	user.ProfilePhoto = tempObj.ProfilePhoto
+	user.IsContact = tempObj.IsContact
+	user.IsMutualContact = tempObj.IsMutualContact
 	user.IsVerified = tempObj.IsVerified
 	user.IsSupport = tempObj.IsSupport
 	user.RestrictionReason = tempObj.RestrictionReason
@@ -3539,12 +3633,6 @@ func (user *User) UnmarshalJSON(b []byte) error {
 	fieldStatus, _ := unmarshalUserStatus(objMap["status"])
 	user.Status = fieldStatus
 
-	fieldOutgoingLink, _ := unmarshalLinkState(objMap["outgoing_link"])
-	user.OutgoingLink = fieldOutgoingLink
-
-	fieldIncomingLink, _ := unmarshalLinkState(objMap["incoming_link"])
-	user.IncomingLink = fieldIncomingLink
-
 	fieldType, _ := unmarshalUserType(objMap["type"])
 	user.Type = fieldType
 
@@ -3554,13 +3642,14 @@ func (user *User) UnmarshalJSON(b []byte) error {
 // UserFullInfo Contains full information about a user (except the full list of profile photos)
 type UserFullInfo struct {
 	tdCommon
-	IsBlocked          bool     `json:"is_blocked"`            // True, if the user is blacklisted by the current user
-	CanBeCalled        bool     `json:"can_be_called"`         // True, if the user can be called
-	HasPrivateCalls    bool     `json:"has_private_calls"`     // True, if the user can't be called due to their privacy settings
-	Bio                string   `json:"bio"`                   // A short user bio
-	ShareText          string   `json:"share_text"`            // For bots, the text that is included with the link when users share the bot
-	GroupInCommonCount int32    `json:"group_in_common_count"` // Number of group chats where both the other user and the current user are a member; 0 for the current user
-	BotInfo            *BotInfo `json:"bot_info"`              // If the user is a bot, information about the bot; may be null
+	IsBlocked                       bool     `json:"is_blocked"`                          // True, if the user is blacklisted by the current user
+	CanBeCalled                     bool     `json:"can_be_called"`                       // True, if the user can be called
+	HasPrivateCalls                 bool     `json:"has_private_calls"`                   // True, if the user can't be called due to their privacy settings
+	NeedPhoneNumberPrivacyException bool     `json:"need_phone_number_privacy_exception"` // True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
+	Bio                             string   `json:"bio"`                                 // A short user bio
+	ShareText                       string   `json:"share_text"`                          // For bots, the text that is included with the link when users share the bot
+	GroupInCommonCount              int32    `json:"group_in_common_count"`               // Number of group chats where both the other user and the current user are a member; 0 for the current user
+	BotInfo                         *BotInfo `json:"bot_info"`                            // If the user is a bot, information about the bot; may be null
 }
 
 // MessageType return the string telegram-type of UserFullInfo
@@ -3573,20 +3662,22 @@ func (userFullInfo *UserFullInfo) MessageType() string {
 // @param isBlocked True, if the user is blacklisted by the current user
 // @param canBeCalled True, if the user can be called
 // @param hasPrivateCalls True, if the user can't be called due to their privacy settings
+// @param needPhoneNumberPrivacyException True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
 // @param bio A short user bio
 // @param shareText For bots, the text that is included with the link when users share the bot
 // @param groupInCommonCount Number of group chats where both the other user and the current user are a member; 0 for the current user
 // @param botInfo If the user is a bot, information about the bot; may be null
-func NewUserFullInfo(isBlocked bool, canBeCalled bool, hasPrivateCalls bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
+func NewUserFullInfo(isBlocked bool, canBeCalled bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
 	userFullInfoTemp := UserFullInfo{
-		tdCommon:           tdCommon{Type: "userFullInfo"},
-		IsBlocked:          isBlocked,
-		CanBeCalled:        canBeCalled,
-		HasPrivateCalls:    hasPrivateCalls,
-		Bio:                bio,
-		ShareText:          shareText,
-		GroupInCommonCount: groupInCommonCount,
-		BotInfo:            botInfo,
+		tdCommon:                        tdCommon{Type: "userFullInfo"},
+		IsBlocked:                       isBlocked,
+		CanBeCalled:                     canBeCalled,
+		HasPrivateCalls:                 hasPrivateCalls,
+		NeedPhoneNumberPrivacyException: needPhoneNumberPrivacyException,
+		Bio:                             bio,
+		ShareText:                       shareText,
+		GroupInCommonCount:              groupInCommonCount,
+		BotInfo:                         botInfo,
 	}
 
 	return &userFullInfoTemp
@@ -3673,6 +3764,58 @@ func NewUsers(totalCount int32, userIds []int32) *Users {
 	return &usersTemp
 }
 
+// ChatAdministrator Contains information about a chat administrator
+type ChatAdministrator struct {
+	tdCommon
+	UserId      int32  `json:"user_id"`      // User identifier of the administrator
+	CustomTitle string `json:"custom_title"` // Custom title of the administrator
+	IsOwner     bool   `json:"is_owner"`     // True, if the user is the owner of the chat
+}
+
+// MessageType return the string telegram-type of ChatAdministrator
+func (chatAdministrator *ChatAdministrator) MessageType() string {
+	return "chatAdministrator"
+}
+
+// NewChatAdministrator creates a new ChatAdministrator
+//
+// @param userId User identifier of the administrator
+// @param customTitle Custom title of the administrator
+// @param isOwner True, if the user is the owner of the chat
+func NewChatAdministrator(userId int32, customTitle string, isOwner bool) *ChatAdministrator {
+	chatAdministratorTemp := ChatAdministrator{
+		tdCommon:    tdCommon{Type: "chatAdministrator"},
+		UserId:      userId,
+		CustomTitle: customTitle,
+		IsOwner:     isOwner,
+	}
+
+	return &chatAdministratorTemp
+}
+
+// ChatAdministrators Represents a list of chat administrators
+type ChatAdministrators struct {
+	tdCommon
+	Administrators []ChatAdministrator `json:"administrators"` // A list of chat administrators
+}
+
+// MessageType return the string telegram-type of ChatAdministrators
+func (chatAdministrators *ChatAdministrators) MessageType() string {
+	return "chatAdministrators"
+}
+
+// NewChatAdministrators creates a new ChatAdministrators
+//
+// @param administrators A list of chat administrators
+func NewChatAdministrators(administrators []ChatAdministrator) *ChatAdministrators {
+	chatAdministratorsTemp := ChatAdministrators{
+		tdCommon:       tdCommon{Type: "chatAdministrators"},
+		Administrators: administrators,
+	}
+
+	return &chatAdministratorsTemp
+}
+
 // ChatPermissions Describes actions that a user is allowed to take in a chat
 type ChatPermissions struct {
 	tdCommon
@@ -3717,10 +3860,11 @@ func NewChatPermissions(canSendMessages bool, canSendMediaMessages bool, canSend
 	return &chatPermissionsTemp
 }
 
-// ChatMemberStatusCreator The user is the creator of a chat and has all the administrator privileges
+// ChatMemberStatusCreator The user is the owner of a chat and has all the administrator privileges
 type ChatMemberStatusCreator struct {
 	tdCommon
-	IsMember bool `json:"is_member"` // True, if the user is a member of the chat
+	CustomTitle string `json:"custom_title"` // A custom title of the owner; 0-16 characters without emojis; applicable to supergroups only
+	IsMember    bool   `json:"is_member"`    // True, if the user is a member of the chat
 }
 
 // MessageType return the string telegram-type of ChatMemberStatusCreator
@@ -3730,11 +3874,13 @@ func (chatMemberStatusCreator *ChatMemberStatusCreator) MessageType() string {
 
 // NewChatMemberStatusCreator creates a new ChatMemberStatusCreator
 //
+// @param customTitle A custom title of the owner; 0-16 characters without emojis; applicable to supergroups only
 // @param isMember True, if the user is a member of the chat
-func NewChatMemberStatusCreator(isMember bool) *ChatMemberStatusCreator {
+func NewChatMemberStatusCreator(customTitle string, isMember bool) *ChatMemberStatusCreator {
 	chatMemberStatusCreatorTemp := ChatMemberStatusCreator{
-		tdCommon: tdCommon{Type: "chatMemberStatusCreator"},
-		IsMember: isMember,
+		tdCommon:    tdCommon{Type: "chatMemberStatusCreator"},
+		CustomTitle: customTitle,
+		IsMember:    isMember,
 	}
 
 	return &chatMemberStatusCreatorTemp
@@ -3748,15 +3894,16 @@ func (chatMemberStatusCreator *ChatMemberStatusCreator) GetChatMemberStatusEnum(
 // ChatMemberStatusAdministrator The user is a member of a chat and has some additional privileges. In basic groups, administrators can edit and delete messages sent by others, add new members, and ban unprivileged members. In supergroups and channels, there are more detailed options for administrator privileges
 type ChatMemberStatusAdministrator struct {
 	tdCommon
-	CanBeEdited        bool `json:"can_be_edited"`        // True, if the current user can edit the administrator privileges for the called user
-	CanChangeInfo      bool `json:"can_change_info"`      // True, if the administrator can change the chat title, photo, and other settings
-	CanPostMessages    bool `json:"can_post_messages"`    // True, if the administrator can create channel posts; applicable to channels only
-	CanEditMessages    bool `json:"can_edit_messages"`    // True, if the administrator can edit messages of other users and pin messages; applicable to channels only
-	CanDeleteMessages  bool `json:"can_delete_messages"`  // True, if the administrator can delete messages of other users
-	CanInviteUsers     bool `json:"can_invite_users"`     // True, if the administrator can invite new users to the chat
-	CanRestrictMembers bool `json:"can_restrict_members"` // True, if the administrator can restrict, ban, or unban chat members
-	CanPinMessages     bool `json:"can_pin_messages"`     // True, if the administrator can pin messages; applicable to groups only
-	CanPromoteMembers  bool `json:"can_promote_members"`  // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by him
+	CustomTitle        string `json:"custom_title"`         // A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only
+	CanBeEdited        bool   `json:"can_be_edited"`        // True, if the current user can edit the administrator privileges for the called user
+	CanChangeInfo      bool   `json:"can_change_info"`      // True, if the administrator can change the chat title, photo, and other settings
+	CanPostMessages    bool   `json:"can_post_messages"`    // True, if the administrator can create channel posts; applicable to channels only
+	CanEditMessages    bool   `json:"can_edit_messages"`    // True, if the administrator can edit messages of other users and pin messages; applicable to channels only
+	CanDeleteMessages  bool   `json:"can_delete_messages"`  // True, if the administrator can delete messages of other users
+	CanInviteUsers     bool   `json:"can_invite_users"`     // True, if the administrator can invite new users to the chat
+	CanRestrictMembers bool   `json:"can_restrict_members"` // True, if the administrator can restrict, ban, or unban chat members
+	CanPinMessages     bool   `json:"can_pin_messages"`     // True, if the administrator can pin messages; applicable to groups only
+	CanPromoteMembers  bool   `json:"can_promote_members"`  // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
 }
 
 // MessageType return the string telegram-type of ChatMemberStatusAdministrator
@@ -3766,6 +3913,7 @@ func (chatMemberStatusAdministrator *ChatMemberStatusAdministrator) MessageType(
 
 // NewChatMemberStatusAdministrator creates a new ChatMemberStatusAdministrator
 //
+// @param customTitle A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only
 // @param canBeEdited True, if the current user can edit the administrator privileges for the called user
 // @param canChangeInfo True, if the administrator can change the chat title, photo, and other settings
 // @param canPostMessages True, if the administrator can create channel posts; applicable to channels only
@@ -3774,10 +3922,11 @@ func (chatMemberStatusAdministrator *ChatMemberStatusAdministrator) MessageType(
 // @param canInviteUsers True, if the administrator can invite new users to the chat
 // @param canRestrictMembers True, if the administrator can restrict, ban, or unban chat members
 // @param canPinMessages True, if the administrator can pin messages; applicable to groups only
-// @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by him
-func NewChatMemberStatusAdministrator(canBeEdited bool, canChangeInfo bool, canPostMessages bool, canEditMessages bool, canDeleteMessages bool, canInviteUsers bool, canRestrictMembers bool, canPinMessages bool, canPromoteMembers bool) *ChatMemberStatusAdministrator {
+// @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
+func NewChatMemberStatusAdministrator(customTitle string, canBeEdited bool, canChangeInfo bool, canPostMessages bool, canEditMessages bool, canDeleteMessages bool, canInviteUsers bool, canRestrictMembers bool, canPinMessages bool, canPromoteMembers bool) *ChatMemberStatusAdministrator {
 	chatMemberStatusAdministratorTemp := ChatMemberStatusAdministrator{
 		tdCommon:           tdCommon{Type: "chatMemberStatusAdministrator"},
+		CustomTitle:        customTitle,
 		CanBeEdited:        canBeEdited,
 		CanChangeInfo:      canChangeInfo,
 		CanPostMessages:    canPostMessages,
@@ -4026,7 +4175,7 @@ func (chatMembersFilterContacts *ChatMembersFilterContacts) GetChatMembersFilter
 	return ChatMembersFilterContactsType
 }
 
-// ChatMembersFilterAdministrators Returns the creator and administrators
+// ChatMembersFilterAdministrators Returns the owner and administrators
 type ChatMembersFilterAdministrators struct {
 	tdCommon
 }
@@ -4204,7 +4353,7 @@ func (supergroupMembersFilterContacts *SupergroupMembersFilterContacts) GetSuper
 	return SupergroupMembersFilterContactsType
 }
 
-// SupergroupMembersFilterAdministrators Returns the creator and administrators
+// SupergroupMembersFilterAdministrators Returns the owner and administrators
 type SupergroupMembersFilterAdministrators struct {
 	tdCommon
 }
@@ -4415,7 +4564,7 @@ type BasicGroupFullInfo struct {
 	Description   string       `json:"description"`     //
 	CreatorUserId int32        `json:"creator_user_id"` // User identifier of the creator of the group; 0 if unknown
 	Members       []ChatMember `json:"members"`         // Group members
-	InviteLink    string       `json:"invite_link"`     // Invite link for this group; available only for the group creator and only after it has been generated at least once
+	InviteLink    string       `json:"invite_link"`     // Invite link for this group; available only after it has been generated at least once and only for the group creator
 }
 
 // MessageType return the string telegram-type of BasicGroupFullInfo
@@ -4428,7 +4577,7 @@ func (basicGroupFullInfo *BasicGroupFullInfo) MessageType() string {
 // @param description
 // @param creatorUserId User identifier of the creator of the group; 0 if unknown
 // @param members Group members
-// @param inviteLink Invite link for this group; available only for the group creator and only after it has been generated at least once
+// @param inviteLink Invite link for this group; available only after it has been generated at least once and only for the group creator
 func NewBasicGroupFullInfo(description string, creatorUserId int32, members []ChatMember, inviteLink string) *BasicGroupFullInfo {
 	basicGroupFullInfoTemp := BasicGroupFullInfo{
 		tdCommon:      tdCommon{Type: "basicGroupFullInfo"},
@@ -4444,17 +4593,20 @@ func NewBasicGroupFullInfo(description string, creatorUserId int32, members []Ch
 // Supergroup Represents a supergroup or channel with zero or more members (subscribers in the case of channels). From the point of view of the system, a channel is a special kind of a supergroup: only administrators can post and see the list of members, and posts from all administrators use the name and photo of the channel instead of individual names and profile photos. Unlike supergroups, channels can have an unlimited number of subscribers
 type Supergroup struct {
 	tdCommon
-	Id                int32            `json:"id"`                 // Supergroup or channel identifier
-	AccessHash        JSONInt64        `json:"access_hash"`        // Supergroup or channel access hash
-	Username          string           `json:"username"`           // Username of the supergroup or channel; empty for private supergroups or channels
-	Date              int32            `json:"date"`               // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-	Status            ChatMemberStatus `json:"status"`             // Status of the current user in the supergroup or channel
-	MemberCount       int32            `json:"member_count"`       // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
-	SignMessages      bool             `json:"sign_messages"`      // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
-	IsChannel         bool             `json:"is_channel"`         // True, if the supergroup is a channel
-	IsVerified        bool             `json:"is_verified"`        // True, if the supergroup or channel is verified
-	RestrictionReason string           `json:"restriction_reason"` // If non-empty, contains the reason why access to this supergroup or channel must be restricted. Format of the string is "{type}: {description}".
-	IsScam            bool             `json:"is_scam"`            // True, if many users reported this supergroup as a scam
+	Id                int32            `json:"id"`                   // Supergroup or channel identifier
+	AccessHash        JSONInt64        `json:"access_hash"`          // Supergroup or channel access hash
+	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
+	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
+	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
+	MemberCount       int32            `json:"member_count"`         // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+	HasLinkedChat     bool             `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
+	HasLocation       bool             `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
+	SignMessages      bool             `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
+	IsSlowModeEnabled bool             `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
+	IsChannel         bool             `json:"is_channel"`           // True, if the supergroup is a channel
+	IsVerified        bool             `json:"is_verified"`          // True, if the supergroup or channel is verified
+	RestrictionReason string           `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
+	IsScam            bool             `json:"is_scam"`              // True, if many users reported this supergroup as a scam
 }
 
 // MessageType return the string telegram-type of Supergroup
@@ -4468,14 +4620,17 @@ func (supergroup *Supergroup) MessageType() string {
 // @param accessHash Supergroup or channel access hash
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-// @param status Status of the current user in the supergroup or channel
+// @param status Status of the current user in the supergroup or channel; custom title will be always empty
 // @param memberCount Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+// @param hasLinkedChat True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
+// @param hasLocation True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 // @param signMessages True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
+// @param isSlowModeEnabled True, if the slow mode is enabled in the supergroup
 // @param isChannel True, if the supergroup is a channel
 // @param isVerified True, if the supergroup or channel is verified
-// @param restrictionReason If non-empty, contains the reason why access to this supergroup or channel must be restricted. Format of the string is "{type}: {description}".
+// @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 // @param isScam True, if many users reported this supergroup as a scam
-func NewSupergroup(id int32, accessHash JSONInt64, username string, date int32, status ChatMemberStatus, memberCount int32, signMessages bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
+func NewSupergroup(id int32, accessHash JSONInt64, username string, date int32, status ChatMemberStatus, memberCount int32, hasLinkedChat bool, hasLocation bool, signMessages bool, isSlowModeEnabled bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
 	supergroupTemp := Supergroup{
 		tdCommon:          tdCommon{Type: "supergroup"},
 		Id:                id,
@@ -4484,7 +4639,10 @@ func NewSupergroup(id int32, accessHash JSONInt64, username string, date int32, 
 		Date:              date,
 		Status:            status,
 		MemberCount:       memberCount,
+		HasLinkedChat:     hasLinkedChat,
+		HasLocation:       hasLocation,
 		SignMessages:      signMessages,
+		IsSlowModeEnabled: isSlowModeEnabled,
 		IsChannel:         isChannel,
 		IsVerified:        isVerified,
 		RestrictionReason: restrictionReason,
@@ -4503,16 +4661,19 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id                int32     `json:"id"`                 // Supergroup or channel identifier
-		AccessHash        JSONInt64 `json:"access_hash"`        // Supergroup or channel access hash
-		Username          string    `json:"username"`           // Username of the supergroup or channel; empty for private supergroups or channels
-		Date              int32     `json:"date"`               // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32     `json:"member_count"`       // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
-		SignMessages      bool      `json:"sign_messages"`      // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
-		IsChannel         bool      `json:"is_channel"`         // True, if the supergroup is a channel
-		IsVerified        bool      `json:"is_verified"`        // True, if the supergroup or channel is verified
-		RestrictionReason string    `json:"restriction_reason"` // If non-empty, contains the reason why access to this supergroup or channel must be restricted. Format of the string is "{type}: {description}".
-		IsScam            bool      `json:"is_scam"`            // True, if many users reported this supergroup as a scam
+		Id                int32     `json:"id"`                   // Supergroup or channel identifier
+		AccessHash        JSONInt64 `json:"access_hash"`          // Supergroup or channel access hash
+		Username          string    `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
+		Date              int32     `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
+		MemberCount       int32     `json:"member_count"`         // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+		HasLinkedChat     bool      `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
+		HasLocation       bool      `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
+		SignMessages      bool      `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
+		IsSlowModeEnabled bool      `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
+		IsChannel         bool      `json:"is_channel"`           // True, if the supergroup is a channel
+		IsVerified        bool      `json:"is_verified"`          // True, if the supergroup or channel is verified
+		RestrictionReason string    `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
+		IsScam            bool      `json:"is_scam"`              // True, if many users reported this supergroup as a scam
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -4525,7 +4686,10 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 	supergroup.Username = tempObj.Username
 	supergroup.Date = tempObj.Date
 	supergroup.MemberCount = tempObj.MemberCount
+	supergroup.HasLinkedChat = tempObj.HasLinkedChat
+	supergroup.HasLocation = tempObj.HasLocation
 	supergroup.SignMessages = tempObj.SignMessages
+	supergroup.IsSlowModeEnabled = tempObj.IsSlowModeEnabled
 	supergroup.IsChannel = tempObj.IsChannel
 	supergroup.IsVerified = tempObj.IsVerified
 	supergroup.RestrictionReason = tempObj.RestrictionReason
@@ -4540,20 +4704,25 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 // SupergroupFullInfo Contains full information about a supergroup or channel
 type SupergroupFullInfo struct {
 	tdCommon
-	Description              string    `json:"description"`                  //
-	MemberCount              int32     `json:"member_count"`                 // Number of members in the supergroup or channel; 0 if unknown
-	AdministratorCount       int32     `json:"administrator_count"`          // Number of privileged users in the supergroup or channel; 0 if unknown
-	RestrictedCount          int32     `json:"restricted_count"`             // Number of restricted users in the supergroup; 0 if unknown
-	BannedCount              int32     `json:"banned_count"`                 // Number of users banned from chat; 0 if unknown
-	CanGetMembers            bool      `json:"can_get_members"`              // True, if members of the chat can be retrieved
-	CanSetUsername           bool      `json:"can_set_username"`             // True, if the chat can be made public
-	CanSetStickerSet         bool      `json:"can_set_sticker_set"`          // True, if the supergroup sticker set can be changed
-	CanViewStatistics        bool      `json:"can_view_statistics"`          // True, if the channel statistics is available through getChatStatisticsUrl
-	IsAllHistoryAvailable    bool      `json:"is_all_history_available"`     // True, if new chat members will have access to old messages. In public supergroups and both public and private channels, old messages are always available, so this option affects only private supergroups. The value of this field is only available for chat administrators
-	StickerSetId             JSONInt64 `json:"sticker_set_id"`               // Identifier of the supergroup sticker set; 0 if none
-	InviteLink               string    `json:"invite_link"`                  // Invite link for this chat
-	UpgradedFromBasicGroupId int32     `json:"upgraded_from_basic_group_id"` // Identifier of the basic group from which supergroup was upgraded; 0 if none
-	UpgradedFromMaxMessageId int64     `json:"upgraded_from_max_message_id"` // Identifier of the last message in the basic group from which supergroup was upgraded; 0 if none
+	Description              string        `json:"description"`                  //
+	MemberCount              int32         `json:"member_count"`                 // Number of members in the supergroup or channel; 0 if unknown
+	AdministratorCount       int32         `json:"administrator_count"`          // Number of privileged users in the supergroup or channel; 0 if unknown
+	RestrictedCount          int32         `json:"restricted_count"`             // Number of restricted users in the supergroup; 0 if unknown
+	BannedCount              int32         `json:"banned_count"`                 // Number of users banned from chat; 0 if unknown
+	LinkedChatId             int64         `json:"linked_chat_id"`               // Chat identifier of a discussion group for the channel, or a channel, for which the supergroup is the designated discussion group; 0 if none or unknown
+	SlowModeDelay            int32         `json:"slow_mode_delay"`              // Delay between consecutive sent messages for non-administrator supergroup members, in seconds
+	SlowModeDelayExpiresIn   float64       `json:"slow_mode_delay_expires_in"`   // Time left before next message can be sent in the supergroup, in seconds. An updateSupergroupFullInfo update is not triggered when value of this field changes, but both new and old values are non-zero
+	CanGetMembers            bool          `json:"can_get_members"`              // True, if members of the chat can be retrieved
+	CanSetUsername           bool          `json:"can_set_username"`             // True, if the chat username can be changed
+	CanSetStickerSet         bool          `json:"can_set_sticker_set"`          // True, if the supergroup sticker set can be changed
+	CanSetLocation           bool          `json:"can_set_location"`             // True, if the supergroup location can be changed
+	CanViewStatistics        bool          `json:"can_view_statistics"`          // True, if the channel statistics is available through getChatStatisticsUrl
+	IsAllHistoryAvailable    bool          `json:"is_all_history_available"`     // True, if new chat members will have access to old messages. In public or discussion groups and both public and private channels, old messages are always available, so this option affects only private supergroups without a linked chat. The value of this field is only available for chat administrators
+	StickerSetId             JSONInt64     `json:"sticker_set_id"`               // Identifier of the supergroup sticker set; 0 if none
+	Location                 *ChatLocation `json:"location"`                     // Location to which the supergroup is connected; may be null
+	InviteLink               string        `json:"invite_link"`                  // Invite link for this chat
+	UpgradedFromBasicGroupId int32         `json:"upgraded_from_basic_group_id"` // Identifier of the basic group from which supergroup was upgraded; 0 if none
+	UpgradedFromMaxMessageId int64         `json:"upgraded_from_max_message_id"` // Identifier of the last message in the basic group from which supergroup was upgraded; 0 if none
 }
 
 // MessageType return the string telegram-type of SupergroupFullInfo
@@ -4568,16 +4737,21 @@ func (supergroupFullInfo *SupergroupFullInfo) MessageType() string {
 // @param administratorCount Number of privileged users in the supergroup or channel; 0 if unknown
 // @param restrictedCount Number of restricted users in the supergroup; 0 if unknown
 // @param bannedCount Number of users banned from chat; 0 if unknown
+// @param linkedChatId Chat identifier of a discussion group for the channel, or a channel, for which the supergroup is the designated discussion group; 0 if none or unknown
+// @param slowModeDelay Delay between consecutive sent messages for non-administrator supergroup members, in seconds
+// @param slowModeDelayExpiresIn Time left before next message can be sent in the supergroup, in seconds. An updateSupergroupFullInfo update is not triggered when value of this field changes, but both new and old values are non-zero
 // @param canGetMembers True, if members of the chat can be retrieved
-// @param canSetUsername True, if the chat can be made public
+// @param canSetUsername True, if the chat username can be changed
 // @param canSetStickerSet True, if the supergroup sticker set can be changed
+// @param canSetLocation True, if the supergroup location can be changed
 // @param canViewStatistics True, if the channel statistics is available through getChatStatisticsUrl
-// @param isAllHistoryAvailable True, if new chat members will have access to old messages. In public supergroups and both public and private channels, old messages are always available, so this option affects only private supergroups. The value of this field is only available for chat administrators
+// @param isAllHistoryAvailable True, if new chat members will have access to old messages. In public or discussion groups and both public and private channels, old messages are always available, so this option affects only private supergroups without a linked chat. The value of this field is only available for chat administrators
 // @param stickerSetId Identifier of the supergroup sticker set; 0 if none
+// @param location Location to which the supergroup is connected; may be null
 // @param inviteLink Invite link for this chat
 // @param upgradedFromBasicGroupId Identifier of the basic group from which supergroup was upgraded; 0 if none
 // @param upgradedFromMaxMessageId Identifier of the last message in the basic group from which supergroup was upgraded; 0 if none
-func NewSupergroupFullInfo(description string, memberCount int32, administratorCount int32, restrictedCount int32, bannedCount int32, canGetMembers bool, canSetUsername bool, canSetStickerSet bool, canViewStatistics bool, isAllHistoryAvailable bool, stickerSetId JSONInt64, inviteLink string, upgradedFromBasicGroupId int32, upgradedFromMaxMessageId int64) *SupergroupFullInfo {
+func NewSupergroupFullInfo(description string, memberCount int32, administratorCount int32, restrictedCount int32, bannedCount int32, linkedChatId int64, slowModeDelay int32, slowModeDelayExpiresIn float64, canGetMembers bool, canSetUsername bool, canSetStickerSet bool, canSetLocation bool, canViewStatistics bool, isAllHistoryAvailable bool, stickerSetId JSONInt64, location *ChatLocation, inviteLink string, upgradedFromBasicGroupId int32, upgradedFromMaxMessageId int64) *SupergroupFullInfo {
 	supergroupFullInfoTemp := SupergroupFullInfo{
 		tdCommon:                 tdCommon{Type: "supergroupFullInfo"},
 		Description:              description,
@@ -4585,12 +4759,17 @@ func NewSupergroupFullInfo(description string, memberCount int32, administratorC
 		AdministratorCount:       administratorCount,
 		RestrictedCount:          restrictedCount,
 		BannedCount:              bannedCount,
+		LinkedChatId:             linkedChatId,
+		SlowModeDelay:            slowModeDelay,
+		SlowModeDelayExpiresIn:   slowModeDelayExpiresIn,
 		CanGetMembers:            canGetMembers,
 		CanSetUsername:           canSetUsername,
 		CanSetStickerSet:         canSetStickerSet,
+		CanSetLocation:           canSetLocation,
 		CanViewStatistics:        canViewStatistics,
 		IsAllHistoryAvailable:    isAllHistoryAvailable,
 		StickerSetId:             stickerSetId,
+		Location:                 location,
 		InviteLink:               inviteLink,
 		UpgradedFromBasicGroupId: upgradedFromBasicGroupId,
 		UpgradedFromMaxMessageId: upgradedFromMaxMessageId,
@@ -4683,7 +4862,7 @@ type SecretChat struct {
 	IsOutbound bool            `json:"is_outbound"` // True, if the chat was created by the current user; otherwise false
 	Ttl        int32           `json:"ttl"`         // Current message Time To Live setting (self-destruct timer) for the chat, in seconds
 	KeyHash    []byte          `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
-	Layer      int32           `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66
+	Layer      int32           `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 }
 
 // MessageType return the string telegram-type of SecretChat
@@ -4699,7 +4878,7 @@ func (secretChat *SecretChat) MessageType() string {
 // @param isOutbound True, if the chat was created by the current user; otherwise false
 // @param ttl Current message Time To Live setting (self-destruct timer) for the chat, in seconds
 // @param keyHash Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
-// @param layer Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66
+// @param layer Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 func NewSecretChat(id int32, userId int32, state SecretChatState, isOutbound bool, ttl int32, keyHash []byte, layer int32) *SecretChat {
 	secretChatTemp := SecretChat{
 		tdCommon:   tdCommon{Type: "secretChat"},
@@ -4729,7 +4908,7 @@ func (secretChat *SecretChat) UnmarshalJSON(b []byte) error {
 		IsOutbound bool   `json:"is_outbound"` // True, if the chat was created by the current user; otherwise false
 		Ttl        int32  `json:"ttl"`         // Current message Time To Live setting (self-destruct timer) for the chat, in seconds
 		KeyHash    []byte `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
-		Layer      int32  `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66
+		Layer      int32  `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -4845,8 +5024,8 @@ type MessageForwardInfo struct {
 	tdCommon
 	Origin        MessageForwardOrigin `json:"origin"`          // Origin of a forwarded message
 	Date          int32                `json:"date"`            // Point in time (Unix timestamp) when the message was originally sent
-	FromChatId    int64                `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-	FromMessageId int64                `json:"from_message_id"` // For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
+	FromChatId    int64                `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
+	FromMessageId int64                `json:"from_message_id"` // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
 }
 
 // MessageType return the string telegram-type of MessageForwardInfo
@@ -4858,8 +5037,8 @@ func (messageForwardInfo *MessageForwardInfo) MessageType() string {
 //
 // @param origin Origin of a forwarded message
 // @param date Point in time (Unix timestamp) when the message was originally sent
-// @param fromChatId For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-// @param fromMessageId For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
+// @param fromChatId For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
+// @param fromMessageId For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
 func NewMessageForwardInfo(origin MessageForwardOrigin, date int32, fromChatId int64, fromMessageId int64) *MessageForwardInfo {
 	messageForwardInfoTemp := MessageForwardInfo{
 		tdCommon:      tdCommon{Type: "messageForwardInfo"},
@@ -4882,8 +5061,8 @@ func (messageForwardInfo *MessageForwardInfo) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		Date          int32 `json:"date"`            // Point in time (Unix timestamp) when the message was originally sent
-		FromChatId    int64 `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-		FromMessageId int64 `json:"from_message_id"` // For messages forwarded to the chat with the current user (saved messages) or to the channel discussion supergroup, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
+		FromChatId    int64 `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
+		FromMessageId int64 `json:"from_message_id"` // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -4966,29 +5145,31 @@ func (messageSendingStateFailed *MessageSendingStateFailed) GetMessageSendingSta
 // Message Describes a message
 type Message struct {
 	tdCommon
-	Id                      int64               `json:"id"`                           // Message identifier, unique for the chat to which the message belongs
-	SenderUserId            int32               `json:"sender_user_id"`               // Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts and for channel posts automatically forwarded to discussion group
-	ChatId                  int64               `json:"chat_id"`                      // Chat identifier
-	SendingState            MessageSendingState `json:"sending_state"`                // Information about the sending state of the message; may be null
-	IsOutgoing              bool                `json:"is_outgoing"`                  // True, if the message is outgoing
-	CanBeEdited             bool                `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows, whether editMessageLiveLocation or stopPoll can be used with this message by the client
-	CanBeForwarded          bool                `json:"can_be_forwarded"`             // True, if the message can be forwarded
-	CanBeDeletedOnlyForSelf bool                `json:"can_be_deleted_only_for_self"` // True, if the message can be deleted only for the current user while other users will continue to see it
-	CanBeDeletedForAllUsers bool                `json:"can_be_deleted_for_all_users"` // True, if the message can be deleted for all users
-	IsChannelPost           bool                `json:"is_channel_post"`              // True, if the message is a channel post. All messages to channels are channel posts, all other messages are not channel posts
-	ContainsUnreadMention   bool                `json:"contains_unread_mention"`      // True, if the message contains an unread mention for the current user
-	Date                    int32               `json:"date"`                         // Point in time (Unix timestamp) when the message was sent
-	EditDate                int32               `json:"edit_date"`                    // Point in time (Unix timestamp) when the message was last edited
-	ForwardInfo             *MessageForwardInfo `json:"forward_info"`                 // Information about the initial message sender; may be null
-	ReplyToMessageId        int64               `json:"reply_to_message_id"`          // If non-zero, the identifier of the message this message is replying to; can be the identifier of a deleted message
-	Ttl                     int32               `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
-	TtlExpiresIn            float64             `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
-	ViaBotUserId            int32               `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
-	AuthorSignature         string              `json:"author_signature"`             // For channel posts, optional author signature
-	Views                   int32               `json:"views"`                        // Number of times this message was viewed
-	MediaAlbumId            JSONInt64           `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
-	Content                 MessageContent      `json:"content"`                      // Content of the message
-	ReplyMarkup             ReplyMarkup         `json:"reply_markup"`                 // Reply markup for the message; may be null
+	Id                      int64                  `json:"id"`                           // Message identifier, unique for the chat to which the message belongs
+	SenderUserId            int32                  `json:"sender_user_id"`               // Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts and for channel posts automatically forwarded to discussion group
+	ChatId                  int64                  `json:"chat_id"`                      // Chat identifier
+	SendingState            MessageSendingState    `json:"sending_state"`                // Information about the sending state of the message; may be null
+	SchedulingState         MessageSchedulingState `json:"scheduling_state"`             // Information about the scheduling state of the message; may be null
+	IsOutgoing              bool                   `json:"is_outgoing"`                  // True, if the message is outgoing
+	CanBeEdited             bool                   `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the client
+	CanBeForwarded          bool                   `json:"can_be_forwarded"`             // True, if the message can be forwarded
+	CanBeDeletedOnlyForSelf bool                   `json:"can_be_deleted_only_for_self"` // True, if the message can be deleted only for the current user while other users will continue to see it
+	CanBeDeletedForAllUsers bool                   `json:"can_be_deleted_for_all_users"` // True, if the message can be deleted for all users
+	IsChannelPost           bool                   `json:"is_channel_post"`              // True, if the message is a channel post. All messages to channels are channel posts, all other messages are not channel posts
+	ContainsUnreadMention   bool                   `json:"contains_unread_mention"`      // True, if the message contains an unread mention for the current user
+	Date                    int32                  `json:"date"`                         // Point in time (Unix timestamp) when the message was sent
+	EditDate                int32                  `json:"edit_date"`                    // Point in time (Unix timestamp) when the message was last edited
+	ForwardInfo             *MessageForwardInfo    `json:"forward_info"`                 // Information about the initial message sender; may be null
+	ReplyToMessageId        int64                  `json:"reply_to_message_id"`          // If non-zero, the identifier of the message this message is replying to; can be the identifier of a deleted message
+	Ttl                     int32                  `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
+	TtlExpiresIn            float64                `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
+	ViaBotUserId            int32                  `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
+	AuthorSignature         string                 `json:"author_signature"`             // For channel posts, optional author signature
+	Views                   int32                  `json:"views"`                        // Number of times this message was viewed
+	MediaAlbumId            JSONInt64              `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+	RestrictionReason       string                 `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
+	Content                 MessageContent         `json:"content"`                      // Content of the message
+	ReplyMarkup             ReplyMarkup            `json:"reply_markup"`                 // Reply markup for the message; may be null
 }
 
 // MessageType return the string telegram-type of Message
@@ -5002,8 +5183,9 @@ func (message *Message) MessageType() string {
 // @param senderUserId Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts and for channel posts automatically forwarded to discussion group
 // @param chatId Chat identifier
 // @param sendingState Information about the sending state of the message; may be null
+// @param schedulingState Information about the scheduling state of the message; may be null
 // @param isOutgoing True, if the message is outgoing
-// @param canBeEdited True, if the message can be edited. For live location and poll messages this fields shows, whether editMessageLiveLocation or stopPoll can be used with this message by the client
+// @param canBeEdited True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the client
 // @param canBeForwarded True, if the message can be forwarded
 // @param canBeDeletedOnlyForSelf True, if the message can be deleted only for the current user while other users will continue to see it
 // @param canBeDeletedForAllUsers True, if the message can be deleted for all users
@@ -5019,15 +5201,17 @@ func (message *Message) MessageType() string {
 // @param authorSignature For channel posts, optional author signature
 // @param views Number of times this message was viewed
 // @param mediaAlbumId Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+// @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 // @param content Content of the message
 // @param replyMarkup Reply markup for the message; may be null
-func NewMessage(id int64, senderUserId int32, chatId int64, sendingState MessageSendingState, isOutgoing bool, canBeEdited bool, canBeForwarded bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, replyToMessageId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int32, authorSignature string, views int32, mediaAlbumId JSONInt64, content MessageContent, replyMarkup ReplyMarkup) *Message {
+func NewMessage(id int64, senderUserId int32, chatId int64, sendingState MessageSendingState, schedulingState MessageSchedulingState, isOutgoing bool, canBeEdited bool, canBeForwarded bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, replyToMessageId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int32, authorSignature string, views int32, mediaAlbumId JSONInt64, restrictionReason string, content MessageContent, replyMarkup ReplyMarkup) *Message {
 	messageTemp := Message{
 		tdCommon:                tdCommon{Type: "message"},
 		Id:                      id,
 		SenderUserId:            senderUserId,
 		ChatId:                  chatId,
 		SendingState:            sendingState,
+		SchedulingState:         schedulingState,
 		IsOutgoing:              isOutgoing,
 		CanBeEdited:             canBeEdited,
 		CanBeForwarded:          canBeForwarded,
@@ -5045,6 +5229,7 @@ func NewMessage(id int64, senderUserId int32, chatId int64, sendingState Message
 		AuthorSignature:         authorSignature,
 		Views:                   views,
 		MediaAlbumId:            mediaAlbumId,
+		RestrictionReason:       restrictionReason,
 		Content:                 content,
 		ReplyMarkup:             replyMarkup,
 	}
@@ -5065,7 +5250,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		SenderUserId            int32               `json:"sender_user_id"`               // Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts and for channel posts automatically forwarded to discussion group
 		ChatId                  int64               `json:"chat_id"`                      // Chat identifier
 		IsOutgoing              bool                `json:"is_outgoing"`                  // True, if the message is outgoing
-		CanBeEdited             bool                `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows, whether editMessageLiveLocation or stopPoll can be used with this message by the client
+		CanBeEdited             bool                `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the client
 		CanBeForwarded          bool                `json:"can_be_forwarded"`             // True, if the message can be forwarded
 		CanBeDeletedOnlyForSelf bool                `json:"can_be_deleted_only_for_self"` // True, if the message can be deleted only for the current user while other users will continue to see it
 		CanBeDeletedForAllUsers bool                `json:"can_be_deleted_for_all_users"` // True, if the message can be deleted for all users
@@ -5081,6 +5266,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		AuthorSignature         string              `json:"author_signature"`             // For channel posts, optional author signature
 		Views                   int32               `json:"views"`                        // Number of times this message was viewed
 		MediaAlbumId            JSONInt64           `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+		RestrictionReason       string              `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -5109,9 +5295,13 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	message.AuthorSignature = tempObj.AuthorSignature
 	message.Views = tempObj.Views
 	message.MediaAlbumId = tempObj.MediaAlbumId
+	message.RestrictionReason = tempObj.RestrictionReason
 
 	fieldSendingState, _ := unmarshalMessageSendingState(objMap["sending_state"])
 	message.SendingState = fieldSendingState
+
+	fieldSchedulingState, _ := unmarshalMessageSchedulingState(objMap["scheduling_state"])
+	message.SchedulingState = fieldSchedulingState
 
 	fieldContent, _ := unmarshalMessageContent(objMap["content"])
 	message.Content = fieldContent
@@ -5504,11 +5694,62 @@ func (chatTypeSecret *ChatTypeSecret) GetChatTypeEnum() ChatTypeEnum {
 	return ChatTypeSecretType
 }
 
+// ChatListMain A main list of chats
+type ChatListMain struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatListMain
+func (chatListMain *ChatListMain) MessageType() string {
+	return "chatListMain"
+}
+
+// NewChatListMain creates a new ChatListMain
+//
+func NewChatListMain() *ChatListMain {
+	chatListMainTemp := ChatListMain{
+		tdCommon: tdCommon{Type: "chatListMain"},
+	}
+
+	return &chatListMainTemp
+}
+
+// GetChatListEnum return the enum type of this object
+func (chatListMain *ChatListMain) GetChatListEnum() ChatListEnum {
+	return ChatListMainType
+}
+
+// ChatListArchive A list of chats usually located at the top of the main chat list. Unmuted chats are automatically moved from the Archive to the Main chat list when a new message arrives
+type ChatListArchive struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatListArchive
+func (chatListArchive *ChatListArchive) MessageType() string {
+	return "chatListArchive"
+}
+
+// NewChatListArchive creates a new ChatListArchive
+//
+func NewChatListArchive() *ChatListArchive {
+	chatListArchiveTemp := ChatListArchive{
+		tdCommon: tdCommon{Type: "chatListArchive"},
+	}
+
+	return &chatListArchiveTemp
+}
+
+// GetChatListEnum return the enum type of this object
+func (chatListArchive *ChatListArchive) GetChatListEnum() ChatListEnum {
+	return ChatListArchiveType
+}
+
 // Chat A chat. (Can be a private chat, basic group, supergroup, or secret chat)
 type Chat struct {
 	tdCommon
 	Id                         int64                     `json:"id"`                           // Chat unique identifier
 	Type                       ChatType                  `json:"type"`                         // Type of the chat
+	ChatList                   ChatList                  `json:"chat_list"`                    // A chat list to which the chat belongs; may be null
 	Title                      string                    `json:"title"`                        // Chat title
 	Photo                      *ChatPhoto                `json:"photo"`                        // Chat photo; may be null
 	Permissions                *ChatPermissions          `json:"permissions"`                  // Actions that non-administrator chat members are allowed to take in the chat
@@ -5517,6 +5758,7 @@ type Chat struct {
 	IsPinned                   bool                      `json:"is_pinned"`                    // True, if the chat is pinned
 	IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
 	IsSponsored                bool                      `json:"is_sponsored"`                 // True, if the chat is sponsored by the user's MTProxy server
+	HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
 	CanBeDeletedOnlyForSelf    bool                      `json:"can_be_deleted_only_for_self"` // True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 	CanBeDeletedForAllUsers    bool                      `json:"can_be_deleted_for_all_users"` // True, if the chat messages can be deleted for all users
 	CanBeReported              bool                      `json:"can_be_reported"`              // True, if the chat can be reported to Telegram moderators through reportChat
@@ -5526,10 +5768,11 @@ type Chat struct {
 	LastReadOutboxMessageId    int64                     `json:"last_read_outbox_message_id"`  // Identifier of the last read outgoing message
 	UnreadMentionCount         int32                     `json:"unread_mention_count"`         // Number of unread messages with a mention/reply in the chat
 	NotificationSettings       *ChatNotificationSettings `json:"notification_settings"`        // Notification settings for this chat
+	ActionBar                  ChatActionBar             `json:"action_bar"`                   // Describes actions which should be possible to do through a chat action bar; may be null
 	PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 	ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 	DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
-	ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if a message database is used
+	ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
 }
 
 // MessageType return the string telegram-type of Chat
@@ -5541,6 +5784,7 @@ func (chat *Chat) MessageType() string {
 //
 // @param id Chat unique identifier
 // @param typeParam Type of the chat
+// @param chatList A chat list to which the chat belongs; may be null
 // @param title Chat title
 // @param photo Chat photo; may be null
 // @param permissions Actions that non-administrator chat members are allowed to take in the chat
@@ -5549,6 +5793,7 @@ func (chat *Chat) MessageType() string {
 // @param isPinned True, if the chat is pinned
 // @param isMarkedAsUnread True, if the chat is marked as unread
 // @param isSponsored True, if the chat is sponsored by the user's MTProxy server
+// @param hasScheduledMessages True, if the chat has scheduled messages
 // @param canBeDeletedOnlyForSelf True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 // @param canBeDeletedForAllUsers True, if the chat messages can be deleted for all users
 // @param canBeReported True, if the chat can be reported to Telegram moderators through reportChat
@@ -5558,15 +5803,17 @@ func (chat *Chat) MessageType() string {
 // @param lastReadOutboxMessageId Identifier of the last read outgoing message
 // @param unreadMentionCount Number of unread messages with a mention/reply in the chat
 // @param notificationSettings Notification settings for this chat
+// @param actionBar Describes actions which should be possible to do through a chat action bar; may be null
 // @param pinnedMessageId Identifier of the pinned message in the chat; 0 if none
 // @param replyMarkupMessageId Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 // @param draftMessage A draft of a message in the chat; may be null
-// @param clientData Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if a message database is used
-func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhoto, permissions *ChatPermissions, lastMessage *Message, order JSONInt64, isPinned bool, isMarkedAsUnread bool, isSponsored bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, pinnedMessageId int64, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
+// @param clientData Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
+func NewChat(id int64, typeParam ChatType, chatList ChatList, title string, photo *ChatPhoto, permissions *ChatPermissions, lastMessage *Message, order JSONInt64, isPinned bool, isMarkedAsUnread bool, isSponsored bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, pinnedMessageId int64, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
 	chatTemp := Chat{
 		tdCommon:                   tdCommon{Type: "chat"},
 		Id:                         id,
 		Type:                       typeParam,
+		ChatList:                   chatList,
 		Title:                      title,
 		Photo:                      photo,
 		Permissions:                permissions,
@@ -5575,6 +5822,7 @@ func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhoto, permi
 		IsPinned:                   isPinned,
 		IsMarkedAsUnread:           isMarkedAsUnread,
 		IsSponsored:                isSponsored,
+		HasScheduledMessages:       hasScheduledMessages,
 		CanBeDeletedOnlyForSelf:    canBeDeletedOnlyForSelf,
 		CanBeDeletedForAllUsers:    canBeDeletedForAllUsers,
 		CanBeReported:              canBeReported,
@@ -5584,6 +5832,7 @@ func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhoto, permi
 		LastReadOutboxMessageId:    lastReadOutboxMessageId,
 		UnreadMentionCount:         unreadMentionCount,
 		NotificationSettings:       notificationSettings,
+		ActionBar:                  actionBar,
 		PinnedMessageId:            pinnedMessageId,
 		ReplyMarkupMessageId:       replyMarkupMessageId,
 		DraftMessage:               draftMessage,
@@ -5611,6 +5860,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		IsPinned                   bool                      `json:"is_pinned"`                    // True, if the chat is pinned
 		IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
 		IsSponsored                bool                      `json:"is_sponsored"`                 // True, if the chat is sponsored by the user's MTProxy server
+		HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
 		CanBeDeletedOnlyForSelf    bool                      `json:"can_be_deleted_only_for_self"` // True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 		CanBeDeletedForAllUsers    bool                      `json:"can_be_deleted_for_all_users"` // True, if the chat messages can be deleted for all users
 		CanBeReported              bool                      `json:"can_be_reported"`              // True, if the chat can be reported to Telegram moderators through reportChat
@@ -5623,7 +5873,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 		ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 		DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
-		ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if a message database is used
+		ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -5640,6 +5890,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 	chat.IsPinned = tempObj.IsPinned
 	chat.IsMarkedAsUnread = tempObj.IsMarkedAsUnread
 	chat.IsSponsored = tempObj.IsSponsored
+	chat.HasScheduledMessages = tempObj.HasScheduledMessages
 	chat.CanBeDeletedOnlyForSelf = tempObj.CanBeDeletedOnlyForSelf
 	chat.CanBeDeletedForAllUsers = tempObj.CanBeDeletedForAllUsers
 	chat.CanBeReported = tempObj.CanBeReported
@@ -5656,6 +5907,12 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 
 	fieldType, _ := unmarshalChatType(objMap["type"])
 	chat.Type = fieldType
+
+	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
+	chat.ChatList = fieldChatList
+
+	fieldActionBar, _ := unmarshalChatActionBar(objMap["action_bar"])
+	chat.ActionBar = fieldActionBar
 
 	return nil
 }
@@ -5681,6 +5938,58 @@ func NewChats(chatIds []int64) *Chats {
 	}
 
 	return &chatsTemp
+}
+
+// ChatNearby Describes a chat located nearby
+type ChatNearby struct {
+	tdCommon
+	ChatId   int64 `json:"chat_id"`  // Chat identifier
+	Distance int32 `json:"distance"` // Distance to the chat location in meters
+}
+
+// MessageType return the string telegram-type of ChatNearby
+func (chatNearby *ChatNearby) MessageType() string {
+	return "chatNearby"
+}
+
+// NewChatNearby creates a new ChatNearby
+//
+// @param chatId Chat identifier
+// @param distance Distance to the chat location in meters
+func NewChatNearby(chatId int64, distance int32) *ChatNearby {
+	chatNearbyTemp := ChatNearby{
+		tdCommon: tdCommon{Type: "chatNearby"},
+		ChatId:   chatId,
+		Distance: distance,
+	}
+
+	return &chatNearbyTemp
+}
+
+// ChatsNearby Represents a list of chats located nearby
+type ChatsNearby struct {
+	tdCommon
+	UsersNearby       []ChatNearby `json:"users_nearby"`       // List of users nearby
+	SupergroupsNearby []ChatNearby `json:"supergroups_nearby"` // List of location-based supergroups nearby
+}
+
+// MessageType return the string telegram-type of ChatsNearby
+func (chatsNearby *ChatsNearby) MessageType() string {
+	return "chatsNearby"
+}
+
+// NewChatsNearby creates a new ChatsNearby
+//
+// @param usersNearby List of users nearby
+// @param supergroupsNearby List of location-based supergroups nearby
+func NewChatsNearby(usersNearby []ChatNearby, supergroupsNearby []ChatNearby) *ChatsNearby {
+	chatsNearbyTemp := ChatsNearby{
+		tdCommon:          tdCommon{Type: "chatsNearby"},
+		UsersNearby:       usersNearby,
+		SupergroupsNearby: supergroupsNearby,
+	}
+
+	return &chatsNearbyTemp
 }
 
 // ChatInviteLink Contains a chat invite link
@@ -5715,7 +6024,7 @@ type ChatInviteLinkInfo struct {
 	Photo         *ChatPhoto `json:"photo"`           // Chat photo; may be null
 	MemberCount   int32      `json:"member_count"`    // Number of members
 	MemberUserIds []int32    `json:"member_user_ids"` // User identifiers of some chat members that may be known to the current user
-	IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or a channel with a username
+	IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 }
 
 // MessageType return the string telegram-type of ChatInviteLinkInfo
@@ -5731,7 +6040,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) MessageType() string {
 // @param photo Chat photo; may be null
 // @param memberCount Number of members
 // @param memberUserIds User identifiers of some chat members that may be known to the current user
-// @param isPublic True, if the chat is a public supergroup or a channel with a username
+// @param isPublic True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 func NewChatInviteLinkInfo(chatId int64, typeParam ChatType, title string, photo *ChatPhoto, memberCount int32, memberUserIds []int32, isPublic bool) *ChatInviteLinkInfo {
 	chatInviteLinkInfoTemp := ChatInviteLinkInfo{
 		tdCommon:      tdCommon{Type: "chatInviteLinkInfo"},
@@ -5761,7 +6070,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) UnmarshalJSON(b []byte) error {
 		Photo         *ChatPhoto `json:"photo"`           // Chat photo; may be null
 		MemberCount   int32      `json:"member_count"`    // Number of members
 		MemberUserIds []int32    `json:"member_user_ids"` // User identifiers of some chat members that may be known to the current user
-		IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or a channel with a username
+		IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -5780,6 +6089,181 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) UnmarshalJSON(b []byte) error {
 	chatInviteLinkInfo.Type = fieldType
 
 	return nil
+}
+
+// PublicChatTypeHasUsername The chat is public, because it has username
+type PublicChatTypeHasUsername struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of PublicChatTypeHasUsername
+func (publicChatTypeHasUsername *PublicChatTypeHasUsername) MessageType() string {
+	return "publicChatTypeHasUsername"
+}
+
+// NewPublicChatTypeHasUsername creates a new PublicChatTypeHasUsername
+//
+func NewPublicChatTypeHasUsername() *PublicChatTypeHasUsername {
+	publicChatTypeHasUsernameTemp := PublicChatTypeHasUsername{
+		tdCommon: tdCommon{Type: "publicChatTypeHasUsername"},
+	}
+
+	return &publicChatTypeHasUsernameTemp
+}
+
+// GetPublicChatTypeEnum return the enum type of this object
+func (publicChatTypeHasUsername *PublicChatTypeHasUsername) GetPublicChatTypeEnum() PublicChatTypeEnum {
+	return PublicChatTypeHasUsernameType
+}
+
+// PublicChatTypeIsLocationBased The chat is public, because it is a location-based supergroup
+type PublicChatTypeIsLocationBased struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of PublicChatTypeIsLocationBased
+func (publicChatTypeIsLocationBased *PublicChatTypeIsLocationBased) MessageType() string {
+	return "publicChatTypeIsLocationBased"
+}
+
+// NewPublicChatTypeIsLocationBased creates a new PublicChatTypeIsLocationBased
+//
+func NewPublicChatTypeIsLocationBased() *PublicChatTypeIsLocationBased {
+	publicChatTypeIsLocationBasedTemp := PublicChatTypeIsLocationBased{
+		tdCommon: tdCommon{Type: "publicChatTypeIsLocationBased"},
+	}
+
+	return &publicChatTypeIsLocationBasedTemp
+}
+
+// GetPublicChatTypeEnum return the enum type of this object
+func (publicChatTypeIsLocationBased *PublicChatTypeIsLocationBased) GetPublicChatTypeEnum() PublicChatTypeEnum {
+	return PublicChatTypeIsLocationBasedType
+}
+
+// ChatActionBarReportSpam The chat can be reported as spam using the method reportChat with the reason chatReportReasonSpam
+type ChatActionBarReportSpam struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatActionBarReportSpam
+func (chatActionBarReportSpam *ChatActionBarReportSpam) MessageType() string {
+	return "chatActionBarReportSpam"
+}
+
+// NewChatActionBarReportSpam creates a new ChatActionBarReportSpam
+//
+func NewChatActionBarReportSpam() *ChatActionBarReportSpam {
+	chatActionBarReportSpamTemp := ChatActionBarReportSpam{
+		tdCommon: tdCommon{Type: "chatActionBarReportSpam"},
+	}
+
+	return &chatActionBarReportSpamTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarReportSpam *ChatActionBarReportSpam) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarReportSpamType
+}
+
+// ChatActionBarReportUnrelatedLocation The chat is a location-based supergroup, which can be reported as having unrelated location using the method reportChat with the reason chatReportReasonUnrelatedLocation
+type ChatActionBarReportUnrelatedLocation struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatActionBarReportUnrelatedLocation
+func (chatActionBarReportUnrelatedLocation *ChatActionBarReportUnrelatedLocation) MessageType() string {
+	return "chatActionBarReportUnrelatedLocation"
+}
+
+// NewChatActionBarReportUnrelatedLocation creates a new ChatActionBarReportUnrelatedLocation
+//
+func NewChatActionBarReportUnrelatedLocation() *ChatActionBarReportUnrelatedLocation {
+	chatActionBarReportUnrelatedLocationTemp := ChatActionBarReportUnrelatedLocation{
+		tdCommon: tdCommon{Type: "chatActionBarReportUnrelatedLocation"},
+	}
+
+	return &chatActionBarReportUnrelatedLocationTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarReportUnrelatedLocation *ChatActionBarReportUnrelatedLocation) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarReportUnrelatedLocationType
+}
+
+// ChatActionBarReportAddBlock The chat is a private or secret chat, which can be reported using the method reportChat, or the other user can be added to the contact list using the method addContact, or the other user can be blocked using the method blockUser
+type ChatActionBarReportAddBlock struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatActionBarReportAddBlock
+func (chatActionBarReportAddBlock *ChatActionBarReportAddBlock) MessageType() string {
+	return "chatActionBarReportAddBlock"
+}
+
+// NewChatActionBarReportAddBlock creates a new ChatActionBarReportAddBlock
+//
+func NewChatActionBarReportAddBlock() *ChatActionBarReportAddBlock {
+	chatActionBarReportAddBlockTemp := ChatActionBarReportAddBlock{
+		tdCommon: tdCommon{Type: "chatActionBarReportAddBlock"},
+	}
+
+	return &chatActionBarReportAddBlockTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarReportAddBlock *ChatActionBarReportAddBlock) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarReportAddBlockType
+}
+
+// ChatActionBarAddContact The chat is a private or secret chat and the other user can be added to the contact list using the method addContact
+type ChatActionBarAddContact struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatActionBarAddContact
+func (chatActionBarAddContact *ChatActionBarAddContact) MessageType() string {
+	return "chatActionBarAddContact"
+}
+
+// NewChatActionBarAddContact creates a new ChatActionBarAddContact
+//
+func NewChatActionBarAddContact() *ChatActionBarAddContact {
+	chatActionBarAddContactTemp := ChatActionBarAddContact{
+		tdCommon: tdCommon{Type: "chatActionBarAddContact"},
+	}
+
+	return &chatActionBarAddContactTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarAddContact *ChatActionBarAddContact) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarAddContactType
+}
+
+// ChatActionBarSharePhoneNumber The chat is a private or secret chat with a mutual contact and the user's phone number can be shared with the other user using the method sharePhoneNumber
+type ChatActionBarSharePhoneNumber struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatActionBarSharePhoneNumber
+func (chatActionBarSharePhoneNumber *ChatActionBarSharePhoneNumber) MessageType() string {
+	return "chatActionBarSharePhoneNumber"
+}
+
+// NewChatActionBarSharePhoneNumber creates a new ChatActionBarSharePhoneNumber
+//
+func NewChatActionBarSharePhoneNumber() *ChatActionBarSharePhoneNumber {
+	chatActionBarSharePhoneNumberTemp := ChatActionBarSharePhoneNumber{
+		tdCommon: tdCommon{Type: "chatActionBarSharePhoneNumber"},
+	}
+
+	return &chatActionBarSharePhoneNumberTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarSharePhoneNumber *ChatActionBarSharePhoneNumber) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarSharePhoneNumberType
 }
 
 // KeyboardButtonTypeText A simple button, with text that should be sent when the button is pressed
@@ -5940,7 +6424,7 @@ func (inlineKeyboardButtonTypeUrl *InlineKeyboardButtonTypeUrl) GetInlineKeyboar
 // InlineKeyboardButtonTypeLoginUrl A button that opens a specified URL and automatically logs in in current user if they allowed to do that
 type InlineKeyboardButtonTypeLoginUrl struct {
 	tdCommon
-	Url         string `json:"url"`          // HTTP URL to open
+	Url         string `json:"url"`          // An HTTP URL to open
 	Id          int32  `json:"id"`           // Unique button identifier
 	ForwardText string `json:"forward_text"` // If non-empty, new text of the button in forwarded messages
 }
@@ -5952,7 +6436,7 @@ func (inlineKeyboardButtonTypeLoginUrl *InlineKeyboardButtonTypeLoginUrl) Messag
 
 // NewInlineKeyboardButtonTypeLoginUrl creates a new InlineKeyboardButtonTypeLoginUrl
 //
-// @param url HTTP URL to open
+// @param url An HTTP URL to open
 // @param id Unique button identifier
 // @param forwardText If non-empty, new text of the button in forwarded messages
 func NewInlineKeyboardButtonTypeLoginUrl(url string, id int32, forwardText string) *InlineKeyboardButtonTypeLoginUrl {
@@ -6253,6 +6737,74 @@ func (replyMarkupInlineKeyboard *ReplyMarkupInlineKeyboard) GetReplyMarkupEnum()
 	return ReplyMarkupInlineKeyboardType
 }
 
+// LoginUrlInfoOpen An HTTP url needs to be open
+type LoginUrlInfoOpen struct {
+	tdCommon
+	Url         string `json:"url"`          // The URL to open
+	SkipConfirm bool   `json:"skip_confirm"` // True, if there is no need to show an ordinary open URL confirm
+}
+
+// MessageType return the string telegram-type of LoginUrlInfoOpen
+func (loginUrlInfoOpen *LoginUrlInfoOpen) MessageType() string {
+	return "loginUrlInfoOpen"
+}
+
+// NewLoginUrlInfoOpen creates a new LoginUrlInfoOpen
+//
+// @param url The URL to open
+// @param skipConfirm True, if there is no need to show an ordinary open URL confirm
+func NewLoginUrlInfoOpen(url string, skipConfirm bool) *LoginUrlInfoOpen {
+	loginUrlInfoOpenTemp := LoginUrlInfoOpen{
+		tdCommon:    tdCommon{Type: "loginUrlInfoOpen"},
+		Url:         url,
+		SkipConfirm: skipConfirm,
+	}
+
+	return &loginUrlInfoOpenTemp
+}
+
+// GetLoginUrlInfoEnum return the enum type of this object
+func (loginUrlInfoOpen *LoginUrlInfoOpen) GetLoginUrlInfoEnum() LoginUrlInfoEnum {
+	return LoginUrlInfoOpenType
+}
+
+// LoginUrlInfoRequestConfirmation An authorization confirmation dialog needs to be shown to the user
+type LoginUrlInfoRequestConfirmation struct {
+	tdCommon
+	Url                string `json:"url"`                  // An HTTP URL to be opened
+	Domain             string `json:"domain"`               // A domain of the URL
+	BotUserId          int32  `json:"bot_user_id"`          // User identifier of a bot linked with the website
+	RequestWriteAccess bool   `json:"request_write_access"` // True, if the user needs to be requested to give the permission to the bot to send them messages
+}
+
+// MessageType return the string telegram-type of LoginUrlInfoRequestConfirmation
+func (loginUrlInfoRequestConfirmation *LoginUrlInfoRequestConfirmation) MessageType() string {
+	return "loginUrlInfoRequestConfirmation"
+}
+
+// NewLoginUrlInfoRequestConfirmation creates a new LoginUrlInfoRequestConfirmation
+//
+// @param url An HTTP URL to be opened
+// @param domain A domain of the URL
+// @param botUserId User identifier of a bot linked with the website
+// @param requestWriteAccess True, if the user needs to be requested to give the permission to the bot to send them messages
+func NewLoginUrlInfoRequestConfirmation(url string, domain string, botUserId int32, requestWriteAccess bool) *LoginUrlInfoRequestConfirmation {
+	loginUrlInfoRequestConfirmationTemp := LoginUrlInfoRequestConfirmation{
+		tdCommon:           tdCommon{Type: "loginUrlInfoRequestConfirmation"},
+		Url:                url,
+		Domain:             domain,
+		BotUserId:          botUserId,
+		RequestWriteAccess: requestWriteAccess,
+	}
+
+	return &loginUrlInfoRequestConfirmationTemp
+}
+
+// GetLoginUrlInfoEnum return the enum type of this object
+func (loginUrlInfoRequestConfirmation *LoginUrlInfoRequestConfirmation) GetLoginUrlInfoEnum() LoginUrlInfoEnum {
+	return LoginUrlInfoRequestConfirmationType
+}
+
 // RichTextPlain A plain text
 type RichTextPlain struct {
 	tdCommon
@@ -6434,7 +6986,7 @@ func (richTextUnderline *RichTextUnderline) GetRichTextEnum() RichTextEnum {
 	return RichTextUnderlineType
 }
 
-// RichTextStrikethrough A strike-through rich text
+// RichTextStrikethrough A strikethrough rich text
 type RichTextStrikethrough struct {
 	tdCommon
 	Text RichText `json:"text"` // Text
@@ -12801,6 +13353,31 @@ func (textEntityTypeEmailAddress *TextEntityTypeEmailAddress) GetTextEntityTypeE
 	return TextEntityTypeEmailAddressType
 }
 
+// TextEntityTypePhoneNumber A phone number
+type TextEntityTypePhoneNumber struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TextEntityTypePhoneNumber
+func (textEntityTypePhoneNumber *TextEntityTypePhoneNumber) MessageType() string {
+	return "textEntityTypePhoneNumber"
+}
+
+// NewTextEntityTypePhoneNumber creates a new TextEntityTypePhoneNumber
+//
+func NewTextEntityTypePhoneNumber() *TextEntityTypePhoneNumber {
+	textEntityTypePhoneNumberTemp := TextEntityTypePhoneNumber{
+		tdCommon: tdCommon{Type: "textEntityTypePhoneNumber"},
+	}
+
+	return &textEntityTypePhoneNumberTemp
+}
+
+// GetTextEntityTypeEnum return the enum type of this object
+func (textEntityTypePhoneNumber *TextEntityTypePhoneNumber) GetTextEntityTypeEnum() TextEntityTypeEnum {
+	return TextEntityTypePhoneNumberType
+}
+
 // TextEntityTypeBold A bold text
 type TextEntityTypeBold struct {
 	tdCommon
@@ -12849,6 +13426,56 @@ func NewTextEntityTypeItalic() *TextEntityTypeItalic {
 // GetTextEntityTypeEnum return the enum type of this object
 func (textEntityTypeItalic *TextEntityTypeItalic) GetTextEntityTypeEnum() TextEntityTypeEnum {
 	return TextEntityTypeItalicType
+}
+
+// TextEntityTypeUnderline An underlined text
+type TextEntityTypeUnderline struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TextEntityTypeUnderline
+func (textEntityTypeUnderline *TextEntityTypeUnderline) MessageType() string {
+	return "textEntityTypeUnderline"
+}
+
+// NewTextEntityTypeUnderline creates a new TextEntityTypeUnderline
+//
+func NewTextEntityTypeUnderline() *TextEntityTypeUnderline {
+	textEntityTypeUnderlineTemp := TextEntityTypeUnderline{
+		tdCommon: tdCommon{Type: "textEntityTypeUnderline"},
+	}
+
+	return &textEntityTypeUnderlineTemp
+}
+
+// GetTextEntityTypeEnum return the enum type of this object
+func (textEntityTypeUnderline *TextEntityTypeUnderline) GetTextEntityTypeEnum() TextEntityTypeEnum {
+	return TextEntityTypeUnderlineType
+}
+
+// TextEntityTypeStrikethrough A strikethrough text
+type TextEntityTypeStrikethrough struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TextEntityTypeStrikethrough
+func (textEntityTypeStrikethrough *TextEntityTypeStrikethrough) MessageType() string {
+	return "textEntityTypeStrikethrough"
+}
+
+// NewTextEntityTypeStrikethrough creates a new TextEntityTypeStrikethrough
+//
+func NewTextEntityTypeStrikethrough() *TextEntityTypeStrikethrough {
+	textEntityTypeStrikethroughTemp := TextEntityTypeStrikethrough{
+		tdCommon: tdCommon{Type: "textEntityTypeStrikethrough"},
+	}
+
+	return &textEntityTypeStrikethroughTemp
+}
+
+// GetTextEntityTypeEnum return the enum type of this object
+func (textEntityTypeStrikethrough *TextEntityTypeStrikethrough) GetTextEntityTypeEnum() TextEntityTypeEnum {
+	return TextEntityTypeStrikethroughType
 }
 
 // TextEntityTypeCode Text that must be formatted as if inside a code HTML tag
@@ -12985,31 +13612,6 @@ func (textEntityTypeMentionName *TextEntityTypeMentionName) GetTextEntityTypeEnu
 	return TextEntityTypeMentionNameType
 }
 
-// TextEntityTypePhoneNumber A phone number
-type TextEntityTypePhoneNumber struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of TextEntityTypePhoneNumber
-func (textEntityTypePhoneNumber *TextEntityTypePhoneNumber) MessageType() string {
-	return "textEntityTypePhoneNumber"
-}
-
-// NewTextEntityTypePhoneNumber creates a new TextEntityTypePhoneNumber
-//
-func NewTextEntityTypePhoneNumber() *TextEntityTypePhoneNumber {
-	textEntityTypePhoneNumberTemp := TextEntityTypePhoneNumber{
-		tdCommon: tdCommon{Type: "textEntityTypePhoneNumber"},
-	}
-
-	return &textEntityTypePhoneNumberTemp
-}
-
-// GetTextEntityTypeEnum return the enum type of this object
-func (textEntityTypePhoneNumber *TextEntityTypePhoneNumber) GetTextEntityTypeEnum() TextEntityTypeEnum {
-	return TextEntityTypePhoneNumberType
-}
-
 // InputThumbnail A thumbnail to be sent along with a file; should be in JPEG or WEBP format for stickers, and less than 200 kB in size
 type InputThumbnail struct {
 	tdCommon
@@ -13066,10 +13668,120 @@ func (inputThumbnail *InputThumbnail) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MessageSchedulingStateSendAtDate The message will be sent at the specified date
+type MessageSchedulingStateSendAtDate struct {
+	tdCommon
+	SendDate int32 `json:"send_date"` // Date the message will be sent. The date must be within 367 days in the future
+}
+
+// MessageType return the string telegram-type of MessageSchedulingStateSendAtDate
+func (messageSchedulingStateSendAtDate *MessageSchedulingStateSendAtDate) MessageType() string {
+	return "messageSchedulingStateSendAtDate"
+}
+
+// NewMessageSchedulingStateSendAtDate creates a new MessageSchedulingStateSendAtDate
+//
+// @param sendDate Date the message will be sent. The date must be within 367 days in the future
+func NewMessageSchedulingStateSendAtDate(sendDate int32) *MessageSchedulingStateSendAtDate {
+	messageSchedulingStateSendAtDateTemp := MessageSchedulingStateSendAtDate{
+		tdCommon: tdCommon{Type: "messageSchedulingStateSendAtDate"},
+		SendDate: sendDate,
+	}
+
+	return &messageSchedulingStateSendAtDateTemp
+}
+
+// GetMessageSchedulingStateEnum return the enum type of this object
+func (messageSchedulingStateSendAtDate *MessageSchedulingStateSendAtDate) GetMessageSchedulingStateEnum() MessageSchedulingStateEnum {
+	return MessageSchedulingStateSendAtDateType
+}
+
+// MessageSchedulingStateSendWhenOnline The message will be sent when the peer will be online. Applicable to private chats only and when the exact online status of the peer is known
+type MessageSchedulingStateSendWhenOnline struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of MessageSchedulingStateSendWhenOnline
+func (messageSchedulingStateSendWhenOnline *MessageSchedulingStateSendWhenOnline) MessageType() string {
+	return "messageSchedulingStateSendWhenOnline"
+}
+
+// NewMessageSchedulingStateSendWhenOnline creates a new MessageSchedulingStateSendWhenOnline
+//
+func NewMessageSchedulingStateSendWhenOnline() *MessageSchedulingStateSendWhenOnline {
+	messageSchedulingStateSendWhenOnlineTemp := MessageSchedulingStateSendWhenOnline{
+		tdCommon: tdCommon{Type: "messageSchedulingStateSendWhenOnline"},
+	}
+
+	return &messageSchedulingStateSendWhenOnlineTemp
+}
+
+// GetMessageSchedulingStateEnum return the enum type of this object
+func (messageSchedulingStateSendWhenOnline *MessageSchedulingStateSendWhenOnline) GetMessageSchedulingStateEnum() MessageSchedulingStateEnum {
+	return MessageSchedulingStateSendWhenOnlineType
+}
+
+// SendMessageOptions Options to be used when a message is send
+type SendMessageOptions struct {
+	tdCommon
+	DisableNotification bool                   `json:"disable_notification"` // Pass true to disable notification for the message. Must be false if the message is sent to a secret chat
+	FromBackground      bool                   `json:"from_background"`      // Pass true if the message is sent from the background
+	SchedulingState     MessageSchedulingState `json:"scheduling_state"`     // Message scheduling state. Messages sent to a secret chat, live location messages and self-destructing messages can't be scheduled
+}
+
+// MessageType return the string telegram-type of SendMessageOptions
+func (sendMessageOptions *SendMessageOptions) MessageType() string {
+	return "sendMessageOptions"
+}
+
+// NewSendMessageOptions creates a new SendMessageOptions
+//
+// @param disableNotification Pass true to disable notification for the message. Must be false if the message is sent to a secret chat
+// @param fromBackground Pass true if the message is sent from the background
+// @param schedulingState Message scheduling state. Messages sent to a secret chat, live location messages and self-destructing messages can't be scheduled
+func NewSendMessageOptions(disableNotification bool, fromBackground bool, schedulingState MessageSchedulingState) *SendMessageOptions {
+	sendMessageOptionsTemp := SendMessageOptions{
+		tdCommon:            tdCommon{Type: "sendMessageOptions"},
+		DisableNotification: disableNotification,
+		FromBackground:      fromBackground,
+		SchedulingState:     schedulingState,
+	}
+
+	return &sendMessageOptionsTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (sendMessageOptions *SendMessageOptions) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		DisableNotification bool `json:"disable_notification"` // Pass true to disable notification for the message. Must be false if the message is sent to a secret chat
+		FromBackground      bool `json:"from_background"`      // Pass true if the message is sent from the background
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	sendMessageOptions.tdCommon = tempObj.tdCommon
+	sendMessageOptions.DisableNotification = tempObj.DisableNotification
+	sendMessageOptions.FromBackground = tempObj.FromBackground
+
+	fieldSchedulingState, _ := unmarshalMessageSchedulingState(objMap["scheduling_state"])
+	sendMessageOptions.SchedulingState = fieldSchedulingState
+
+	return nil
+}
+
 // InputMessageText A text message
 type InputMessageText struct {
 	tdCommon
-	Text                  *FormattedText `json:"text"`                     // Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Code, Pre, PreCode and TextUrl entities are allowed to be specified manually
+	Text                  *FormattedText `json:"text"`                     // Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
 	DisableWebPagePreview bool           `json:"disable_web_page_preview"` // True, if rich web page previews for URLs in the message text should be disabled
 	ClearDraft            bool           `json:"clear_draft"`              // True, if a chat message draft should be deleted
 }
@@ -13081,7 +13793,7 @@ func (inputMessageText *InputMessageText) MessageType() string {
 
 // NewInputMessageText creates a new InputMessageText
 //
-// @param text Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Code, Pre, PreCode and TextUrl entities are allowed to be specified manually
+// @param text Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
 // @param disableWebPagePreview True, if rich web page previews for URLs in the message text should be disabled
 // @param clearDraft True, if a chat message draft should be deleted
 func NewInputMessageText(text *FormattedText, disableWebPagePreview bool, clearDraft bool) *InputMessageText {
@@ -15140,8 +15852,8 @@ type CallProtocol struct {
 	tdCommon
 	UdpP2p       bool  `json:"udp_p2p"`       // True, if UDP peer-to-peer connections are supported
 	UdpReflector bool  `json:"udp_reflector"` // True, if connection through UDP reflectors is supported
-	MinLayer     int32 `json:"min_layer"`     // Minimum supported API layer; use 65
-	MaxLayer     int32 `json:"max_layer"`     // Maximum supported API layer; use 65
+	MinLayer     int32 `json:"min_layer"`     // The minimum supported API layer; use 65
+	MaxLayer     int32 `json:"max_layer"`     // The maximum supported API layer; use 65
 }
 
 // MessageType return the string telegram-type of CallProtocol
@@ -15153,8 +15865,8 @@ func (callProtocol *CallProtocol) MessageType() string {
 //
 // @param udpP2p True, if UDP peer-to-peer connections are supported
 // @param udpReflector True, if connection through UDP reflectors is supported
-// @param minLayer Minimum supported API layer; use 65
-// @param maxLayer Maximum supported API layer; use 65
+// @param minLayer The minimum supported API layer; use 65
+// @param maxLayer The maximum supported API layer; use 65
 func NewCallProtocol(udpP2p bool, udpReflector bool, minLayer int32, maxLayer int32) *CallProtocol {
 	callProtocolTemp := CallProtocol{
 		tdCommon:     tdCommon{Type: "callProtocol"},
@@ -16572,12 +17284,12 @@ func (inputInlineQueryResultPhoto *InputInlineQueryResultPhoto) GetInputInlineQu
 	return InputInlineQueryResultPhotoType
 }
 
-// InputInlineQueryResultSticker Represents a link to a WEBP or a TGS sticker
+// InputInlineQueryResultSticker Represents a link to a WEBP or TGS sticker
 type InputInlineQueryResultSticker struct {
 	tdCommon
 	Id                  string              `json:"id"`                    // Unique identifier of the query result
 	ThumbnailUrl        string              `json:"thumbnail_url"`         // URL of the sticker thumbnail, if it exists
-	StickerUrl          string              `json:"sticker_url"`           // The URL of the WEBP or a TGS sticker (sticker file size must not exceed 5MB)
+	StickerUrl          string              `json:"sticker_url"`           // The URL of the WEBP or TGS sticker (sticker file size must not exceed 5MB)
 	StickerWidth        int32               `json:"sticker_width"`         // Width of the sticker
 	StickerHeight       int32               `json:"sticker_height"`        // Height of the sticker
 	ReplyMarkup         ReplyMarkup         `json:"reply_markup"`          // The message reply markup. Must be of type replyMarkupInlineKeyboard or null
@@ -16593,7 +17305,7 @@ func (inputInlineQueryResultSticker *InputInlineQueryResultSticker) MessageType(
 //
 // @param id Unique identifier of the query result
 // @param thumbnailUrl URL of the sticker thumbnail, if it exists
-// @param stickerUrl The URL of the WEBP or a TGS sticker (sticker file size must not exceed 5MB)
+// @param stickerUrl The URL of the WEBP or TGS sticker (sticker file size must not exceed 5MB)
 // @param stickerWidth Width of the sticker
 // @param stickerHeight Height of the sticker
 // @param replyMarkup The message reply markup. Must be of type replyMarkupInlineKeyboard or null
@@ -16624,7 +17336,7 @@ func (inputInlineQueryResultSticker *InputInlineQueryResultSticker) UnmarshalJSO
 		tdCommon
 		Id            string `json:"id"`             // Unique identifier of the query result
 		ThumbnailUrl  string `json:"thumbnail_url"`  // URL of the sticker thumbnail, if it exists
-		StickerUrl    string `json:"sticker_url"`    // The URL of the WEBP or a TGS sticker (sticker file size must not exceed 5MB)
+		StickerUrl    string `json:"sticker_url"`    // The URL of the WEBP or TGS sticker (sticker file size must not exceed 5MB)
 		StickerWidth  int32  `json:"sticker_width"`  // Width of the sticker
 		StickerHeight int32  `json:"sticker_height"` // Height of the sticker
 
@@ -18136,6 +18848,68 @@ func (chatEventInvitesToggled *ChatEventInvitesToggled) GetChatEventActionEnum()
 	return ChatEventInvitesToggledType
 }
 
+// ChatEventLinkedChatChanged The linked chat of a supergroup was changed
+type ChatEventLinkedChatChanged struct {
+	tdCommon
+	OldLinkedChatId int64 `json:"old_linked_chat_id"` // Previous supergroup linked chat identifier
+	NewLinkedChatId int64 `json:"new_linked_chat_id"` // New supergroup linked chat identifier
+}
+
+// MessageType return the string telegram-type of ChatEventLinkedChatChanged
+func (chatEventLinkedChatChanged *ChatEventLinkedChatChanged) MessageType() string {
+	return "chatEventLinkedChatChanged"
+}
+
+// NewChatEventLinkedChatChanged creates a new ChatEventLinkedChatChanged
+//
+// @param oldLinkedChatId Previous supergroup linked chat identifier
+// @param newLinkedChatId New supergroup linked chat identifier
+func NewChatEventLinkedChatChanged(oldLinkedChatId int64, newLinkedChatId int64) *ChatEventLinkedChatChanged {
+	chatEventLinkedChatChangedTemp := ChatEventLinkedChatChanged{
+		tdCommon:        tdCommon{Type: "chatEventLinkedChatChanged"},
+		OldLinkedChatId: oldLinkedChatId,
+		NewLinkedChatId: newLinkedChatId,
+	}
+
+	return &chatEventLinkedChatChangedTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventLinkedChatChanged *ChatEventLinkedChatChanged) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventLinkedChatChangedType
+}
+
+// ChatEventSlowModeDelayChanged The slow_mode_delay setting of a supergroup was changed
+type ChatEventSlowModeDelayChanged struct {
+	tdCommon
+	OldSlowModeDelay int32 `json:"old_slow_mode_delay"` // Previous value of slow_mode_delay
+	NewSlowModeDelay int32 `json:"new_slow_mode_delay"` // New value of slow_mode_delay
+}
+
+// MessageType return the string telegram-type of ChatEventSlowModeDelayChanged
+func (chatEventSlowModeDelayChanged *ChatEventSlowModeDelayChanged) MessageType() string {
+	return "chatEventSlowModeDelayChanged"
+}
+
+// NewChatEventSlowModeDelayChanged creates a new ChatEventSlowModeDelayChanged
+//
+// @param oldSlowModeDelay Previous value of slow_mode_delay
+// @param newSlowModeDelay New value of slow_mode_delay
+func NewChatEventSlowModeDelayChanged(oldSlowModeDelay int32, newSlowModeDelay int32) *ChatEventSlowModeDelayChanged {
+	chatEventSlowModeDelayChangedTemp := ChatEventSlowModeDelayChanged{
+		tdCommon:         tdCommon{Type: "chatEventSlowModeDelayChanged"},
+		OldSlowModeDelay: oldSlowModeDelay,
+		NewSlowModeDelay: newSlowModeDelay,
+	}
+
+	return &chatEventSlowModeDelayChangedTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventSlowModeDelayChanged *ChatEventSlowModeDelayChanged) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventSlowModeDelayChangedType
+}
+
 // ChatEventSignMessagesToggled The sign_messages setting of a channel was toggled
 type ChatEventSignMessagesToggled struct {
 	tdCommon
@@ -18193,6 +18967,37 @@ func NewChatEventStickerSetChanged(oldStickerSetId JSONInt64, newStickerSetId JS
 // GetChatEventActionEnum return the enum type of this object
 func (chatEventStickerSetChanged *ChatEventStickerSetChanged) GetChatEventActionEnum() ChatEventActionEnum {
 	return ChatEventStickerSetChangedType
+}
+
+// ChatEventLocationChanged The supergroup location was changed
+type ChatEventLocationChanged struct {
+	tdCommon
+	OldLocation *ChatLocation `json:"old_location"` // Previous location; may be null
+	NewLocation *ChatLocation `json:"new_location"` // New location; may be null
+}
+
+// MessageType return the string telegram-type of ChatEventLocationChanged
+func (chatEventLocationChanged *ChatEventLocationChanged) MessageType() string {
+	return "chatEventLocationChanged"
+}
+
+// NewChatEventLocationChanged creates a new ChatEventLocationChanged
+//
+// @param oldLocation Previous location; may be null
+// @param newLocation New location; may be null
+func NewChatEventLocationChanged(oldLocation *ChatLocation, newLocation *ChatLocation) *ChatEventLocationChanged {
+	chatEventLocationChangedTemp := ChatEventLocationChanged{
+		tdCommon:    tdCommon{Type: "chatEventLocationChanged"},
+		OldLocation: oldLocation,
+		NewLocation: newLocation,
+	}
+
+	return &chatEventLocationChangedTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventLocationChanged *ChatEventLocationChanged) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventLocationChangedType
 }
 
 // ChatEventIsAllHistoryAvailableToggled The is_all_history_available setting of a supergroup was toggled
@@ -18960,11 +19765,73 @@ func NewPushReceiverId(id JSONInt64) *PushReceiverId {
 	return &pushReceiverIdTemp
 }
 
+// BackgroundFillSolid Describes a solid fill of a background
+type BackgroundFillSolid struct {
+	tdCommon
+	Color int32 `json:"color"` // A color of the background in the RGB24 format
+}
+
+// MessageType return the string telegram-type of BackgroundFillSolid
+func (backgroundFillSolid *BackgroundFillSolid) MessageType() string {
+	return "backgroundFillSolid"
+}
+
+// NewBackgroundFillSolid creates a new BackgroundFillSolid
+//
+// @param color A color of the background in the RGB24 format
+func NewBackgroundFillSolid(color int32) *BackgroundFillSolid {
+	backgroundFillSolidTemp := BackgroundFillSolid{
+		tdCommon: tdCommon{Type: "backgroundFillSolid"},
+		Color:    color,
+	}
+
+	return &backgroundFillSolidTemp
+}
+
+// GetBackgroundFillEnum return the enum type of this object
+func (backgroundFillSolid *BackgroundFillSolid) GetBackgroundFillEnum() BackgroundFillEnum {
+	return BackgroundFillSolidType
+}
+
+// BackgroundFillGradient Describes a gradient fill of a background
+type BackgroundFillGradient struct {
+	tdCommon
+	TopColor      int32 `json:"top_color"`      // A top color of the background in the RGB24 format
+	BottomColor   int32 `json:"bottom_color"`   // A bottom color of the background in the RGB24 format
+	RotationAngle int32 `json:"rotation_angle"` // Clockwise rotation angle of the gradient, in degrees; 0-359. Should be always divisible by 45
+}
+
+// MessageType return the string telegram-type of BackgroundFillGradient
+func (backgroundFillGradient *BackgroundFillGradient) MessageType() string {
+	return "backgroundFillGradient"
+}
+
+// NewBackgroundFillGradient creates a new BackgroundFillGradient
+//
+// @param topColor A top color of the background in the RGB24 format
+// @param bottomColor A bottom color of the background in the RGB24 format
+// @param rotationAngle Clockwise rotation angle of the gradient, in degrees; 0-359. Should be always divisible by 45
+func NewBackgroundFillGradient(topColor int32, bottomColor int32, rotationAngle int32) *BackgroundFillGradient {
+	backgroundFillGradientTemp := BackgroundFillGradient{
+		tdCommon:      tdCommon{Type: "backgroundFillGradient"},
+		TopColor:      topColor,
+		BottomColor:   bottomColor,
+		RotationAngle: rotationAngle,
+	}
+
+	return &backgroundFillGradientTemp
+}
+
+// GetBackgroundFillEnum return the enum type of this object
+func (backgroundFillGradient *BackgroundFillGradient) GetBackgroundFillEnum() BackgroundFillEnum {
+	return BackgroundFillGradientType
+}
+
 // BackgroundTypeWallpaper A wallpaper in JPEG format
 type BackgroundTypeWallpaper struct {
 	tdCommon
 	IsBlurred bool `json:"is_blurred"` // True, if the wallpaper must be downscaled to fit in 450x450 square and then box-blurred with radius 12
-	IsMoving  bool `json:"is_moving"`  // True, if the background needs to be slightly moved when device is rotated
+	IsMoving  bool `json:"is_moving"`  // True, if the background needs to be slightly moved when device is tilted
 }
 
 // MessageType return the string telegram-type of BackgroundTypeWallpaper
@@ -18975,7 +19842,7 @@ func (backgroundTypeWallpaper *BackgroundTypeWallpaper) MessageType() string {
 // NewBackgroundTypeWallpaper creates a new BackgroundTypeWallpaper
 //
 // @param isBlurred True, if the wallpaper must be downscaled to fit in 450x450 square and then box-blurred with radius 12
-// @param isMoving True, if the background needs to be slightly moved when device is rotated
+// @param isMoving True, if the background needs to be slightly moved when device is tilted
 func NewBackgroundTypeWallpaper(isBlurred bool, isMoving bool) *BackgroundTypeWallpaper {
 	backgroundTypeWallpaperTemp := BackgroundTypeWallpaper{
 		tdCommon:  tdCommon{Type: "backgroundTypeWallpaper"},
@@ -18991,12 +19858,12 @@ func (backgroundTypeWallpaper *BackgroundTypeWallpaper) GetBackgroundTypeEnum() 
 	return BackgroundTypeWallpaperType
 }
 
-// BackgroundTypePattern A PNG pattern to be combined with the color chosen by the user
+// BackgroundTypePattern A PNG or TGV (gzipped subset of SVG with mime-type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user
 type BackgroundTypePattern struct {
 	tdCommon
-	IsMoving  bool  `json:"is_moving"` // True, if the background needs to be slightly moved when device is rotated
-	Color     int32 `json:"color"`     // Main color of the background in RGB24 format
-	Intensity int32 `json:"intensity"` // Intensity of the pattern when it is shown above the main background color, 0-100
+	Fill      BackgroundFill `json:"fill"`      // Description of the background fill
+	Intensity int32          `json:"intensity"` // Intensity of the pattern when it is shown above the filled background, 0-100
+	IsMoving  bool           `json:"is_moving"` // True, if the background needs to be slightly moved when device is tilted
 }
 
 // MessageType return the string telegram-type of BackgroundTypePattern
@@ -19006,18 +19873,45 @@ func (backgroundTypePattern *BackgroundTypePattern) MessageType() string {
 
 // NewBackgroundTypePattern creates a new BackgroundTypePattern
 //
-// @param isMoving True, if the background needs to be slightly moved when device is rotated
-// @param color Main color of the background in RGB24 format
-// @param intensity Intensity of the pattern when it is shown above the main background color, 0-100
-func NewBackgroundTypePattern(isMoving bool, color int32, intensity int32) *BackgroundTypePattern {
+// @param fill Description of the background fill
+// @param intensity Intensity of the pattern when it is shown above the filled background, 0-100
+// @param isMoving True, if the background needs to be slightly moved when device is tilted
+func NewBackgroundTypePattern(fill BackgroundFill, intensity int32, isMoving bool) *BackgroundTypePattern {
 	backgroundTypePatternTemp := BackgroundTypePattern{
 		tdCommon:  tdCommon{Type: "backgroundTypePattern"},
-		IsMoving:  isMoving,
-		Color:     color,
+		Fill:      fill,
 		Intensity: intensity,
+		IsMoving:  isMoving,
 	}
 
 	return &backgroundTypePatternTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (backgroundTypePattern *BackgroundTypePattern) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Intensity int32 `json:"intensity"` // Intensity of the pattern when it is shown above the filled background, 0-100
+		IsMoving  bool  `json:"is_moving"` // True, if the background needs to be slightly moved when device is tilted
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	backgroundTypePattern.tdCommon = tempObj.tdCommon
+	backgroundTypePattern.Intensity = tempObj.Intensity
+	backgroundTypePattern.IsMoving = tempObj.IsMoving
+
+	fieldFill, _ := unmarshalBackgroundFill(objMap["fill"])
+	backgroundTypePattern.Fill = fieldFill
+
+	return nil
 }
 
 // GetBackgroundTypeEnum return the enum type of this object
@@ -19025,32 +19919,55 @@ func (backgroundTypePattern *BackgroundTypePattern) GetBackgroundTypeEnum() Back
 	return BackgroundTypePatternType
 }
 
-// BackgroundTypeSolid A solid background
-type BackgroundTypeSolid struct {
+// BackgroundTypeFill A filled background
+type BackgroundTypeFill struct {
 	tdCommon
-	Color int32 `json:"color"` // A color of the background in RGB24 format
+	Fill BackgroundFill `json:"fill"` // Description of the background fill
 }
 
-// MessageType return the string telegram-type of BackgroundTypeSolid
-func (backgroundTypeSolid *BackgroundTypeSolid) MessageType() string {
-	return "backgroundTypeSolid"
+// MessageType return the string telegram-type of BackgroundTypeFill
+func (backgroundTypeFill *BackgroundTypeFill) MessageType() string {
+	return "backgroundTypeFill"
 }
 
-// NewBackgroundTypeSolid creates a new BackgroundTypeSolid
+// NewBackgroundTypeFill creates a new BackgroundTypeFill
 //
-// @param color A color of the background in RGB24 format
-func NewBackgroundTypeSolid(color int32) *BackgroundTypeSolid {
-	backgroundTypeSolidTemp := BackgroundTypeSolid{
-		tdCommon: tdCommon{Type: "backgroundTypeSolid"},
-		Color:    color,
+// @param fill Description of the background fill
+func NewBackgroundTypeFill(fill BackgroundFill) *BackgroundTypeFill {
+	backgroundTypeFillTemp := BackgroundTypeFill{
+		tdCommon: tdCommon{Type: "backgroundTypeFill"},
+		Fill:     fill,
 	}
 
-	return &backgroundTypeSolidTemp
+	return &backgroundTypeFillTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (backgroundTypeFill *BackgroundTypeFill) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	backgroundTypeFill.tdCommon = tempObj.tdCommon
+
+	fieldFill, _ := unmarshalBackgroundFill(objMap["fill"])
+	backgroundTypeFill.Fill = fieldFill
+
+	return nil
 }
 
 // GetBackgroundTypeEnum return the enum type of this object
-func (backgroundTypeSolid *BackgroundTypeSolid) GetBackgroundTypeEnum() BackgroundTypeEnum {
-	return BackgroundTypeSolidType
+func (backgroundTypeFill *BackgroundTypeFill) GetBackgroundTypeEnum() BackgroundTypeEnum {
+	return BackgroundTypeFillType
 }
 
 // Background Describes a chat background
@@ -19060,7 +19977,7 @@ type Background struct {
 	IsDefault bool           `json:"is_default"` // True, if this is one of default backgrounds
 	IsDark    bool           `json:"is_dark"`    // True, if the background is dark and is recommended to be used with dark theme
 	Name      string         `json:"name"`       // Unique background name
-	Document  *Document      `json:"document"`   // Document with the background; may be null. Null only for solid backgrounds
+	Document  *Document      `json:"document"`   // Document with the background; may be null. Null only for filled backgrounds
 	Type      BackgroundType `json:"type"`       // Type of the background
 }
 
@@ -19075,7 +19992,7 @@ func (background *Background) MessageType() string {
 // @param isDefault True, if this is one of default backgrounds
 // @param isDark True, if the background is dark and is recommended to be used with dark theme
 // @param name Unique background name
-// @param document Document with the background; may be null. Null only for solid backgrounds
+// @param document Document with the background; may be null. Null only for filled backgrounds
 // @param typeParam Type of the background
 func NewBackground(id JSONInt64, isDefault bool, isDark bool, name string, document *Document, typeParam BackgroundType) *Background {
 	backgroundTemp := Background{
@@ -19104,7 +20021,7 @@ func (background *Background) UnmarshalJSON(b []byte) error {
 		IsDefault bool      `json:"is_default"` // True, if this is one of default backgrounds
 		IsDark    bool      `json:"is_dark"`    // True, if the background is dark and is recommended to be used with dark theme
 		Name      string    `json:"name"`       // Unique background name
-		Document  *Document `json:"document"`   // Document with the background; may be null. Null only for solid backgrounds
+		Document  *Document `json:"document"`   // Document with the background; may be null. Null only for filled backgrounds
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -19248,6 +20165,112 @@ func NewHashtags(hashtags []string) *Hashtags {
 	}
 
 	return &hashtagsTemp
+}
+
+// CanTransferOwnershipResultOk The session can be used
+type CanTransferOwnershipResultOk struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of CanTransferOwnershipResultOk
+func (canTransferOwnershipResultOk *CanTransferOwnershipResultOk) MessageType() string {
+	return "canTransferOwnershipResultOk"
+}
+
+// NewCanTransferOwnershipResultOk creates a new CanTransferOwnershipResultOk
+//
+func NewCanTransferOwnershipResultOk() *CanTransferOwnershipResultOk {
+	canTransferOwnershipResultOkTemp := CanTransferOwnershipResultOk{
+		tdCommon: tdCommon{Type: "canTransferOwnershipResultOk"},
+	}
+
+	return &canTransferOwnershipResultOkTemp
+}
+
+// GetCanTransferOwnershipResultEnum return the enum type of this object
+func (canTransferOwnershipResultOk *CanTransferOwnershipResultOk) GetCanTransferOwnershipResultEnum() CanTransferOwnershipResultEnum {
+	return CanTransferOwnershipResultOkType
+}
+
+// CanTransferOwnershipResultPasswordNeeded The 2-step verification needs to be enabled first
+type CanTransferOwnershipResultPasswordNeeded struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of CanTransferOwnershipResultPasswordNeeded
+func (canTransferOwnershipResultPasswordNeeded *CanTransferOwnershipResultPasswordNeeded) MessageType() string {
+	return "canTransferOwnershipResultPasswordNeeded"
+}
+
+// NewCanTransferOwnershipResultPasswordNeeded creates a new CanTransferOwnershipResultPasswordNeeded
+//
+func NewCanTransferOwnershipResultPasswordNeeded() *CanTransferOwnershipResultPasswordNeeded {
+	canTransferOwnershipResultPasswordNeededTemp := CanTransferOwnershipResultPasswordNeeded{
+		tdCommon: tdCommon{Type: "canTransferOwnershipResultPasswordNeeded"},
+	}
+
+	return &canTransferOwnershipResultPasswordNeededTemp
+}
+
+// GetCanTransferOwnershipResultEnum return the enum type of this object
+func (canTransferOwnershipResultPasswordNeeded *CanTransferOwnershipResultPasswordNeeded) GetCanTransferOwnershipResultEnum() CanTransferOwnershipResultEnum {
+	return CanTransferOwnershipResultPasswordNeededType
+}
+
+// CanTransferOwnershipResultPasswordTooFresh The 2-step verification was enabled recently, user needs to wait
+type CanTransferOwnershipResultPasswordTooFresh struct {
+	tdCommon
+	RetryAfter int32 `json:"retry_after"` // Time left before the session can be used to transfer ownership of a chat, in seconds
+}
+
+// MessageType return the string telegram-type of CanTransferOwnershipResultPasswordTooFresh
+func (canTransferOwnershipResultPasswordTooFresh *CanTransferOwnershipResultPasswordTooFresh) MessageType() string {
+	return "canTransferOwnershipResultPasswordTooFresh"
+}
+
+// NewCanTransferOwnershipResultPasswordTooFresh creates a new CanTransferOwnershipResultPasswordTooFresh
+//
+// @param retryAfter Time left before the session can be used to transfer ownership of a chat, in seconds
+func NewCanTransferOwnershipResultPasswordTooFresh(retryAfter int32) *CanTransferOwnershipResultPasswordTooFresh {
+	canTransferOwnershipResultPasswordTooFreshTemp := CanTransferOwnershipResultPasswordTooFresh{
+		tdCommon:   tdCommon{Type: "canTransferOwnershipResultPasswordTooFresh"},
+		RetryAfter: retryAfter,
+	}
+
+	return &canTransferOwnershipResultPasswordTooFreshTemp
+}
+
+// GetCanTransferOwnershipResultEnum return the enum type of this object
+func (canTransferOwnershipResultPasswordTooFresh *CanTransferOwnershipResultPasswordTooFresh) GetCanTransferOwnershipResultEnum() CanTransferOwnershipResultEnum {
+	return CanTransferOwnershipResultPasswordTooFreshType
+}
+
+// CanTransferOwnershipResultSessionTooFresh The session was created recently, user needs to wait
+type CanTransferOwnershipResultSessionTooFresh struct {
+	tdCommon
+	RetryAfter int32 `json:"retry_after"` // Time left before the session can be used to transfer ownership of a chat, in seconds
+}
+
+// MessageType return the string telegram-type of CanTransferOwnershipResultSessionTooFresh
+func (canTransferOwnershipResultSessionTooFresh *CanTransferOwnershipResultSessionTooFresh) MessageType() string {
+	return "canTransferOwnershipResultSessionTooFresh"
+}
+
+// NewCanTransferOwnershipResultSessionTooFresh creates a new CanTransferOwnershipResultSessionTooFresh
+//
+// @param retryAfter Time left before the session can be used to transfer ownership of a chat, in seconds
+func NewCanTransferOwnershipResultSessionTooFresh(retryAfter int32) *CanTransferOwnershipResultSessionTooFresh {
+	canTransferOwnershipResultSessionTooFreshTemp := CanTransferOwnershipResultSessionTooFresh{
+		tdCommon:   tdCommon{Type: "canTransferOwnershipResultSessionTooFresh"},
+		RetryAfter: retryAfter,
+	}
+
+	return &canTransferOwnershipResultSessionTooFreshTemp
+}
+
+// GetCanTransferOwnershipResultEnum return the enum type of this object
+func (canTransferOwnershipResultSessionTooFresh *CanTransferOwnershipResultSessionTooFresh) GetCanTransferOwnershipResultEnum() CanTransferOwnershipResultEnum {
+	return CanTransferOwnershipResultSessionTooFreshType
 }
 
 // CheckChatUsernameResultOk The username can be set
@@ -19969,7 +20992,7 @@ type PushMessageContentChatAddMembers struct {
 	tdCommon
 	MemberName    string `json:"member_name"`     // Name of the added member
 	IsCurrentUser bool   `json:"is_current_user"` // True, if the current user was added to the group
-	IsReturned    bool   `json:"is_returned"`     // True, if the user has returned to the group himself
+	IsReturned    bool   `json:"is_returned"`     // True, if the user has returned to the group themself
 }
 
 // MessageType return the string telegram-type of PushMessageContentChatAddMembers
@@ -19981,7 +21004,7 @@ func (pushMessageContentChatAddMembers *PushMessageContentChatAddMembers) Messag
 //
 // @param memberName Name of the added member
 // @param isCurrentUser True, if the current user was added to the group
-// @param isReturned True, if the user has returned to the group himself
+// @param isReturned True, if the user has returned to the group themself
 func NewPushMessageContentChatAddMembers(memberName string, isCurrentUser bool, isReturned bool) *PushMessageContentChatAddMembers {
 	pushMessageContentChatAddMembersTemp := PushMessageContentChatAddMembers{
 		tdCommon:      tdCommon{Type: "pushMessageContentChatAddMembers"},
@@ -20056,7 +21079,7 @@ type PushMessageContentChatDeleteMember struct {
 	tdCommon
 	MemberName    string `json:"member_name"`     // Name of the deleted member
 	IsCurrentUser bool   `json:"is_current_user"` // True, if the current user was deleted from the group
-	IsLeft        bool   `json:"is_left"`         // True, if the user has left the group himself
+	IsLeft        bool   `json:"is_left"`         // True, if the user has left the group themself
 }
 
 // MessageType return the string telegram-type of PushMessageContentChatDeleteMember
@@ -20068,7 +21091,7 @@ func (pushMessageContentChatDeleteMember *PushMessageContentChatDeleteMember) Me
 //
 // @param memberName Name of the deleted member
 // @param isCurrentUser True, if the current user was deleted from the group
-// @param isLeft True, if the user has left the group himself
+// @param isLeft True, if the user has left the group themself
 func NewPushMessageContentChatDeleteMember(memberName string, isCurrentUser bool, isLeft bool) *PushMessageContentChatDeleteMember {
 	pushMessageContentChatDeleteMemberTemp := PushMessageContentChatDeleteMember{
 		tdCommon:      tdCommon{Type: "pushMessageContentChatDeleteMember"},
@@ -20922,7 +21945,7 @@ func (userPrivacySettingRuleAllowContacts *UserPrivacySettingRuleAllowContacts) 
 // UserPrivacySettingRuleAllowUsers A rule to allow certain specified users to do something
 type UserPrivacySettingRuleAllowUsers struct {
 	tdCommon
-	UserIds []int32 `json:"user_ids"` // The user identifiers
+	UserIds []int32 `json:"user_ids"` // The user identifiers, total number of users in all rules must not exceed 1000
 }
 
 // MessageType return the string telegram-type of UserPrivacySettingRuleAllowUsers
@@ -20932,7 +21955,7 @@ func (userPrivacySettingRuleAllowUsers *UserPrivacySettingRuleAllowUsers) Messag
 
 // NewUserPrivacySettingRuleAllowUsers creates a new UserPrivacySettingRuleAllowUsers
 //
-// @param userIds The user identifiers
+// @param userIds The user identifiers, total number of users in all rules must not exceed 1000
 func NewUserPrivacySettingRuleAllowUsers(userIds []int32) *UserPrivacySettingRuleAllowUsers {
 	userPrivacySettingRuleAllowUsersTemp := UserPrivacySettingRuleAllowUsers{
 		tdCommon: tdCommon{Type: "userPrivacySettingRuleAllowUsers"},
@@ -20945,6 +21968,34 @@ func NewUserPrivacySettingRuleAllowUsers(userIds []int32) *UserPrivacySettingRul
 // GetUserPrivacySettingRuleEnum return the enum type of this object
 func (userPrivacySettingRuleAllowUsers *UserPrivacySettingRuleAllowUsers) GetUserPrivacySettingRuleEnum() UserPrivacySettingRuleEnum {
 	return UserPrivacySettingRuleAllowUsersType
+}
+
+// UserPrivacySettingRuleAllowChatMembers A rule to allow all members of certain specified basic groups and supergroups to doing something
+type UserPrivacySettingRuleAllowChatMembers struct {
+	tdCommon
+	ChatIds []int64 `json:"chat_ids"` // The chat identifiers, total number of chats in all rules must not exceed 20
+}
+
+// MessageType return the string telegram-type of UserPrivacySettingRuleAllowChatMembers
+func (userPrivacySettingRuleAllowChatMembers *UserPrivacySettingRuleAllowChatMembers) MessageType() string {
+	return "userPrivacySettingRuleAllowChatMembers"
+}
+
+// NewUserPrivacySettingRuleAllowChatMembers creates a new UserPrivacySettingRuleAllowChatMembers
+//
+// @param chatIds The chat identifiers, total number of chats in all rules must not exceed 20
+func NewUserPrivacySettingRuleAllowChatMembers(chatIds []int64) *UserPrivacySettingRuleAllowChatMembers {
+	userPrivacySettingRuleAllowChatMembersTemp := UserPrivacySettingRuleAllowChatMembers{
+		tdCommon: tdCommon{Type: "userPrivacySettingRuleAllowChatMembers"},
+		ChatIds:  chatIds,
+	}
+
+	return &userPrivacySettingRuleAllowChatMembersTemp
+}
+
+// GetUserPrivacySettingRuleEnum return the enum type of this object
+func (userPrivacySettingRuleAllowChatMembers *UserPrivacySettingRuleAllowChatMembers) GetUserPrivacySettingRuleEnum() UserPrivacySettingRuleEnum {
+	return UserPrivacySettingRuleAllowChatMembersType
 }
 
 // UserPrivacySettingRuleRestrictAll A rule to restrict all users from doing something
@@ -21000,7 +22051,7 @@ func (userPrivacySettingRuleRestrictContacts *UserPrivacySettingRuleRestrictCont
 // UserPrivacySettingRuleRestrictUsers A rule to restrict all specified users from doing something
 type UserPrivacySettingRuleRestrictUsers struct {
 	tdCommon
-	UserIds []int32 `json:"user_ids"` // The user identifiers
+	UserIds []int32 `json:"user_ids"` // The user identifiers, total number of users in all rules must not exceed 1000
 }
 
 // MessageType return the string telegram-type of UserPrivacySettingRuleRestrictUsers
@@ -21010,7 +22061,7 @@ func (userPrivacySettingRuleRestrictUsers *UserPrivacySettingRuleRestrictUsers) 
 
 // NewUserPrivacySettingRuleRestrictUsers creates a new UserPrivacySettingRuleRestrictUsers
 //
-// @param userIds The user identifiers
+// @param userIds The user identifiers, total number of users in all rules must not exceed 1000
 func NewUserPrivacySettingRuleRestrictUsers(userIds []int32) *UserPrivacySettingRuleRestrictUsers {
 	userPrivacySettingRuleRestrictUsersTemp := UserPrivacySettingRuleRestrictUsers{
 		tdCommon: tdCommon{Type: "userPrivacySettingRuleRestrictUsers"},
@@ -21023,6 +22074,34 @@ func NewUserPrivacySettingRuleRestrictUsers(userIds []int32) *UserPrivacySetting
 // GetUserPrivacySettingRuleEnum return the enum type of this object
 func (userPrivacySettingRuleRestrictUsers *UserPrivacySettingRuleRestrictUsers) GetUserPrivacySettingRuleEnum() UserPrivacySettingRuleEnum {
 	return UserPrivacySettingRuleRestrictUsersType
+}
+
+// UserPrivacySettingRuleRestrictChatMembers A rule to restrict all members of specified basic groups and supergroups from doing something
+type UserPrivacySettingRuleRestrictChatMembers struct {
+	tdCommon
+	ChatIds []int64 `json:"chat_ids"` // The chat identifiers, total number of chats in all rules must not exceed 20
+}
+
+// MessageType return the string telegram-type of UserPrivacySettingRuleRestrictChatMembers
+func (userPrivacySettingRuleRestrictChatMembers *UserPrivacySettingRuleRestrictChatMembers) MessageType() string {
+	return "userPrivacySettingRuleRestrictChatMembers"
+}
+
+// NewUserPrivacySettingRuleRestrictChatMembers creates a new UserPrivacySettingRuleRestrictChatMembers
+//
+// @param chatIds The chat identifiers, total number of chats in all rules must not exceed 20
+func NewUserPrivacySettingRuleRestrictChatMembers(chatIds []int64) *UserPrivacySettingRuleRestrictChatMembers {
+	userPrivacySettingRuleRestrictChatMembersTemp := UserPrivacySettingRuleRestrictChatMembers{
+		tdCommon: tdCommon{Type: "userPrivacySettingRuleRestrictChatMembers"},
+		ChatIds:  chatIds,
+	}
+
+	return &userPrivacySettingRuleRestrictChatMembersTemp
+}
+
+// GetUserPrivacySettingRuleEnum return the enum type of this object
+func (userPrivacySettingRuleRestrictChatMembers *UserPrivacySettingRuleRestrictChatMembers) GetUserPrivacySettingRuleEnum() UserPrivacySettingRuleEnum {
+	return UserPrivacySettingRuleRestrictChatMembersType
 }
 
 // UserPrivacySettingRules A list of privacy rules. Rules are matched in the specified order. The first matched rule defines the privacy setting for a given user. If no rule matches, the action is not allowed
@@ -21123,6 +22202,31 @@ func (userPrivacySettingShowLinkInForwardedMessages *UserPrivacySettingShowLinkI
 	return UserPrivacySettingShowLinkInForwardedMessagesType
 }
 
+// UserPrivacySettingShowPhoneNumber A privacy setting for managing whether the user's phone number is visible
+type UserPrivacySettingShowPhoneNumber struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of UserPrivacySettingShowPhoneNumber
+func (userPrivacySettingShowPhoneNumber *UserPrivacySettingShowPhoneNumber) MessageType() string {
+	return "userPrivacySettingShowPhoneNumber"
+}
+
+// NewUserPrivacySettingShowPhoneNumber creates a new UserPrivacySettingShowPhoneNumber
+//
+func NewUserPrivacySettingShowPhoneNumber() *UserPrivacySettingShowPhoneNumber {
+	userPrivacySettingShowPhoneNumberTemp := UserPrivacySettingShowPhoneNumber{
+		tdCommon: tdCommon{Type: "userPrivacySettingShowPhoneNumber"},
+	}
+
+	return &userPrivacySettingShowPhoneNumberTemp
+}
+
+// GetUserPrivacySettingEnum return the enum type of this object
+func (userPrivacySettingShowPhoneNumber *UserPrivacySettingShowPhoneNumber) GetUserPrivacySettingEnum() UserPrivacySettingEnum {
+	return UserPrivacySettingShowPhoneNumberType
+}
+
 // UserPrivacySettingAllowChatInvites A privacy setting for managing whether the user can be invited to chats
 type UserPrivacySettingAllowChatInvites struct {
 	tdCommon
@@ -21196,6 +22300,31 @@ func NewUserPrivacySettingAllowPeerToPeerCalls() *UserPrivacySettingAllowPeerToP
 // GetUserPrivacySettingEnum return the enum type of this object
 func (userPrivacySettingAllowPeerToPeerCalls *UserPrivacySettingAllowPeerToPeerCalls) GetUserPrivacySettingEnum() UserPrivacySettingEnum {
 	return UserPrivacySettingAllowPeerToPeerCallsType
+}
+
+// UserPrivacySettingAllowFindingByPhoneNumber A privacy setting for managing whether the user can be found by their phone number. Checked only if the phone number is not known to the other user. Can be set only to "Allow contacts" or "Allow all"
+type UserPrivacySettingAllowFindingByPhoneNumber struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of UserPrivacySettingAllowFindingByPhoneNumber
+func (userPrivacySettingAllowFindingByPhoneNumber *UserPrivacySettingAllowFindingByPhoneNumber) MessageType() string {
+	return "userPrivacySettingAllowFindingByPhoneNumber"
+}
+
+// NewUserPrivacySettingAllowFindingByPhoneNumber creates a new UserPrivacySettingAllowFindingByPhoneNumber
+//
+func NewUserPrivacySettingAllowFindingByPhoneNumber() *UserPrivacySettingAllowFindingByPhoneNumber {
+	userPrivacySettingAllowFindingByPhoneNumberTemp := UserPrivacySettingAllowFindingByPhoneNumber{
+		tdCommon: tdCommon{Type: "userPrivacySettingAllowFindingByPhoneNumber"},
+	}
+
+	return &userPrivacySettingAllowFindingByPhoneNumberTemp
+}
+
+// GetUserPrivacySettingEnum return the enum type of this object
+func (userPrivacySettingAllowFindingByPhoneNumber *UserPrivacySettingAllowFindingByPhoneNumber) GetUserPrivacySettingEnum() UserPrivacySettingEnum {
+	return UserPrivacySettingAllowFindingByPhoneNumberType
 }
 
 // AccountTtl Contains information about the period of inactivity after which the current user's account will automatically be deleted
@@ -21379,29 +22508,6 @@ func NewConnectedWebsites(websites []ConnectedWebsite) *ConnectedWebsites {
 	return &connectedWebsitesTemp
 }
 
-// ChatReportSpamState Contains information about the availability of the "Report spam" action for a chat
-type ChatReportSpamState struct {
-	tdCommon
-	CanReportSpam bool `json:"can_report_spam"` // True, if a prompt with the "Report spam" action should be shown to the user
-}
-
-// MessageType return the string telegram-type of ChatReportSpamState
-func (chatReportSpamState *ChatReportSpamState) MessageType() string {
-	return "chatReportSpamState"
-}
-
-// NewChatReportSpamState creates a new ChatReportSpamState
-//
-// @param canReportSpam True, if a prompt with the "Report spam" action should be shown to the user
-func NewChatReportSpamState(canReportSpam bool) *ChatReportSpamState {
-	chatReportSpamStateTemp := ChatReportSpamState{
-		tdCommon:      tdCommon{Type: "chatReportSpamState"},
-		CanReportSpam: canReportSpam,
-	}
-
-	return &chatReportSpamStateTemp
-}
-
 // ChatReportReasonSpam The chat contains spam messages
 type ChatReportReasonSpam struct {
 	tdCommon
@@ -21527,6 +22633,31 @@ func (chatReportReasonCopyright *ChatReportReasonCopyright) GetChatReportReasonE
 	return ChatReportReasonCopyrightType
 }
 
+// ChatReportReasonUnrelatedLocation The location-based chat is unrelated to its stated location
+type ChatReportReasonUnrelatedLocation struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatReportReasonUnrelatedLocation
+func (chatReportReasonUnrelatedLocation *ChatReportReasonUnrelatedLocation) MessageType() string {
+	return "chatReportReasonUnrelatedLocation"
+}
+
+// NewChatReportReasonUnrelatedLocation creates a new ChatReportReasonUnrelatedLocation
+//
+func NewChatReportReasonUnrelatedLocation() *ChatReportReasonUnrelatedLocation {
+	chatReportReasonUnrelatedLocationTemp := ChatReportReasonUnrelatedLocation{
+		tdCommon: tdCommon{Type: "chatReportReasonUnrelatedLocation"},
+	}
+
+	return &chatReportReasonUnrelatedLocationTemp
+}
+
+// GetChatReportReasonEnum return the enum type of this object
+func (chatReportReasonUnrelatedLocation *ChatReportReasonUnrelatedLocation) GetChatReportReasonEnum() ChatReportReasonEnum {
+	return ChatReportReasonUnrelatedLocationType
+}
+
 // ChatReportReasonCustom A custom reason provided by the user
 type ChatReportReasonCustom struct {
 	tdCommon
@@ -21555,7 +22686,7 @@ func (chatReportReasonCustom *ChatReportReasonCustom) GetChatReportReasonEnum() 
 	return ChatReportReasonCustomType
 }
 
-// PublicMessageLink Contains a public HTTPS link to a message in a public supergroup or channel with a username
+// PublicMessageLink Contains a public HTTPS link to a message in a supergroup or channel with a username
 type PublicMessageLink struct {
 	tdCommon
 	Link string `json:"link"` // Message link
@@ -22499,9 +23630,10 @@ func NewNetworkStatistics(sinceDate int32, entries []NetworkStatisticsEntry) *Ne
 type AutoDownloadSettings struct {
 	tdCommon
 	IsAutoDownloadEnabled bool  `json:"is_auto_download_enabled"` // True, if the auto-download is enabled
-	MaxPhotoFileSize      int32 `json:"max_photo_file_size"`      // Maximum size of a photo file to be auto-downloaded
-	MaxVideoFileSize      int32 `json:"max_video_file_size"`      // Maximum size of a video file to be auto-downloaded
-	MaxOtherFileSize      int32 `json:"max_other_file_size"`      // Maximum size of other file types to be auto-downloaded
+	MaxPhotoFileSize      int32 `json:"max_photo_file_size"`      // The maximum size of a photo file to be auto-downloaded
+	MaxVideoFileSize      int32 `json:"max_video_file_size"`      // The maximum size of a video file to be auto-downloaded
+	MaxOtherFileSize      int32 `json:"max_other_file_size"`      // The maximum size of other file types to be auto-downloaded
+	VideoUploadBitrate    int32 `json:"video_upload_bitrate"`     // The maximum suggested bitrate for uploaded videos
 	PreloadLargeVideos    bool  `json:"preload_large_videos"`     // True, if the beginning of videos needs to be preloaded for instant playback
 	PreloadNextAudio      bool  `json:"preload_next_audio"`       // True, if the next audio track needs to be preloaded while the user is listening to an audio file
 	UseLessDataForCalls   bool  `json:"use_less_data_for_calls"`  // True, if "use less data for calls" option needs to be enabled
@@ -22515,19 +23647,21 @@ func (autoDownloadSettings *AutoDownloadSettings) MessageType() string {
 // NewAutoDownloadSettings creates a new AutoDownloadSettings
 //
 // @param isAutoDownloadEnabled True, if the auto-download is enabled
-// @param maxPhotoFileSize Maximum size of a photo file to be auto-downloaded
-// @param maxVideoFileSize Maximum size of a video file to be auto-downloaded
-// @param maxOtherFileSize Maximum size of other file types to be auto-downloaded
+// @param maxPhotoFileSize The maximum size of a photo file to be auto-downloaded
+// @param maxVideoFileSize The maximum size of a video file to be auto-downloaded
+// @param maxOtherFileSize The maximum size of other file types to be auto-downloaded
+// @param videoUploadBitrate The maximum suggested bitrate for uploaded videos
 // @param preloadLargeVideos True, if the beginning of videos needs to be preloaded for instant playback
 // @param preloadNextAudio True, if the next audio track needs to be preloaded while the user is listening to an audio file
 // @param useLessDataForCalls True, if "use less data for calls" option needs to be enabled
-func NewAutoDownloadSettings(isAutoDownloadEnabled bool, maxPhotoFileSize int32, maxVideoFileSize int32, maxOtherFileSize int32, preloadLargeVideos bool, preloadNextAudio bool, useLessDataForCalls bool) *AutoDownloadSettings {
+func NewAutoDownloadSettings(isAutoDownloadEnabled bool, maxPhotoFileSize int32, maxVideoFileSize int32, maxOtherFileSize int32, videoUploadBitrate int32, preloadLargeVideos bool, preloadNextAudio bool, useLessDataForCalls bool) *AutoDownloadSettings {
 	autoDownloadSettingsTemp := AutoDownloadSettings{
 		tdCommon:              tdCommon{Type: "autoDownloadSettings"},
 		IsAutoDownloadEnabled: isAutoDownloadEnabled,
 		MaxPhotoFileSize:      maxPhotoFileSize,
 		MaxVideoFileSize:      maxVideoFileSize,
 		MaxOtherFileSize:      maxOtherFileSize,
+		VideoUploadBitrate:    videoUploadBitrate,
 		PreloadLargeVideos:    preloadLargeVideos,
 		PreloadNextAudio:      preloadNextAudio,
 		UseLessDataForCalls:   useLessDataForCalls,
@@ -22840,6 +23974,31 @@ func (topChatCategoryCalls *TopChatCategoryCalls) GetTopChatCategoryEnum() TopCh
 	return TopChatCategoryCallsType
 }
 
+// TopChatCategoryForwardChats A category containing frequently used chats used to forward messages
+type TopChatCategoryForwardChats struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TopChatCategoryForwardChats
+func (topChatCategoryForwardChats *TopChatCategoryForwardChats) MessageType() string {
+	return "topChatCategoryForwardChats"
+}
+
+// NewTopChatCategoryForwardChats creates a new TopChatCategoryForwardChats
+//
+func NewTopChatCategoryForwardChats() *TopChatCategoryForwardChats {
+	topChatCategoryForwardChatsTemp := TopChatCategoryForwardChats{
+		tdCommon: tdCommon{Type: "topChatCategoryForwardChats"},
+	}
+
+	return &topChatCategoryForwardChatsTemp
+}
+
+// GetTopChatCategoryEnum return the enum type of this object
+func (topChatCategoryForwardChats *TopChatCategoryForwardChats) GetTopChatCategoryEnum() TopChatCategoryEnum {
+	return TopChatCategoryForwardChatsType
+}
+
 // TMeUrlTypeUser A URL linking to a user
 type TMeUrlTypeUser struct {
 	tdCommon
@@ -23125,6 +24284,7 @@ func NewDeepLinkInfo(text *FormattedText, needUpdateApplication bool) *DeepLinkI
 // TextParseModeMarkdown The text should be parsed in markdown-style
 type TextParseModeMarkdown struct {
 	tdCommon
+	Version int32 `json:"version"` // Version of the parser: 0 or 1 - Bot API Markdown parse mode, 2 - Bot API MarkdownV2 parse mode
 }
 
 // MessageType return the string telegram-type of TextParseModeMarkdown
@@ -23134,9 +24294,11 @@ func (textParseModeMarkdown *TextParseModeMarkdown) MessageType() string {
 
 // NewTextParseModeMarkdown creates a new TextParseModeMarkdown
 //
-func NewTextParseModeMarkdown() *TextParseModeMarkdown {
+// @param version Version of the parser: 0 or 1 - Bot API Markdown parse mode, 2 - Bot API MarkdownV2 parse mode
+func NewTextParseModeMarkdown(version int32) *TextParseModeMarkdown {
 	textParseModeMarkdownTemp := TextParseModeMarkdown{
 		tdCommon: tdCommon{Type: "textParseModeMarkdown"},
+		Version:  version,
 	}
 
 	return &textParseModeMarkdownTemp
@@ -23822,6 +24984,37 @@ func (updateMessageMentionRead *UpdateMessageMentionRead) GetUpdateEnum() Update
 	return UpdateMessageMentionReadType
 }
 
+// UpdateMessageLiveLocationViewed A message with a live location was viewed. When the update is received, the client is supposed to update the live location
+type UpdateMessageLiveLocationViewed struct {
+	tdCommon
+	ChatId    int64 `json:"chat_id"`    // Identifier of the chat with the live location message
+	MessageId int64 `json:"message_id"` // Identifier of the message with live location
+}
+
+// MessageType return the string telegram-type of UpdateMessageLiveLocationViewed
+func (updateMessageLiveLocationViewed *UpdateMessageLiveLocationViewed) MessageType() string {
+	return "updateMessageLiveLocationViewed"
+}
+
+// NewUpdateMessageLiveLocationViewed creates a new UpdateMessageLiveLocationViewed
+//
+// @param chatId Identifier of the chat with the live location message
+// @param messageId Identifier of the message with live location
+func NewUpdateMessageLiveLocationViewed(chatId int64, messageId int64) *UpdateMessageLiveLocationViewed {
+	updateMessageLiveLocationViewedTemp := UpdateMessageLiveLocationViewed{
+		tdCommon:  tdCommon{Type: "updateMessageLiveLocationViewed"},
+		ChatId:    chatId,
+		MessageId: messageId,
+	}
+
+	return &updateMessageLiveLocationViewedTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateMessageLiveLocationViewed *UpdateMessageLiveLocationViewed) GetUpdateEnum() UpdateEnum {
+	return UpdateMessageLiveLocationViewedType
+}
+
 // UpdateNewChat A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the client. The chat field changes will be reported through separate updates
 type UpdateNewChat struct {
 	tdCommon
@@ -23848,6 +25041,63 @@ func NewUpdateNewChat(chat *Chat) *UpdateNewChat {
 // GetUpdateEnum return the enum type of this object
 func (updateNewChat *UpdateNewChat) GetUpdateEnum() UpdateEnum {
 	return UpdateNewChatType
+}
+
+// UpdateChatChatList The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
+type UpdateChatChatList struct {
+	tdCommon
+	ChatId   int64    `json:"chat_id"`   // Chat identifier
+	ChatList ChatList `json:"chat_list"` // The new chat's chat list; may be null
+}
+
+// MessageType return the string telegram-type of UpdateChatChatList
+func (updateChatChatList *UpdateChatChatList) MessageType() string {
+	return "updateChatChatList"
+}
+
+// NewUpdateChatChatList creates a new UpdateChatChatList
+//
+// @param chatId Chat identifier
+// @param chatList The new chat's chat list; may be null
+func NewUpdateChatChatList(chatId int64, chatList ChatList) *UpdateChatChatList {
+	updateChatChatListTemp := UpdateChatChatList{
+		tdCommon: tdCommon{Type: "updateChatChatList"},
+		ChatId:   chatId,
+		ChatList: chatList,
+	}
+
+	return &updateChatChatListTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateChatChatList *UpdateChatChatList) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		ChatId int64 `json:"chat_id"` // Chat identifier
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateChatChatList.tdCommon = tempObj.tdCommon
+	updateChatChatList.ChatId = tempObj.ChatId
+
+	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
+	updateChatChatList.ChatList = fieldChatList
+
+	return nil
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatChatList *UpdateChatChatList) GetUpdateEnum() UpdateEnum {
+	return UpdateChatChatListType
 }
 
 // UpdateChatTitle The title of a chat was changed
@@ -23977,7 +25227,7 @@ func (updateChatLastMessage *UpdateChatLastMessage) GetUpdateEnum() UpdateEnum {
 	return UpdateChatLastMessageType
 }
 
-// UpdateChatOrder The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned or updateChatDraftMessage might be sent
+// UpdateChatOrder The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
 type UpdateChatOrder struct {
 	tdCommon
 	ChatId int64     `json:"chat_id"` // Chat identifier
@@ -24105,6 +25355,37 @@ func NewUpdateChatIsSponsored(chatId int64, isSponsored bool, order JSONInt64) *
 // GetUpdateEnum return the enum type of this object
 func (updateChatIsSponsored *UpdateChatIsSponsored) GetUpdateEnum() UpdateEnum {
 	return UpdateChatIsSponsoredType
+}
+
+// UpdateChatHasScheduledMessages A chat's has_scheduled_messages field has changed
+type UpdateChatHasScheduledMessages struct {
+	tdCommon
+	ChatId               int64 `json:"chat_id"`                // Chat identifier
+	HasScheduledMessages bool  `json:"has_scheduled_messages"` // New value of has_scheduled_messages
+}
+
+// MessageType return the string telegram-type of UpdateChatHasScheduledMessages
+func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) MessageType() string {
+	return "updateChatHasScheduledMessages"
+}
+
+// NewUpdateChatHasScheduledMessages creates a new UpdateChatHasScheduledMessages
+//
+// @param chatId Chat identifier
+// @param hasScheduledMessages New value of has_scheduled_messages
+func NewUpdateChatHasScheduledMessages(chatId int64, hasScheduledMessages bool) *UpdateChatHasScheduledMessages {
+	updateChatHasScheduledMessagesTemp := UpdateChatHasScheduledMessages{
+		tdCommon:             tdCommon{Type: "updateChatHasScheduledMessages"},
+		ChatId:               chatId,
+		HasScheduledMessages: hasScheduledMessages,
+	}
+
+	return &updateChatHasScheduledMessagesTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) GetUpdateEnum() UpdateEnum {
+	return UpdateChatHasScheduledMessagesType
 }
 
 // UpdateChatDefaultDisableNotification The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
@@ -24319,6 +25600,63 @@ func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) Unmarsha
 // GetUpdateEnum return the enum type of this object
 func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) GetUpdateEnum() UpdateEnum {
 	return UpdateScopeNotificationSettingsType
+}
+
+// UpdateChatActionBar The chat action bar was changed
+type UpdateChatActionBar struct {
+	tdCommon
+	ChatId    int64         `json:"chat_id"`    // Chat identifier
+	ActionBar ChatActionBar `json:"action_bar"` // The new value of the action bar; may be null
+}
+
+// MessageType return the string telegram-type of UpdateChatActionBar
+func (updateChatActionBar *UpdateChatActionBar) MessageType() string {
+	return "updateChatActionBar"
+}
+
+// NewUpdateChatActionBar creates a new UpdateChatActionBar
+//
+// @param chatId Chat identifier
+// @param actionBar The new value of the action bar; may be null
+func NewUpdateChatActionBar(chatId int64, actionBar ChatActionBar) *UpdateChatActionBar {
+	updateChatActionBarTemp := UpdateChatActionBar{
+		tdCommon:  tdCommon{Type: "updateChatActionBar"},
+		ChatId:    chatId,
+		ActionBar: actionBar,
+	}
+
+	return &updateChatActionBarTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateChatActionBar *UpdateChatActionBar) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		ChatId int64 `json:"chat_id"` // Chat identifier
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateChatActionBar.tdCommon = tempObj.tdCommon
+	updateChatActionBar.ChatId = tempObj.ChatId
+
+	fieldActionBar, _ := unmarshalChatActionBar(objMap["action_bar"])
+	updateChatActionBar.ActionBar = fieldActionBar
+
+	return nil
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatActionBar *UpdateChatActionBar) GetUpdateEnum() UpdateEnum {
+	return UpdateChatActionBarType
 }
 
 // UpdateChatPinnedMessage The chat pinned message was changed
@@ -24565,7 +25903,7 @@ func (updateNotificationGroup *UpdateNotificationGroup) GetUpdateEnum() UpdateEn
 	return UpdateNotificationGroupType
 }
 
-// UpdateActiveNotifications Contains active notifications that was shown on previous application launches. This update is sent only if a message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
+// UpdateActiveNotifications Contains active notifications that was shown on previous application launches. This update is sent only if the message database is used. In that case it comes once before any updateNotification and updateNotificationGroup update
 type UpdateActiveNotifications struct {
 	tdCommon
 	Groups []NotificationGroup `json:"groups"` // Lists of active notification groups
@@ -24593,7 +25931,7 @@ func (updateActiveNotifications *UpdateActiveNotifications) GetUpdateEnum() Upda
 	return UpdateActiveNotificationsType
 }
 
-// UpdateHavePendingNotifications Describes, whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
+// UpdateHavePendingNotifications Describes whether there are some pending notification updates. Can be used to prevent application from killing, while there are some pending notifications
 type UpdateHavePendingNotifications struct {
 	tdCommon
 	HaveDelayedNotifications    bool `json:"have_delayed_notifications"`    // True, if there are some delayed notification updates, which will be sent soon
@@ -25219,11 +26557,12 @@ func (updateUserPrivacySettingRules *UpdateUserPrivacySettingRules) GetUpdateEnu
 	return UpdateUserPrivacySettingRulesType
 }
 
-// UpdateUnreadMessageCount Number of unread messages has changed. This update is sent only if a message database is used
+// UpdateUnreadMessageCount Number of unread messages in a chat list has changed. This update is sent only if the message database is used
 type UpdateUnreadMessageCount struct {
 	tdCommon
-	UnreadCount        int32 `json:"unread_count"`         // Total number of unread messages
-	UnreadUnmutedCount int32 `json:"unread_unmuted_count"` // Total number of unread messages in unmuted chats
+	ChatList           ChatList `json:"chat_list"`            // The chat list with changed number of unread messages
+	UnreadCount        int32    `json:"unread_count"`         // Total number of unread messages
+	UnreadUnmutedCount int32    `json:"unread_unmuted_count"` // Total number of unread messages in unmuted chats
 }
 
 // MessageType return the string telegram-type of UpdateUnreadMessageCount
@@ -25233,11 +26572,13 @@ func (updateUnreadMessageCount *UpdateUnreadMessageCount) MessageType() string {
 
 // NewUpdateUnreadMessageCount creates a new UpdateUnreadMessageCount
 //
+// @param chatList The chat list with changed number of unread messages
 // @param unreadCount Total number of unread messages
 // @param unreadUnmutedCount Total number of unread messages in unmuted chats
-func NewUpdateUnreadMessageCount(unreadCount int32, unreadUnmutedCount int32) *UpdateUnreadMessageCount {
+func NewUpdateUnreadMessageCount(chatList ChatList, unreadCount int32, unreadUnmutedCount int32) *UpdateUnreadMessageCount {
 	updateUnreadMessageCountTemp := UpdateUnreadMessageCount{
 		tdCommon:           tdCommon{Type: "updateUnreadMessageCount"},
+		ChatList:           chatList,
 		UnreadCount:        unreadCount,
 		UnreadUnmutedCount: unreadUnmutedCount,
 	}
@@ -25245,18 +26586,47 @@ func NewUpdateUnreadMessageCount(unreadCount int32, unreadUnmutedCount int32) *U
 	return &updateUnreadMessageCountTemp
 }
 
+// UnmarshalJSON unmarshal to json
+func (updateUnreadMessageCount *UpdateUnreadMessageCount) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		UnreadCount        int32 `json:"unread_count"`         // Total number of unread messages
+		UnreadUnmutedCount int32 `json:"unread_unmuted_count"` // Total number of unread messages in unmuted chats
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateUnreadMessageCount.tdCommon = tempObj.tdCommon
+	updateUnreadMessageCount.UnreadCount = tempObj.UnreadCount
+	updateUnreadMessageCount.UnreadUnmutedCount = tempObj.UnreadUnmutedCount
+
+	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
+	updateUnreadMessageCount.ChatList = fieldChatList
+
+	return nil
+}
+
 // GetUpdateEnum return the enum type of this object
 func (updateUnreadMessageCount *UpdateUnreadMessageCount) GetUpdateEnum() UpdateEnum {
 	return UpdateUnreadMessageCountType
 }
 
-// UpdateUnreadChatCount Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if a message database is used
+// UpdateUnreadChatCount Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if the message database is used
 type UpdateUnreadChatCount struct {
 	tdCommon
-	UnreadCount                int32 `json:"unread_count"`                   // Total number of unread chats
-	UnreadUnmutedCount         int32 `json:"unread_unmuted_count"`           // Total number of unread unmuted chats
-	MarkedAsUnreadCount        int32 `json:"marked_as_unread_count"`         // Total number of chats marked as unread
-	MarkedAsUnreadUnmutedCount int32 `json:"marked_as_unread_unmuted_count"` // Total number of unmuted chats marked as unread
+	ChatList                   ChatList `json:"chat_list"`                      // The chat list with changed number of unread messages
+	TotalCount                 int32    `json:"total_count"`                    // Approximate total number of chats in the chat list
+	UnreadCount                int32    `json:"unread_count"`                   // Total number of unread chats
+	UnreadUnmutedCount         int32    `json:"unread_unmuted_count"`           // Total number of unread unmuted chats
+	MarkedAsUnreadCount        int32    `json:"marked_as_unread_count"`         // Total number of chats marked as unread
+	MarkedAsUnreadUnmutedCount int32    `json:"marked_as_unread_unmuted_count"` // Total number of unmuted chats marked as unread
 }
 
 // MessageType return the string telegram-type of UpdateUnreadChatCount
@@ -25266,13 +26636,17 @@ func (updateUnreadChatCount *UpdateUnreadChatCount) MessageType() string {
 
 // NewUpdateUnreadChatCount creates a new UpdateUnreadChatCount
 //
+// @param chatList The chat list with changed number of unread messages
+// @param totalCount Approximate total number of chats in the chat list
 // @param unreadCount Total number of unread chats
 // @param unreadUnmutedCount Total number of unread unmuted chats
 // @param markedAsUnreadCount Total number of chats marked as unread
 // @param markedAsUnreadUnmutedCount Total number of unmuted chats marked as unread
-func NewUpdateUnreadChatCount(unreadCount int32, unreadUnmutedCount int32, markedAsUnreadCount int32, markedAsUnreadUnmutedCount int32) *UpdateUnreadChatCount {
+func NewUpdateUnreadChatCount(chatList ChatList, totalCount int32, unreadCount int32, unreadUnmutedCount int32, markedAsUnreadCount int32, markedAsUnreadUnmutedCount int32) *UpdateUnreadChatCount {
 	updateUnreadChatCountTemp := UpdateUnreadChatCount{
 		tdCommon:                   tdCommon{Type: "updateUnreadChatCount"},
+		ChatList:                   chatList,
+		TotalCount:                 totalCount,
 		UnreadCount:                unreadCount,
 		UnreadUnmutedCount:         unreadUnmutedCount,
 		MarkedAsUnreadCount:        markedAsUnreadCount,
@@ -25280,6 +26654,39 @@ func NewUpdateUnreadChatCount(unreadCount int32, unreadUnmutedCount int32, marke
 	}
 
 	return &updateUnreadChatCountTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateUnreadChatCount *UpdateUnreadChatCount) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		TotalCount                 int32 `json:"total_count"`                    // Approximate total number of chats in the chat list
+		UnreadCount                int32 `json:"unread_count"`                   // Total number of unread chats
+		UnreadUnmutedCount         int32 `json:"unread_unmuted_count"`           // Total number of unread unmuted chats
+		MarkedAsUnreadCount        int32 `json:"marked_as_unread_count"`         // Total number of chats marked as unread
+		MarkedAsUnreadUnmutedCount int32 `json:"marked_as_unread_unmuted_count"` // Total number of unmuted chats marked as unread
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateUnreadChatCount.tdCommon = tempObj.tdCommon
+	updateUnreadChatCount.TotalCount = tempObj.TotalCount
+	updateUnreadChatCount.UnreadCount = tempObj.UnreadCount
+	updateUnreadChatCount.UnreadUnmutedCount = tempObj.UnreadUnmutedCount
+	updateUnreadChatCount.MarkedAsUnreadCount = tempObj.MarkedAsUnreadCount
+	updateUnreadChatCount.MarkedAsUnreadUnmutedCount = tempObj.MarkedAsUnreadUnmutedCount
+
+	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
+	updateUnreadChatCount.ChatList = fieldChatList
+
+	return nil
 }
 
 // GetUpdateEnum return the enum type of this object
@@ -25637,6 +27044,34 @@ func (updateTermsOfService *UpdateTermsOfService) GetUpdateEnum() UpdateEnum {
 	return UpdateTermsOfServiceType
 }
 
+// UpdateUsersNearby List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+type UpdateUsersNearby struct {
+	tdCommon
+	UsersNearby []ChatNearby `json:"users_nearby"` // The new list of users nearby
+}
+
+// MessageType return the string telegram-type of UpdateUsersNearby
+func (updateUsersNearby *UpdateUsersNearby) MessageType() string {
+	return "updateUsersNearby"
+}
+
+// NewUpdateUsersNearby creates a new UpdateUsersNearby
+//
+// @param usersNearby The new list of users nearby
+func NewUpdateUsersNearby(usersNearby []ChatNearby) *UpdateUsersNearby {
+	updateUsersNearbyTemp := UpdateUsersNearby{
+		tdCommon:    tdCommon{Type: "updateUsersNearby"},
+		UsersNearby: usersNearby,
+	}
+
+	return &updateUsersNearbyTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateUsersNearby *UpdateUsersNearby) GetUpdateEnum() UpdateEnum {
+	return UpdateUsersNearbyType
+}
+
 // UpdateNewInlineQuery A new incoming inline query; for bots only
 type UpdateNewInlineQuery struct {
 	tdCommon
@@ -25722,7 +27157,7 @@ type UpdateNewCallbackQuery struct {
 	tdCommon
 	Id           JSONInt64            `json:"id"`             // Unique query identifier
 	SenderUserId int32                `json:"sender_user_id"` // Identifier of the user who sent the query
-	ChatId       int64                `json:"chat_id"`        // Identifier of the chat, in which the query was sent
+	ChatId       int64                `json:"chat_id"`        // Identifier of the chat where the query was sent
 	MessageId    int64                `json:"message_id"`     // Identifier of the message, from which the query originated
 	ChatInstance JSONInt64            `json:"chat_instance"`  // Identifier that uniquely corresponds to the chat to which the message was sent
 	Payload      CallbackQueryPayload `json:"payload"`        // Query payload
@@ -25737,7 +27172,7 @@ func (updateNewCallbackQuery *UpdateNewCallbackQuery) MessageType() string {
 //
 // @param id Unique query identifier
 // @param senderUserId Identifier of the user who sent the query
-// @param chatId Identifier of the chat, in which the query was sent
+// @param chatId Identifier of the chat where the query was sent
 // @param messageId Identifier of the message, from which the query originated
 // @param chatInstance Identifier that uniquely corresponds to the chat to which the message was sent
 // @param payload Query payload
@@ -25766,7 +27201,7 @@ func (updateNewCallbackQuery *UpdateNewCallbackQuery) UnmarshalJSON(b []byte) er
 		tdCommon
 		Id           JSONInt64 `json:"id"`             // Unique query identifier
 		SenderUserId int32     `json:"sender_user_id"` // Identifier of the user who sent the query
-		ChatId       int64     `json:"chat_id"`        // Identifier of the chat, in which the query was sent
+		ChatId       int64     `json:"chat_id"`        // Identifier of the chat where the query was sent
 		MessageId    int64     `json:"message_id"`     // Identifier of the message, from which the query originated
 		ChatInstance JSONInt64 `json:"chat_instance"`  // Identifier that uniquely corresponds to the chat to which the message was sent
 
@@ -26091,7 +27526,7 @@ func (logStreamDefault *LogStreamDefault) GetLogStreamEnum() LogStreamEnum {
 type LogStreamFile struct {
 	tdCommon
 	Path        string `json:"path"`          // Path to the file to where the internal TDLib log will be written
-	MaxFileSize int64  `json:"max_file_size"` // Maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated
+	MaxFileSize int64  `json:"max_file_size"` // The maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated
 }
 
 // MessageType return the string telegram-type of LogStreamFile
@@ -26102,7 +27537,7 @@ func (logStreamFile *LogStreamFile) MessageType() string {
 // NewLogStreamFile creates a new LogStreamFile
 //
 // @param path Path to the file to where the internal TDLib log will be written
-// @param maxFileSize Maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated
+// @param maxFileSize The maximum size of the file to where the internal TDLib log is written before the file will be auto-rotated
 func NewLogStreamFile(path string, maxFileSize int64) *LogStreamFile {
 	logStreamFileTemp := LogStreamFile{
 		tdCommon:    tdCommon{Type: "logStreamFile"},
@@ -26419,6 +27854,11 @@ func unmarshalAuthorizationState(rawMsg *json.RawMessage) (AuthorizationState, e
 		err := json.Unmarshal(*rawMsg, &authorizationStateWaitCode)
 		return &authorizationStateWaitCode, err
 
+	case AuthorizationStateWaitOtherDeviceConfirmationType:
+		var authorizationStateWaitOtherDeviceConfirmation AuthorizationStateWaitOtherDeviceConfirmation
+		err := json.Unmarshal(*rawMsg, &authorizationStateWaitOtherDeviceConfirmation)
+		return &authorizationStateWaitOtherDeviceConfirmation, err
+
 	case AuthorizationStateWaitRegistrationType:
 		var authorizationStateWaitRegistration AuthorizationStateWaitRegistration
 		err := json.Unmarshal(*rawMsg, &authorizationStateWaitRegistration)
@@ -26522,38 +27962,6 @@ func unmarshalMaskPoint(rawMsg *json.RawMessage) (MaskPoint, error) {
 		var maskPointChin MaskPointChin
 		err := json.Unmarshal(*rawMsg, &maskPointChin)
 		return &maskPointChin, err
-
-	default:
-		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
-	}
-}
-
-func unmarshalLinkState(rawMsg *json.RawMessage) (LinkState, error) {
-
-	if rawMsg == nil {
-		return nil, nil
-	}
-	var objMap map[string]interface{}
-	err := json.Unmarshal(*rawMsg, &objMap)
-	if err != nil {
-		return nil, err
-	}
-
-	switch LinkStateEnum(objMap["@type"].(string)) {
-	case LinkStateNoneType:
-		var linkStateNone LinkStateNone
-		err := json.Unmarshal(*rawMsg, &linkStateNone)
-		return &linkStateNone, err
-
-	case LinkStateKnowsPhoneNumberType:
-		var linkStateKnowsPhoneNumber LinkStateKnowsPhoneNumber
-		err := json.Unmarshal(*rawMsg, &linkStateKnowsPhoneNumber)
-		return &linkStateKnowsPhoneNumber, err
-
-	case LinkStateIsContactType:
-		var linkStateIsContact LinkStateIsContact
-		err := json.Unmarshal(*rawMsg, &linkStateIsContact)
-		return &linkStateIsContact, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -26903,6 +28311,102 @@ func unmarshalChatType(rawMsg *json.RawMessage) (ChatType, error) {
 	}
 }
 
+func unmarshalChatList(rawMsg *json.RawMessage) (ChatList, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch ChatListEnum(objMap["@type"].(string)) {
+	case ChatListMainType:
+		var chatListMain ChatListMain
+		err := json.Unmarshal(*rawMsg, &chatListMain)
+		return &chatListMain, err
+
+	case ChatListArchiveType:
+		var chatListArchive ChatListArchive
+		err := json.Unmarshal(*rawMsg, &chatListArchive)
+		return &chatListArchive, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalPublicChatType(rawMsg *json.RawMessage) (PublicChatType, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch PublicChatTypeEnum(objMap["@type"].(string)) {
+	case PublicChatTypeHasUsernameType:
+		var publicChatTypeHasUsername PublicChatTypeHasUsername
+		err := json.Unmarshal(*rawMsg, &publicChatTypeHasUsername)
+		return &publicChatTypeHasUsername, err
+
+	case PublicChatTypeIsLocationBasedType:
+		var publicChatTypeIsLocationBased PublicChatTypeIsLocationBased
+		err := json.Unmarshal(*rawMsg, &publicChatTypeIsLocationBased)
+		return &publicChatTypeIsLocationBased, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalChatActionBar(rawMsg *json.RawMessage) (ChatActionBar, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch ChatActionBarEnum(objMap["@type"].(string)) {
+	case ChatActionBarReportSpamType:
+		var chatActionBarReportSpam ChatActionBarReportSpam
+		err := json.Unmarshal(*rawMsg, &chatActionBarReportSpam)
+		return &chatActionBarReportSpam, err
+
+	case ChatActionBarReportUnrelatedLocationType:
+		var chatActionBarReportUnrelatedLocation ChatActionBarReportUnrelatedLocation
+		err := json.Unmarshal(*rawMsg, &chatActionBarReportUnrelatedLocation)
+		return &chatActionBarReportUnrelatedLocation, err
+
+	case ChatActionBarReportAddBlockType:
+		var chatActionBarReportAddBlock ChatActionBarReportAddBlock
+		err := json.Unmarshal(*rawMsg, &chatActionBarReportAddBlock)
+		return &chatActionBarReportAddBlock, err
+
+	case ChatActionBarAddContactType:
+		var chatActionBarAddContact ChatActionBarAddContact
+		err := json.Unmarshal(*rawMsg, &chatActionBarAddContact)
+		return &chatActionBarAddContact, err
+
+	case ChatActionBarSharePhoneNumberType:
+		var chatActionBarSharePhoneNumber ChatActionBarSharePhoneNumber
+		err := json.Unmarshal(*rawMsg, &chatActionBarSharePhoneNumber)
+		return &chatActionBarSharePhoneNumber, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalKeyboardButtonType(rawMsg *json.RawMessage) (KeyboardButtonType, error) {
 
 	if rawMsg == nil {
@@ -27013,6 +28517,33 @@ func unmarshalReplyMarkup(rawMsg *json.RawMessage) (ReplyMarkup, error) {
 		var replyMarkupInlineKeyboard ReplyMarkupInlineKeyboard
 		err := json.Unmarshal(*rawMsg, &replyMarkupInlineKeyboard)
 		return &replyMarkupInlineKeyboard, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalLoginUrlInfo(rawMsg *json.RawMessage) (LoginUrlInfo, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch LoginUrlInfoEnum(objMap["@type"].(string)) {
+	case LoginUrlInfoOpenType:
+		var loginUrlInfoOpen LoginUrlInfoOpen
+		err := json.Unmarshal(*rawMsg, &loginUrlInfoOpen)
+		return &loginUrlInfoOpen, err
+
+	case LoginUrlInfoRequestConfirmationType:
+		var loginUrlInfoRequestConfirmation LoginUrlInfoRequestConfirmation
+		err := json.Unmarshal(*rawMsg, &loginUrlInfoRequestConfirmation)
+		return &loginUrlInfoRequestConfirmation, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -28003,6 +29534,11 @@ func unmarshalTextEntityType(rawMsg *json.RawMessage) (TextEntityType, error) {
 		err := json.Unmarshal(*rawMsg, &textEntityTypeEmailAddress)
 		return &textEntityTypeEmailAddress, err
 
+	case TextEntityTypePhoneNumberType:
+		var textEntityTypePhoneNumber TextEntityTypePhoneNumber
+		err := json.Unmarshal(*rawMsg, &textEntityTypePhoneNumber)
+		return &textEntityTypePhoneNumber, err
+
 	case TextEntityTypeBoldType:
 		var textEntityTypeBold TextEntityTypeBold
 		err := json.Unmarshal(*rawMsg, &textEntityTypeBold)
@@ -28012,6 +29548,16 @@ func unmarshalTextEntityType(rawMsg *json.RawMessage) (TextEntityType, error) {
 		var textEntityTypeItalic TextEntityTypeItalic
 		err := json.Unmarshal(*rawMsg, &textEntityTypeItalic)
 		return &textEntityTypeItalic, err
+
+	case TextEntityTypeUnderlineType:
+		var textEntityTypeUnderline TextEntityTypeUnderline
+		err := json.Unmarshal(*rawMsg, &textEntityTypeUnderline)
+		return &textEntityTypeUnderline, err
+
+	case TextEntityTypeStrikethroughType:
+		var textEntityTypeStrikethrough TextEntityTypeStrikethrough
+		err := json.Unmarshal(*rawMsg, &textEntityTypeStrikethrough)
+		return &textEntityTypeStrikethrough, err
 
 	case TextEntityTypeCodeType:
 		var textEntityTypeCode TextEntityTypeCode
@@ -28038,10 +29584,32 @@ func unmarshalTextEntityType(rawMsg *json.RawMessage) (TextEntityType, error) {
 		err := json.Unmarshal(*rawMsg, &textEntityTypeMentionName)
 		return &textEntityTypeMentionName, err
 
-	case TextEntityTypePhoneNumberType:
-		var textEntityTypePhoneNumber TextEntityTypePhoneNumber
-		err := json.Unmarshal(*rawMsg, &textEntityTypePhoneNumber)
-		return &textEntityTypePhoneNumber, err
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalMessageSchedulingState(rawMsg *json.RawMessage) (MessageSchedulingState, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch MessageSchedulingStateEnum(objMap["@type"].(string)) {
+	case MessageSchedulingStateSendAtDateType:
+		var messageSchedulingStateSendAtDate MessageSchedulingStateSendAtDate
+		err := json.Unmarshal(*rawMsg, &messageSchedulingStateSendAtDate)
+		return &messageSchedulingStateSendAtDate, err
+
+	case MessageSchedulingStateSendWhenOnlineType:
+		var messageSchedulingStateSendWhenOnline MessageSchedulingStateSendWhenOnline
+		err := json.Unmarshal(*rawMsg, &messageSchedulingStateSendWhenOnline)
+		return &messageSchedulingStateSendWhenOnline, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -28790,6 +30358,16 @@ func unmarshalChatEventAction(rawMsg *json.RawMessage) (ChatEventAction, error) 
 		err := json.Unmarshal(*rawMsg, &chatEventInvitesToggled)
 		return &chatEventInvitesToggled, err
 
+	case ChatEventLinkedChatChangedType:
+		var chatEventLinkedChatChanged ChatEventLinkedChatChanged
+		err := json.Unmarshal(*rawMsg, &chatEventLinkedChatChanged)
+		return &chatEventLinkedChatChanged, err
+
+	case ChatEventSlowModeDelayChangedType:
+		var chatEventSlowModeDelayChanged ChatEventSlowModeDelayChanged
+		err := json.Unmarshal(*rawMsg, &chatEventSlowModeDelayChanged)
+		return &chatEventSlowModeDelayChanged, err
+
 	case ChatEventSignMessagesToggledType:
 		var chatEventSignMessagesToggled ChatEventSignMessagesToggled
 		err := json.Unmarshal(*rawMsg, &chatEventSignMessagesToggled)
@@ -28799,6 +30377,11 @@ func unmarshalChatEventAction(rawMsg *json.RawMessage) (ChatEventAction, error) 
 		var chatEventStickerSetChanged ChatEventStickerSetChanged
 		err := json.Unmarshal(*rawMsg, &chatEventStickerSetChanged)
 		return &chatEventStickerSetChanged, err
+
+	case ChatEventLocationChangedType:
+		var chatEventLocationChanged ChatEventLocationChanged
+		err := json.Unmarshal(*rawMsg, &chatEventLocationChanged)
+		return &chatEventLocationChanged, err
 
 	case ChatEventIsAllHistoryAvailableToggledType:
 		var chatEventIsAllHistoryAvailableToggled ChatEventIsAllHistoryAvailableToggled
@@ -28914,6 +30497,33 @@ func unmarshalDeviceToken(rawMsg *json.RawMessage) (DeviceToken, error) {
 	}
 }
 
+func unmarshalBackgroundFill(rawMsg *json.RawMessage) (BackgroundFill, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch BackgroundFillEnum(objMap["@type"].(string)) {
+	case BackgroundFillSolidType:
+		var backgroundFillSolid BackgroundFillSolid
+		err := json.Unmarshal(*rawMsg, &backgroundFillSolid)
+		return &backgroundFillSolid, err
+
+	case BackgroundFillGradientType:
+		var backgroundFillGradient BackgroundFillGradient
+		err := json.Unmarshal(*rawMsg, &backgroundFillGradient)
+		return &backgroundFillGradient, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalBackgroundType(rawMsg *json.RawMessage) (BackgroundType, error) {
 
 	if rawMsg == nil {
@@ -28936,10 +30546,10 @@ func unmarshalBackgroundType(rawMsg *json.RawMessage) (BackgroundType, error) {
 		err := json.Unmarshal(*rawMsg, &backgroundTypePattern)
 		return &backgroundTypePattern, err
 
-	case BackgroundTypeSolidType:
-		var backgroundTypeSolid BackgroundTypeSolid
-		err := json.Unmarshal(*rawMsg, &backgroundTypeSolid)
-		return &backgroundTypeSolid, err
+	case BackgroundTypeFillType:
+		var backgroundTypeFill BackgroundTypeFill
+		err := json.Unmarshal(*rawMsg, &backgroundTypeFill)
+		return &backgroundTypeFill, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -28967,6 +30577,43 @@ func unmarshalInputBackground(rawMsg *json.RawMessage) (InputBackground, error) 
 		var inputBackgroundRemote InputBackgroundRemote
 		err := json.Unmarshal(*rawMsg, &inputBackgroundRemote)
 		return &inputBackgroundRemote, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalCanTransferOwnershipResult(rawMsg *json.RawMessage) (CanTransferOwnershipResult, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch CanTransferOwnershipResultEnum(objMap["@type"].(string)) {
+	case CanTransferOwnershipResultOkType:
+		var canTransferOwnershipResultOk CanTransferOwnershipResultOk
+		err := json.Unmarshal(*rawMsg, &canTransferOwnershipResultOk)
+		return &canTransferOwnershipResultOk, err
+
+	case CanTransferOwnershipResultPasswordNeededType:
+		var canTransferOwnershipResultPasswordNeeded CanTransferOwnershipResultPasswordNeeded
+		err := json.Unmarshal(*rawMsg, &canTransferOwnershipResultPasswordNeeded)
+		return &canTransferOwnershipResultPasswordNeeded, err
+
+	case CanTransferOwnershipResultPasswordTooFreshType:
+		var canTransferOwnershipResultPasswordTooFresh CanTransferOwnershipResultPasswordTooFresh
+		err := json.Unmarshal(*rawMsg, &canTransferOwnershipResultPasswordTooFresh)
+		return &canTransferOwnershipResultPasswordTooFresh, err
+
+	case CanTransferOwnershipResultSessionTooFreshType:
+		var canTransferOwnershipResultSessionTooFresh CanTransferOwnershipResultSessionTooFresh
+		err := json.Unmarshal(*rawMsg, &canTransferOwnershipResultSessionTooFresh)
+		return &canTransferOwnershipResultSessionTooFresh, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -29347,6 +30994,11 @@ func unmarshalUserPrivacySettingRule(rawMsg *json.RawMessage) (UserPrivacySettin
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingRuleAllowUsers)
 		return &userPrivacySettingRuleAllowUsers, err
 
+	case UserPrivacySettingRuleAllowChatMembersType:
+		var userPrivacySettingRuleAllowChatMembers UserPrivacySettingRuleAllowChatMembers
+		err := json.Unmarshal(*rawMsg, &userPrivacySettingRuleAllowChatMembers)
+		return &userPrivacySettingRuleAllowChatMembers, err
+
 	case UserPrivacySettingRuleRestrictAllType:
 		var userPrivacySettingRuleRestrictAll UserPrivacySettingRuleRestrictAll
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingRuleRestrictAll)
@@ -29361,6 +31013,11 @@ func unmarshalUserPrivacySettingRule(rawMsg *json.RawMessage) (UserPrivacySettin
 		var userPrivacySettingRuleRestrictUsers UserPrivacySettingRuleRestrictUsers
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingRuleRestrictUsers)
 		return &userPrivacySettingRuleRestrictUsers, err
+
+	case UserPrivacySettingRuleRestrictChatMembersType:
+		var userPrivacySettingRuleRestrictChatMembers UserPrivacySettingRuleRestrictChatMembers
+		err := json.Unmarshal(*rawMsg, &userPrivacySettingRuleRestrictChatMembers)
+		return &userPrivacySettingRuleRestrictChatMembers, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -29394,6 +31051,11 @@ func unmarshalUserPrivacySetting(rawMsg *json.RawMessage) (UserPrivacySetting, e
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingShowLinkInForwardedMessages)
 		return &userPrivacySettingShowLinkInForwardedMessages, err
 
+	case UserPrivacySettingShowPhoneNumberType:
+		var userPrivacySettingShowPhoneNumber UserPrivacySettingShowPhoneNumber
+		err := json.Unmarshal(*rawMsg, &userPrivacySettingShowPhoneNumber)
+		return &userPrivacySettingShowPhoneNumber, err
+
 	case UserPrivacySettingAllowChatInvitesType:
 		var userPrivacySettingAllowChatInvites UserPrivacySettingAllowChatInvites
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingAllowChatInvites)
@@ -29408,6 +31070,11 @@ func unmarshalUserPrivacySetting(rawMsg *json.RawMessage) (UserPrivacySetting, e
 		var userPrivacySettingAllowPeerToPeerCalls UserPrivacySettingAllowPeerToPeerCalls
 		err := json.Unmarshal(*rawMsg, &userPrivacySettingAllowPeerToPeerCalls)
 		return &userPrivacySettingAllowPeerToPeerCalls, err
+
+	case UserPrivacySettingAllowFindingByPhoneNumberType:
+		var userPrivacySettingAllowFindingByPhoneNumber UserPrivacySettingAllowFindingByPhoneNumber
+		err := json.Unmarshal(*rawMsg, &userPrivacySettingAllowFindingByPhoneNumber)
+		return &userPrivacySettingAllowFindingByPhoneNumber, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -29450,6 +31117,11 @@ func unmarshalChatReportReason(rawMsg *json.RawMessage) (ChatReportReason, error
 		var chatReportReasonCopyright ChatReportReasonCopyright
 		err := json.Unmarshal(*rawMsg, &chatReportReasonCopyright)
 		return &chatReportReasonCopyright, err
+
+	case ChatReportReasonUnrelatedLocationType:
+		var chatReportReasonUnrelatedLocation ChatReportReasonUnrelatedLocation
+		err := json.Unmarshal(*rawMsg, &chatReportReasonUnrelatedLocation)
+		return &chatReportReasonUnrelatedLocation, err
 
 	case ChatReportReasonCustomType:
 		var chatReportReasonCustom ChatReportReasonCustom
@@ -29711,6 +31383,11 @@ func unmarshalTopChatCategory(rawMsg *json.RawMessage) (TopChatCategory, error) 
 		err := json.Unmarshal(*rawMsg, &topChatCategoryCalls)
 		return &topChatCategoryCalls, err
 
+	case TopChatCategoryForwardChatsType:
+		var topChatCategoryForwardChats TopChatCategoryForwardChats
+		err := json.Unmarshal(*rawMsg, &topChatCategoryForwardChats)
+		return &topChatCategoryForwardChats, err
+
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
 	}
@@ -29874,10 +31551,20 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateMessageMentionRead)
 		return &updateMessageMentionRead, err
 
+	case UpdateMessageLiveLocationViewedType:
+		var updateMessageLiveLocationViewed UpdateMessageLiveLocationViewed
+		err := json.Unmarshal(*rawMsg, &updateMessageLiveLocationViewed)
+		return &updateMessageLiveLocationViewed, err
+
 	case UpdateNewChatType:
 		var updateNewChat UpdateNewChat
 		err := json.Unmarshal(*rawMsg, &updateNewChat)
 		return &updateNewChat, err
+
+	case UpdateChatChatListType:
+		var updateChatChatList UpdateChatChatList
+		err := json.Unmarshal(*rawMsg, &updateChatChatList)
+		return &updateChatChatList, err
 
 	case UpdateChatTitleType:
 		var updateChatTitle UpdateChatTitle
@@ -29919,6 +31606,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatIsSponsored)
 		return &updateChatIsSponsored, err
 
+	case UpdateChatHasScheduledMessagesType:
+		var updateChatHasScheduledMessages UpdateChatHasScheduledMessages
+		err := json.Unmarshal(*rawMsg, &updateChatHasScheduledMessages)
+		return &updateChatHasScheduledMessages, err
+
 	case UpdateChatDefaultDisableNotificationType:
 		var updateChatDefaultDisableNotification UpdateChatDefaultDisableNotification
 		err := json.Unmarshal(*rawMsg, &updateChatDefaultDisableNotification)
@@ -29948,6 +31640,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateScopeNotificationSettings UpdateScopeNotificationSettings
 		err := json.Unmarshal(*rawMsg, &updateScopeNotificationSettings)
 		return &updateScopeNotificationSettings, err
+
+	case UpdateChatActionBarType:
+		var updateChatActionBar UpdateChatActionBar
+		err := json.Unmarshal(*rawMsg, &updateChatActionBar)
+		return &updateChatActionBar, err
 
 	case UpdateChatPinnedMessageType:
 		var updateChatPinnedMessage UpdateChatPinnedMessage
@@ -30128,6 +31825,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateTermsOfService UpdateTermsOfService
 		err := json.Unmarshal(*rawMsg, &updateTermsOfService)
 		return &updateTermsOfService, err
+
+	case UpdateUsersNearbyType:
+		var updateUsersNearby UpdateUsersNearby
+		err := json.Unmarshal(*rawMsg, &updateUsersNearby)
+		return &updateUsersNearby, err
 
 	case UpdateNewInlineQueryType:
 		var updateNewInlineQuery UpdateNewInlineQuery
