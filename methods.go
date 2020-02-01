@@ -405,7 +405,7 @@ func (client *Client) ConfirmQrCodeAuthentication(link string) (*Session, error)
 
 }
 
-// GetCurrentState Returns all updates needed to restore current TDLib state, i.e. all actual UpdateAuthorizationState/UpdateUser/UpdateNewChat and others. This is especially usefull if TDLib is run in a separate process. This is an offline method. Can be called before authorization
+// GetCurrentState Returns all updates needed to restore current TDLib state, i.e. all actual UpdateAuthorizationState/UpdateUser/UpdateNewChat and others. This is especially useful if TDLib is run in a separate process. This is an offline method. Can be called before authorization
 func (client *Client) GetCurrentState() (*Updates, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getCurrentState",
@@ -2609,10 +2609,10 @@ func (client *Client) GetLanguagePackString(languagePackDatabasePath string, loc
 
 // GetJsonValue Converts a JSON-serialized string to corresponding JsonValue object. This is an offline method. Can be called before authorization. Can be called synchronously
 // @param json The JSON-serialized string
-func (client *Client) GetJsonValue(json2 string) (JsonValue, error) {
+func (client *Client) GetJsonValue(jValue string) (JsonValue, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getJsonValue",
-		"json":  json2,
+		"json":  jValue,
 	})
 
 	if err != nil {
@@ -2682,10 +2682,10 @@ func (client *Client) GetJsonString(jsonValue JsonValue) (*Text, error) {
 
 }
 
-// SetPollAnswer Changes user answer to a poll
+// SetPollAnswer Changes the user answer to a poll. A poll in quiz mode can be answered only once
 // @param chatId Identifier of the chat to which the poll belongs
 // @param messageId Identifier of the message containing the poll
-// @param optionIds 0-based identifiers of options, chosen by the user. Currently user can't choose more than 1 option
+// @param optionIds 0-based identifiers of answer options, chosen by the user. User can choose more than 1 answer option only is the poll allows multiple answers
 func (client *Client) SetPollAnswer(chatId int64, messageId int64, optionIds []int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":      "setPollAnswer",
@@ -2705,6 +2705,36 @@ func (client *Client) SetPollAnswer(chatId int64, messageId int64, optionIds []i
 	var ok Ok
 	err = json.Unmarshal(result.Raw, &ok)
 	return &ok, err
+
+}
+
+// GetPollVoters Returns users voted for the specified option in a non-anonymous polls. For the optimal performance the number of returned users is chosen by the library
+// @param chatId Identifier of the chat to which the poll belongs
+// @param messageId Identifier of the message containing the poll
+// @param optionId 0-based identifier of the answer option
+// @param offset Number of users to skip in the result; must be non-negative
+// @param limit The maximum number of users to be returned; must be positive and can't be greater than 50. Fewer users may be returned than specified by the limit, even if the end of the voter list has not been reached
+func (client *Client) GetPollVoters(chatId int64, messageId int64, optionId int32, offset int32, limit int32) (*Users, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":      "getPollVoters",
+		"chat_id":    chatId,
+		"message_id": messageId,
+		"option_id":  optionId,
+		"offset":     offset,
+		"limit":      limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var users Users
+	err = json.Unmarshal(result.Raw, &users)
+	return &users, err
 
 }
 
@@ -4368,7 +4398,7 @@ func (client *Client) WriteGeneratedFilePart(generationId JSONInt64, offset int3
 
 }
 
-// SetFileGenerationProgress Informs TDLib on a file generation prograss
+// SetFileGenerationProgress Informs TDLib on a file generation progress
 // @param generationId The identifier of the generation process
 // @param expectedSize Expected size of the generated file, in bytes; 0 if unknown
 // @param localPrefixSize The number of bytes already generated
@@ -5433,11 +5463,13 @@ func (client *Client) GetStickerEmojis(sticker InputFile) (*Emojis, error) {
 // SearchEmojis Searches for emojis by keywords. Supported only if the file database is enabled
 // @param text Text to search for
 // @param exactMatch True, if only emojis, which exactly match text needs to be returned
-func (client *Client) SearchEmojis(text string, exactMatch bool) (*Emojis, error) {
+// @param inputLanguageCode IETF language tag of the user's input language; may be empty if unknown
+func (client *Client) SearchEmojis(text string, exactMatch bool, inputLanguageCode string) (*Emojis, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":       "searchEmojis",
-		"text":        text,
-		"exact_match": exactMatch,
+		"@type":               "searchEmojis",
+		"text":                text,
+		"exact_match":         exactMatch,
+		"input_language_code": inputLanguageCode,
 	})
 
 	if err != nil {
@@ -6126,7 +6158,7 @@ func (client *Client) DeleteSupergroup(supergroupId int32) (*Ok, error) {
 
 }
 
-// CloseSecretChat Closes a secret chat, effectively transfering its state to secretChatStateClosed
+// CloseSecretChat Closes a secret chat, effectively transferring its state to secretChatStateClosed
 // @param secretChatId Secret chat identifier
 func (client *Client) CloseSecretChat(secretChatId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -6461,7 +6493,7 @@ func (client *Client) SetBackground(background InputBackground, typeParam Backgr
 }
 
 // RemoveBackground Removes background from the list of installed backgrounds
-// @param backgroundId The background indentifier
+// @param backgroundId The background identifier
 func (client *Client) RemoveBackground(backgroundId JSONInt64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":         "removeBackground",
@@ -8071,48 +8103,6 @@ func (client *Client) AnswerCustomQuery(customQueryId JSONInt64, data string) (*
 
 }
 
-// SendTonLiteServerRequest Sends a request to TON lite server through Telegram servers. Can be called before authorization
-// @param request The request
-func (client *Client) SendTonLiteServerRequest(request []byte) (*TonLiteServerResponse, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "sendTonLiteServerRequest",
-		"request": request,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var tonLiteServerResponse TonLiteServerResponse
-	err = json.Unmarshal(result.Raw, &tonLiteServerResponse)
-	return &tonLiteServerResponse, err
-
-}
-
-// GetTonWalletPasswordSalt Returns a salt to be used with locally stored password to access a local TON-based wallet
-func (client *Client) GetTonWalletPasswordSalt() (*TonWalletPasswordSalt, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type": "getTonWalletPasswordSalt",
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var tonWalletPasswordSalt TonWalletPasswordSalt
-	err = json.Unmarshal(result.Raw, &tonWalletPasswordSalt)
-	return &tonWalletPasswordSalt, err
-
-}
-
 // SetAlarm Succeeds after a specified amount of time has passed. Can be called before authorization. Can be called before initialization
 // @param seconds Number of seconds before the function returns
 func (client *Client) SetAlarm(seconds float64) (*Ok, error) {
@@ -9282,6 +9272,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdatePollType:
 		var update UpdatePoll
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdatePollAnswerType:
+		var update UpdatePollAnswer
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 

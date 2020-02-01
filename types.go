@@ -89,6 +89,15 @@ const (
 	MaskPointChinType     MaskPointEnum = "maskPointChin"
 )
 
+// PollTypeEnum Alias for abstract PollType 'Sub-Classes', used as constant-enum here
+type PollTypeEnum string
+
+// PollType enums
+const (
+	PollTypeRegularType PollTypeEnum = "pollTypeRegular"
+	PollTypeQuizType    PollTypeEnum = "pollTypeQuiz"
+)
+
 // UserTypeEnum Alias for abstract UserType 'Sub-Classes', used as constant-enum here
 type UserTypeEnum string
 
@@ -228,6 +237,7 @@ const (
 	KeyboardButtonTypeTextType               KeyboardButtonTypeEnum = "keyboardButtonTypeText"
 	KeyboardButtonTypeRequestPhoneNumberType KeyboardButtonTypeEnum = "keyboardButtonTypeRequestPhoneNumber"
 	KeyboardButtonTypeRequestLocationType    KeyboardButtonTypeEnum = "keyboardButtonTypeRequestLocation"
+	KeyboardButtonTypeRequestPollType        KeyboardButtonTypeEnum = "keyboardButtonTypeRequestPoll"
 )
 
 // InlineKeyboardButtonTypeEnum Alias for abstract InlineKeyboardButtonType 'Sub-Classes', used as constant-enum here
@@ -1100,6 +1110,7 @@ const (
 	UpdateNewCustomEventType                 UpdateEnum = "updateNewCustomEvent"
 	UpdateNewCustomQueryType                 UpdateEnum = "updateNewCustomQuery"
 	UpdatePollType                           UpdateEnum = "updatePoll"
+	UpdatePollAnswerType                     UpdateEnum = "updatePollAnswer"
 )
 
 // LogStreamEnum Alias for abstract LogStream 'Sub-Classes', used as constant-enum here
@@ -1130,7 +1141,12 @@ type MaskPoint interface {
 	GetMaskPointEnum() MaskPointEnum
 }
 
-// UserType Represents the type of the user. The following types are possible: regular users, deleted users and bots
+// PollType Describes the type of a poll
+type PollType interface {
+	GetPollTypeEnum() PollTypeEnum
+}
+
+// UserType Represents the type of a user. The following types are possible: regular users, deleted users and bots
 type UserType interface {
 	GetUserTypeEnum() UserTypeEnum
 }
@@ -1345,7 +1361,7 @@ type BackgroundFill interface {
 	GetBackgroundFillEnum() BackgroundFillEnum
 }
 
-// BackgroundType Describes a type of a background
+// BackgroundType Describes the type of a background
 type BackgroundType interface {
 	GetBackgroundTypeEnum() BackgroundTypeEnum
 }
@@ -1375,7 +1391,7 @@ type NotificationType interface {
 	GetNotificationTypeEnum() NotificationTypeEnum
 }
 
-// NotificationGroupType Describes type of notifications in the group
+// NotificationGroupType Describes the type of notifications in a notification group
 type NotificationGroupType interface {
 	GetNotificationGroupTypeEnum() NotificationGroupTypeEnum
 }
@@ -1440,7 +1456,7 @@ type TextParseMode interface {
 	GetTextParseModeEnum() TextParseModeEnum
 }
 
-// ProxyType Describes the type of the proxy server
+// ProxyType Describes the type of a proxy server
 type ProxyType interface {
 	GetProxyTypeEnum() ProxyTypeEnum
 }
@@ -1769,8 +1785,8 @@ func NewEmailAddressAuthenticationCodeInfo(emailAddressPattern string, length in
 // TextEntity Represents a part of the text that needs to be formatted in some unusual way
 type TextEntity struct {
 	tdCommon
-	Offset int32          `json:"offset"` // Offset of the entity in UTF-16 code points
-	Length int32          `json:"length"` // Length of the entity, in UTF-16 code points
+	Offset int32          `json:"offset"` // Offset of the entity in UTF-16 code units
+	Length int32          `json:"length"` // Length of the entity, in UTF-16 code units
 	Type   TextEntityType `json:"type"`   // Type of the entity
 }
 
@@ -1781,8 +1797,8 @@ func (textEntity *TextEntity) MessageType() string {
 
 // NewTextEntity creates a new TextEntity
 //
-// @param offset Offset of the entity in UTF-16 code points
-// @param length Length of the entity, in UTF-16 code points
+// @param offset Offset of the entity in UTF-16 code units
+// @param length Length of the entity, in UTF-16 code units
 // @param typeParam Type of the entity
 func NewTextEntity(offset int32, length int32, typeParam TextEntityType) *TextEntity {
 	textEntityTemp := TextEntity{
@@ -1804,8 +1820,8 @@ func (textEntity *TextEntity) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Offset int32 `json:"offset"` // Offset of the entity in UTF-16 code points
-		Length int32 `json:"length"` // Length of the entity, in UTF-16 code points
+		Offset int32 `json:"offset"` // Offset of the entity in UTF-16 code units
+		Length int32 `json:"length"` // Length of the entity, in UTF-16 code units
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -2773,6 +2789,62 @@ func NewPollOption(text string, voterCount int32, votePercentage int32, isChosen
 	return &pollOptionTemp
 }
 
+// PollTypeRegular A regular poll
+type PollTypeRegular struct {
+	tdCommon
+	AllowMultipleAnswers bool `json:"allow_multiple_answers"` // True, if multiple answer options can be chosen simultaneously
+}
+
+// MessageType return the string telegram-type of PollTypeRegular
+func (pollTypeRegular *PollTypeRegular) MessageType() string {
+	return "pollTypeRegular"
+}
+
+// NewPollTypeRegular creates a new PollTypeRegular
+//
+// @param allowMultipleAnswers True, if multiple answer options can be chosen simultaneously
+func NewPollTypeRegular(allowMultipleAnswers bool) *PollTypeRegular {
+	pollTypeRegularTemp := PollTypeRegular{
+		tdCommon:             tdCommon{Type: "pollTypeRegular"},
+		AllowMultipleAnswers: allowMultipleAnswers,
+	}
+
+	return &pollTypeRegularTemp
+}
+
+// GetPollTypeEnum return the enum type of this object
+func (pollTypeRegular *PollTypeRegular) GetPollTypeEnum() PollTypeEnum {
+	return PollTypeRegularType
+}
+
+// PollTypeQuiz A poll in quiz mode, which has exactly one correct answer option and can be answered only once
+type PollTypeQuiz struct {
+	tdCommon
+	CorrectOptionId int32 `json:"correct_option_id"` // 0-based identifier of the correct answer option; -1 for a yet unanswered poll
+}
+
+// MessageType return the string telegram-type of PollTypeQuiz
+func (pollTypeQuiz *PollTypeQuiz) MessageType() string {
+	return "pollTypeQuiz"
+}
+
+// NewPollTypeQuiz creates a new PollTypeQuiz
+//
+// @param correctOptionId 0-based identifier of the correct answer option; -1 for a yet unanswered poll
+func NewPollTypeQuiz(correctOptionId int32) *PollTypeQuiz {
+	pollTypeQuizTemp := PollTypeQuiz{
+		tdCommon:        tdCommon{Type: "pollTypeQuiz"},
+		CorrectOptionId: correctOptionId,
+	}
+
+	return &pollTypeQuizTemp
+}
+
+// GetPollTypeEnum return the enum type of this object
+func (pollTypeQuiz *PollTypeQuiz) GetPollTypeEnum() PollTypeEnum {
+	return PollTypeQuizType
+}
+
 // Animation Describes an animation file. The animation must be encoded in GIF or MPEG4 format
 type Animation struct {
 	tdCommon
@@ -3232,11 +3304,14 @@ func NewGame(id JSONInt64, shortName string, title string, text *FormattedText, 
 // Poll Describes a poll
 type Poll struct {
 	tdCommon
-	Id              JSONInt64    `json:"id"`                // Unique poll identifier
-	Question        string       `json:"question"`          // Poll question, 1-255 characters
-	Options         []PollOption `json:"options"`           // List of poll answer options
-	TotalVoterCount int32        `json:"total_voter_count"` // Total number of voters, participating in the poll
-	IsClosed        bool         `json:"is_closed"`         // True, if the poll is closed
+	Id                 JSONInt64    `json:"id"`                    // Unique poll identifier
+	Question           string       `json:"question"`              // Poll question, 1-255 characters
+	Options            []PollOption `json:"options"`               // List of poll answer options
+	TotalVoterCount    int32        `json:"total_voter_count"`     // Total number of voters, participating in the poll
+	RecentVoterUserIds []int32      `json:"recent_voter_user_ids"` // User identifiers of recent voters, if the poll is non-anonymous
+	IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
+	Type               PollType     `json:"type"`                  // Type of the poll
+	IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
 }
 
 // MessageType return the string telegram-type of Poll
@@ -3250,18 +3325,61 @@ func (poll *Poll) MessageType() string {
 // @param question Poll question, 1-255 characters
 // @param options List of poll answer options
 // @param totalVoterCount Total number of voters, participating in the poll
+// @param recentVoterUserIds User identifiers of recent voters, if the poll is non-anonymous
+// @param isAnonymous True, if the poll is anonymous
+// @param typeParam Type of the poll
 // @param isClosed True, if the poll is closed
-func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCount int32, isClosed bool) *Poll {
+func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCount int32, recentVoterUserIds []int32, isAnonymous bool, typeParam PollType, isClosed bool) *Poll {
 	pollTemp := Poll{
-		tdCommon:        tdCommon{Type: "poll"},
-		Id:              id,
-		Question:        question,
-		Options:         options,
-		TotalVoterCount: totalVoterCount,
-		IsClosed:        isClosed,
+		tdCommon:           tdCommon{Type: "poll"},
+		Id:                 id,
+		Question:           question,
+		Options:            options,
+		TotalVoterCount:    totalVoterCount,
+		RecentVoterUserIds: recentVoterUserIds,
+		IsAnonymous:        isAnonymous,
+		Type:               typeParam,
+		IsClosed:           isClosed,
 	}
 
 	return &pollTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (poll *Poll) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Id                 JSONInt64    `json:"id"`                    // Unique poll identifier
+		Question           string       `json:"question"`              // Poll question, 1-255 characters
+		Options            []PollOption `json:"options"`               // List of poll answer options
+		TotalVoterCount    int32        `json:"total_voter_count"`     // Total number of voters, participating in the poll
+		RecentVoterUserIds []int32      `json:"recent_voter_user_ids"` // User identifiers of recent voters, if the poll is non-anonymous
+		IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
+		IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	poll.tdCommon = tempObj.tdCommon
+	poll.Id = tempObj.Id
+	poll.Question = tempObj.Question
+	poll.Options = tempObj.Options
+	poll.TotalVoterCount = tempObj.TotalVoterCount
+	poll.RecentVoterUserIds = tempObj.RecentVoterUserIds
+	poll.IsAnonymous = tempObj.IsAnonymous
+	poll.IsClosed = tempObj.IsClosed
+
+	fieldType, _ := unmarshalPollType(objMap["type"])
+	poll.Type = fieldType
+
+	return nil
 }
 
 // ProfilePhoto Describes a user profile photo
@@ -4861,7 +4979,7 @@ type SecretChat struct {
 	State      SecretChatState `json:"state"`       // State of the secret chat
 	IsOutbound bool            `json:"is_outbound"` // True, if the chat was created by the current user; otherwise false
 	Ttl        int32           `json:"ttl"`         // Current message Time To Live setting (self-destruct timer) for the chat, in seconds
-	KeyHash    []byte          `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
+	KeyHash    []byte          `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 little-endian bytes, which must be split into groups of 2 bits, each denoting a pixel of one of 4 colors FFFFFF, D5E6F3, 2D5775, and 2F99C9.
 	Layer      int32           `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 }
 
@@ -4877,7 +4995,7 @@ func (secretChat *SecretChat) MessageType() string {
 // @param state State of the secret chat
 // @param isOutbound True, if the chat was created by the current user; otherwise false
 // @param ttl Current message Time To Live setting (self-destruct timer) for the chat, in seconds
-// @param keyHash Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
+// @param keyHash Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 little-endian bytes, which must be split into groups of 2 bits, each denoting a pixel of one of 4 colors FFFFFF, D5E6F3, 2D5775, and 2F99C9.
 // @param layer Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 func NewSecretChat(id int32, userId int32, state SecretChatState, isOutbound bool, ttl int32, keyHash []byte, layer int32) *SecretChat {
 	secretChatTemp := SecretChat{
@@ -4907,7 +5025,7 @@ func (secretChat *SecretChat) UnmarshalJSON(b []byte) error {
 		UserId     int32  `json:"user_id"`     // Identifier of the chat partner
 		IsOutbound bool   `json:"is_outbound"` // True, if the chat was created by the current user; otherwise false
 		Ttl        int32  `json:"ttl"`         // Current message Time To Live setting (self-destruct timer) for the chat, in seconds
-		KeyHash    []byte `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 bytes, which must be used to make a 12x12 square image with a color depth of 4. The first 16 bytes should be used to make a central 8x8 square, while the remaining 20 bytes should be used to construct a 2-pixel-wide border around that square.
+		KeyHash    []byte `json:"key_hash"`    // Hash of the currently used key for comparison with the hash of the chat partner's key. This is a string of 36 little-endian bytes, which must be split into groups of 2 bits, each denoting a pixel of one of 4 colors FFFFFF, D5E6F3, 2D5775, and 2F99C9.
 		Layer      int32  `json:"layer"`       // Secret chat layer; determines features supported by the other client. Video notes are supported if the layer >= 66; nested text entities and underline and strikethrough entities are supported if the layer >= 101
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -6339,6 +6457,37 @@ func NewKeyboardButtonTypeRequestLocation() *KeyboardButtonTypeRequestLocation {
 // GetKeyboardButtonTypeEnum return the enum type of this object
 func (keyboardButtonTypeRequestLocation *KeyboardButtonTypeRequestLocation) GetKeyboardButtonTypeEnum() KeyboardButtonTypeEnum {
 	return KeyboardButtonTypeRequestLocationType
+}
+
+// KeyboardButtonTypeRequestPoll A button that allows the user to create and send a poll when pressed; available only in private chats
+type KeyboardButtonTypeRequestPoll struct {
+	tdCommon
+	ForceRegular bool `json:"force_regular"` // If true, only regular polls must be allowed to create
+	ForceQuiz    bool `json:"force_quiz"`    // If true, only polls in quiz mode must be allowed to create
+}
+
+// MessageType return the string telegram-type of KeyboardButtonTypeRequestPoll
+func (keyboardButtonTypeRequestPoll *KeyboardButtonTypeRequestPoll) MessageType() string {
+	return "keyboardButtonTypeRequestPoll"
+}
+
+// NewKeyboardButtonTypeRequestPoll creates a new KeyboardButtonTypeRequestPoll
+//
+// @param forceRegular If true, only regular polls must be allowed to create
+// @param forceQuiz If true, only polls in quiz mode must be allowed to create
+func NewKeyboardButtonTypeRequestPoll(forceRegular bool, forceQuiz bool) *KeyboardButtonTypeRequestPoll {
+	keyboardButtonTypeRequestPollTemp := KeyboardButtonTypeRequestPoll{
+		tdCommon:     tdCommon{Type: "keyboardButtonTypeRequestPoll"},
+		ForceRegular: forceRegular,
+		ForceQuiz:    forceQuiz,
+	}
+
+	return &keyboardButtonTypeRequestPollTemp
+}
+
+// GetKeyboardButtonTypeEnum return the enum type of this object
+func (keyboardButtonTypeRequestPoll *KeyboardButtonTypeRequestPoll) GetKeyboardButtonTypeEnum() KeyboardButtonTypeEnum {
+	return KeyboardButtonTypeRequestPollType
 }
 
 // KeyboardButton Represents a single button in a bot keyboard
@@ -11999,7 +12148,7 @@ func (messageText *MessageText) GetMessageContentEnum() MessageContentEnum {
 // MessageAnimation An animation message (GIF-style).
 type MessageAnimation struct {
 	tdCommon
-	Animation *Animation     `json:"animation"` // Message content
+	Animation *Animation     `json:"animation"` // The animation description
 	Caption   *FormattedText `json:"caption"`   // Animation caption
 	IsSecret  bool           `json:"is_secret"` // True, if the animation thumbnail must be blurred and the animation must be shown only while tapped
 }
@@ -12011,7 +12160,7 @@ func (messageAnimation *MessageAnimation) MessageType() string {
 
 // NewMessageAnimation creates a new MessageAnimation
 //
-// @param animation Message content
+// @param animation The animation description
 // @param caption Animation caption
 // @param isSecret True, if the animation thumbnail must be blurred and the animation must be shown only while tapped
 func NewMessageAnimation(animation *Animation, caption *FormattedText, isSecret bool) *MessageAnimation {
@@ -12033,7 +12182,7 @@ func (messageAnimation *MessageAnimation) GetMessageContentEnum() MessageContent
 // MessageAudio An audio message
 type MessageAudio struct {
 	tdCommon
-	Audio   *Audio         `json:"audio"`   // Message content
+	Audio   *Audio         `json:"audio"`   // The audio description
 	Caption *FormattedText `json:"caption"` // Audio caption
 }
 
@@ -12044,7 +12193,7 @@ func (messageAudio *MessageAudio) MessageType() string {
 
 // NewMessageAudio creates a new MessageAudio
 //
-// @param audio Message content
+// @param audio The audio description
 // @param caption Audio caption
 func NewMessageAudio(audio *Audio, caption *FormattedText) *MessageAudio {
 	messageAudioTemp := MessageAudio{
@@ -12064,7 +12213,7 @@ func (messageAudio *MessageAudio) GetMessageContentEnum() MessageContentEnum {
 // MessageDocument A document message (general file)
 type MessageDocument struct {
 	tdCommon
-	Document *Document      `json:"document"` // Message content
+	Document *Document      `json:"document"` // The document description
 	Caption  *FormattedText `json:"caption"`  // Document caption
 }
 
@@ -12075,7 +12224,7 @@ func (messageDocument *MessageDocument) MessageType() string {
 
 // NewMessageDocument creates a new MessageDocument
 //
-// @param document Message content
+// @param document The document description
 // @param caption Document caption
 func NewMessageDocument(document *Document, caption *FormattedText) *MessageDocument {
 	messageDocumentTemp := MessageDocument{
@@ -12095,7 +12244,7 @@ func (messageDocument *MessageDocument) GetMessageContentEnum() MessageContentEn
 // MessagePhoto A photo message
 type MessagePhoto struct {
 	tdCommon
-	Photo    *Photo         `json:"photo"`     // Message content
+	Photo    *Photo         `json:"photo"`     // The photo description
 	Caption  *FormattedText `json:"caption"`   // Photo caption
 	IsSecret bool           `json:"is_secret"` // True, if the photo must be blurred and must be shown only while tapped
 }
@@ -12107,7 +12256,7 @@ func (messagePhoto *MessagePhoto) MessageType() string {
 
 // NewMessagePhoto creates a new MessagePhoto
 //
-// @param photo Message content
+// @param photo The photo description
 // @param caption Photo caption
 // @param isSecret True, if the photo must be blurred and must be shown only while tapped
 func NewMessagePhoto(photo *Photo, caption *FormattedText, isSecret bool) *MessagePhoto {
@@ -12154,7 +12303,7 @@ func (messageExpiredPhoto *MessageExpiredPhoto) GetMessageContentEnum() MessageC
 // MessageSticker A sticker message
 type MessageSticker struct {
 	tdCommon
-	Sticker *Sticker `json:"sticker"` // Message content
+	Sticker *Sticker `json:"sticker"` // The sticker description
 }
 
 // MessageType return the string telegram-type of MessageSticker
@@ -12164,7 +12313,7 @@ func (messageSticker *MessageSticker) MessageType() string {
 
 // NewMessageSticker creates a new MessageSticker
 //
-// @param sticker Message content
+// @param sticker The sticker description
 func NewMessageSticker(sticker *Sticker) *MessageSticker {
 	messageStickerTemp := MessageSticker{
 		tdCommon: tdCommon{Type: "messageSticker"},
@@ -12182,7 +12331,7 @@ func (messageSticker *MessageSticker) GetMessageContentEnum() MessageContentEnum
 // MessageVideo A video message
 type MessageVideo struct {
 	tdCommon
-	Video    *Video         `json:"video"`     // Message content
+	Video    *Video         `json:"video"`     // The video description
 	Caption  *FormattedText `json:"caption"`   // Video caption
 	IsSecret bool           `json:"is_secret"` // True, if the video thumbnail must be blurred and the video must be shown only while tapped
 }
@@ -12194,7 +12343,7 @@ func (messageVideo *MessageVideo) MessageType() string {
 
 // NewMessageVideo creates a new MessageVideo
 //
-// @param video Message content
+// @param video The video description
 // @param caption Video caption
 // @param isSecret True, if the video thumbnail must be blurred and the video must be shown only while tapped
 func NewMessageVideo(video *Video, caption *FormattedText, isSecret bool) *MessageVideo {
@@ -12241,7 +12390,7 @@ func (messageExpiredVideo *MessageExpiredVideo) GetMessageContentEnum() MessageC
 // MessageVideoNote A video note message
 type MessageVideoNote struct {
 	tdCommon
-	VideoNote *VideoNote `json:"video_note"` // Message content
+	VideoNote *VideoNote `json:"video_note"` // The video note description
 	IsViewed  bool       `json:"is_viewed"`  // True, if at least one of the recipients has viewed the video note
 	IsSecret  bool       `json:"is_secret"`  // True, if the video note thumbnail must be blurred and the video note must be shown only while tapped
 }
@@ -12253,7 +12402,7 @@ func (messageVideoNote *MessageVideoNote) MessageType() string {
 
 // NewMessageVideoNote creates a new MessageVideoNote
 //
-// @param videoNote Message content
+// @param videoNote The video note description
 // @param isViewed True, if at least one of the recipients has viewed the video note
 // @param isSecret True, if the video note thumbnail must be blurred and the video note must be shown only while tapped
 func NewMessageVideoNote(videoNote *VideoNote, isViewed bool, isSecret bool) *MessageVideoNote {
@@ -12275,7 +12424,7 @@ func (messageVideoNote *MessageVideoNote) GetMessageContentEnum() MessageContent
 // MessageVoiceNote A voice note message
 type MessageVoiceNote struct {
 	tdCommon
-	VoiceNote  *VoiceNote     `json:"voice_note"`  // Message content
+	VoiceNote  *VoiceNote     `json:"voice_note"`  // The voice note description
 	Caption    *FormattedText `json:"caption"`     // Voice note caption
 	IsListened bool           `json:"is_listened"` // True, if at least one of the recipients has listened to the voice note
 }
@@ -12287,7 +12436,7 @@ func (messageVoiceNote *MessageVoiceNote) MessageType() string {
 
 // NewMessageVoiceNote creates a new MessageVoiceNote
 //
-// @param voiceNote Message content
+// @param voiceNote The voice note description
 // @param caption Voice note caption
 // @param isListened True, if at least one of the recipients has listened to the voice note
 func NewMessageVoiceNote(voiceNote *VoiceNote, caption *FormattedText, isListened bool) *MessageVoiceNote {
@@ -12309,7 +12458,7 @@ func (messageVoiceNote *MessageVoiceNote) GetMessageContentEnum() MessageContent
 // MessageLocation A message with a location
 type MessageLocation struct {
 	tdCommon
-	Location   *Location `json:"location"`    // Message content
+	Location   *Location `json:"location"`    // The location description
 	LivePeriod int32     `json:"live_period"` // Time relative to the message sent date until which the location can be updated, in seconds
 	ExpiresIn  int32     `json:"expires_in"`  // Left time for which the location can be updated, in seconds. updateMessageContent is not sent when this field changes
 }
@@ -12321,7 +12470,7 @@ func (messageLocation *MessageLocation) MessageType() string {
 
 // NewMessageLocation creates a new MessageLocation
 //
-// @param location Message content
+// @param location The location description
 // @param livePeriod Time relative to the message sent date until which the location can be updated, in seconds
 // @param expiresIn Left time for which the location can be updated, in seconds. updateMessageContent is not sent when this field changes
 func NewMessageLocation(location *Location, livePeriod int32, expiresIn int32) *MessageLocation {
@@ -12343,7 +12492,7 @@ func (messageLocation *MessageLocation) GetMessageContentEnum() MessageContentEn
 // MessageVenue A message with information about a venue
 type MessageVenue struct {
 	tdCommon
-	Venue *Venue `json:"venue"` // Message content
+	Venue *Venue `json:"venue"` // The venue description
 }
 
 // MessageType return the string telegram-type of MessageVenue
@@ -12353,7 +12502,7 @@ func (messageVenue *MessageVenue) MessageType() string {
 
 // NewMessageVenue creates a new MessageVenue
 //
-// @param venue Message content
+// @param venue The venue description
 func NewMessageVenue(venue *Venue) *MessageVenue {
 	messageVenueTemp := MessageVenue{
 		tdCommon: tdCommon{Type: "messageVenue"},
@@ -12371,7 +12520,7 @@ func (messageVenue *MessageVenue) GetMessageContentEnum() MessageContentEnum {
 // MessageContact A message with a user contact
 type MessageContact struct {
 	tdCommon
-	Contact *Contact `json:"contact"` // Message content
+	Contact *Contact `json:"contact"` // The contact description
 }
 
 // MessageType return the string telegram-type of MessageContact
@@ -12381,7 +12530,7 @@ func (messageContact *MessageContact) MessageType() string {
 
 // NewMessageContact creates a new MessageContact
 //
-// @param contact Message content
+// @param contact The contact description
 func NewMessageContact(contact *Contact) *MessageContact {
 	messageContactTemp := MessageContact{
 		tdCommon: tdCommon{Type: "messageContact"},
@@ -12399,7 +12548,7 @@ func (messageContact *MessageContact) GetMessageContentEnum() MessageContentEnum
 // MessageGame A message with a game
 type MessageGame struct {
 	tdCommon
-	Game *Game `json:"game"` // Game
+	Game *Game `json:"game"` // The game description
 }
 
 // MessageType return the string telegram-type of MessageGame
@@ -12409,7 +12558,7 @@ func (messageGame *MessageGame) MessageType() string {
 
 // NewMessageGame creates a new MessageGame
 //
-// @param game Game
+// @param game The game description
 func NewMessageGame(game *Game) *MessageGame {
 	messageGameTemp := MessageGame{
 		tdCommon: tdCommon{Type: "messageGame"},
@@ -12427,7 +12576,7 @@ func (messageGame *MessageGame) GetMessageContentEnum() MessageContentEnum {
 // MessagePoll A message with a poll
 type MessagePoll struct {
 	tdCommon
-	Poll *Poll `json:"poll"` // Poll
+	Poll *Poll `json:"poll"` // The poll description
 }
 
 // MessageType return the string telegram-type of MessagePoll
@@ -12437,7 +12586,7 @@ func (messagePoll *MessagePoll) MessageType() string {
 
 // NewMessagePoll creates a new MessagePoll
 //
-// @param poll Poll
+// @param poll The poll description
 func NewMessagePoll(poll *Poll) *MessagePoll {
 	messagePollTemp := MessagePoll{
 		tdCommon: tdCommon{Type: "messagePoll"},
@@ -14399,7 +14548,7 @@ func (inputMessageVoiceNote *InputMessageVoiceNote) GetInputMessageContentEnum()
 type InputMessageLocation struct {
 	tdCommon
 	Location   *Location `json:"location"`    // Location to be sent
-	LivePeriod int32     `json:"live_period"` // Period for which the location can be updated, in seconds; should bebetween 60 and 86400 for a live location and 0 otherwise
+	LivePeriod int32     `json:"live_period"` // Period for which the location can be updated, in seconds; should be between 60 and 86400 for a live location and 0 otherwise
 }
 
 // MessageType return the string telegram-type of InputMessageLocation
@@ -14410,7 +14559,7 @@ func (inputMessageLocation *InputMessageLocation) MessageType() string {
 // NewInputMessageLocation creates a new InputMessageLocation
 //
 // @param location Location to be sent
-// @param livePeriod Period for which the location can be updated, in seconds; should bebetween 60 and 86400 for a live location and 0 otherwise
+// @param livePeriod Period for which the location can be updated, in seconds; should be between 60 and 86400 for a live location and 0 otherwise
 func NewInputMessageLocation(location *Location, livePeriod int32) *InputMessageLocation {
 	inputMessageLocationTemp := InputMessageLocation{
 		tdCommon:   tdCommon{Type: "inputMessageLocation"},
@@ -14571,11 +14720,14 @@ func (inputMessageInvoice *InputMessageInvoice) GetInputMessageContentEnum() Inp
 	return InputMessageInvoiceType
 }
 
-// InputMessagePoll A message with a poll. Polls can't be sent to private or secret chats
+// InputMessagePoll A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot
 type InputMessagePoll struct {
 	tdCommon
-	Question string   `json:"question"` // Poll question, 1-255 characters
-	Options  []string `json:"options"`  // List of poll answer options, 2-10 strings 1-100 characters each
+	Question    string   `json:"question"`     // Poll question, 1-255 characters
+	Options     []string `json:"options"`      // List of poll answer options, 2-10 strings 1-100 characters each
+	IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
+	Type        PollType `json:"type"`         // Type of the poll
+	IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
 }
 
 // MessageType return the string telegram-type of InputMessagePoll
@@ -14587,14 +14739,51 @@ func (inputMessagePoll *InputMessagePoll) MessageType() string {
 //
 // @param question Poll question, 1-255 characters
 // @param options List of poll answer options, 2-10 strings 1-100 characters each
-func NewInputMessagePoll(question string, options []string) *InputMessagePoll {
+// @param isAnonymous True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
+// @param typeParam Type of the poll
+// @param isClosed True, if the poll needs to be sent already closed; for bots only
+func NewInputMessagePoll(question string, options []string, isAnonymous bool, typeParam PollType, isClosed bool) *InputMessagePoll {
 	inputMessagePollTemp := InputMessagePoll{
-		tdCommon: tdCommon{Type: "inputMessagePoll"},
-		Question: question,
-		Options:  options,
+		tdCommon:    tdCommon{Type: "inputMessagePoll"},
+		Question:    question,
+		Options:     options,
+		IsAnonymous: isAnonymous,
+		Type:        typeParam,
+		IsClosed:    isClosed,
 	}
 
 	return &inputMessagePollTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (inputMessagePoll *InputMessagePoll) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Question    string   `json:"question"`     // Poll question, 1-255 characters
+		Options     []string `json:"options"`      // List of poll answer options, 2-10 strings 1-100 characters each
+		IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
+		IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	inputMessagePoll.tdCommon = tempObj.tdCommon
+	inputMessagePoll.Question = tempObj.Question
+	inputMessagePoll.Options = tempObj.Options
+	inputMessagePoll.IsAnonymous = tempObj.IsAnonymous
+	inputMessagePoll.IsClosed = tempObj.IsClosed
+
+	fieldType, _ := unmarshalPollType(objMap["type"])
+	inputMessagePoll.Type = fieldType
+
+	return nil
 }
 
 // GetInputMessageContentEnum return the enum type of this object
@@ -18246,52 +18435,6 @@ func NewGameHighScores(scores []GameHighScore) *GameHighScores {
 	return &gameHighScoresTemp
 }
 
-// TonLiteServerResponse Contains the response of a request to TON lite server
-type TonLiteServerResponse struct {
-	tdCommon
-	Response []byte `json:"response"` // The response
-}
-
-// MessageType return the string telegram-type of TonLiteServerResponse
-func (tonLiteServerResponse *TonLiteServerResponse) MessageType() string {
-	return "tonLiteServerResponse"
-}
-
-// NewTonLiteServerResponse creates a new TonLiteServerResponse
-//
-// @param response The response
-func NewTonLiteServerResponse(response []byte) *TonLiteServerResponse {
-	tonLiteServerResponseTemp := TonLiteServerResponse{
-		tdCommon: tdCommon{Type: "tonLiteServerResponse"},
-		Response: response,
-	}
-
-	return &tonLiteServerResponseTemp
-}
-
-// TonWalletPasswordSalt Contains the salt to be used with locally stored password to access a local TON-based wallet
-type TonWalletPasswordSalt struct {
-	tdCommon
-	Salt []byte `json:"salt"` // The salt
-}
-
-// MessageType return the string telegram-type of TonWalletPasswordSalt
-func (tonWalletPasswordSalt *TonWalletPasswordSalt) MessageType() string {
-	return "tonWalletPasswordSalt"
-}
-
-// NewTonWalletPasswordSalt creates a new TonWalletPasswordSalt
-//
-// @param salt The salt
-func NewTonWalletPasswordSalt(salt []byte) *TonWalletPasswordSalt {
-	tonWalletPasswordSaltTemp := TonWalletPasswordSalt{
-		tdCommon: tdCommon{Type: "tonWalletPasswordSalt"},
-		Salt:     salt,
-	}
-
-	return &tonWalletPasswordSaltTemp
-}
-
 // ChatEventMessageEdited A message was edited
 type ChatEventMessageEdited struct {
 	tdCommon
@@ -19858,7 +20001,7 @@ func (backgroundTypeWallpaper *BackgroundTypeWallpaper) GetBackgroundTypeEnum() 
 	return BackgroundTypeWallpaperType
 }
 
-// BackgroundTypePattern A PNG or TGV (gzipped subset of SVG with mime-type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user
+// BackgroundTypePattern A PNG or TGV (gzipped subset of SVG with MIME type "application/x-tgwallpattern") pattern to be combined with the background fill chosen by the user
 type BackgroundTypePattern struct {
 	tdCommon
 	Fill      BackgroundFill `json:"fill"`      // Description of the background fill
@@ -20068,7 +20211,7 @@ func NewBackgrounds(backgrounds []Background) *Backgrounds {
 // InputBackgroundLocal A background from a local file
 type InputBackgroundLocal struct {
 	tdCommon
-	Background InputFile `json:"background"` // Background file to use. Only inputFileLocal and inputFileGenerated are supported. The file nust be in JPEG format for wallpapers and in PNG format for patterns
+	Background InputFile `json:"background"` // Background file to use. Only inputFileLocal and inputFileGenerated are supported. The file must be in JPEG format for wallpapers and in PNG format for patterns
 }
 
 // MessageType return the string telegram-type of InputBackgroundLocal
@@ -20078,7 +20221,7 @@ func (inputBackgroundLocal *InputBackgroundLocal) MessageType() string {
 
 // NewInputBackgroundLocal creates a new InputBackgroundLocal
 //
-// @param background Background file to use. Only inputFileLocal and inputFileGenerated are supported. The file nust be in JPEG format for wallpapers and in PNG format for patterns
+// @param background Background file to use. Only inputFileLocal and inputFileGenerated are supported. The file must be in JPEG format for wallpapers and in PNG format for patterns
 func NewInputBackgroundLocal(background InputFile) *InputBackgroundLocal {
 	inputBackgroundLocalTemp := InputBackgroundLocal{
 		tdCommon:   tdCommon{Type: "inputBackgroundLocal"},
@@ -20745,8 +20888,9 @@ func (pushMessageContentPhoto *PushMessageContentPhoto) GetPushMessageContentEnu
 // PushMessageContentPoll A message with a poll
 type PushMessageContentPoll struct {
 	tdCommon
-	Question string `json:"question"`  // Poll question
-	IsPinned bool   `json:"is_pinned"` // True, if the message is a pinned message with the specified content
+	Question  string `json:"question"`   // Poll question
+	IsRegular bool   `json:"is_regular"` // True, if the poll is regular and not in quiz mode
+	IsPinned  bool   `json:"is_pinned"`  // True, if the message is a pinned message with the specified content
 }
 
 // MessageType return the string telegram-type of PushMessageContentPoll
@@ -20757,12 +20901,14 @@ func (pushMessageContentPoll *PushMessageContentPoll) MessageType() string {
 // NewPushMessageContentPoll creates a new PushMessageContentPoll
 //
 // @param question Poll question
+// @param isRegular True, if the poll is regular and not in quiz mode
 // @param isPinned True, if the message is a pinned message with the specified content
-func NewPushMessageContentPoll(question string, isPinned bool) *PushMessageContentPoll {
+func NewPushMessageContentPoll(question string, isRegular bool, isPinned bool) *PushMessageContentPoll {
 	pushMessageContentPollTemp := PushMessageContentPoll{
-		tdCommon: tdCommon{Type: "pushMessageContentPoll"},
-		Question: question,
-		IsPinned: isPinned,
+		tdCommon:  tdCommon{Type: "pushMessageContentPoll"},
+		Question:  question,
+		IsRegular: isRegular,
+		IsPinned:  isPinned,
 	}
 
 	return &pushMessageContentPollTemp
@@ -27446,7 +27592,7 @@ func (updateNewCustomQuery *UpdateNewCustomQuery) GetUpdateEnum() UpdateEnum {
 	return UpdateNewCustomQueryType
 }
 
-// UpdatePoll Information about a poll was updated; for bots only
+// UpdatePoll A poll was updated; for bots only
 type UpdatePoll struct {
 	tdCommon
 	Poll *Poll `json:"poll"` // New data about the poll
@@ -27472,6 +27618,40 @@ func NewUpdatePoll(poll *Poll) *UpdatePoll {
 // GetUpdateEnum return the enum type of this object
 func (updatePoll *UpdatePoll) GetUpdateEnum() UpdateEnum {
 	return UpdatePollType
+}
+
+// UpdatePollAnswer A user changed the answer to a poll; for bots only
+type UpdatePollAnswer struct {
+	tdCommon
+	PollId    JSONInt64 `json:"poll_id"`    // Unique poll identifier
+	UserId    int32     `json:"user_id"`    // The user, who changed the answer to the poll
+	OptionIds []int32   `json:"option_ids"` // 0-based identifiers of answer options, chosen by the user
+}
+
+// MessageType return the string telegram-type of UpdatePollAnswer
+func (updatePollAnswer *UpdatePollAnswer) MessageType() string {
+	return "updatePollAnswer"
+}
+
+// NewUpdatePollAnswer creates a new UpdatePollAnswer
+//
+// @param pollId Unique poll identifier
+// @param userId The user, who changed the answer to the poll
+// @param optionIds 0-based identifiers of answer options, chosen by the user
+func NewUpdatePollAnswer(pollId JSONInt64, userId int32, optionIds []int32) *UpdatePollAnswer {
+	updatePollAnswerTemp := UpdatePollAnswer{
+		tdCommon:  tdCommon{Type: "updatePollAnswer"},
+		PollId:    pollId,
+		UserId:    userId,
+		OptionIds: optionIds,
+	}
+
+	return &updatePollAnswerTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updatePollAnswer *UpdatePollAnswer) GetUpdateEnum() UpdateEnum {
+	return UpdatePollAnswerType
 }
 
 // Updates Contains a list of updates
@@ -27968,6 +28148,33 @@ func unmarshalMaskPoint(rawMsg *json.RawMessage) (MaskPoint, error) {
 	}
 }
 
+func unmarshalPollType(rawMsg *json.RawMessage) (PollType, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch PollTypeEnum(objMap["@type"].(string)) {
+	case PollTypeRegularType:
+		var pollTypeRegular PollTypeRegular
+		err := json.Unmarshal(*rawMsg, &pollTypeRegular)
+		return &pollTypeRegular, err
+
+	case PollTypeQuizType:
+		var pollTypeQuiz PollTypeQuiz
+		err := json.Unmarshal(*rawMsg, &pollTypeQuiz)
+		return &pollTypeQuiz, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalUserType(rawMsg *json.RawMessage) (UserType, error) {
 
 	if rawMsg == nil {
@@ -28433,6 +28640,11 @@ func unmarshalKeyboardButtonType(rawMsg *json.RawMessage) (KeyboardButtonType, e
 		var keyboardButtonTypeRequestLocation KeyboardButtonTypeRequestLocation
 		err := json.Unmarshal(*rawMsg, &keyboardButtonTypeRequestLocation)
 		return &keyboardButtonTypeRequestLocation, err
+
+	case KeyboardButtonTypeRequestPollType:
+		var keyboardButtonTypeRequestPoll KeyboardButtonTypeRequestPoll
+		err := json.Unmarshal(*rawMsg, &keyboardButtonTypeRequestPoll)
+		return &keyboardButtonTypeRequestPoll, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -31875,6 +32087,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updatePoll UpdatePoll
 		err := json.Unmarshal(*rawMsg, &updatePoll)
 		return &updatePoll, err
+
+	case UpdatePollAnswerType:
+		var updatePollAnswer UpdatePollAnswer
+		err := json.Unmarshal(*rawMsg, &updatePollAnswer)
+		return &updatePollAnswer, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
