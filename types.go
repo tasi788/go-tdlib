@@ -506,22 +506,23 @@ type TextEntityTypeEnum string
 
 // TextEntityType enums
 const (
-	TextEntityTypeMentionType       TextEntityTypeEnum = "textEntityTypeMention"
-	TextEntityTypeHashtagType       TextEntityTypeEnum = "textEntityTypeHashtag"
-	TextEntityTypeCashtagType       TextEntityTypeEnum = "textEntityTypeCashtag"
-	TextEntityTypeBotCommandType    TextEntityTypeEnum = "textEntityTypeBotCommand"
-	TextEntityTypeUrlType           TextEntityTypeEnum = "textEntityTypeUrl"
-	TextEntityTypeEmailAddressType  TextEntityTypeEnum = "textEntityTypeEmailAddress"
-	TextEntityTypePhoneNumberType   TextEntityTypeEnum = "textEntityTypePhoneNumber"
-	TextEntityTypeBoldType          TextEntityTypeEnum = "textEntityTypeBold"
-	TextEntityTypeItalicType        TextEntityTypeEnum = "textEntityTypeItalic"
-	TextEntityTypeUnderlineType     TextEntityTypeEnum = "textEntityTypeUnderline"
-	TextEntityTypeStrikethroughType TextEntityTypeEnum = "textEntityTypeStrikethrough"
-	TextEntityTypeCodeType          TextEntityTypeEnum = "textEntityTypeCode"
-	TextEntityTypePreType           TextEntityTypeEnum = "textEntityTypePre"
-	TextEntityTypePreCodeType       TextEntityTypeEnum = "textEntityTypePreCode"
-	TextEntityTypeTextUrlType       TextEntityTypeEnum = "textEntityTypeTextUrl"
-	TextEntityTypeMentionNameType   TextEntityTypeEnum = "textEntityTypeMentionName"
+	TextEntityTypeMentionType        TextEntityTypeEnum = "textEntityTypeMention"
+	TextEntityTypeHashtagType        TextEntityTypeEnum = "textEntityTypeHashtag"
+	TextEntityTypeCashtagType        TextEntityTypeEnum = "textEntityTypeCashtag"
+	TextEntityTypeBotCommandType     TextEntityTypeEnum = "textEntityTypeBotCommand"
+	TextEntityTypeUrlType            TextEntityTypeEnum = "textEntityTypeUrl"
+	TextEntityTypeEmailAddressType   TextEntityTypeEnum = "textEntityTypeEmailAddress"
+	TextEntityTypePhoneNumberType    TextEntityTypeEnum = "textEntityTypePhoneNumber"
+	TextEntityTypeBankCardNumberType TextEntityTypeEnum = "textEntityTypeBankCardNumber"
+	TextEntityTypeBoldType           TextEntityTypeEnum = "textEntityTypeBold"
+	TextEntityTypeItalicType         TextEntityTypeEnum = "textEntityTypeItalic"
+	TextEntityTypeUnderlineType      TextEntityTypeEnum = "textEntityTypeUnderline"
+	TextEntityTypeStrikethroughType  TextEntityTypeEnum = "textEntityTypeStrikethrough"
+	TextEntityTypeCodeType           TextEntityTypeEnum = "textEntityTypeCode"
+	TextEntityTypePreType            TextEntityTypeEnum = "textEntityTypePre"
+	TextEntityTypePreCodeType        TextEntityTypeEnum = "textEntityTypePreCode"
+	TextEntityTypeTextUrlType        TextEntityTypeEnum = "textEntityTypeTextUrl"
+	TextEntityTypeMentionNameType    TextEntityTypeEnum = "textEntityTypeMentionName"
 )
 
 // MessageSchedulingStateEnum Alias for abstract MessageSchedulingState 'Sub-Classes', used as constant-enum here
@@ -9432,6 +9433,58 @@ func NewWebPage(url string, displayUrl string, typeParam string, siteName string
 	return &webPageTemp
 }
 
+// BankCardActionOpenUrl Describes an action associated with a bank card number
+type BankCardActionOpenUrl struct {
+	tdCommon
+	Text string `json:"text"` // Action text
+	Url  string `json:"url"`  // The URL to be opened
+}
+
+// MessageType return the string telegram-type of BankCardActionOpenUrl
+func (bankCardActionOpenUrl *BankCardActionOpenUrl) MessageType() string {
+	return "bankCardActionOpenUrl"
+}
+
+// NewBankCardActionOpenUrl creates a new BankCardActionOpenUrl
+//
+// @param text Action text
+// @param url The URL to be opened
+func NewBankCardActionOpenUrl(text string, url string) *BankCardActionOpenUrl {
+	bankCardActionOpenUrlTemp := BankCardActionOpenUrl{
+		tdCommon: tdCommon{Type: "bankCardActionOpenUrl"},
+		Text:     text,
+		Url:      url,
+	}
+
+	return &bankCardActionOpenUrlTemp
+}
+
+// BankCardInfo Information about a bank card
+type BankCardInfo struct {
+	tdCommon
+	Title   string                  `json:"title"`   // Title of the bank card description
+	Actions []BankCardActionOpenUrl `json:"actions"` // Actions that can be done with the bank card number
+}
+
+// MessageType return the string telegram-type of BankCardInfo
+func (bankCardInfo *BankCardInfo) MessageType() string {
+	return "bankCardInfo"
+}
+
+// NewBankCardInfo creates a new BankCardInfo
+//
+// @param title Title of the bank card description
+// @param actions Actions that can be done with the bank card number
+func NewBankCardInfo(title string, actions []BankCardActionOpenUrl) *BankCardInfo {
+	bankCardInfoTemp := BankCardInfo{
+		tdCommon: tdCommon{Type: "bankCardInfo"},
+		Title:    title,
+		Actions:  actions,
+	}
+
+	return &bankCardInfoTemp
+}
+
 // Address Describes an address
 type Address struct {
 	tdCommon
@@ -13525,6 +13578,31 @@ func NewTextEntityTypePhoneNumber() *TextEntityTypePhoneNumber {
 // GetTextEntityTypeEnum return the enum type of this object
 func (textEntityTypePhoneNumber *TextEntityTypePhoneNumber) GetTextEntityTypeEnum() TextEntityTypeEnum {
 	return TextEntityTypePhoneNumberType
+}
+
+// TextEntityTypeBankCardNumber A bank card number. The getBankCardInfo method can be used to get information about the bank card
+type TextEntityTypeBankCardNumber struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TextEntityTypeBankCardNumber
+func (textEntityTypeBankCardNumber *TextEntityTypeBankCardNumber) MessageType() string {
+	return "textEntityTypeBankCardNumber"
+}
+
+// NewTextEntityTypeBankCardNumber creates a new TextEntityTypeBankCardNumber
+//
+func NewTextEntityTypeBankCardNumber() *TextEntityTypeBankCardNumber {
+	textEntityTypeBankCardNumberTemp := TextEntityTypeBankCardNumber{
+		tdCommon: tdCommon{Type: "textEntityTypeBankCardNumber"},
+	}
+
+	return &textEntityTypeBankCardNumberTemp
+}
+
+// GetTextEntityTypeEnum return the enum type of this object
+func (textEntityTypeBankCardNumber *TextEntityTypeBankCardNumber) GetTextEntityTypeEnum() TextEntityTypeEnum {
+	return TextEntityTypeBankCardNumberType
 }
 
 // TextEntityTypeBold A bold text
@@ -29750,6 +29828,11 @@ func unmarshalTextEntityType(rawMsg *json.RawMessage) (TextEntityType, error) {
 		var textEntityTypePhoneNumber TextEntityTypePhoneNumber
 		err := json.Unmarshal(*rawMsg, &textEntityTypePhoneNumber)
 		return &textEntityTypePhoneNumber, err
+
+	case TextEntityTypeBankCardNumberType:
+		var textEntityTypeBankCardNumber TextEntityTypeBankCardNumber
+		err := json.Unmarshal(*rawMsg, &textEntityTypeBankCardNumber)
+		return &textEntityTypeBankCardNumber, err
 
 	case TextEntityTypeBoldType:
 		var textEntityTypeBold TextEntityTypeBold

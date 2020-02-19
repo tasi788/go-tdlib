@@ -2451,7 +2451,7 @@ func (client *Client) EditMessageSchedulingState(chatId int64, messageId int64, 
 
 }
 
-// GetTextEntities Returns all entities (mentions, hashtags, cashtags, bot commands, URLs, and email addresses) contained in the text. This is an offline method. Can be called before authorization. Can be called synchronously
+// GetTextEntities Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) contained in the text. This is an offline method. Can be called before authorization. Can be called synchronously
 // @param text The text in which to look for entites
 func (client *Client) GetTextEntities(text string) (*TextEntities, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -5796,6 +5796,28 @@ func (client *Client) SetUsername(username string) (*Ok, error) {
 
 }
 
+// SetLocation Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location changes for more than 1 kilometer
+// @param location The new location of the user
+func (client *Client) SetLocation(location *Location) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":    "setLocation",
+		"location": location,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // ChangePhoneNumber Changes the phone number of the user and sends an authentication code to the user's new phone number. On success, returns information about the sent code
 // @param phoneNumber The new phone number of the user in international format
 // @param settings Settings for the authentication of the user's phone number
@@ -7027,7 +7049,7 @@ func (client *Client) RemoveChatActionBar(chatId int64) (*Ok, error) {
 
 }
 
-// ReportChat Reports a chat to the Telegram moderators. Supported only for supergroups, channels, or private chats with bots, since other chats can't be checked by moderators, or when the report is done from the chat action bar
+// ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if this is a private chats with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
 // @param chatId Chat identifier
 // @param reason The reason for reporting the chat
 // @param messageIds Identifiers of reported messages, if any
@@ -7304,6 +7326,28 @@ func (client *Client) SetAutoDownloadSettings(settings *AutoDownloadSettings, ty
 	var ok Ok
 	err = json.Unmarshal(result.Raw, &ok)
 	return &ok, err
+
+}
+
+// GetBankCardInfo Returns information about a bank card
+// @param bankCardNumber The bank card number
+func (client *Client) GetBankCardInfo(bankCardNumber string) (*BankCardInfo, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":            "getBankCardInfo",
+		"bank_card_number": bankCardNumber,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var bankCardInfo BankCardInfo
+	err = json.Unmarshal(result.Raw, &bankCardInfo)
+	return &bankCardInfo, err
 
 }
 
