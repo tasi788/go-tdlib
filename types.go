@@ -4717,7 +4717,7 @@ type Supergroup struct {
 	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
-	MemberCount       int32            `json:"member_count"`         // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+	MemberCount       int32            `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
 	HasLinkedChat     bool             `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 	HasLocation       bool             `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 	SignMessages      bool             `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -4740,7 +4740,7 @@ func (supergroup *Supergroup) MessageType() string {
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 // @param status Status of the current user in the supergroup or channel; custom title will be always empty
-// @param memberCount Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+// @param memberCount Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
 // @param hasLinkedChat True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 // @param hasLocation True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 // @param signMessages True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -4784,7 +4784,7 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 		AccessHash        JSONInt64 `json:"access_hash"`          // Supergroup or channel access hash
 		Username          string    `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 		Date              int32     `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32     `json:"member_count"`         // Member count; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+		MemberCount       int32     `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
 		HasLinkedChat     bool      `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 		HasLocation       bool      `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 		SignMessages      bool      `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -6141,7 +6141,7 @@ type ChatInviteLinkInfo struct {
 	Type          ChatType   `json:"type"`            // Contains information about the type of the chat
 	Title         string     `json:"title"`           // Title of the chat
 	Photo         *ChatPhoto `json:"photo"`           // Chat photo; may be null
-	MemberCount   int32      `json:"member_count"`    // Number of members
+	MemberCount   int32      `json:"member_count"`    // Number of members in the chat
 	MemberUserIds []int32    `json:"member_user_ids"` // User identifiers of some chat members that may be known to the current user
 	IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 }
@@ -6157,7 +6157,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) MessageType() string {
 // @param typeParam Contains information about the type of the chat
 // @param title Title of the chat
 // @param photo Chat photo; may be null
-// @param memberCount Number of members
+// @param memberCount Number of members in the chat
 // @param memberUserIds User identifiers of some chat members that may be known to the current user
 // @param isPublic True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 func NewChatInviteLinkInfo(chatId int64, typeParam ChatType, title string, photo *ChatPhoto, memberCount int32, memberUserIds []int32, isPublic bool) *ChatInviteLinkInfo {
@@ -6187,7 +6187,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) UnmarshalJSON(b []byte) error {
 		ChatId        int64      `json:"chat_id"`         // Chat identifier of the invite link; 0 if the user is not a member of this chat
 		Title         string     `json:"title"`           // Title of the chat
 		Photo         *ChatPhoto `json:"photo"`           // Chat photo; may be null
-		MemberCount   int32      `json:"member_count"`    // Number of members
+		MemberCount   int32      `json:"member_count"`    // Number of members in the chat
 		MemberUserIds []int32    `json:"member_user_ids"` // User identifiers of some chat members that may be known to the current user
 		IsPublic      bool       `json:"is_public"`       // True, if the chat is a public supergroup or channel, i.e. it has a username or it is a location-based supergroup
 	}{}
@@ -21504,7 +21504,8 @@ func (notificationTypeNewCall *NotificationTypeNewCall) GetNotificationTypeEnum(
 type NotificationTypeNewPushMessage struct {
 	tdCommon
 	MessageId    int64              `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
-	SenderUserId int32              `json:"sender_user_id"` // Sender of the message. Corresponding user may be inaccessible
+	SenderUserId int32              `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
+	SenderName   string             `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
 	Content      PushMessageContent `json:"content"`        // Push message content
 }
 
@@ -21516,13 +21517,15 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) MessageTyp
 // NewNotificationTypeNewPushMessage creates a new NotificationTypeNewPushMessage
 //
 // @param messageId The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
-// @param senderUserId Sender of the message. Corresponding user may be inaccessible
+// @param senderUserId Sender of the message; 0 if unknown. Corresponding user may be inaccessible
+// @param senderName Name of the sender; can be different from the name of the sender user
 // @param content Push message content
-func NewNotificationTypeNewPushMessage(messageId int64, senderUserId int32, content PushMessageContent) *NotificationTypeNewPushMessage {
+func NewNotificationTypeNewPushMessage(messageId int64, senderUserId int32, senderName string, content PushMessageContent) *NotificationTypeNewPushMessage {
 	notificationTypeNewPushMessageTemp := NotificationTypeNewPushMessage{
 		tdCommon:     tdCommon{Type: "notificationTypeNewPushMessage"},
 		MessageId:    messageId,
 		SenderUserId: senderUserId,
+		SenderName:   senderName,
 		Content:      content,
 	}
 
@@ -21538,8 +21541,9 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	}
 	tempObj := struct {
 		tdCommon
-		MessageId    int64 `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
-		SenderUserId int32 `json:"sender_user_id"` // Sender of the message. Corresponding user may be inaccessible
+		MessageId    int64  `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
+		SenderUserId int32  `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
+		SenderName   string `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -21550,6 +21554,7 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	notificationTypeNewPushMessage.tdCommon = tempObj.tdCommon
 	notificationTypeNewPushMessage.MessageId = tempObj.MessageId
 	notificationTypeNewPushMessage.SenderUserId = tempObj.SenderUserId
+	notificationTypeNewPushMessage.SenderName = tempObj.SenderName
 
 	fieldContent, _ := unmarshalPushMessageContent(objMap["content"])
 	notificationTypeNewPushMessage.Content = fieldContent
