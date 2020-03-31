@@ -2474,13 +2474,57 @@ func (client *Client) GetTextEntities(text string) (*TextEntities, error) {
 }
 
 // ParseTextEntities Parses Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities contained in the text. This is an offline method. Can be called before authorization. Can be called synchronously
-// @param text The text which should be parsed
+// @param text The text to parse
 // @param parseMode Text parse mode
 func (client *Client) ParseTextEntities(text string, parseMode TextParseMode) (*FormattedText, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":      "parseTextEntities",
 		"text":       text,
 		"parse_mode": parseMode,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var formattedText FormattedText
+	err = json.Unmarshal(result.Raw, &formattedText)
+	return &formattedText, err
+
+}
+
+// ParseMarkdown Parses Markdown entities in a human-friendly format, ignoring mark up errors. This is an offline method. Can be called before authorization. Can be called synchronously
+// @param text The text to parse. For example, "__italic__ ~~strikethrough~~ **bold** `code` ```pre``` __[italic__ text_url](telegram.org) __italic**bold italic__bold**"
+func (client *Client) ParseMarkdown(text *FormattedText) (*FormattedText, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "parseMarkdown",
+		"text":  text,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var formattedText FormattedText
+	err = json.Unmarshal(result.Raw, &formattedText)
+	return &formattedText, err
+
+}
+
+// GetMarkdownText Replaces text entities with Markdown formatting in a human-friendly format. Entities that can't be represented in Markdown unambiguously are kept as is. This is an offline method. Can be called before authorization. Can be called synchronously
+// @param text The text
+func (client *Client) GetMarkdownText(text *FormattedText) (*FormattedText, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getMarkdownText",
+		"text":  text,
 	})
 
 	if err != nil {
@@ -3467,7 +3511,7 @@ func (client *Client) UpgradeBasicGroupChatToSupergroupChat(chatId int64) (*Chat
 
 // SetChatChatList Moves a chat to a different chat list. Current chat list of the chat must ne non-null
 // @param chatId Chat identifier
-// @param chatList New chat list of the chat
+// @param chatList New chat list of the chat. The chat with the current user (Saved Messages) and the chat 777000 (Telegram) can't be moved to the Archive chat list
 func (client *Client) SetChatChatList(chatId int64, chatList ChatList) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":     "setChatChatList",
@@ -5884,6 +5928,28 @@ func (client *Client) CheckChangePhoneNumberCode(code string) (*Ok, error) {
 
 }
 
+// SetCommands Sets the list of commands supported by the bot; for bots only
+// @param commands List of the bot's commands
+func (client *Client) SetCommands(commands []BotCommand) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":    "setCommands",
+		"commands": commands,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // GetActiveSessions Returns all active sessions of the current user
 func (client *Client) GetActiveSessions() (*Sessions, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -7075,7 +7141,7 @@ func (client *Client) ReportChat(chatId int64, reason ChatReportReason, messageI
 
 }
 
-// GetChatStatisticsUrl Returns an HTTP URL with the chat statistics. Currently this method can be used only for channels. Can be used only if SupergroupFullInfo.can_view_statistics == true
+// GetChatStatisticsUrl Returns an HTTP URL with the chat statistics. Currently this method of getting the statistics is disabled and can be deleted in the future
 // @param chatId Chat identifier
 // @param parameters Parameters from "tg://statsrefresh?params=******" link
 // @param isDark Pass true if a URL with the dark theme must be returned
@@ -7171,18 +7237,20 @@ func (client *Client) GetDatabaseStatistics() (*DatabaseStatistics, error) {
 // @param fileTypes If not empty, only files with the given type(s) are considered. By default, all types except thumbnails, profile photos, stickers and wallpapers are deleted
 // @param chatIds If not empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to any chat (e.g., profile photos)
 // @param excludeChatIds If not empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to any chat (e.g., profile photos)
+// @param returnDeletedFileStatistics Pass true, if deleted file statistics needs to be returned instead of the whole storage usage statistics. Affects only returned statistics
 // @param chatLimit Same as in getStorageStatistics. Affects only returned statistics
-func (client *Client) OptimizeStorage(size int64, ttl int32, count int32, immunityDelay int32, fileTypes []FileType, chatIds []int64, excludeChatIds []int64, chatLimit int32) (*StorageStatistics, error) {
+func (client *Client) OptimizeStorage(size int64, ttl int32, count int32, immunityDelay int32, fileTypes []FileType, chatIds []int64, excludeChatIds []int64, returnDeletedFileStatistics bool, chatLimit int32) (*StorageStatistics, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":            "optimizeStorage",
-		"size":             size,
-		"ttl":              ttl,
-		"count":            count,
-		"immunity_delay":   immunityDelay,
-		"file_types":       fileTypes,
-		"chat_ids":         chatIds,
-		"exclude_chat_ids": excludeChatIds,
-		"chat_limit":       chatLimit,
+		"@type":                          "optimizeStorage",
+		"size":                           size,
+		"ttl":                            ttl,
+		"count":                          count,
+		"immunity_delay":                 immunityDelay,
+		"file_types":                     fileTypes,
+		"chat_ids":                       chatIds,
+		"exclude_chat_ids":               excludeChatIds,
+		"return_deleted_file_statistics": returnDeletedFileStatistics,
+		"chat_limit":                     chatLimit,
 	})
 
 	if err != nil {
@@ -7921,7 +7989,7 @@ func (client *Client) SetBotUpdatesStatus(pendingUpdateCount int32, errorMessage
 
 // UploadStickerFile Uploads a PNG image with a sticker; for bots only; returns the uploaded file
 // @param userId Sticker file owner
-// @param pngSticker PNG image with the sticker; must be up to 512 kB in size and fit in 512x512 square
+// @param pngSticker PNG image with the sticker; must be up to 512 KB in size and fit in 512x512 square
 func (client *Client) UploadStickerFile(userId int32, pngSticker InputFile) (*File, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "uploadStickerFile",
@@ -7947,8 +8015,8 @@ func (client *Client) UploadStickerFile(userId int32, pngSticker InputFile) (*Fi
 // @param userId Sticker set owner
 // @param title Sticker set title; 1-64 characters
 // @param name Sticker set name. Can contain only English letters, digits and underscores. Must end with *"_by_<bot username>"* (*<bot_username>* is case insensitive); 1-64 characters
-// @param isMasks True, if stickers are masks
-// @param stickers List of stickers to be added to the set
+// @param isMasks True, if stickers are masks. Animated stickers can't be masks
+// @param stickers List of stickers to be added to the set; must be non-empty. All stickers must be of the same type
 func (client *Client) CreateNewStickerSet(userId int32, title string, name string, isMasks bool, stickers []InputSticker) (*StickerSet, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "createNewStickerSet",
@@ -7977,12 +8045,38 @@ func (client *Client) CreateNewStickerSet(userId int32, title string, name strin
 // @param userId Sticker set owner
 // @param name Sticker set name
 // @param sticker Sticker to add to the set
-func (client *Client) AddStickerToSet(userId int32, name string, sticker *InputSticker) (*StickerSet, error) {
+func (client *Client) AddStickerToSet(userId int32, name string, sticker InputSticker) (*StickerSet, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":   "addStickerToSet",
 		"user_id": userId,
 		"name":    name,
 		"sticker": sticker,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var stickerSet StickerSet
+	err = json.Unmarshal(result.Raw, &stickerSet)
+	return &stickerSet, err
+
+}
+
+// SetStickerSetThumbnail Sets a sticker set thumbnail; for bots only. Returns the sticker set
+// @param userId Sticker set owner
+// @param name Sticker set name
+// @param thumbnail Thumbnail to set in PNG or TGS format. Animated thumbnail must be set for animated sticker sets and only for them. You can use a zero InputFileId to delete the thumbnail
+func (client *Client) SetStickerSetThumbnail(userId int32, name string, thumbnail InputFile) (*StickerSet, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":     "setStickerSetThumbnail",
+		"user_id":   userId,
+		"name":      name,
+		"thumbnail": thumbnail,
 	})
 
 	if err != nil {

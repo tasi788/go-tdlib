@@ -291,7 +291,9 @@ const (
 	RichTextMarkedType        RichTextEnum = "richTextMarked"
 	RichTextPhoneNumberType   RichTextEnum = "richTextPhoneNumber"
 	RichTextIconType          RichTextEnum = "richTextIcon"
+	RichTextReferenceType     RichTextEnum = "richTextReference"
 	RichTextAnchorType        RichTextEnum = "richTextAnchor"
+	RichTextAnchorLinkType    RichTextEnum = "richTextAnchorLink"
 	RichTextsType             RichTextEnum = "richTexts"
 )
 
@@ -473,6 +475,7 @@ const (
 	MessageLocationType             MessageContentEnum = "messageLocation"
 	MessageVenueType                MessageContentEnum = "messageVenue"
 	MessageContactType              MessageContentEnum = "messageContact"
+	MessageDiceType                 MessageContentEnum = "messageDice"
 	MessageGameType                 MessageContentEnum = "messageGame"
 	MessagePollType                 MessageContentEnum = "messagePoll"
 	MessageInvoiceType              MessageContentEnum = "messageInvoice"
@@ -551,6 +554,7 @@ const (
 	InputMessageLocationType  InputMessageContentEnum = "inputMessageLocation"
 	InputMessageVenueType     InputMessageContentEnum = "inputMessageVenue"
 	InputMessageContactType   InputMessageContentEnum = "inputMessageContact"
+	InputMessageDiceType      InputMessageContentEnum = "inputMessageDice"
 	InputMessageGameType      InputMessageContentEnum = "inputMessageGame"
 	InputMessageInvoiceType   InputMessageContentEnum = "inputMessageInvoice"
 	InputMessagePollType      InputMessageContentEnum = "inputMessagePoll"
@@ -1031,6 +1035,15 @@ const (
 	ProxyTypeMtprotoType ProxyTypeEnum = "proxyTypeMtproto"
 )
 
+// InputStickerEnum Alias for abstract InputSticker 'Sub-Classes', used as constant-enum here
+type InputStickerEnum string
+
+// InputSticker enums
+const (
+	InputStickerStaticType   InputStickerEnum = "inputStickerStatic"
+	InputStickerAnimatedType InputStickerEnum = "inputStickerAnimated"
+)
+
 // UpdateEnum Alias for abstract Update 'Sub-Classes', used as constant-enum here
 type UpdateEnum string
 
@@ -1460,6 +1473,11 @@ type TextParseMode interface {
 // ProxyType Describes the type of a proxy server
 type ProxyType interface {
 	GetProxyTypeEnum() ProxyTypeEnum
+}
+
+// InputSticker Describes a sticker that needs to be added to a sticker set
+type InputSticker interface {
+	GetInputStickerEnum() InputStickerEnum
 }
 
 // Update Contains notifications about data changes
@@ -3553,7 +3571,7 @@ func (userTypeUnknown *UserTypeUnknown) GetUserTypeEnum() UserTypeEnum {
 	return UserTypeUnknownType
 }
 
-// BotCommand Represents commands supported by a bot
+// BotCommand Represents a command supported by a bot
 type BotCommand struct {
 	tdCommon
 	Command     string `json:"command"`     // Text of the bot command
@@ -4835,7 +4853,7 @@ type SupergroupFullInfo struct {
 	CanSetUsername           bool          `json:"can_set_username"`             // True, if the chat username can be changed
 	CanSetStickerSet         bool          `json:"can_set_sticker_set"`          // True, if the supergroup sticker set can be changed
 	CanSetLocation           bool          `json:"can_set_location"`             // True, if the supergroup location can be changed
-	CanViewStatistics        bool          `json:"can_view_statistics"`          // True, if the channel statistics is available through getChatStatisticsUrl
+	CanViewStatistics        bool          `json:"can_view_statistics"`          // True, if the channel statistics is available
 	IsAllHistoryAvailable    bool          `json:"is_all_history_available"`     // True, if new chat members will have access to old messages. In public or discussion groups and both public and private channels, old messages are always available, so this option affects only private supergroups without a linked chat. The value of this field is only available for chat administrators
 	StickerSetId             JSONInt64     `json:"sticker_set_id"`               // Identifier of the supergroup sticker set; 0 if none
 	Location                 *ChatLocation `json:"location"`                     // Location to which the supergroup is connected; may be null
@@ -4863,7 +4881,7 @@ func (supergroupFullInfo *SupergroupFullInfo) MessageType() string {
 // @param canSetUsername True, if the chat username can be changed
 // @param canSetStickerSet True, if the supergroup sticker set can be changed
 // @param canSetLocation True, if the supergroup location can be changed
-// @param canViewStatistics True, if the channel statistics is available through getChatStatisticsUrl
+// @param canViewStatistics True, if the channel statistics is available
 // @param isAllHistoryAvailable True, if new chat members will have access to old messages. In public or discussion groups and both public and private channels, old messages are always available, so this option affects only private supergroups without a linked chat. The value of this field is only available for chat administrators
 // @param stickerSetId Identifier of the supergroup sticker set; 0 if none
 // @param location Location to which the supergroup is connected; may be null
@@ -5647,6 +5665,7 @@ func NewScopeNotificationSettings(muteFor int32, sound string, showPreview bool,
 type DraftMessage struct {
 	tdCommon
 	ReplyToMessageId int64               `json:"reply_to_message_id"` // Identifier of the message to reply to; 0 if none
+	Date             int32               `json:"date"`                // Point in time (Unix timestamp) when the draft was created
 	InputMessageText InputMessageContent `json:"input_message_text"`  // Content of the message draft; this should always be of type inputMessageText
 }
 
@@ -5658,11 +5677,13 @@ func (draftMessage *DraftMessage) MessageType() string {
 // NewDraftMessage creates a new DraftMessage
 //
 // @param replyToMessageId Identifier of the message to reply to; 0 if none
+// @param date Point in time (Unix timestamp) when the draft was created
 // @param inputMessageText Content of the message draft; this should always be of type inputMessageText
-func NewDraftMessage(replyToMessageId int64, inputMessageText InputMessageContent) *DraftMessage {
+func NewDraftMessage(replyToMessageId int64, date int32, inputMessageText InputMessageContent) *DraftMessage {
 	draftMessageTemp := DraftMessage{
 		tdCommon:         tdCommon{Type: "draftMessage"},
 		ReplyToMessageId: replyToMessageId,
+		Date:             date,
 		InputMessageText: inputMessageText,
 	}
 
@@ -5679,6 +5700,7 @@ func (draftMessage *DraftMessage) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		ReplyToMessageId int64 `json:"reply_to_message_id"` // Identifier of the message to reply to; 0 if none
+		Date             int32 `json:"date"`                // Point in time (Unix timestamp) when the draft was created
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -5688,6 +5710,7 @@ func (draftMessage *DraftMessage) UnmarshalJSON(b []byte) error {
 
 	draftMessage.tdCommon = tempObj.tdCommon
 	draftMessage.ReplyToMessageId = tempObj.ReplyToMessageId
+	draftMessage.Date = tempObj.Date
 
 	fieldInputMessageText, _ := unmarshalInputMessageContent(objMap["input_message_text"])
 	draftMessage.InputMessageText = fieldInputMessageText
@@ -7598,11 +7621,72 @@ func (richTextIcon *RichTextIcon) GetRichTextEnum() RichTextEnum {
 	return RichTextIconType
 }
 
-// RichTextAnchor A rich text anchor
+// RichTextReference A rich text reference of a text on the same web page
+type RichTextReference struct {
+	tdCommon
+	Text          RichText `json:"text"`           // The text
+	ReferenceText RichText `json:"reference_text"` // The text to show on click
+	Url           string   `json:"url"`            // An HTTP URL, opening the reference
+}
+
+// MessageType return the string telegram-type of RichTextReference
+func (richTextReference *RichTextReference) MessageType() string {
+	return "richTextReference"
+}
+
+// NewRichTextReference creates a new RichTextReference
+//
+// @param text The text
+// @param referenceText The text to show on click
+// @param url An HTTP URL, opening the reference
+func NewRichTextReference(text RichText, referenceText RichText, url string) *RichTextReference {
+	richTextReferenceTemp := RichTextReference{
+		tdCommon:      tdCommon{Type: "richTextReference"},
+		Text:          text,
+		ReferenceText: referenceText,
+		Url:           url,
+	}
+
+	return &richTextReferenceTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (richTextReference *RichTextReference) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Url string `json:"url"` // An HTTP URL, opening the reference
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	richTextReference.tdCommon = tempObj.tdCommon
+	richTextReference.Url = tempObj.Url
+
+	fieldText, _ := unmarshalRichText(objMap["text"])
+	richTextReference.Text = fieldText
+
+	fieldReferenceText, _ := unmarshalRichText(objMap["reference_text"])
+	richTextReference.ReferenceText = fieldReferenceText
+
+	return nil
+}
+
+// GetRichTextEnum return the enum type of this object
+func (richTextReference *RichTextReference) GetRichTextEnum() RichTextEnum {
+	return RichTextReferenceType
+}
+
+// RichTextAnchor An anchor
 type RichTextAnchor struct {
 	tdCommon
-	Text RichText `json:"text"` // Text
-	Name string   `json:"name"` // Anchor name
+	Name string `json:"name"` // Anchor name
 }
 
 // MessageType return the string telegram-type of RichTextAnchor
@@ -7612,20 +7696,52 @@ func (richTextAnchor *RichTextAnchor) MessageType() string {
 
 // NewRichTextAnchor creates a new RichTextAnchor
 //
-// @param text Text
 // @param name Anchor name
-func NewRichTextAnchor(text RichText, name string) *RichTextAnchor {
+func NewRichTextAnchor(name string) *RichTextAnchor {
 	richTextAnchorTemp := RichTextAnchor{
 		tdCommon: tdCommon{Type: "richTextAnchor"},
-		Text:     text,
 		Name:     name,
 	}
 
 	return &richTextAnchorTemp
 }
 
+// GetRichTextEnum return the enum type of this object
+func (richTextAnchor *RichTextAnchor) GetRichTextEnum() RichTextEnum {
+	return RichTextAnchorType
+}
+
+// RichTextAnchorLink A link to an anchor on the same web page
+type RichTextAnchorLink struct {
+	tdCommon
+	Text RichText `json:"text"` // The link text
+	Name string   `json:"name"` // The anchor name. If the name is empty, the link should bring back to top
+	Url  string   `json:"url"`  // An HTTP URL, opening the anchor
+}
+
+// MessageType return the string telegram-type of RichTextAnchorLink
+func (richTextAnchorLink *RichTextAnchorLink) MessageType() string {
+	return "richTextAnchorLink"
+}
+
+// NewRichTextAnchorLink creates a new RichTextAnchorLink
+//
+// @param text The link text
+// @param name The anchor name. If the name is empty, the link should bring back to top
+// @param url An HTTP URL, opening the anchor
+func NewRichTextAnchorLink(text RichText, name string, url string) *RichTextAnchorLink {
+	richTextAnchorLinkTemp := RichTextAnchorLink{
+		tdCommon: tdCommon{Type: "richTextAnchorLink"},
+		Text:     text,
+		Name:     name,
+		Url:      url,
+	}
+
+	return &richTextAnchorLinkTemp
+}
+
 // UnmarshalJSON unmarshal to json
-func (richTextAnchor *RichTextAnchor) UnmarshalJSON(b []byte) error {
+func (richTextAnchorLink *RichTextAnchorLink) UnmarshalJSON(b []byte) error {
 	var objMap map[string]*json.RawMessage
 	err := json.Unmarshal(b, &objMap)
 	if err != nil {
@@ -7633,25 +7749,27 @@ func (richTextAnchor *RichTextAnchor) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Name string `json:"name"` // Anchor name
+		Name string `json:"name"` // The anchor name. If the name is empty, the link should bring back to top
+		Url  string `json:"url"`  // An HTTP URL, opening the anchor
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
 		return err
 	}
 
-	richTextAnchor.tdCommon = tempObj.tdCommon
-	richTextAnchor.Name = tempObj.Name
+	richTextAnchorLink.tdCommon = tempObj.tdCommon
+	richTextAnchorLink.Name = tempObj.Name
+	richTextAnchorLink.Url = tempObj.Url
 
 	fieldText, _ := unmarshalRichText(objMap["text"])
-	richTextAnchor.Text = fieldText
+	richTextAnchorLink.Text = fieldText
 
 	return nil
 }
 
 // GetRichTextEnum return the enum type of this object
-func (richTextAnchor *RichTextAnchor) GetRichTextEnum() RichTextEnum {
-	return RichTextAnchorType
+func (richTextAnchorLink *RichTextAnchorLink) GetRichTextEnum() RichTextEnum {
+	return RichTextAnchorLinkType
 }
 
 // RichTexts A concatenation of rich texts
@@ -9319,8 +9437,8 @@ func (pageBlockMap *PageBlockMap) GetPageBlockEnum() PageBlockEnum {
 type WebPageInstantView struct {
 	tdCommon
 	PageBlocks []PageBlock `json:"page_blocks"` // Content of the web page
+	ViewCount  int32       `json:"view_count"`  // Number of the instant view views; 0 if unknown
 	Version    int32       `json:"version"`     // Version of the instant view, currently can be 1 or 2
-	Url        string      `json:"url"`         // Instant view URL; may be different from WebPage.url and must be used for the correct anchors handling
 	IsRtl      bool        `json:"is_rtl"`      // True, if the instant view must be shown from right to left
 	IsFull     bool        `json:"is_full"`     // True, if the instant view contains the full page. A network request might be needed to get the full web page instant view
 }
@@ -9333,16 +9451,16 @@ func (webPageInstantView *WebPageInstantView) MessageType() string {
 // NewWebPageInstantView creates a new WebPageInstantView
 //
 // @param pageBlocks Content of the web page
+// @param viewCount Number of the instant view views; 0 if unknown
 // @param version Version of the instant view, currently can be 1 or 2
-// @param url Instant view URL; may be different from WebPage.url and must be used for the correct anchors handling
 // @param isRtl True, if the instant view must be shown from right to left
 // @param isFull True, if the instant view contains the full page. A network request might be needed to get the full web page instant view
-func NewWebPageInstantView(pageBlocks []PageBlock, version int32, url string, isRtl bool, isFull bool) *WebPageInstantView {
+func NewWebPageInstantView(pageBlocks []PageBlock, viewCount int32, version int32, isRtl bool, isFull bool) *WebPageInstantView {
 	webPageInstantViewTemp := WebPageInstantView{
 		tdCommon:   tdCommon{Type: "webPageInstantView"},
 		PageBlocks: pageBlocks,
+		ViewCount:  viewCount,
 		Version:    version,
-		Url:        url,
 		IsRtl:      isRtl,
 		IsFull:     isFull,
 	}
@@ -9353,27 +9471,27 @@ func NewWebPageInstantView(pageBlocks []PageBlock, version int32, url string, is
 // WebPage Describes a web page preview
 type WebPage struct {
 	tdCommon
-	Url                string     `json:"url"`                  // Original URL of the link
-	DisplayUrl         string     `json:"display_url"`          // URL to display
-	Type               string     `json:"type"`                 // Type of the web page. Can be: article, photo, audio, video, document, profile, app, or something else
-	SiteName           string     `json:"site_name"`            // Short name of the site (e.g., Google Docs, App Store)
-	Title              string     `json:"title"`                // Title of the content
-	Description        string     `json:"description"`          //
-	Photo              *Photo     `json:"photo"`                // Image representing the content; may be null
-	EmbedUrl           string     `json:"embed_url"`            // URL to show in the embedded preview
-	EmbedType          string     `json:"embed_type"`           // MIME type of the embedded preview, (e.g., text/html or video/mp4)
-	EmbedWidth         int32      `json:"embed_width"`          // Width of the embedded preview
-	EmbedHeight        int32      `json:"embed_height"`         // Height of the embedded preview
-	Duration           int32      `json:"duration"`             // Duration of the content, in seconds
-	Author             string     `json:"author"`               // Author of the content
-	Animation          *Animation `json:"animation"`            // Preview of the content as an animation, if available; may be null
-	Audio              *Audio     `json:"audio"`                // Preview of the content as an audio file, if available; may be null
-	Document           *Document  `json:"document"`             // Preview of the content as a document, if available (currently only available for small PDF files and ZIP archives); may be null
-	Sticker            *Sticker   `json:"sticker"`              // Preview of the content as a sticker for small WEBP files, if available; may be null
-	Video              *Video     `json:"video"`                // Preview of the content as a video, if available; may be null
-	VideoNote          *VideoNote `json:"video_note"`           // Preview of the content as a video note, if available; may be null
-	VoiceNote          *VoiceNote `json:"voice_note"`           // Preview of the content as a voice note, if available; may be null
-	InstantViewVersion int32      `json:"instant_view_version"` // Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
+	Url                string         `json:"url"`                  // Original URL of the link
+	DisplayUrl         string         `json:"display_url"`          // URL to display
+	Type               string         `json:"type"`                 // Type of the web page. Can be: article, photo, audio, video, document, profile, app, or something else
+	SiteName           string         `json:"site_name"`            // Short name of the site (e.g., Google Docs, App Store)
+	Title              string         `json:"title"`                // Title of the content
+	Description        *FormattedText `json:"description"`          //
+	Photo              *Photo         `json:"photo"`                // Image representing the content; may be null
+	EmbedUrl           string         `json:"embed_url"`            // URL to show in the embedded preview
+	EmbedType          string         `json:"embed_type"`           // MIME type of the embedded preview, (e.g., text/html or video/mp4)
+	EmbedWidth         int32          `json:"embed_width"`          // Width of the embedded preview
+	EmbedHeight        int32          `json:"embed_height"`         // Height of the embedded preview
+	Duration           int32          `json:"duration"`             // Duration of the content, in seconds
+	Author             string         `json:"author"`               // Author of the content
+	Animation          *Animation     `json:"animation"`            // Preview of the content as an animation, if available; may be null
+	Audio              *Audio         `json:"audio"`                // Preview of the content as an audio file, if available; may be null
+	Document           *Document      `json:"document"`             // Preview of the content as a document, if available (currently only available for small PDF files and ZIP archives); may be null
+	Sticker            *Sticker       `json:"sticker"`              // Preview of the content as a sticker for small WEBP files, if available; may be null
+	Video              *Video         `json:"video"`                // Preview of the content as a video, if available; may be null
+	VideoNote          *VideoNote     `json:"video_note"`           // Preview of the content as a video note, if available; may be null
+	VoiceNote          *VoiceNote     `json:"voice_note"`           // Preview of the content as a voice note, if available; may be null
+	InstantViewVersion int32          `json:"instant_view_version"` // Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
 }
 
 // MessageType return the string telegram-type of WebPage
@@ -9404,7 +9522,7 @@ func (webPage *WebPage) MessageType() string {
 // @param videoNote Preview of the content as a video note, if available; may be null
 // @param voiceNote Preview of the content as a voice note, if available; may be null
 // @param instantViewVersion Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
-func NewWebPage(url string, displayUrl string, typeParam string, siteName string, title string, description string, photo *Photo, embedUrl string, embedType string, embedWidth int32, embedHeight int32, duration int32, author string, animation *Animation, audio *Audio, document *Document, sticker *Sticker, video *Video, videoNote *VideoNote, voiceNote *VoiceNote, instantViewVersion int32) *WebPage {
+func NewWebPage(url string, displayUrl string, typeParam string, siteName string, title string, description *FormattedText, photo *Photo, embedUrl string, embedType string, embedWidth int32, embedHeight int32, duration int32, author string, animation *Animation, audio *Audio, document *Document, sticker *Sticker, video *Video, videoNote *VideoNote, voiceNote *VoiceNote, instantViewVersion int32) *WebPage {
 	webPageTemp := WebPage{
 		tdCommon:           tdCommon{Type: "webPage"},
 		Url:                url,
@@ -12598,6 +12716,34 @@ func (messageContact *MessageContact) GetMessageContentEnum() MessageContentEnum
 	return MessageContactType
 }
 
+// MessageDice A dice message. The dice value is randomly generated by the server
+type MessageDice struct {
+	tdCommon
+	Value int32 `json:"value"` // The dice value; 0-6. If the value is 0, the dice must roll infinitely
+}
+
+// MessageType return the string telegram-type of MessageDice
+func (messageDice *MessageDice) MessageType() string {
+	return "messageDice"
+}
+
+// NewMessageDice creates a new MessageDice
+//
+// @param value The dice value; 0-6. If the value is 0, the dice must roll infinitely
+func NewMessageDice(value int32) *MessageDice {
+	messageDiceTemp := MessageDice{
+		tdCommon: tdCommon{Type: "messageDice"},
+		Value:    value,
+	}
+
+	return &messageDiceTemp
+}
+
+// GetMessageContentEnum return the enum type of this object
+func (messageDice *MessageDice) GetMessageContentEnum() MessageContentEnum {
+	return MessageDiceType
+}
+
 // MessageGame A message with a game
 type MessageGame struct {
 	tdCommon
@@ -13839,7 +13985,7 @@ func (textEntityTypeMentionName *TextEntityTypeMentionName) GetTextEntityTypeEnu
 	return TextEntityTypeMentionNameType
 }
 
-// InputThumbnail A thumbnail to be sent along with a file; should be in JPEG or WEBP format for stickers, and less than 200 kB in size
+// InputThumbnail A thumbnail to be sent along with a file; should be in JPEG or WEBP format for stickers, and less than 200 KB in size
 type InputThumbnail struct {
 	tdCommon
 	Thumbnail InputFile `json:"thumbnail"` // Thumbnail file to send. Sending thumbnails by file_id is currently not supported
@@ -14707,6 +14853,31 @@ func NewInputMessageContact(contact *Contact) *InputMessageContact {
 // GetInputMessageContentEnum return the enum type of this object
 func (inputMessageContact *InputMessageContact) GetInputMessageContentEnum() InputMessageContentEnum {
 	return InputMessageContactType
+}
+
+// InputMessageDice A dice message
+type InputMessageDice struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of InputMessageDice
+func (inputMessageDice *InputMessageDice) MessageType() string {
+	return "inputMessageDice"
+}
+
+// NewInputMessageDice creates a new InputMessageDice
+//
+func NewInputMessageDice() *InputMessageDice {
+	inputMessageDiceTemp := InputMessageDice{
+		tdCommon: tdCommon{Type: "inputMessageDice"},
+	}
+
+	return &inputMessageDiceTemp
+}
+
+// GetInputMessageContentEnum return the enum type of this object
+func (inputMessageDice *InputMessageDice) GetInputMessageContentEnum() InputMessageContentEnum {
+	return InputMessageDiceType
 }
 
 // InputMessageGame A message with a game; not supported for channels or secret chats
@@ -16117,10 +16288,11 @@ func (callDiscardReasonHungUp *CallDiscardReasonHungUp) GetCallDiscardReasonEnum
 // CallProtocol Specifies the supported call protocols
 type CallProtocol struct {
 	tdCommon
-	UdpP2p       bool  `json:"udp_p2p"`       // True, if UDP peer-to-peer connections are supported
-	UdpReflector bool  `json:"udp_reflector"` // True, if connection through UDP reflectors is supported
-	MinLayer     int32 `json:"min_layer"`     // The minimum supported API layer; use 65
-	MaxLayer     int32 `json:"max_layer"`     // The maximum supported API layer; use 65
+	UdpP2p          bool     `json:"udp_p2p"`          // True, if UDP peer-to-peer connections are supported
+	UdpReflector    bool     `json:"udp_reflector"`    // True, if connection through UDP reflectors is supported
+	MinLayer        int32    `json:"min_layer"`        // The minimum supported API layer; use 65
+	MaxLayer        int32    `json:"max_layer"`        // The maximum supported API layer; use 65
+	LibraryVersions []string `json:"library_versions"` // List of supported libtgvoip versions
 }
 
 // MessageType return the string telegram-type of CallProtocol
@@ -16134,13 +16306,15 @@ func (callProtocol *CallProtocol) MessageType() string {
 // @param udpReflector True, if connection through UDP reflectors is supported
 // @param minLayer The minimum supported API layer; use 65
 // @param maxLayer The maximum supported API layer; use 65
-func NewCallProtocol(udpP2p bool, udpReflector bool, minLayer int32, maxLayer int32) *CallProtocol {
+// @param libraryVersions List of supported libtgvoip versions
+func NewCallProtocol(udpP2p bool, udpReflector bool, minLayer int32, maxLayer int32, libraryVersions []string) *CallProtocol {
 	callProtocolTemp := CallProtocol{
-		tdCommon:     tdCommon{Type: "callProtocol"},
-		UdpP2p:       udpP2p,
-		UdpReflector: udpReflector,
-		MinLayer:     minLayer,
-		MaxLayer:     maxLayer,
+		tdCommon:        tdCommon{Type: "callProtocol"},
+		UdpP2p:          udpP2p,
+		UdpReflector:    udpReflector,
+		MinLayer:        minLayer,
+		MaxLayer:        maxLayer,
+		LibraryVersions: libraryVersions,
 	}
 
 	return &callProtocolTemp
@@ -21506,6 +21680,7 @@ type NotificationTypeNewPushMessage struct {
 	MessageId    int64              `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
 	SenderUserId int32              `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
 	SenderName   string             `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
+	IsOutgoing   bool               `json:"is_outgoing"`    // True, if the message is outgoing
 	Content      PushMessageContent `json:"content"`        // Push message content
 }
 
@@ -21519,13 +21694,15 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) MessageTyp
 // @param messageId The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
 // @param senderUserId Sender of the message; 0 if unknown. Corresponding user may be inaccessible
 // @param senderName Name of the sender; can be different from the name of the sender user
+// @param isOutgoing True, if the message is outgoing
 // @param content Push message content
-func NewNotificationTypeNewPushMessage(messageId int64, senderUserId int32, senderName string, content PushMessageContent) *NotificationTypeNewPushMessage {
+func NewNotificationTypeNewPushMessage(messageId int64, senderUserId int32, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
 	notificationTypeNewPushMessageTemp := NotificationTypeNewPushMessage{
 		tdCommon:     tdCommon{Type: "notificationTypeNewPushMessage"},
 		MessageId:    messageId,
 		SenderUserId: senderUserId,
 		SenderName:   senderName,
+		IsOutgoing:   isOutgoing,
 		Content:      content,
 	}
 
@@ -21544,6 +21721,7 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 		MessageId    int64  `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages and as reply_to_message_id
 		SenderUserId int32  `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
 		SenderName   string `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
+		IsOutgoing   bool   `json:"is_outgoing"`    // True, if the message is outgoing
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -21555,6 +21733,7 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	notificationTypeNewPushMessage.MessageId = tempObj.MessageId
 	notificationTypeNewPushMessage.SenderUserId = tempObj.SenderUserId
 	notificationTypeNewPushMessage.SenderName = tempObj.SenderName
+	notificationTypeNewPushMessage.IsOutgoing = tempObj.IsOutgoing
 
 	fieldContent, _ := unmarshalPushMessageContent(objMap["content"])
 	notificationTypeNewPushMessage.Content = fieldContent
@@ -24510,10 +24689,10 @@ func NewDeepLinkInfo(text *FormattedText, needUpdateApplication bool) *DeepLinkI
 	return &deepLinkInfoTemp
 }
 
-// TextParseModeMarkdown The text should be parsed in markdown-style
+// TextParseModeMarkdown The text uses Markdown-style formatting
 type TextParseModeMarkdown struct {
 	tdCommon
-	Version int32 `json:"version"` // Version of the parser: 0 or 1 - Bot API Markdown parse mode, 2 - Bot API MarkdownV2 parse mode
+	Version int32 `json:"version"` // Version of the parser: 0 or 1 - Telegram Bot API "Markdown" parse mode, 2 - Telegram Bot API "MarkdownV2" parse mode
 }
 
 // MessageType return the string telegram-type of TextParseModeMarkdown
@@ -24523,7 +24702,7 @@ func (textParseModeMarkdown *TextParseModeMarkdown) MessageType() string {
 
 // NewTextParseModeMarkdown creates a new TextParseModeMarkdown
 //
-// @param version Version of the parser: 0 or 1 - Bot API Markdown parse mode, 2 - Bot API MarkdownV2 parse mode
+// @param version Version of the parser: 0 or 1 - Telegram Bot API "Markdown" parse mode, 2 - Telegram Bot API "MarkdownV2" parse mode
 func NewTextParseModeMarkdown(version int32) *TextParseModeMarkdown {
 	textParseModeMarkdownTemp := TextParseModeMarkdown{
 		tdCommon: tdCommon{Type: "textParseModeMarkdown"},
@@ -24538,7 +24717,7 @@ func (textParseModeMarkdown *TextParseModeMarkdown) GetTextParseModeEnum() TextP
 	return TextParseModeMarkdownType
 }
 
-// TextParseModeHTML The text should be parsed in HTML-style
+// TextParseModeHTML The text uses HTML-style formatting. The same as Telegram Bot API "HTML" parse mode
 type TextParseModeHTML struct {
 	tdCommon
 }
@@ -24751,37 +24930,37 @@ func NewProxies(proxies []Proxy) *Proxies {
 	return &proxiesTemp
 }
 
-// InputSticker Describes a sticker that should be added to a sticker set
-type InputSticker struct {
+// InputStickerStatic A static sticker in PNG format, which will be converted to WEBP server-side
+type InputStickerStatic struct {
 	tdCommon
-	PngSticker   InputFile     `json:"png_sticker"`   // PNG image with the sticker; must be up to 512 kB in size and fit in a 512x512 square
-	Emojis       string        `json:"emojis"`        // Emoji corresponding to the sticker
+	Sticker      InputFile     `json:"sticker"`       // PNG image with the sticker; must be up to 512 KB in size and fit in a 512x512 square
+	Emojis       string        `json:"emojis"`        // Emojis corresponding to the sticker
 	MaskPosition *MaskPosition `json:"mask_position"` // For masks, position where the mask should be placed; may be null
 }
 
-// MessageType return the string telegram-type of InputSticker
-func (inputSticker *InputSticker) MessageType() string {
-	return "inputSticker"
+// MessageType return the string telegram-type of InputStickerStatic
+func (inputStickerStatic *InputStickerStatic) MessageType() string {
+	return "inputStickerStatic"
 }
 
-// NewInputSticker creates a new InputSticker
+// NewInputStickerStatic creates a new InputStickerStatic
 //
-// @param pngSticker PNG image with the sticker; must be up to 512 kB in size and fit in a 512x512 square
-// @param emojis Emoji corresponding to the sticker
+// @param sticker PNG image with the sticker; must be up to 512 KB in size and fit in a 512x512 square
+// @param emojis Emojis corresponding to the sticker
 // @param maskPosition For masks, position where the mask should be placed; may be null
-func NewInputSticker(pngSticker InputFile, emojis string, maskPosition *MaskPosition) *InputSticker {
-	inputStickerTemp := InputSticker{
-		tdCommon:     tdCommon{Type: "inputSticker"},
-		PngSticker:   pngSticker,
+func NewInputStickerStatic(sticker InputFile, emojis string, maskPosition *MaskPosition) *InputStickerStatic {
+	inputStickerStaticTemp := InputStickerStatic{
+		tdCommon:     tdCommon{Type: "inputStickerStatic"},
+		Sticker:      sticker,
 		Emojis:       emojis,
 		MaskPosition: maskPosition,
 	}
 
-	return &inputStickerTemp
+	return &inputStickerStaticTemp
 }
 
 // UnmarshalJSON unmarshal to json
-func (inputSticker *InputSticker) UnmarshalJSON(b []byte) error {
+func (inputStickerStatic *InputStickerStatic) UnmarshalJSON(b []byte) error {
 	var objMap map[string]*json.RawMessage
 	err := json.Unmarshal(b, &objMap)
 	if err != nil {
@@ -24789,7 +24968,7 @@ func (inputSticker *InputSticker) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Emojis       string        `json:"emojis"`        // Emoji corresponding to the sticker
+		Emojis       string        `json:"emojis"`        // Emojis corresponding to the sticker
 		MaskPosition *MaskPosition `json:"mask_position"` // For masks, position where the mask should be placed; may be null
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -24797,14 +24976,75 @@ func (inputSticker *InputSticker) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	inputSticker.tdCommon = tempObj.tdCommon
-	inputSticker.Emojis = tempObj.Emojis
-	inputSticker.MaskPosition = tempObj.MaskPosition
+	inputStickerStatic.tdCommon = tempObj.tdCommon
+	inputStickerStatic.Emojis = tempObj.Emojis
+	inputStickerStatic.MaskPosition = tempObj.MaskPosition
 
-	fieldPngSticker, _ := unmarshalInputFile(objMap["png_sticker"])
-	inputSticker.PngSticker = fieldPngSticker
+	fieldSticker, _ := unmarshalInputFile(objMap["sticker"])
+	inputStickerStatic.Sticker = fieldSticker
 
 	return nil
+}
+
+// GetInputStickerEnum return the enum type of this object
+func (inputStickerStatic *InputStickerStatic) GetInputStickerEnum() InputStickerEnum {
+	return InputStickerStaticType
+}
+
+// InputStickerAnimated An animated sticker in TGS format
+type InputStickerAnimated struct {
+	tdCommon
+	Sticker InputFile `json:"sticker"` // File with the animated sticker. Only local or uploaded within a week files are supported. See https://core.telegram.org/animated_stickers#technical-requirements for technical requirements
+	Emojis  string    `json:"emojis"`  // Emojis corresponding to the sticker
+}
+
+// MessageType return the string telegram-type of InputStickerAnimated
+func (inputStickerAnimated *InputStickerAnimated) MessageType() string {
+	return "inputStickerAnimated"
+}
+
+// NewInputStickerAnimated creates a new InputStickerAnimated
+//
+// @param sticker File with the animated sticker. Only local or uploaded within a week files are supported. See https://core.telegram.org/animated_stickers#technical-requirements for technical requirements
+// @param emojis Emojis corresponding to the sticker
+func NewInputStickerAnimated(sticker InputFile, emojis string) *InputStickerAnimated {
+	inputStickerAnimatedTemp := InputStickerAnimated{
+		tdCommon: tdCommon{Type: "inputStickerAnimated"},
+		Sticker:  sticker,
+		Emojis:   emojis,
+	}
+
+	return &inputStickerAnimatedTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (inputStickerAnimated *InputStickerAnimated) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Emojis string `json:"emojis"` // Emojis corresponding to the sticker
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	inputStickerAnimated.tdCommon = tempObj.tdCommon
+	inputStickerAnimated.Emojis = tempObj.Emojis
+
+	fieldSticker, _ := unmarshalInputFile(objMap["sticker"])
+	inputStickerAnimated.Sticker = fieldSticker
+
+	return nil
+}
+
+// GetInputStickerEnum return the enum type of this object
+func (inputStickerAnimated *InputStickerAnimated) GetInputStickerEnum() InputStickerEnum {
+	return InputStickerAnimatedType
 }
 
 // UpdateAuthorizationState The user authorization state has changed
@@ -28922,10 +29162,20 @@ func unmarshalRichText(rawMsg *json.RawMessage) (RichText, error) {
 		err := json.Unmarshal(*rawMsg, &richTextIcon)
 		return &richTextIcon, err
 
+	case RichTextReferenceType:
+		var richTextReference RichTextReference
+		err := json.Unmarshal(*rawMsg, &richTextReference)
+		return &richTextReference, err
+
 	case RichTextAnchorType:
 		var richTextAnchor RichTextAnchor
 		err := json.Unmarshal(*rawMsg, &richTextAnchor)
 		return &richTextAnchor, err
+
+	case RichTextAnchorLinkType:
+		var richTextAnchorLink RichTextAnchorLink
+		err := json.Unmarshal(*rawMsg, &richTextAnchorLink)
+		return &richTextAnchorLink, err
 
 	case RichTextsType:
 		var richTexts RichTexts
@@ -29652,6 +29902,11 @@ func unmarshalMessageContent(rawMsg *json.RawMessage) (MessageContent, error) {
 		err := json.Unmarshal(*rawMsg, &messageContact)
 		return &messageContact, err
 
+	case MessageDiceType:
+		var messageDice MessageDice
+		err := json.Unmarshal(*rawMsg, &messageDice)
+		return &messageDice, err
+
 	case MessageGameType:
 		var messageGame MessageGame
 		err := json.Unmarshal(*rawMsg, &messageGame)
@@ -29987,6 +30242,11 @@ func unmarshalInputMessageContent(rawMsg *json.RawMessage) (InputMessageContent,
 		var inputMessageContact InputMessageContact
 		err := json.Unmarshal(*rawMsg, &inputMessageContact)
 		return &inputMessageContact, err
+
+	case InputMessageDiceType:
+		var inputMessageDice InputMessageDice
+		err := json.Unmarshal(*rawMsg, &inputMessageDice)
+		return &inputMessageDice, err
 
 	case InputMessageGameType:
 		var inputMessageGame InputMessageGame
@@ -31783,6 +32043,33 @@ func unmarshalProxyType(rawMsg *json.RawMessage) (ProxyType, error) {
 		var proxyTypeMtproto ProxyTypeMtproto
 		err := json.Unmarshal(*rawMsg, &proxyTypeMtproto)
 		return &proxyTypeMtproto, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalInputSticker(rawMsg *json.RawMessage) (InputSticker, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch InputStickerEnum(objMap["@type"].(string)) {
+	case InputStickerStaticType:
+		var inputStickerStatic InputStickerStatic
+		err := json.Unmarshal(*rawMsg, &inputStickerStatic)
+		return &inputStickerStatic, err
+
+	case InputStickerAnimatedType:
+		var inputStickerAnimated InputStickerAnimated
+		err := json.Unmarshal(*rawMsg, &inputStickerAnimated)
+		return &inputStickerAnimated, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
