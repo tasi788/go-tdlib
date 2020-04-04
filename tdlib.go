@@ -292,7 +292,7 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 			json.Unmarshal(response.Raw, &messageDummy)
 
 			if messageDummy.Content != nil {
-				if messageDummy.Content.GetMessageContentEnum() == "messageText" {
+				if messageDummy.Content.GetMessageContentEnum() == "messageText" || messageDummy.Content.GetMessageContentEnum() == "messageDice" {
 					msgWaiter := make(chan UpdateMsg, 1)
 					client.msgWaiters.Store(messageDummy.Id, msgWaiter)
 
