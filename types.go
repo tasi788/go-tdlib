@@ -1044,6 +1044,16 @@ const (
 	InputStickerAnimatedType InputStickerEnum = "inputStickerAnimated"
 )
 
+// StatisticsGraphEnum Alias for abstract StatisticsGraph 'Sub-Classes', used as constant-enum here
+type StatisticsGraphEnum string
+
+// StatisticsGraph enums
+const (
+	StatisticsGraphDataType  StatisticsGraphEnum = "statisticsGraphData"
+	StatisticsGraphAsyncType StatisticsGraphEnum = "statisticsGraphAsync"
+	StatisticsGraphErrorType StatisticsGraphEnum = "statisticsGraphError"
+)
+
 // UpdateEnum Alias for abstract Update 'Sub-Classes', used as constant-enum here
 type UpdateEnum string
 
@@ -1105,6 +1115,7 @@ const (
 	UpdateUnreadMessageCountType             UpdateEnum = "updateUnreadMessageCount"
 	UpdateUnreadChatCountType                UpdateEnum = "updateUnreadChatCount"
 	UpdateOptionType                         UpdateEnum = "updateOption"
+	UpdateStickerSetType                     UpdateEnum = "updateStickerSet"
 	UpdateInstalledStickerSetsType           UpdateEnum = "updateInstalledStickerSets"
 	UpdateTrendingStickerSetsType            UpdateEnum = "updateTrendingStickerSets"
 	UpdateRecentStickersType                 UpdateEnum = "updateRecentStickers"
@@ -1115,6 +1126,7 @@ const (
 	UpdateConnectionStateType                UpdateEnum = "updateConnectionState"
 	UpdateTermsOfServiceType                 UpdateEnum = "updateTermsOfService"
 	UpdateUsersNearbyType                    UpdateEnum = "updateUsersNearby"
+	UpdateDiceEmojisType                     UpdateEnum = "updateDiceEmojis"
 	UpdateNewInlineQueryType                 UpdateEnum = "updateNewInlineQuery"
 	UpdateNewChosenInlineResultType          UpdateEnum = "updateNewChosenInlineResult"
 	UpdateNewCallbackQueryType               UpdateEnum = "updateNewCallbackQuery"
@@ -1478,6 +1490,11 @@ type ProxyType interface {
 // InputSticker Describes a sticker that needs to be added to a sticker set
 type InputSticker interface {
 	GetInputStickerEnum() InputStickerEnum
+}
+
+// StatisticsGraph Describes a statistics graph
+type StatisticsGraph interface {
+	GetStatisticsGraphEnum() StatisticsGraphEnum
 }
 
 // Update Contains notifications about data changes
@@ -2399,7 +2416,6 @@ func NewRemoteFile(id string, uniqueId string, isUploadingActive bool, isUploadi
 type File struct {
 	tdCommon
 	Id           int32       `json:"id"`            // Unique file identifier
-	DcId         int32       `json:"dc_id"`         // File data center
 	Size         int32       `json:"size"`          // File size; 0 if unknown
 	ExpectedSize int32       `json:"expected_size"` // Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 	Local        *LocalFile  `json:"local"`         // Information about the local copy of the file
@@ -2414,16 +2430,14 @@ func (file *File) MessageType() string {
 // NewFile creates a new File
 //
 // @param id Unique file identifier
-// @param dcId File data center
 // @param size File size; 0 if unknown
 // @param expectedSize Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 // @param local Information about the local copy of the file
 // @param remote Information about the remote copy of the file
-func NewFile(id int32, dcId int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
+func NewFile(id int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
 	fileTemp := File{
 		tdCommon:     tdCommon{Type: "file"},
 		Id:           id,
-		DcId:         dcId,
 		Size:         size,
 		ExpectedSize: expectedSize,
 		Local:        local,
@@ -2839,7 +2853,8 @@ func (pollTypeRegular *PollTypeRegular) GetPollTypeEnum() PollTypeEnum {
 // PollTypeQuiz A poll in quiz mode, which has exactly one correct answer option and can be answered only once
 type PollTypeQuiz struct {
 	tdCommon
-	CorrectOptionId int32 `json:"correct_option_id"` // 0-based identifier of the correct answer option; -1 for a yet unanswered poll
+	CorrectOptionId int32          `json:"correct_option_id"` // 0-based identifier of the correct answer option; -1 for a yet unanswered poll
+	Explanation     *FormattedText `json:"explanation"`       // Text that is shown when the user chooses an incorrect answer or taps on the lamp icon, 0-200 characters with at most 2 line feeds; empty for a yet unanswered poll
 }
 
 // MessageType return the string telegram-type of PollTypeQuiz
@@ -2850,10 +2865,12 @@ func (pollTypeQuiz *PollTypeQuiz) MessageType() string {
 // NewPollTypeQuiz creates a new PollTypeQuiz
 //
 // @param correctOptionId 0-based identifier of the correct answer option; -1 for a yet unanswered poll
-func NewPollTypeQuiz(correctOptionId int32) *PollTypeQuiz {
+// @param explanation Text that is shown when the user chooses an incorrect answer or taps on the lamp icon, 0-200 characters with at most 2 line feeds; empty for a yet unanswered poll
+func NewPollTypeQuiz(correctOptionId int32, explanation *FormattedText) *PollTypeQuiz {
 	pollTypeQuizTemp := PollTypeQuiz{
 		tdCommon:        tdCommon{Type: "pollTypeQuiz"},
 		CorrectOptionId: correctOptionId,
+		Explanation:     explanation,
 	}
 
 	return &pollTypeQuizTemp
@@ -3330,6 +3347,8 @@ type Poll struct {
 	RecentVoterUserIds []int32      `json:"recent_voter_user_ids"` // User identifiers of recent voters, if the poll is non-anonymous
 	IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
 	Type               PollType     `json:"type"`                  // Type of the poll
+	OpenPeriod         int32        `json:"open_period"`           // Amount of time the poll will be active after creation, in seconds
+	CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will be automatically closed
 	IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
 }
 
@@ -3347,8 +3366,10 @@ func (poll *Poll) MessageType() string {
 // @param recentVoterUserIds User identifiers of recent voters, if the poll is non-anonymous
 // @param isAnonymous True, if the poll is anonymous
 // @param typeParam Type of the poll
+// @param openPeriod Amount of time the poll will be active after creation, in seconds
+// @param closeDate Point in time (Unix timestamp) when the poll will be automatically closed
 // @param isClosed True, if the poll is closed
-func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCount int32, recentVoterUserIds []int32, isAnonymous bool, typeParam PollType, isClosed bool) *Poll {
+func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCount int32, recentVoterUserIds []int32, isAnonymous bool, typeParam PollType, openPeriod int32, closeDate int32, isClosed bool) *Poll {
 	pollTemp := Poll{
 		tdCommon:           tdCommon{Type: "poll"},
 		Id:                 id,
@@ -3358,6 +3379,8 @@ func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCoun
 		RecentVoterUserIds: recentVoterUserIds,
 		IsAnonymous:        isAnonymous,
 		Type:               typeParam,
+		OpenPeriod:         openPeriod,
+		CloseDate:          closeDate,
 		IsClosed:           isClosed,
 	}
 
@@ -3379,6 +3402,8 @@ func (poll *Poll) UnmarshalJSON(b []byte) error {
 		TotalVoterCount    int32        `json:"total_voter_count"`     // Total number of voters, participating in the poll
 		RecentVoterUserIds []int32      `json:"recent_voter_user_ids"` // User identifiers of recent voters, if the poll is non-anonymous
 		IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
+		OpenPeriod         int32        `json:"open_period"`           // Amount of time the poll will be active after creation, in seconds
+		CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will be automatically closed
 		IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -3393,6 +3418,8 @@ func (poll *Poll) UnmarshalJSON(b []byte) error {
 	poll.TotalVoterCount = tempObj.TotalVoterCount
 	poll.RecentVoterUserIds = tempObj.RecentVoterUserIds
 	poll.IsAnonymous = tempObj.IsAnonymous
+	poll.OpenPeriod = tempObj.OpenPeriod
+	poll.CloseDate = tempObj.CloseDate
 	poll.IsClosed = tempObj.IsClosed
 
 	fieldType, _ := unmarshalPollType(objMap["type"])
@@ -3653,7 +3680,6 @@ func NewChatLocation(location *Location, address string) *ChatLocation {
 type User struct {
 	tdCommon
 	Id                int32         `json:"id"`                 // User identifier
-	AccessHash        JSONInt64     `json:"access_hash"`        // User access hash
 	FirstName         string        `json:"first_name"`         // First name of the user
 	LastName          string        `json:"last_name"`          // Last name of the user
 	Username          string        `json:"username"`           // Username of the user
@@ -3679,7 +3705,6 @@ func (user *User) MessageType() string {
 // NewUser creates a new User
 //
 // @param id User identifier
-// @param accessHash User access hash
 // @param firstName First name of the user
 // @param lastName Last name of the user
 // @param username Username of the user
@@ -3695,11 +3720,10 @@ func (user *User) MessageType() string {
 // @param haveAccess If false, the user is inaccessible, and the only information known about the user is inside this class. It can't be passed to any method except GetUser
 // @param typeParam Type of the user
 // @param languageCode IETF language tag of the user's language; only available to bots
-func NewUser(id int32, accessHash JSONInt64, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, isContact bool, isMutualContact bool, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
+func NewUser(id int32, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, isContact bool, isMutualContact bool, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
 	userTemp := User{
 		tdCommon:          tdCommon{Type: "user"},
 		Id:                id,
-		AccessHash:        accessHash,
 		FirstName:         firstName,
 		LastName:          lastName,
 		Username:          username,
@@ -3730,7 +3754,6 @@ func (user *User) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		Id                int32         `json:"id"`                 // User identifier
-		AccessHash        JSONInt64     `json:"access_hash"`        // User access hash
 		FirstName         string        `json:"first_name"`         // First name of the user
 		LastName          string        `json:"last_name"`          // Last name of the user
 		Username          string        `json:"username"`           // Username of the user
@@ -3752,7 +3775,6 @@ func (user *User) UnmarshalJSON(b []byte) error {
 
 	user.tdCommon = tempObj.tdCommon
 	user.Id = tempObj.Id
-	user.AccessHash = tempObj.AccessHash
 	user.FirstName = tempObj.FirstName
 	user.LastName = tempObj.LastName
 	user.Username = tempObj.Username
@@ -4628,7 +4650,6 @@ func (supergroupMembersFilterBots *SupergroupMembersFilterBots) GetSupergroupMem
 type BasicGroup struct {
 	tdCommon
 	Id                     int32            `json:"id"`                        // Group identifier
-	AccessHash             JSONInt64        `json:"access_hash"`               // Group access hash
 	MemberCount            int32            `json:"member_count"`              // Number of members in the group
 	Status                 ChatMemberStatus `json:"status"`                    // Status of the current user in the group
 	IsActive               bool             `json:"is_active"`                 // True, if the group is active
@@ -4643,16 +4664,14 @@ func (basicGroup *BasicGroup) MessageType() string {
 // NewBasicGroup creates a new BasicGroup
 //
 // @param id Group identifier
-// @param accessHash Group access hash
 // @param memberCount Number of members in the group
 // @param status Status of the current user in the group
 // @param isActive True, if the group is active
 // @param upgradedToSupergroupId Identifier of the supergroup to which this group was upgraded; 0 if none
-func NewBasicGroup(id int32, accessHash JSONInt64, memberCount int32, status ChatMemberStatus, isActive bool, upgradedToSupergroupId int32) *BasicGroup {
+func NewBasicGroup(id int32, memberCount int32, status ChatMemberStatus, isActive bool, upgradedToSupergroupId int32) *BasicGroup {
 	basicGroupTemp := BasicGroup{
 		tdCommon:               tdCommon{Type: "basicGroup"},
 		Id:                     id,
-		AccessHash:             accessHash,
 		MemberCount:            memberCount,
 		Status:                 status,
 		IsActive:               isActive,
@@ -4671,11 +4690,10 @@ func (basicGroup *BasicGroup) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id                     int32     `json:"id"`                        // Group identifier
-		AccessHash             JSONInt64 `json:"access_hash"`               // Group access hash
-		MemberCount            int32     `json:"member_count"`              // Number of members in the group
-		IsActive               bool      `json:"is_active"`                 // True, if the group is active
-		UpgradedToSupergroupId int32     `json:"upgraded_to_supergroup_id"` // Identifier of the supergroup to which this group was upgraded; 0 if none
+		Id                     int32 `json:"id"`                        // Group identifier
+		MemberCount            int32 `json:"member_count"`              // Number of members in the group
+		IsActive               bool  `json:"is_active"`                 // True, if the group is active
+		UpgradedToSupergroupId int32 `json:"upgraded_to_supergroup_id"` // Identifier of the supergroup to which this group was upgraded; 0 if none
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -4684,7 +4702,6 @@ func (basicGroup *BasicGroup) UnmarshalJSON(b []byte) error {
 
 	basicGroup.tdCommon = tempObj.tdCommon
 	basicGroup.Id = tempObj.Id
-	basicGroup.AccessHash = tempObj.AccessHash
 	basicGroup.MemberCount = tempObj.MemberCount
 	basicGroup.IsActive = tempObj.IsActive
 	basicGroup.UpgradedToSupergroupId = tempObj.UpgradedToSupergroupId
@@ -4731,7 +4748,6 @@ func NewBasicGroupFullInfo(description string, creatorUserId int32, members []Ch
 type Supergroup struct {
 	tdCommon
 	Id                int32            `json:"id"`                   // Supergroup or channel identifier
-	AccessHash        JSONInt64        `json:"access_hash"`          // Supergroup or channel access hash
 	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
@@ -4754,7 +4770,6 @@ func (supergroup *Supergroup) MessageType() string {
 // NewSupergroup creates a new Supergroup
 //
 // @param id Supergroup or channel identifier
-// @param accessHash Supergroup or channel access hash
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 // @param status Status of the current user in the supergroup or channel; custom title will be always empty
@@ -4767,11 +4782,10 @@ func (supergroup *Supergroup) MessageType() string {
 // @param isVerified True, if the supergroup or channel is verified
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 // @param isScam True, if many users reported this supergroup as a scam
-func NewSupergroup(id int32, accessHash JSONInt64, username string, date int32, status ChatMemberStatus, memberCount int32, hasLinkedChat bool, hasLocation bool, signMessages bool, isSlowModeEnabled bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
+func NewSupergroup(id int32, username string, date int32, status ChatMemberStatus, memberCount int32, hasLinkedChat bool, hasLocation bool, signMessages bool, isSlowModeEnabled bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
 	supergroupTemp := Supergroup{
 		tdCommon:          tdCommon{Type: "supergroup"},
 		Id:                id,
-		AccessHash:        accessHash,
 		Username:          username,
 		Date:              date,
 		Status:            status,
@@ -4798,19 +4812,18 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id                int32     `json:"id"`                   // Supergroup or channel identifier
-		AccessHash        JSONInt64 `json:"access_hash"`          // Supergroup or channel access hash
-		Username          string    `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
-		Date              int32     `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32     `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
-		HasLinkedChat     bool      `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
-		HasLocation       bool      `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
-		SignMessages      bool      `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
-		IsSlowModeEnabled bool      `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
-		IsChannel         bool      `json:"is_channel"`           // True, if the supergroup is a channel
-		IsVerified        bool      `json:"is_verified"`          // True, if the supergroup or channel is verified
-		RestrictionReason string    `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
-		IsScam            bool      `json:"is_scam"`              // True, if many users reported this supergroup as a scam
+		Id                int32  `json:"id"`                   // Supergroup or channel identifier
+		Username          string `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
+		Date              int32  `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
+		MemberCount       int32  `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+		HasLinkedChat     bool   `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
+		HasLocation       bool   `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
+		SignMessages      bool   `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
+		IsSlowModeEnabled bool   `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
+		IsChannel         bool   `json:"is_channel"`           // True, if the supergroup is a channel
+		IsVerified        bool   `json:"is_verified"`          // True, if the supergroup or channel is verified
+		RestrictionReason string `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
+		IsScam            bool   `json:"is_scam"`              // True, if many users reported this supergroup as a scam
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -4819,7 +4832,6 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 
 	supergroup.tdCommon = tempObj.tdCommon
 	supergroup.Id = tempObj.Id
-	supergroup.AccessHash = tempObj.AccessHash
 	supergroup.Username = tempObj.Username
 	supergroup.Date = tempObj.Date
 	supergroup.MemberCount = tempObj.MemberCount
@@ -12719,7 +12731,11 @@ func (messageContact *MessageContact) GetMessageContentEnum() MessageContentEnum
 // MessageDice A dice message. The dice value is randomly generated by the server
 type MessageDice struct {
 	tdCommon
-	Value int32 `json:"value"` // The dice value; 0-6. If the value is 0, the dice must roll infinitely
+	InitialStateSticker         *Sticker `json:"initial_state_sticker"`          // The animated sticker with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+	FinalStateSticker           *Sticker `json:"final_state_sticker"`            // The animated sticker with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+	Emoji                       string   `json:"emoji"`                          // Emoji on which the dice throw animation is based
+	Value                       int32    `json:"value"`                          // The dice value. If the value is 0, the dice don't have final state yet
+	SuccessAnimationFrameNumber int32    `json:"success_animation_frame_number"` // Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
 }
 
 // MessageType return the string telegram-type of MessageDice
@@ -12729,11 +12745,19 @@ func (messageDice *MessageDice) MessageType() string {
 
 // NewMessageDice creates a new MessageDice
 //
-// @param value The dice value; 0-6. If the value is 0, the dice must roll infinitely
-func NewMessageDice(value int32) *MessageDice {
+// @param initialStateSticker The animated sticker with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+// @param finalStateSticker The animated sticker with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+// @param emoji Emoji on which the dice throw animation is based
+// @param value The dice value. If the value is 0, the dice don't have final state yet
+// @param successAnimationFrameNumber Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
+func NewMessageDice(initialStateSticker *Sticker, finalStateSticker *Sticker, emoji string, value int32, successAnimationFrameNumber int32) *MessageDice {
 	messageDiceTemp := MessageDice{
-		tdCommon: tdCommon{Type: "messageDice"},
-		Value:    value,
+		tdCommon:                    tdCommon{Type: "messageDice"},
+		InitialStateSticker:         initialStateSticker,
+		FinalStateSticker:           finalStateSticker,
+		Emoji:                       emoji,
+		Value:                       value,
+		SuccessAnimationFrameNumber: successAnimationFrameNumber,
 	}
 
 	return &messageDiceTemp
@@ -14858,6 +14882,8 @@ func (inputMessageContact *InputMessageContact) GetInputMessageContentEnum() Inp
 // InputMessageDice A dice message
 type InputMessageDice struct {
 	tdCommon
+	Emoji      string `json:"emoji"`       // Emoji on which the dice throw animation is based
+	ClearDraft bool   `json:"clear_draft"` // True, if a chat message draft should be deleted
 }
 
 // MessageType return the string telegram-type of InputMessageDice
@@ -14867,9 +14893,13 @@ func (inputMessageDice *InputMessageDice) MessageType() string {
 
 // NewInputMessageDice creates a new InputMessageDice
 //
-func NewInputMessageDice() *InputMessageDice {
+// @param emoji Emoji on which the dice throw animation is based
+// @param clearDraft True, if a chat message draft should be deleted
+func NewInputMessageDice(emoji string, clearDraft bool) *InputMessageDice {
 	inputMessageDiceTemp := InputMessageDice{
-		tdCommon: tdCommon{Type: "inputMessageDice"},
+		tdCommon:   tdCommon{Type: "inputMessageDice"},
+		Emoji:      emoji,
+		ClearDraft: clearDraft,
 	}
 
 	return &inputMessageDiceTemp
@@ -14976,6 +15006,8 @@ type InputMessagePoll struct {
 	Options     []string `json:"options"`      // List of poll answer options, 2-10 strings 1-100 characters each
 	IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
 	Type        PollType `json:"type"`         // Type of the poll
+	OpenPeriod  int32    `json:"open_period"`  // Amount of time the poll will be active after creation, in seconds; for bots only
+	CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
 	IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
 }
 
@@ -14990,14 +15022,18 @@ func (inputMessagePoll *InputMessagePoll) MessageType() string {
 // @param options List of poll answer options, 2-10 strings 1-100 characters each
 // @param isAnonymous True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
 // @param typeParam Type of the poll
+// @param openPeriod Amount of time the poll will be active after creation, in seconds; for bots only
+// @param closeDate Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
 // @param isClosed True, if the poll needs to be sent already closed; for bots only
-func NewInputMessagePoll(question string, options []string, isAnonymous bool, typeParam PollType, isClosed bool) *InputMessagePoll {
+func NewInputMessagePoll(question string, options []string, isAnonymous bool, typeParam PollType, openPeriod int32, closeDate int32, isClosed bool) *InputMessagePoll {
 	inputMessagePollTemp := InputMessagePoll{
 		tdCommon:    tdCommon{Type: "inputMessagePoll"},
 		Question:    question,
 		Options:     options,
 		IsAnonymous: isAnonymous,
 		Type:        typeParam,
+		OpenPeriod:  openPeriod,
+		CloseDate:   closeDate,
 		IsClosed:    isClosed,
 	}
 
@@ -15016,6 +15052,8 @@ func (inputMessagePoll *InputMessagePoll) UnmarshalJSON(b []byte) error {
 		Question    string   `json:"question"`     // Poll question, 1-255 characters
 		Options     []string `json:"options"`      // List of poll answer options, 2-10 strings 1-100 characters each
 		IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
+		OpenPeriod  int32    `json:"open_period"`  // Amount of time the poll will be active after creation, in seconds; for bots only
+		CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
 		IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -15027,6 +15065,8 @@ func (inputMessagePoll *InputMessagePoll) UnmarshalJSON(b []byte) error {
 	inputMessagePoll.Question = tempObj.Question
 	inputMessagePoll.Options = tempObj.Options
 	inputMessagePoll.IsAnonymous = tempObj.IsAnonymous
+	inputMessagePoll.OpenPeriod = tempObj.OpenPeriod
+	inputMessagePoll.CloseDate = tempObj.CloseDate
 	inputMessagePoll.IsClosed = tempObj.IsClosed
 
 	fieldType, _ := unmarshalPollType(objMap["type"])
@@ -24778,7 +24818,7 @@ type ProxyTypeHttp struct {
 	tdCommon
 	Username string `json:"username"`  // Username for logging in; may be empty
 	Password string `json:"password"`  // Password for logging in; may be empty
-	HttpOnly bool   `json:"http_only"` // Pass true, if the proxy supports only HTTP requests and doesn't support transparent TCP connections via HTTP CONNECT method
+	HttpOnly bool   `json:"http_only"` // Pass true if the proxy supports only HTTP requests and doesn't support transparent TCP connections via HTTP CONNECT method
 }
 
 // MessageType return the string telegram-type of ProxyTypeHttp
@@ -24790,7 +24830,7 @@ func (proxyTypeHttp *ProxyTypeHttp) MessageType() string {
 //
 // @param username Username for logging in; may be empty
 // @param password Password for logging in; may be empty
-// @param httpOnly Pass true, if the proxy supports only HTTP requests and doesn't support transparent TCP connections via HTTP CONNECT method
+// @param httpOnly Pass true if the proxy supports only HTTP requests and doesn't support transparent TCP connections via HTTP CONNECT method
 func NewProxyTypeHttp(username string, password string, httpOnly bool) *ProxyTypeHttp {
 	proxyTypeHttpTemp := ProxyTypeHttp{
 		tdCommon: tdCommon{Type: "proxyTypeHttp"},
@@ -25045,6 +25085,301 @@ func (inputStickerAnimated *InputStickerAnimated) UnmarshalJSON(b []byte) error 
 // GetInputStickerEnum return the enum type of this object
 func (inputStickerAnimated *InputStickerAnimated) GetInputStickerEnum() InputStickerEnum {
 	return InputStickerAnimatedType
+}
+
+// DateRange Represents a date range
+type DateRange struct {
+	tdCommon
+	StartDate int32 `json:"start_date"` // Point in time (Unix timestamp) at which the date range begins
+	EndDate   int32 `json:"end_date"`   // Point in time (Unix timestamp) at which the date range ends
+}
+
+// MessageType return the string telegram-type of DateRange
+func (dateRange *DateRange) MessageType() string {
+	return "dateRange"
+}
+
+// NewDateRange creates a new DateRange
+//
+// @param startDate Point in time (Unix timestamp) at which the date range begins
+// @param endDate Point in time (Unix timestamp) at which the date range ends
+func NewDateRange(startDate int32, endDate int32) *DateRange {
+	dateRangeTemp := DateRange{
+		tdCommon:  tdCommon{Type: "dateRange"},
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+
+	return &dateRangeTemp
+}
+
+// StatisticsValue A statistics value
+type StatisticsValue struct {
+	tdCommon
+	Value                float64 `json:"value"`                  // The value
+	PreviousValue        float64 `json:"previous_value"`         // The value for the previous day
+	GrowthRatePercentage float64 `json:"growth_rate_percentage"` // The growth rate of the value, as a percentage
+}
+
+// MessageType return the string telegram-type of StatisticsValue
+func (statisticsValue *StatisticsValue) MessageType() string {
+	return "statisticsValue"
+}
+
+// NewStatisticsValue creates a new StatisticsValue
+//
+// @param value The value
+// @param previousValue The value for the previous day
+// @param growthRatePercentage The growth rate of the value, as a percentage
+func NewStatisticsValue(value float64, previousValue float64, growthRatePercentage float64) *StatisticsValue {
+	statisticsValueTemp := StatisticsValue{
+		tdCommon:             tdCommon{Type: "statisticsValue"},
+		Value:                value,
+		PreviousValue:        previousValue,
+		GrowthRatePercentage: growthRatePercentage,
+	}
+
+	return &statisticsValueTemp
+}
+
+// StatisticsGraphData A graph data
+type StatisticsGraphData struct {
+	tdCommon
+	JsonData  string `json:"json_data"`  // Graph data in JSON format
+	ZoomToken string `json:"zoom_token"` // If non-empty, a token which can be used to receive a zoomed in graph
+}
+
+// MessageType return the string telegram-type of StatisticsGraphData
+func (statisticsGraphData *StatisticsGraphData) MessageType() string {
+	return "statisticsGraphData"
+}
+
+// NewStatisticsGraphData creates a new StatisticsGraphData
+//
+// @param jsonData Graph data in JSON format
+// @param zoomToken If non-empty, a token which can be used to receive a zoomed in graph
+func NewStatisticsGraphData(jsonData string, zoomToken string) *StatisticsGraphData {
+	statisticsGraphDataTemp := StatisticsGraphData{
+		tdCommon:  tdCommon{Type: "statisticsGraphData"},
+		JsonData:  jsonData,
+		ZoomToken: zoomToken,
+	}
+
+	return &statisticsGraphDataTemp
+}
+
+// GetStatisticsGraphEnum return the enum type of this object
+func (statisticsGraphData *StatisticsGraphData) GetStatisticsGraphEnum() StatisticsGraphEnum {
+	return StatisticsGraphDataType
+}
+
+// StatisticsGraphAsync The graph data to be asynchronously loaded through getChatStatisticsGraph
+type StatisticsGraphAsync struct {
+	tdCommon
+	Token string `json:"token"` // The token to use for data loading
+}
+
+// MessageType return the string telegram-type of StatisticsGraphAsync
+func (statisticsGraphAsync *StatisticsGraphAsync) MessageType() string {
+	return "statisticsGraphAsync"
+}
+
+// NewStatisticsGraphAsync creates a new StatisticsGraphAsync
+//
+// @param token The token to use for data loading
+func NewStatisticsGraphAsync(token string) *StatisticsGraphAsync {
+	statisticsGraphAsyncTemp := StatisticsGraphAsync{
+		tdCommon: tdCommon{Type: "statisticsGraphAsync"},
+		Token:    token,
+	}
+
+	return &statisticsGraphAsyncTemp
+}
+
+// GetStatisticsGraphEnum return the enum type of this object
+func (statisticsGraphAsync *StatisticsGraphAsync) GetStatisticsGraphEnum() StatisticsGraphEnum {
+	return StatisticsGraphAsyncType
+}
+
+// StatisticsGraphError An error message to be shown to the user instead of the graph
+type StatisticsGraphError struct {
+	tdCommon
+	ErrorMessage string `json:"error_message"` // The error message
+}
+
+// MessageType return the string telegram-type of StatisticsGraphError
+func (statisticsGraphError *StatisticsGraphError) MessageType() string {
+	return "statisticsGraphError"
+}
+
+// NewStatisticsGraphError creates a new StatisticsGraphError
+//
+// @param errorMessage The error message
+func NewStatisticsGraphError(errorMessage string) *StatisticsGraphError {
+	statisticsGraphErrorTemp := StatisticsGraphError{
+		tdCommon:     tdCommon{Type: "statisticsGraphError"},
+		ErrorMessage: errorMessage,
+	}
+
+	return &statisticsGraphErrorTemp
+}
+
+// GetStatisticsGraphEnum return the enum type of this object
+func (statisticsGraphError *StatisticsGraphError) GetStatisticsGraphEnum() StatisticsGraphEnum {
+	return StatisticsGraphErrorType
+}
+
+// ChatStatisticsMessageInteractionCounters Contains statistics about interactions with a message
+type ChatStatisticsMessageInteractionCounters struct {
+	tdCommon
+	MessageId    int64 `json:"message_id"`    // Message identifier
+	ViewCount    int32 `json:"view_count"`    // Number of times the message was viewed
+	ForwardCount int32 `json:"forward_count"` // Number of times the message was forwarded
+}
+
+// MessageType return the string telegram-type of ChatStatisticsMessageInteractionCounters
+func (chatStatisticsMessageInteractionCounters *ChatStatisticsMessageInteractionCounters) MessageType() string {
+	return "chatStatisticsMessageInteractionCounters"
+}
+
+// NewChatStatisticsMessageInteractionCounters creates a new ChatStatisticsMessageInteractionCounters
+//
+// @param messageId Message identifier
+// @param viewCount Number of times the message was viewed
+// @param forwardCount Number of times the message was forwarded
+func NewChatStatisticsMessageInteractionCounters(messageId int64, viewCount int32, forwardCount int32) *ChatStatisticsMessageInteractionCounters {
+	chatStatisticsMessageInteractionCountersTemp := ChatStatisticsMessageInteractionCounters{
+		tdCommon:     tdCommon{Type: "chatStatisticsMessageInteractionCounters"},
+		MessageId:    messageId,
+		ViewCount:    viewCount,
+		ForwardCount: forwardCount,
+	}
+
+	return &chatStatisticsMessageInteractionCountersTemp
+}
+
+// ChatStatistics A detailed statistics about a chat
+type ChatStatistics struct {
+	tdCommon
+	Period                         *DateRange                                 `json:"period"`                           // A period to which the statistics applies
+	MemberCount                    *StatisticsValue                           `json:"member_count"`                     // Number of members in the chat
+	MeanViewCount                  *StatisticsValue                           `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
+	MeanShareCount                 *StatisticsValue                           `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
+	EnabledNotificationsPercentage float64                                    `json:"enabled_notifications_percentage"` // A percentage of users with enabled notifications for the chat
+	MemberCountGraph               StatisticsGraph                            `json:"member_count_graph"`               // A graph containing number of members in the chat
+	JoinGraph                      StatisticsGraph                            `json:"join_graph"`                       // A graph containing number of members joined and left the chat
+	MuteGraph                      StatisticsGraph                            `json:"mute_graph"`                       // A graph containing number of members muted and unmuted the chat
+	ViewCountByHourGraph           StatisticsGraph                            `json:"view_count_by_hour_graph"`         // A graph containing number of message views in a given hour in the last two weeks
+	ViewCountBySourceGraph         StatisticsGraph                            `json:"view_count_by_source_graph"`       // A graph containing number of message views per source
+	JoinBySourceGraph              StatisticsGraph                            `json:"join_by_source_graph"`             // A graph containing number of new member joins per source
+	LanguageGraph                  StatisticsGraph                            `json:"language_graph"`                   // A graph containing number of users viewed chat messages per language
+	MessageInteractionGraph        StatisticsGraph                            `json:"message_interaction_graph"`        // A graph containing number of chat message views and shares
+	InstantViewInteractionGraph    StatisticsGraph                            `json:"instant_view_interaction_graph"`   // A graph containing number of views of associated with the chat instant views
+	RecentMessageInteractions      []ChatStatisticsMessageInteractionCounters `json:"recent_message_interactions"`      // Detailed statistics about number of views and shares of recently sent messages
+}
+
+// MessageType return the string telegram-type of ChatStatistics
+func (chatStatistics *ChatStatistics) MessageType() string {
+	return "chatStatistics"
+}
+
+// NewChatStatistics creates a new ChatStatistics
+//
+// @param period A period to which the statistics applies
+// @param memberCount Number of members in the chat
+// @param meanViewCount Mean number of times the recently sent messages was viewed
+// @param meanShareCount Mean number of times the recently sent messages was shared
+// @param enabledNotificationsPercentage A percentage of users with enabled notifications for the chat
+// @param memberCountGraph A graph containing number of members in the chat
+// @param joinGraph A graph containing number of members joined and left the chat
+// @param muteGraph A graph containing number of members muted and unmuted the chat
+// @param viewCountByHourGraph A graph containing number of message views in a given hour in the last two weeks
+// @param viewCountBySourceGraph A graph containing number of message views per source
+// @param joinBySourceGraph A graph containing number of new member joins per source
+// @param languageGraph A graph containing number of users viewed chat messages per language
+// @param messageInteractionGraph A graph containing number of chat message views and shares
+// @param instantViewInteractionGraph A graph containing number of views of associated with the chat instant views
+// @param recentMessageInteractions Detailed statistics about number of views and shares of recently sent messages
+func NewChatStatistics(period *DateRange, memberCount *StatisticsValue, meanViewCount *StatisticsValue, meanShareCount *StatisticsValue, enabledNotificationsPercentage float64, memberCountGraph StatisticsGraph, joinGraph StatisticsGraph, muteGraph StatisticsGraph, viewCountByHourGraph StatisticsGraph, viewCountBySourceGraph StatisticsGraph, joinBySourceGraph StatisticsGraph, languageGraph StatisticsGraph, messageInteractionGraph StatisticsGraph, instantViewInteractionGraph StatisticsGraph, recentMessageInteractions []ChatStatisticsMessageInteractionCounters) *ChatStatistics {
+	chatStatisticsTemp := ChatStatistics{
+		tdCommon:                       tdCommon{Type: "chatStatistics"},
+		Period:                         period,
+		MemberCount:                    memberCount,
+		MeanViewCount:                  meanViewCount,
+		MeanShareCount:                 meanShareCount,
+		EnabledNotificationsPercentage: enabledNotificationsPercentage,
+		MemberCountGraph:               memberCountGraph,
+		JoinGraph:                      joinGraph,
+		MuteGraph:                      muteGraph,
+		ViewCountByHourGraph:           viewCountByHourGraph,
+		ViewCountBySourceGraph:         viewCountBySourceGraph,
+		JoinBySourceGraph:              joinBySourceGraph,
+		LanguageGraph:                  languageGraph,
+		MessageInteractionGraph:        messageInteractionGraph,
+		InstantViewInteractionGraph:    instantViewInteractionGraph,
+		RecentMessageInteractions:      recentMessageInteractions,
+	}
+
+	return &chatStatisticsTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (chatStatistics *ChatStatistics) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Period                         *DateRange                                 `json:"period"`                           // A period to which the statistics applies
+		MemberCount                    *StatisticsValue                           `json:"member_count"`                     // Number of members in the chat
+		MeanViewCount                  *StatisticsValue                           `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
+		MeanShareCount                 *StatisticsValue                           `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
+		EnabledNotificationsPercentage float64                                    `json:"enabled_notifications_percentage"` // A percentage of users with enabled notifications for the chat
+		RecentMessageInteractions      []ChatStatisticsMessageInteractionCounters `json:"recent_message_interactions"`      // Detailed statistics about number of views and shares of recently sent messages
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	chatStatistics.tdCommon = tempObj.tdCommon
+	chatStatistics.Period = tempObj.Period
+	chatStatistics.MemberCount = tempObj.MemberCount
+	chatStatistics.MeanViewCount = tempObj.MeanViewCount
+	chatStatistics.MeanShareCount = tempObj.MeanShareCount
+	chatStatistics.EnabledNotificationsPercentage = tempObj.EnabledNotificationsPercentage
+	chatStatistics.RecentMessageInteractions = tempObj.RecentMessageInteractions
+
+	fieldMemberCountGraph, _ := unmarshalStatisticsGraph(objMap["member_count_graph"])
+	chatStatistics.MemberCountGraph = fieldMemberCountGraph
+
+	fieldJoinGraph, _ := unmarshalStatisticsGraph(objMap["join_graph"])
+	chatStatistics.JoinGraph = fieldJoinGraph
+
+	fieldMuteGraph, _ := unmarshalStatisticsGraph(objMap["mute_graph"])
+	chatStatistics.MuteGraph = fieldMuteGraph
+
+	fieldViewCountByHourGraph, _ := unmarshalStatisticsGraph(objMap["view_count_by_hour_graph"])
+	chatStatistics.ViewCountByHourGraph = fieldViewCountByHourGraph
+
+	fieldViewCountBySourceGraph, _ := unmarshalStatisticsGraph(objMap["view_count_by_source_graph"])
+	chatStatistics.ViewCountBySourceGraph = fieldViewCountBySourceGraph
+
+	fieldJoinBySourceGraph, _ := unmarshalStatisticsGraph(objMap["join_by_source_graph"])
+	chatStatistics.JoinBySourceGraph = fieldJoinBySourceGraph
+
+	fieldLanguageGraph, _ := unmarshalStatisticsGraph(objMap["language_graph"])
+	chatStatistics.LanguageGraph = fieldLanguageGraph
+
+	fieldMessageInteractionGraph, _ := unmarshalStatisticsGraph(objMap["message_interaction_graph"])
+	chatStatistics.MessageInteractionGraph = fieldMessageInteractionGraph
+
+	fieldInstantViewInteractionGraph, _ := unmarshalStatisticsGraph(objMap["instant_view_interaction_graph"])
+	chatStatistics.InstantViewInteractionGraph = fieldInstantViewInteractionGraph
+
+	return nil
 }
 
 // UpdateAuthorizationState The user authorization state has changed
@@ -27220,6 +27555,34 @@ func (updateOption *UpdateOption) GetUpdateEnum() UpdateEnum {
 	return UpdateOptionType
 }
 
+// UpdateStickerSet A sticker set has changed
+type UpdateStickerSet struct {
+	tdCommon
+	StickerSet *StickerSet `json:"sticker_set"` // The sticker set
+}
+
+// MessageType return the string telegram-type of UpdateStickerSet
+func (updateStickerSet *UpdateStickerSet) MessageType() string {
+	return "updateStickerSet"
+}
+
+// NewUpdateStickerSet creates a new UpdateStickerSet
+//
+// @param stickerSet The sticker set
+func NewUpdateStickerSet(stickerSet *StickerSet) *UpdateStickerSet {
+	updateStickerSetTemp := UpdateStickerSet{
+		tdCommon:   tdCommon{Type: "updateStickerSet"},
+		StickerSet: stickerSet,
+	}
+
+	return &updateStickerSetTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateStickerSet *UpdateStickerSet) GetUpdateEnum() UpdateEnum {
+	return UpdateStickerSetType
+}
+
 // UpdateInstalledStickerSets The list of installed sticker sets was updated
 type UpdateInstalledStickerSets struct {
 	tdCommon
@@ -27254,7 +27617,7 @@ func (updateInstalledStickerSets *UpdateInstalledStickerSets) GetUpdateEnum() Up
 // UpdateTrendingStickerSets The list of trending sticker sets was updated or some of them were viewed
 type UpdateTrendingStickerSets struct {
 	tdCommon
-	StickerSets *StickerSets `json:"sticker_sets"` // The new list of trending sticker sets
+	StickerSets *StickerSets `json:"sticker_sets"` // The prefix of the list of trending sticker sets with the newest trending sticker sets
 }
 
 // MessageType return the string telegram-type of UpdateTrendingStickerSets
@@ -27264,7 +27627,7 @@ func (updateTrendingStickerSets *UpdateTrendingStickerSets) MessageType() string
 
 // NewUpdateTrendingStickerSets creates a new UpdateTrendingStickerSets
 //
-// @param stickerSets The new list of trending sticker sets
+// @param stickerSets The prefix of the list of trending sticker sets with the newest trending sticker sets
 func NewUpdateTrendingStickerSets(stickerSets *StickerSets) *UpdateTrendingStickerSets {
 	updateTrendingStickerSetsTemp := UpdateTrendingStickerSets{
 		tdCommon:    tdCommon{Type: "updateTrendingStickerSets"},
@@ -27513,7 +27876,7 @@ func (updateTermsOfService *UpdateTermsOfService) GetUpdateEnum() UpdateEnum {
 	return UpdateTermsOfServiceType
 }
 
-// UpdateUsersNearby List of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
+// UpdateUsersNearby The list of users nearby has changed. The update is sent only 60 seconds after a successful searchChatsNearby request
 type UpdateUsersNearby struct {
 	tdCommon
 	UsersNearby []ChatNearby `json:"users_nearby"` // The new list of users nearby
@@ -27539,6 +27902,34 @@ func NewUpdateUsersNearby(usersNearby []ChatNearby) *UpdateUsersNearby {
 // GetUpdateEnum return the enum type of this object
 func (updateUsersNearby *UpdateUsersNearby) GetUpdateEnum() UpdateEnum {
 	return UpdateUsersNearbyType
+}
+
+// UpdateDiceEmojis The list of supported dice emojis has changed
+type UpdateDiceEmojis struct {
+	tdCommon
+	Emojis []string `json:"emojis"` // The new list of supported dice emojis
+}
+
+// MessageType return the string telegram-type of UpdateDiceEmojis
+func (updateDiceEmojis *UpdateDiceEmojis) MessageType() string {
+	return "updateDiceEmojis"
+}
+
+// NewUpdateDiceEmojis creates a new UpdateDiceEmojis
+//
+// @param emojis The new list of supported dice emojis
+func NewUpdateDiceEmojis(emojis []string) *UpdateDiceEmojis {
+	updateDiceEmojisTemp := UpdateDiceEmojis{
+		tdCommon: tdCommon{Type: "updateDiceEmojis"},
+		Emojis:   emojis,
+	}
+
+	return &updateDiceEmojisTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateDiceEmojis *UpdateDiceEmojis) GetUpdateEnum() UpdateEnum {
+	return UpdateDiceEmojisType
 }
 
 // UpdateNewInlineQuery A new incoming inline query; for bots only
@@ -32076,6 +32467,38 @@ func unmarshalInputSticker(rawMsg *json.RawMessage) (InputSticker, error) {
 	}
 }
 
+func unmarshalStatisticsGraph(rawMsg *json.RawMessage) (StatisticsGraph, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch StatisticsGraphEnum(objMap["@type"].(string)) {
+	case StatisticsGraphDataType:
+		var statisticsGraphData StatisticsGraphData
+		err := json.Unmarshal(*rawMsg, &statisticsGraphData)
+		return &statisticsGraphData, err
+
+	case StatisticsGraphAsyncType:
+		var statisticsGraphAsync StatisticsGraphAsync
+		err := json.Unmarshal(*rawMsg, &statisticsGraphAsync)
+		return &statisticsGraphAsync, err
+
+	case StatisticsGraphErrorType:
+		var statisticsGraphError StatisticsGraphError
+		err := json.Unmarshal(*rawMsg, &statisticsGraphError)
+		return &statisticsGraphError, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 
 	if rawMsg == nil {
@@ -32368,6 +32791,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateOption)
 		return &updateOption, err
 
+	case UpdateStickerSetType:
+		var updateStickerSet UpdateStickerSet
+		err := json.Unmarshal(*rawMsg, &updateStickerSet)
+		return &updateStickerSet, err
+
 	case UpdateInstalledStickerSetsType:
 		var updateInstalledStickerSets UpdateInstalledStickerSets
 		err := json.Unmarshal(*rawMsg, &updateInstalledStickerSets)
@@ -32417,6 +32845,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateUsersNearby UpdateUsersNearby
 		err := json.Unmarshal(*rawMsg, &updateUsersNearby)
 		return &updateUsersNearby, err
+
+	case UpdateDiceEmojisType:
+		var updateDiceEmojis UpdateDiceEmojis
+		err := json.Unmarshal(*rawMsg, &updateDiceEmojis)
+		return &updateDiceEmojis, err
 
 	case UpdateNewInlineQueryType:
 		var updateNewInlineQuery UpdateNewInlineQuery

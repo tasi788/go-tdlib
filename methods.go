@@ -5120,10 +5120,14 @@ func (client *Client) GetArchivedStickerSets(isMasks bool, offsetStickerSetId JS
 
 }
 
-// GetTrendingStickerSets Returns a list of trending sticker sets
-func (client *Client) GetTrendingStickerSets() (*StickerSets, error) {
+// GetTrendingStickerSets Returns a list of trending sticker sets. For the optimal performance the number of returned sticker sets is chosen by the library
+// @param offset The offset from which to return the sticker sets; must be non-negative
+// @param limit The maximum number of sticker sets to be returned; must be non-negative. Fewer sticker sets may be returned than specified by the limit, even if the end of the list has not been reached
+func (client *Client) GetTrendingStickerSets(offset int32, limit int32) (*StickerSets, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type": "getTrendingStickerSets",
+		"@type":  "getTrendingStickerSets",
+		"offset": offset,
+		"limit":  limit,
 	})
 
 	if err != nil {
@@ -5507,13 +5511,13 @@ func (client *Client) GetStickerEmojis(sticker InputFile) (*Emojis, error) {
 // SearchEmojis Searches for emojis by keywords. Supported only if the file database is enabled
 // @param text Text to search for
 // @param exactMatch True, if only emojis, which exactly match text needs to be returned
-// @param inputLanguageCode IETF language tag of the user's input language; may be empty if unknown
-func (client *Client) SearchEmojis(text string, exactMatch bool, inputLanguageCode string) (*Emojis, error) {
+// @param inputLanguageCodes List of possible IETF language tags of the user's input language; may be empty if unknown
+func (client *Client) SearchEmojis(text string, exactMatch bool, inputLanguageCodes []string) (*Emojis, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":               "searchEmojis",
-		"text":                text,
-		"exact_match":         exactMatch,
-		"input_language_code": inputLanguageCode,
+		"@type":                "searchEmojis",
+		"text":                 text,
+		"exact_match":          exactMatch,
+		"input_language_codes": inputLanguageCodes,
 	})
 
 	if err != nil {
@@ -7167,6 +7171,72 @@ func (client *Client) GetChatStatisticsUrl(chatId int64, parameters string, isDa
 
 }
 
+// GetChatStatistics Returns detailed statistics about a chat. Currently this method can be used only for channels. Requires administrator rights in the channel
+// @param chatId Chat identifier
+// @param isDark Pass true if a dark theme is used by the app
+func (client *Client) GetChatStatistics(chatId int64, isDark bool) (*ChatStatistics, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "getChatStatistics",
+		"chat_id": chatId,
+		"is_dark": isDark,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatStatistics ChatStatistics
+	err = json.Unmarshal(result.Raw, &chatStatistics)
+	return &chatStatistics, err
+
+}
+
+// GetChatStatisticsGraph Loads asynchronous or zoomed in chat statistics graph
+// @param chatId Chat identifier
+// @param token The token for graph loading
+// @param x X-value for zoomed in graph or 0 otherwise
+func (client *Client) GetChatStatisticsGraph(chatId int64, token string, x int64) (StatisticsGraph, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "getChatStatisticsGraph",
+		"chat_id": chatId,
+		"token":   token,
+		"x":       x,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	switch StatisticsGraphEnum(result.Data["@type"].(string)) {
+
+	case StatisticsGraphDataType:
+		var statisticsGraph StatisticsGraphData
+		err = json.Unmarshal(result.Raw, &statisticsGraph)
+		return &statisticsGraph, err
+
+	case StatisticsGraphAsyncType:
+		var statisticsGraph StatisticsGraphAsync
+		err = json.Unmarshal(result.Raw, &statisticsGraph)
+		return &statisticsGraph, err
+
+	case StatisticsGraphErrorType:
+		var statisticsGraph StatisticsGraphError
+		err = json.Unmarshal(result.Raw, &statisticsGraph)
+		return &statisticsGraph, err
+
+	default:
+		return nil, fmt.Errorf("Invalid type")
+	}
+}
+
 // GetStorageStatistics Returns storage usage statistics. Can be called before authorization
 // @param chatLimit The maximum number of chats with the largest storage usage for which separate statistics should be returned. All other chats will be grouped in entries with chat_id == 0. If the chat info database is not used, the chat_limit is ignored and is always set to 0
 func (client *Client) GetStorageStatistics(chatLimit int32) (*StorageStatistics, error) {
@@ -7237,7 +7307,7 @@ func (client *Client) GetDatabaseStatistics() (*DatabaseStatistics, error) {
 // @param fileTypes If not empty, only files with the given type(s) are considered. By default, all types except thumbnails, profile photos, stickers and wallpapers are deleted
 // @param chatIds If not empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to any chat (e.g., profile photos)
 // @param excludeChatIds If not empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to any chat (e.g., profile photos)
-// @param returnDeletedFileStatistics Pass true, if deleted file statistics needs to be returned instead of the whole storage usage statistics. Affects only returned statistics
+// @param returnDeletedFileStatistics Pass true if deleted file statistics needs to be returned instead of the whole storage usage statistics. Affects only returned statistics
 // @param chatLimit Same as in getStorageStatistics. Affects only returned statistics
 func (client *Client) OptimizeStorage(size int64, ttl int32, count int32, immunityDelay int32, fileTypes []FileType, chatIds []int64, excludeChatIds []int64, returnDeletedFileStatistics bool, chatLimit int32) (*StorageStatistics, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -9318,6 +9388,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
+	case UpdateStickerSetType:
+		var update UpdateStickerSet
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
 	case UpdateInstalledStickerSetsType:
 		var update UpdateInstalledStickerSets
 		err = json.Unmarshal(result.Raw, &update)
@@ -9365,6 +9440,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateUsersNearbyType:
 		var update UpdateUsersNearby
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateDiceEmojisType:
+		var update UpdateDiceEmojis
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -9421,26 +9501,4 @@ func (client *Client) TestUseUpdate() (Update, error) {
 	default:
 		return nil, fmt.Errorf("Invalid type")
 	}
-}
-
-// TestReturnError Returns the specified error and ensures that the Error object is used; for testing only. This is an offline method. Can be called before authorization. Can be called synchronously
-// @param error The error to be returned
-func (client *Client) TestReturnError(error *Error) (*Error, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type": "testReturnError",
-		"error": error,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var errorDummy Error
-	err = json.Unmarshal(result.Raw, &errorDummy)
-	return &errorDummy, err
-
 }
