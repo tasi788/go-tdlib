@@ -78,6 +78,19 @@ const (
 	InputFileGeneratedType InputFileEnum = "inputFileGenerated"
 )
 
+// ThumbnailFormatEnum Alias for abstract ThumbnailFormat 'Sub-Classes', used as constant-enum here
+type ThumbnailFormatEnum string
+
+// ThumbnailFormat enums
+const (
+	ThumbnailFormatJpegType  ThumbnailFormatEnum = "thumbnailFormatJpeg"
+	ThumbnailFormatPngType   ThumbnailFormatEnum = "thumbnailFormatPng"
+	ThumbnailFormatWebpType  ThumbnailFormatEnum = "thumbnailFormatWebp"
+	ThumbnailFormatGifType   ThumbnailFormatEnum = "thumbnailFormatGif"
+	ThumbnailFormatTgsType   ThumbnailFormatEnum = "thumbnailFormatTgs"
+	ThumbnailFormatMpeg4Type ThumbnailFormatEnum = "thumbnailFormatMpeg4"
+)
+
 // MaskPointEnum Alias for abstract MaskPoint 'Sub-Classes', used as constant-enum here
 type MaskPointEnum string
 
@@ -206,6 +219,16 @@ type ChatListEnum string
 const (
 	ChatListMainType    ChatListEnum = "chatListMain"
 	ChatListArchiveType ChatListEnum = "chatListArchive"
+	ChatListFilterType  ChatListEnum = "chatListFilter"
+)
+
+// ChatSourceEnum Alias for abstract ChatSource 'Sub-Classes', used as constant-enum here
+type ChatSourceEnum string
+
+// ChatSource enums
+const (
+	ChatSourceMtprotoProxyType              ChatSourceEnum = "chatSourceMtprotoProxy"
+	ChatSourcePublicServiceAnnouncementType ChatSourceEnum = "chatSourcePublicServiceAnnouncement"
 )
 
 // PublicChatTypeEnum Alias for abstract PublicChatType 'Sub-Classes', used as constant-enum here
@@ -582,6 +605,7 @@ const (
 	SearchMessagesFilterVoiceAndVideoNoteType SearchMessagesFilterEnum = "searchMessagesFilterVoiceAndVideoNote"
 	SearchMessagesFilterMentionType           SearchMessagesFilterEnum = "searchMessagesFilterMention"
 	SearchMessagesFilterUnreadMentionType     SearchMessagesFilterEnum = "searchMessagesFilterUnreadMention"
+	SearchMessagesFilterFailedToSendType      SearchMessagesFilterEnum = "searchMessagesFilterFailedToSend"
 )
 
 // ChatActionEnum Alias for abstract ChatAction 'Sub-Classes', used as constant-enum here
@@ -661,19 +685,18 @@ type InputInlineQueryResultEnum string
 
 // InputInlineQueryResult enums
 const (
-	InputInlineQueryResultAnimatedGifType   InputInlineQueryResultEnum = "inputInlineQueryResultAnimatedGif"
-	InputInlineQueryResultAnimatedMpeg4Type InputInlineQueryResultEnum = "inputInlineQueryResultAnimatedMpeg4"
-	InputInlineQueryResultArticleType       InputInlineQueryResultEnum = "inputInlineQueryResultArticle"
-	InputInlineQueryResultAudioType         InputInlineQueryResultEnum = "inputInlineQueryResultAudio"
-	InputInlineQueryResultContactType       InputInlineQueryResultEnum = "inputInlineQueryResultContact"
-	InputInlineQueryResultDocumentType      InputInlineQueryResultEnum = "inputInlineQueryResultDocument"
-	InputInlineQueryResultGameType          InputInlineQueryResultEnum = "inputInlineQueryResultGame"
-	InputInlineQueryResultLocationType      InputInlineQueryResultEnum = "inputInlineQueryResultLocation"
-	InputInlineQueryResultPhotoType         InputInlineQueryResultEnum = "inputInlineQueryResultPhoto"
-	InputInlineQueryResultStickerType       InputInlineQueryResultEnum = "inputInlineQueryResultSticker"
-	InputInlineQueryResultVenueType         InputInlineQueryResultEnum = "inputInlineQueryResultVenue"
-	InputInlineQueryResultVideoType         InputInlineQueryResultEnum = "inputInlineQueryResultVideo"
-	InputInlineQueryResultVoiceNoteType     InputInlineQueryResultEnum = "inputInlineQueryResultVoiceNote"
+	InputInlineQueryResultAnimationType InputInlineQueryResultEnum = "inputInlineQueryResultAnimation"
+	InputInlineQueryResultArticleType   InputInlineQueryResultEnum = "inputInlineQueryResultArticle"
+	InputInlineQueryResultAudioType     InputInlineQueryResultEnum = "inputInlineQueryResultAudio"
+	InputInlineQueryResultContactType   InputInlineQueryResultEnum = "inputInlineQueryResultContact"
+	InputInlineQueryResultDocumentType  InputInlineQueryResultEnum = "inputInlineQueryResultDocument"
+	InputInlineQueryResultGameType      InputInlineQueryResultEnum = "inputInlineQueryResultGame"
+	InputInlineQueryResultLocationType  InputInlineQueryResultEnum = "inputInlineQueryResultLocation"
+	InputInlineQueryResultPhotoType     InputInlineQueryResultEnum = "inputInlineQueryResultPhoto"
+	InputInlineQueryResultStickerType   InputInlineQueryResultEnum = "inputInlineQueryResultSticker"
+	InputInlineQueryResultVenueType     InputInlineQueryResultEnum = "inputInlineQueryResultVenue"
+	InputInlineQueryResultVideoType     InputInlineQueryResultEnum = "inputInlineQueryResultVideo"
+	InputInlineQueryResultVoiceNoteType InputInlineQueryResultEnum = "inputInlineQueryResultVoiceNote"
 )
 
 // InlineQueryResultEnum Alias for abstract InlineQueryResult 'Sub-Classes', used as constant-enum here
@@ -1071,15 +1094,12 @@ const (
 	UpdateMessageMentionReadType             UpdateEnum = "updateMessageMentionRead"
 	UpdateMessageLiveLocationViewedType      UpdateEnum = "updateMessageLiveLocationViewed"
 	UpdateNewChatType                        UpdateEnum = "updateNewChat"
-	UpdateChatChatListType                   UpdateEnum = "updateChatChatList"
 	UpdateChatTitleType                      UpdateEnum = "updateChatTitle"
 	UpdateChatPhotoType                      UpdateEnum = "updateChatPhoto"
 	UpdateChatPermissionsType                UpdateEnum = "updateChatPermissions"
 	UpdateChatLastMessageType                UpdateEnum = "updateChatLastMessage"
-	UpdateChatOrderType                      UpdateEnum = "updateChatOrder"
-	UpdateChatIsPinnedType                   UpdateEnum = "updateChatIsPinned"
+	UpdateChatPositionType                   UpdateEnum = "updateChatPosition"
 	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
-	UpdateChatIsSponsoredType                UpdateEnum = "updateChatIsSponsored"
 	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
 	UpdateChatDefaultDisableNotificationType UpdateEnum = "updateChatDefaultDisableNotification"
 	UpdateChatReadInboxType                  UpdateEnum = "updateChatReadInbox"
@@ -1091,6 +1111,7 @@ const (
 	UpdateChatPinnedMessageType              UpdateEnum = "updateChatPinnedMessage"
 	UpdateChatReplyMarkupType                UpdateEnum = "updateChatReplyMarkup"
 	UpdateChatDraftMessageType               UpdateEnum = "updateChatDraftMessage"
+	UpdateChatFiltersType                    UpdateEnum = "updateChatFilters"
 	UpdateChatOnlineMemberCountType          UpdateEnum = "updateChatOnlineMemberCount"
 	UpdateNotificationType                   UpdateEnum = "updateNotification"
 	UpdateNotificationGroupType              UpdateEnum = "updateNotificationGroup"
@@ -1127,6 +1148,7 @@ const (
 	UpdateTermsOfServiceType                 UpdateEnum = "updateTermsOfService"
 	UpdateUsersNearbyType                    UpdateEnum = "updateUsersNearby"
 	UpdateDiceEmojisType                     UpdateEnum = "updateDiceEmojis"
+	UpdateAnimationSearchParametersType      UpdateEnum = "updateAnimationSearchParameters"
 	UpdateNewInlineQueryType                 UpdateEnum = "updateNewInlineQuery"
 	UpdateNewChosenInlineResultType          UpdateEnum = "updateNewChosenInlineResult"
 	UpdateNewCallbackQueryType               UpdateEnum = "updateNewCallbackQuery"
@@ -1160,6 +1182,11 @@ type AuthorizationState interface {
 // InputFile Points to a file
 type InputFile interface {
 	GetInputFileEnum() InputFileEnum
+}
+
+// ThumbnailFormat Describes format of the thumbnail
+type ThumbnailFormat interface {
+	GetThumbnailFormatEnum() ThumbnailFormatEnum
 }
 
 // MaskPoint Part of the face, relative to which a mask should be placed
@@ -1220,6 +1247,11 @@ type ChatType interface {
 // ChatList Describes a list of chats
 type ChatList interface {
 	GetChatListEnum() ChatListEnum
+}
+
+// ChatSource Describes a reason why an external chat is shown in a chat list
+type ChatSource interface {
+	GetChatSourceEnum() ChatSourceEnum
 }
 
 // PublicChatType Describes a type of public chats
@@ -2380,7 +2412,7 @@ func NewLocalFile(path string, canBeDownloaded bool, canBeDeleted bool, isDownlo
 // RemoteFile Represents a remote file
 type RemoteFile struct {
 	tdCommon
-	Id                   string `json:"id"`                     // Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
+	Id                   string `json:"id"`                     // Remote file identifier; may be empty. Can be used by the current user across application restarts or even from other devices. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
 	UniqueId             string `json:"unique_id"`              // Unique file identifier; may be empty if unknown. The unique file identifier which is the same for the same file even for different users and is persistent over time
 	IsUploadingActive    bool   `json:"is_uploading_active"`    // True, if the file is currently being uploaded (or a remote copy is being generated by some other means)
 	IsUploadingCompleted bool   `json:"is_uploading_completed"` // True, if a remote copy is fully available
@@ -2394,7 +2426,7 @@ func (remoteFile *RemoteFile) MessageType() string {
 
 // NewRemoteFile creates a new RemoteFile
 //
-// @param id Remote file identifier; may be empty. Can be used across application restarts or even from other devices for the current user. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
+// @param id Remote file identifier; may be empty. Can be used by the current user across application restarts or even from other devices. Uniquely identifies a file, but a file can have a lot of different valid identifiers.
 // @param uniqueId Unique file identifier; may be empty if unknown. The unique file identifier which is the same for the same file even for different users and is persistent over time
 // @param isUploadingActive True, if the file is currently being uploaded (or a remote copy is being generated by some other means)
 // @param isUploadingCompleted True, if a remote copy is fully available
@@ -2624,6 +2656,217 @@ func NewMinithumbnail(width int32, height int32, data []byte) *Minithumbnail {
 	}
 
 	return &minithumbnailTemp
+}
+
+// ThumbnailFormatJpeg The thumbnail is in JPEG format
+type ThumbnailFormatJpeg struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatJpeg
+func (thumbnailFormatJpeg *ThumbnailFormatJpeg) MessageType() string {
+	return "thumbnailFormatJpeg"
+}
+
+// NewThumbnailFormatJpeg creates a new ThumbnailFormatJpeg
+//
+func NewThumbnailFormatJpeg() *ThumbnailFormatJpeg {
+	thumbnailFormatJpegTemp := ThumbnailFormatJpeg{
+		tdCommon: tdCommon{Type: "thumbnailFormatJpeg"},
+	}
+
+	return &thumbnailFormatJpegTemp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatJpeg *ThumbnailFormatJpeg) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatJpegType
+}
+
+// ThumbnailFormatPng The thumbnail is in PNG format. It will be used only for background patterns
+type ThumbnailFormatPng struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatPng
+func (thumbnailFormatPng *ThumbnailFormatPng) MessageType() string {
+	return "thumbnailFormatPng"
+}
+
+// NewThumbnailFormatPng creates a new ThumbnailFormatPng
+//
+func NewThumbnailFormatPng() *ThumbnailFormatPng {
+	thumbnailFormatPngTemp := ThumbnailFormatPng{
+		tdCommon: tdCommon{Type: "thumbnailFormatPng"},
+	}
+
+	return &thumbnailFormatPngTemp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatPng *ThumbnailFormatPng) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatPngType
+}
+
+// ThumbnailFormatWebp The thumbnail is in WEBP format. It will be used only for some stickers
+type ThumbnailFormatWebp struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatWebp
+func (thumbnailFormatWebp *ThumbnailFormatWebp) MessageType() string {
+	return "thumbnailFormatWebp"
+}
+
+// NewThumbnailFormatWebp creates a new ThumbnailFormatWebp
+//
+func NewThumbnailFormatWebp() *ThumbnailFormatWebp {
+	thumbnailFormatWebpTemp := ThumbnailFormatWebp{
+		tdCommon: tdCommon{Type: "thumbnailFormatWebp"},
+	}
+
+	return &thumbnailFormatWebpTemp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatWebp *ThumbnailFormatWebp) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatWebpType
+}
+
+// ThumbnailFormatGif The thumbnail is in static GIF format. It will be used only for some bot inline results
+type ThumbnailFormatGif struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatGif
+func (thumbnailFormatGif *ThumbnailFormatGif) MessageType() string {
+	return "thumbnailFormatGif"
+}
+
+// NewThumbnailFormatGif creates a new ThumbnailFormatGif
+//
+func NewThumbnailFormatGif() *ThumbnailFormatGif {
+	thumbnailFormatGifTemp := ThumbnailFormatGif{
+		tdCommon: tdCommon{Type: "thumbnailFormatGif"},
+	}
+
+	return &thumbnailFormatGifTemp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatGif *ThumbnailFormatGif) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatGifType
+}
+
+// ThumbnailFormatTgs The thumbnail is in TGS format. It will be used only for animated sticker sets
+type ThumbnailFormatTgs struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatTgs
+func (thumbnailFormatTgs *ThumbnailFormatTgs) MessageType() string {
+	return "thumbnailFormatTgs"
+}
+
+// NewThumbnailFormatTgs creates a new ThumbnailFormatTgs
+//
+func NewThumbnailFormatTgs() *ThumbnailFormatTgs {
+	thumbnailFormatTgsTemp := ThumbnailFormatTgs{
+		tdCommon: tdCommon{Type: "thumbnailFormatTgs"},
+	}
+
+	return &thumbnailFormatTgsTemp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatTgs *ThumbnailFormatTgs) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatTgsType
+}
+
+// ThumbnailFormatMpeg4 The thumbnail is in MPEG4 format. It will be used only for some animations and videos
+type ThumbnailFormatMpeg4 struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ThumbnailFormatMpeg4
+func (thumbnailFormatMpeg4 *ThumbnailFormatMpeg4) MessageType() string {
+	return "thumbnailFormatMpeg4"
+}
+
+// NewThumbnailFormatMpeg4 creates a new ThumbnailFormatMpeg4
+//
+func NewThumbnailFormatMpeg4() *ThumbnailFormatMpeg4 {
+	thumbnailFormatMpeg4Temp := ThumbnailFormatMpeg4{
+		tdCommon: tdCommon{Type: "thumbnailFormatMpeg4"},
+	}
+
+	return &thumbnailFormatMpeg4Temp
+}
+
+// GetThumbnailFormatEnum return the enum type of this object
+func (thumbnailFormatMpeg4 *ThumbnailFormatMpeg4) GetThumbnailFormatEnum() ThumbnailFormatEnum {
+	return ThumbnailFormatMpeg4Type
+}
+
+// Thumbnail Represents a thumbnail
+type Thumbnail struct {
+	tdCommon
+	Format ThumbnailFormat `json:"format"` // Thumbnail format
+	Width  int32           `json:"width"`  // Thumbnail width
+	Height int32           `json:"height"` // Thumbnail height
+	File   *File           `json:"file"`   // The thumbnail
+}
+
+// MessageType return the string telegram-type of Thumbnail
+func (thumbnail *Thumbnail) MessageType() string {
+	return "thumbnail"
+}
+
+// NewThumbnail creates a new Thumbnail
+//
+// @param format Thumbnail format
+// @param width Thumbnail width
+// @param height Thumbnail height
+// @param file The thumbnail
+func NewThumbnail(format ThumbnailFormat, width int32, height int32, file *File) *Thumbnail {
+	thumbnailTemp := Thumbnail{
+		tdCommon: tdCommon{Type: "thumbnail"},
+		Format:   format,
+		Width:    width,
+		Height:   height,
+		File:     file,
+	}
+
+	return &thumbnailTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (thumbnail *Thumbnail) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Width  int32 `json:"width"`  // Thumbnail width
+		Height int32 `json:"height"` // Thumbnail height
+		File   *File `json:"file"`   // The thumbnail
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	thumbnail.tdCommon = tempObj.tdCommon
+	thumbnail.Width = tempObj.Width
+	thumbnail.Height = tempObj.Height
+	thumbnail.File = tempObj.File
+
+	fieldFormat, _ := unmarshalThumbnailFormat(objMap["format"])
+	thumbnail.Format = fieldFormat
+
+	return nil
 }
 
 // MaskPointForehead A mask should be placed relatively to the forehead
@@ -2889,8 +3132,9 @@ type Animation struct {
 	Height        int32          `json:"height"`        // Height of the animation
 	FileName      string         `json:"file_name"`     // Original name of the file; as defined by the sender
 	MimeType      string         `json:"mime_type"`     // MIME type of the file, usually "image/gif" or "video/mp4"
+	HasStickers   bool           `json:"has_stickers"`  // True, if stickers were added to the animation. The list of corresponding sticker set can be received using getAttachedStickerSets
 	Minithumbnail *Minithumbnail `json:"minithumbnail"` // Animation minithumbnail; may be null
-	Thumbnail     *PhotoSize     `json:"thumbnail"`     // Animation thumbnail; may be null
+	Thumbnail     *Thumbnail     `json:"thumbnail"`     // Animation thumbnail in JPEG or MPEG4 format; may be null
 	Animation     *File          `json:"animation"`     // File containing the animation
 }
 
@@ -2906,10 +3150,11 @@ func (animation *Animation) MessageType() string {
 // @param height Height of the animation
 // @param fileName Original name of the file; as defined by the sender
 // @param mimeType MIME type of the file, usually "image/gif" or "video/mp4"
+// @param hasStickers True, if stickers were added to the animation. The list of corresponding sticker set can be received using getAttachedStickerSets
 // @param minithumbnail Animation minithumbnail; may be null
-// @param thumbnail Animation thumbnail; may be null
+// @param thumbnail Animation thumbnail in JPEG or MPEG4 format; may be null
 // @param animation File containing the animation
-func NewAnimation(duration int32, width int32, height int32, fileName string, mimeType string, minithumbnail *Minithumbnail, thumbnail *PhotoSize, animation *File) *Animation {
+func NewAnimation(duration int32, width int32, height int32, fileName string, mimeType string, hasStickers bool, minithumbnail *Minithumbnail, thumbnail *Thumbnail, animation *File) *Animation {
 	animationTemp := Animation{
 		tdCommon:      tdCommon{Type: "animation"},
 		Duration:      duration,
@@ -2917,6 +3162,7 @@ func NewAnimation(duration int32, width int32, height int32, fileName string, mi
 		Height:        height,
 		FileName:      fileName,
 		MimeType:      mimeType,
+		HasStickers:   hasStickers,
 		Minithumbnail: minithumbnail,
 		Thumbnail:     thumbnail,
 		Animation:     animation,
@@ -2934,7 +3180,7 @@ type Audio struct {
 	FileName                string         `json:"file_name"`                 // Original name of the file; as defined by the sender
 	MimeType                string         `json:"mime_type"`                 // The MIME type of the file; as defined by the sender
 	AlbumCoverMinithumbnail *Minithumbnail `json:"album_cover_minithumbnail"` // The minithumbnail of the album cover; may be null
-	AlbumCoverThumbnail     *PhotoSize     `json:"album_cover_thumbnail"`     // The thumbnail of the album cover; as defined by the sender. The full size thumbnail should be extracted from the downloaded file; may be null
+	AlbumCoverThumbnail     *Thumbnail     `json:"album_cover_thumbnail"`     // The thumbnail of the album cover in JPEG format; as defined by the sender. The full size thumbnail should be extracted from the downloaded file; may be null
 	Audio                   *File          `json:"audio"`                     // File containing the audio
 }
 
@@ -2951,9 +3197,9 @@ func (audio *Audio) MessageType() string {
 // @param fileName Original name of the file; as defined by the sender
 // @param mimeType The MIME type of the file; as defined by the sender
 // @param albumCoverMinithumbnail The minithumbnail of the album cover; may be null
-// @param albumCoverThumbnail The thumbnail of the album cover; as defined by the sender. The full size thumbnail should be extracted from the downloaded file; may be null
+// @param albumCoverThumbnail The thumbnail of the album cover in JPEG format; as defined by the sender. The full size thumbnail should be extracted from the downloaded file; may be null
 // @param audio File containing the audio
-func NewAudio(duration int32, title string, performer string, fileName string, mimeType string, albumCoverMinithumbnail *Minithumbnail, albumCoverThumbnail *PhotoSize, audio *File) *Audio {
+func NewAudio(duration int32, title string, performer string, fileName string, mimeType string, albumCoverMinithumbnail *Minithumbnail, albumCoverThumbnail *Thumbnail, audio *File) *Audio {
 	audioTemp := Audio{
 		tdCommon:                tdCommon{Type: "audio"},
 		Duration:                duration,
@@ -2975,7 +3221,7 @@ type Document struct {
 	FileName      string         `json:"file_name"`     // Original name of the file; as defined by the sender
 	MimeType      string         `json:"mime_type"`     // MIME type of the file; as defined by the sender
 	Minithumbnail *Minithumbnail `json:"minithumbnail"` // Document minithumbnail; may be null
-	Thumbnail     *PhotoSize     `json:"thumbnail"`     // Document thumbnail in JPEG or PNG format (PNG will be used only for background patterns); as defined by the sender; may be null
+	Thumbnail     *Thumbnail     `json:"thumbnail"`     // Document thumbnail in JPEG or PNG format (PNG will be used only for background patterns); as defined by the sender; may be null
 	Document      *File          `json:"document"`      // File containing the document
 }
 
@@ -2991,7 +3237,7 @@ func (document *Document) MessageType() string {
 // @param minithumbnail Document minithumbnail; may be null
 // @param thumbnail Document thumbnail in JPEG or PNG format (PNG will be used only for background patterns); as defined by the sender; may be null
 // @param document File containing the document
-func NewDocument(fileName string, mimeType string, minithumbnail *Minithumbnail, thumbnail *PhotoSize, document *File) *Document {
+func NewDocument(fileName string, mimeType string, minithumbnail *Minithumbnail, thumbnail *Thumbnail, document *File) *Document {
 	documentTemp := Document{
 		tdCommon:      tdCommon{Type: "document"},
 		FileName:      fileName,
@@ -3007,7 +3253,7 @@ func NewDocument(fileName string, mimeType string, minithumbnail *Minithumbnail,
 // Photo Describes a photo
 type Photo struct {
 	tdCommon
-	HasStickers   bool           `json:"has_stickers"`  // True, if stickers were added to the photo
+	HasStickers   bool           `json:"has_stickers"`  // True, if stickers were added to the photo. The list of corresponding sticker sets can be received using getAttachedStickerSets
 	Minithumbnail *Minithumbnail `json:"minithumbnail"` // Photo minithumbnail; may be null
 	Sizes         []PhotoSize    `json:"sizes"`         // Available variants of the photo, in different sizes
 }
@@ -3019,7 +3265,7 @@ func (photo *Photo) MessageType() string {
 
 // NewPhoto creates a new Photo
 //
-// @param hasStickers True, if stickers were added to the photo
+// @param hasStickers True, if stickers were added to the photo. The list of corresponding sticker sets can be received using getAttachedStickerSets
 // @param minithumbnail Photo minithumbnail; may be null
 // @param sizes Available variants of the photo, in different sizes
 func NewPhoto(hasStickers bool, minithumbnail *Minithumbnail, sizes []PhotoSize) *Photo {
@@ -3043,7 +3289,7 @@ type Sticker struct {
 	IsAnimated   bool          `json:"is_animated"`   // True, if the sticker is an animated sticker in TGS format
 	IsMask       bool          `json:"is_mask"`       // True, if the sticker is a mask
 	MaskPosition *MaskPosition `json:"mask_position"` // Position where the mask should be placed; may be null
-	Thumbnail    *PhotoSize    `json:"thumbnail"`     // Sticker thumbnail in WEBP or JPEG format; may be null
+	Thumbnail    *Thumbnail    `json:"thumbnail"`     // Sticker thumbnail in WEBP or JPEG format; may be null
 	Sticker      *File         `json:"sticker"`       // File containing the sticker
 }
 
@@ -3063,7 +3309,7 @@ func (sticker *Sticker) MessageType() string {
 // @param maskPosition Position where the mask should be placed; may be null
 // @param thumbnail Sticker thumbnail in WEBP or JPEG format; may be null
 // @param sticker File containing the sticker
-func NewSticker(setId JSONInt64, width int32, height int32, emoji string, isAnimated bool, isMask bool, maskPosition *MaskPosition, thumbnail *PhotoSize, sticker *File) *Sticker {
+func NewSticker(setId JSONInt64, width int32, height int32, emoji string, isAnimated bool, isMask bool, maskPosition *MaskPosition, thumbnail *Thumbnail, sticker *File) *Sticker {
 	stickerTemp := Sticker{
 		tdCommon:     tdCommon{Type: "sticker"},
 		SetId:        setId,
@@ -3088,10 +3334,10 @@ type Video struct {
 	Height            int32          `json:"height"`             // Video height; as defined by the sender
 	FileName          string         `json:"file_name"`          // Original name of the file; as defined by the sender
 	MimeType          string         `json:"mime_type"`          // MIME type of the file; as defined by the sender
-	HasStickers       bool           `json:"has_stickers"`       // True, if stickers were added to the video
+	HasStickers       bool           `json:"has_stickers"`       // True, if stickers were added to the video. The list of corresponding sticker sets can be received using getAttachedStickerSets
 	SupportsStreaming bool           `json:"supports_streaming"` // True, if the video should be tried to be streamed
 	Minithumbnail     *Minithumbnail `json:"minithumbnail"`      // Video minithumbnail; may be null
-	Thumbnail         *PhotoSize     `json:"thumbnail"`          // Video thumbnail; as defined by the sender; may be null
+	Thumbnail         *Thumbnail     `json:"thumbnail"`          // Video thumbnail in JPEG or MPEG4 format; as defined by the sender; may be null
 	Video             *File          `json:"video"`              // File containing the video
 }
 
@@ -3107,12 +3353,12 @@ func (video *Video) MessageType() string {
 // @param height Video height; as defined by the sender
 // @param fileName Original name of the file; as defined by the sender
 // @param mimeType MIME type of the file; as defined by the sender
-// @param hasStickers True, if stickers were added to the video
+// @param hasStickers True, if stickers were added to the video. The list of corresponding sticker sets can be received using getAttachedStickerSets
 // @param supportsStreaming True, if the video should be tried to be streamed
 // @param minithumbnail Video minithumbnail; may be null
-// @param thumbnail Video thumbnail; as defined by the sender; may be null
+// @param thumbnail Video thumbnail in JPEG or MPEG4 format; as defined by the sender; may be null
 // @param video File containing the video
-func NewVideo(duration int32, width int32, height int32, fileName string, mimeType string, hasStickers bool, supportsStreaming bool, minithumbnail *Minithumbnail, thumbnail *PhotoSize, video *File) *Video {
+func NewVideo(duration int32, width int32, height int32, fileName string, mimeType string, hasStickers bool, supportsStreaming bool, minithumbnail *Minithumbnail, thumbnail *Thumbnail, video *File) *Video {
 	videoTemp := Video{
 		tdCommon:          tdCommon{Type: "video"},
 		Duration:          duration,
@@ -3136,7 +3382,7 @@ type VideoNote struct {
 	Duration      int32          `json:"duration"`      // Duration of the video, in seconds; as defined by the sender
 	Length        int32          `json:"length"`        // Video width and height; as defined by the sender
 	Minithumbnail *Minithumbnail `json:"minithumbnail"` // Video minithumbnail; may be null
-	Thumbnail     *PhotoSize     `json:"thumbnail"`     // Video thumbnail; as defined by the sender; may be null
+	Thumbnail     *Thumbnail     `json:"thumbnail"`     // Video thumbnail in JPEG format; as defined by the sender; may be null
 	Video         *File          `json:"video"`         // File containing the video
 }
 
@@ -3150,9 +3396,9 @@ func (videoNote *VideoNote) MessageType() string {
 // @param duration Duration of the video, in seconds; as defined by the sender
 // @param length Video width and height; as defined by the sender
 // @param minithumbnail Video minithumbnail; may be null
-// @param thumbnail Video thumbnail; as defined by the sender; may be null
+// @param thumbnail Video thumbnail in JPEG format; as defined by the sender; may be null
 // @param video File containing the video
-func NewVideoNote(duration int32, length int32, minithumbnail *Minithumbnail, thumbnail *PhotoSize, video *File) *VideoNote {
+func NewVideoNote(duration int32, length int32, minithumbnail *Minithumbnail, thumbnail *Thumbnail, video *File) *VideoNote {
 	videoNoteTemp := VideoNote{
 		tdCommon:      tdCommon{Type: "videoNote"},
 		Duration:      duration,
@@ -4751,7 +4997,7 @@ type Supergroup struct {
 	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
-	MemberCount       int32            `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+	MemberCount       int32            `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 	HasLinkedChat     bool             `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 	HasLocation       bool             `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 	SignMessages      bool             `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -4773,7 +5019,7 @@ func (supergroup *Supergroup) MessageType() string {
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 // @param status Status of the current user in the supergroup or channel; custom title will be always empty
-// @param memberCount Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+// @param memberCount Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 // @param hasLinkedChat True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 // @param hasLocation True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 // @param signMessages True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -4815,7 +5061,7 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 		Id                int32  `json:"id"`                   // Supergroup or channel identifier
 		Username          string `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 		Date              int32  `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32  `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was found through SearchPublicChats
+		MemberCount       int32  `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 		HasLinkedChat     bool   `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 		HasLocation       bool   `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 		SignMessages      bool   `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
@@ -5171,10 +5417,11 @@ func (messageForwardOriginChannel *MessageForwardOriginChannel) GetMessageForwar
 // MessageForwardInfo Contains information about a forwarded message
 type MessageForwardInfo struct {
 	tdCommon
-	Origin        MessageForwardOrigin `json:"origin"`          // Origin of a forwarded message
-	Date          int32                `json:"date"`            // Point in time (Unix timestamp) when the message was originally sent
-	FromChatId    int64                `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-	FromMessageId int64                `json:"from_message_id"` // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
+	Origin                        MessageForwardOrigin `json:"origin"`                           // Origin of a forwarded message
+	Date                          int32                `json:"date"`                             // Point in time (Unix timestamp) when the message was originally sent
+	PublicServiceAnnouncementType string               `json:"public_service_announcement_type"` // The type of a public service announcement for the forwarded message
+	FromChatId                    int64                `json:"from_chat_id"`                     // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
+	FromMessageId                 int64                `json:"from_message_id"`                  // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
 }
 
 // MessageType return the string telegram-type of MessageForwardInfo
@@ -5186,15 +5433,17 @@ func (messageForwardInfo *MessageForwardInfo) MessageType() string {
 //
 // @param origin Origin of a forwarded message
 // @param date Point in time (Unix timestamp) when the message was originally sent
+// @param publicServiceAnnouncementType The type of a public service announcement for the forwarded message
 // @param fromChatId For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
 // @param fromMessageId For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
-func NewMessageForwardInfo(origin MessageForwardOrigin, date int32, fromChatId int64, fromMessageId int64) *MessageForwardInfo {
+func NewMessageForwardInfo(origin MessageForwardOrigin, date int32, publicServiceAnnouncementType string, fromChatId int64, fromMessageId int64) *MessageForwardInfo {
 	messageForwardInfoTemp := MessageForwardInfo{
-		tdCommon:      tdCommon{Type: "messageForwardInfo"},
-		Origin:        origin,
-		Date:          date,
-		FromChatId:    fromChatId,
-		FromMessageId: fromMessageId,
+		tdCommon:                      tdCommon{Type: "messageForwardInfo"},
+		Origin:                        origin,
+		Date:                          date,
+		PublicServiceAnnouncementType: publicServiceAnnouncementType,
+		FromChatId:                    fromChatId,
+		FromMessageId:                 fromMessageId,
 	}
 
 	return &messageForwardInfoTemp
@@ -5209,9 +5458,10 @@ func (messageForwardInfo *MessageForwardInfo) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Date          int32 `json:"date"`            // Point in time (Unix timestamp) when the message was originally sent
-		FromChatId    int64 `json:"from_chat_id"`    // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
-		FromMessageId int64 `json:"from_message_id"` // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
+		Date                          int32  `json:"date"`                             // Point in time (Unix timestamp) when the message was originally sent
+		PublicServiceAnnouncementType string `json:"public_service_announcement_type"` // The type of a public service announcement for the forwarded message
+		FromChatId                    int64  `json:"from_chat_id"`                     // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown
+		FromMessageId                 int64  `json:"from_message_id"`                  // For messages forwarded to the chat with the current user (Saved Messages) or to the channel's discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if unknown
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -5220,6 +5470,7 @@ func (messageForwardInfo *MessageForwardInfo) UnmarshalJSON(b []byte) error {
 
 	messageForwardInfo.tdCommon = tempObj.tdCommon
 	messageForwardInfo.Date = tempObj.Date
+	messageForwardInfo.PublicServiceAnnouncementType = tempObj.PublicServiceAnnouncementType
 	messageForwardInfo.FromChatId = tempObj.FromChatId
 	messageForwardInfo.FromMessageId = tempObj.FromMessageId
 
@@ -5848,6 +6099,143 @@ func (chatTypeSecret *ChatTypeSecret) GetChatTypeEnum() ChatTypeEnum {
 	return ChatTypeSecretType
 }
 
+// ChatFilter Represents a filter of user chats
+type ChatFilter struct {
+	tdCommon
+	Title              string  `json:"title"`                // The title of the filter; 1-12 characters without line feeds
+	IconName           string  `json:"icon_name"`            // The icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work".
+	PinnedChatIds      []int64 `json:"pinned_chat_ids"`      // The chat identifiers of pinned chats in the filtered chat list
+	IncludedChatIds    []int64 `json:"included_chat_ids"`    // The chat identifiers of always included chats in the filtered chat list
+	ExcludedChatIds    []int64 `json:"excluded_chat_ids"`    // The chat identifiers of always excluded chats in the filtered chat list
+	ExcludeMuted       bool    `json:"exclude_muted"`        // True, if the muted chats need to be excluded
+	ExcludeRead        bool    `json:"exclude_read"`         // True, if read chats need to be excluded
+	ExcludeArchived    bool    `json:"exclude_archived"`     // True, if archived chats need to be excluded
+	IncludeContacts    bool    `json:"include_contacts"`     // True, if contacts need to be included
+	IncludeNonContacts bool    `json:"include_non_contacts"` // True, if non-contact users need to be included
+	IncludeBots        bool    `json:"include_bots"`         // True, if bots need to be included
+	IncludeGroups      bool    `json:"include_groups"`       // True, if basic groups and supergroups need to be included
+	IncludeChannels    bool    `json:"include_channels"`     // True, if channels need to be included
+}
+
+// MessageType return the string telegram-type of ChatFilter
+func (chatFilter *ChatFilter) MessageType() string {
+	return "chatFilter"
+}
+
+// NewChatFilter creates a new ChatFilter
+//
+// @param title The title of the filter; 1-12 characters without line feeds
+// @param iconName The icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work".
+// @param pinnedChatIds The chat identifiers of pinned chats in the filtered chat list
+// @param includedChatIds The chat identifiers of always included chats in the filtered chat list
+// @param excludedChatIds The chat identifiers of always excluded chats in the filtered chat list
+// @param excludeMuted True, if the muted chats need to be excluded
+// @param excludeRead True, if read chats need to be excluded
+// @param excludeArchived True, if archived chats need to be excluded
+// @param includeContacts True, if contacts need to be included
+// @param includeNonContacts True, if non-contact users need to be included
+// @param includeBots True, if bots need to be included
+// @param includeGroups True, if basic groups and supergroups need to be included
+// @param includeChannels True, if channels need to be included
+func NewChatFilter(title string, iconName string, pinnedChatIds []int64, includedChatIds []int64, excludedChatIds []int64, excludeMuted bool, excludeRead bool, excludeArchived bool, includeContacts bool, includeNonContacts bool, includeBots bool, includeGroups bool, includeChannels bool) *ChatFilter {
+	chatFilterTemp := ChatFilter{
+		tdCommon:           tdCommon{Type: "chatFilter"},
+		Title:              title,
+		IconName:           iconName,
+		PinnedChatIds:      pinnedChatIds,
+		IncludedChatIds:    includedChatIds,
+		ExcludedChatIds:    excludedChatIds,
+		ExcludeMuted:       excludeMuted,
+		ExcludeRead:        excludeRead,
+		ExcludeArchived:    excludeArchived,
+		IncludeContacts:    includeContacts,
+		IncludeNonContacts: includeNonContacts,
+		IncludeBots:        includeBots,
+		IncludeGroups:      includeGroups,
+		IncludeChannels:    includeChannels,
+	}
+
+	return &chatFilterTemp
+}
+
+// ChatFilterInfo Contains basic information about a chat filter
+type ChatFilterInfo struct {
+	tdCommon
+	Id       int32  `json:"id"`        // Unique chat filter identifier
+	Title    string `json:"title"`     // The title of the filter; 1-12 characters without line feeds
+	IconName string `json:"icon_name"` // The icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
+}
+
+// MessageType return the string telegram-type of ChatFilterInfo
+func (chatFilterInfo *ChatFilterInfo) MessageType() string {
+	return "chatFilterInfo"
+}
+
+// NewChatFilterInfo creates a new ChatFilterInfo
+//
+// @param id Unique chat filter identifier
+// @param title The title of the filter; 1-12 characters without line feeds
+// @param iconName The icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
+func NewChatFilterInfo(id int32, title string, iconName string) *ChatFilterInfo {
+	chatFilterInfoTemp := ChatFilterInfo{
+		tdCommon: tdCommon{Type: "chatFilterInfo"},
+		Id:       id,
+		Title:    title,
+		IconName: iconName,
+	}
+
+	return &chatFilterInfoTemp
+}
+
+// RecommendedChatFilter Describes a recommended chat filter
+type RecommendedChatFilter struct {
+	tdCommon
+	Filter      *ChatFilter `json:"filter"`      // The chat filter
+	Description string      `json:"description"` //
+}
+
+// MessageType return the string telegram-type of RecommendedChatFilter
+func (recommendedChatFilter *RecommendedChatFilter) MessageType() string {
+	return "recommendedChatFilter"
+}
+
+// NewRecommendedChatFilter creates a new RecommendedChatFilter
+//
+// @param filter The chat filter
+// @param description
+func NewRecommendedChatFilter(filter *ChatFilter, description string) *RecommendedChatFilter {
+	recommendedChatFilterTemp := RecommendedChatFilter{
+		tdCommon:    tdCommon{Type: "recommendedChatFilter"},
+		Filter:      filter,
+		Description: description,
+	}
+
+	return &recommendedChatFilterTemp
+}
+
+// RecommendedChatFilters Contains a list of recommended chat filters
+type RecommendedChatFilters struct {
+	tdCommon
+	ChatFilters []RecommendedChatFilter `json:"chat_filters"` // List of recommended chat filters
+}
+
+// MessageType return the string telegram-type of RecommendedChatFilters
+func (recommendedChatFilters *RecommendedChatFilters) MessageType() string {
+	return "recommendedChatFilters"
+}
+
+// NewRecommendedChatFilters creates a new RecommendedChatFilters
+//
+// @param chatFilters List of recommended chat filters
+func NewRecommendedChatFilters(chatFilters []RecommendedChatFilter) *RecommendedChatFilters {
+	recommendedChatFiltersTemp := RecommendedChatFilters{
+		tdCommon:    tdCommon{Type: "recommendedChatFilters"},
+		ChatFilters: chatFilters,
+	}
+
+	return &recommendedChatFiltersTemp
+}
+
 // ChatListMain A main list of chats
 type ChatListMain struct {
 	tdCommon
@@ -5898,20 +6286,187 @@ func (chatListArchive *ChatListArchive) GetChatListEnum() ChatListEnum {
 	return ChatListArchiveType
 }
 
+// ChatListFilter A list of chats belonging to a chat filter
+type ChatListFilter struct {
+	tdCommon
+	ChatFilterId int32 `json:"chat_filter_id"` // Chat filter identifier
+}
+
+// MessageType return the string telegram-type of ChatListFilter
+func (chatListFilter *ChatListFilter) MessageType() string {
+	return "chatListFilter"
+}
+
+// NewChatListFilter creates a new ChatListFilter
+//
+// @param chatFilterId Chat filter identifier
+func NewChatListFilter(chatFilterId int32) *ChatListFilter {
+	chatListFilterTemp := ChatListFilter{
+		tdCommon:     tdCommon{Type: "chatListFilter"},
+		ChatFilterId: chatFilterId,
+	}
+
+	return &chatListFilterTemp
+}
+
+// GetChatListEnum return the enum type of this object
+func (chatListFilter *ChatListFilter) GetChatListEnum() ChatListEnum {
+	return ChatListFilterType
+}
+
+// ChatLists Contains a list of chat lists
+type ChatLists struct {
+	tdCommon
+	ChatLists []ChatList `json:"chat_lists"` // List of chat lists
+}
+
+// MessageType return the string telegram-type of ChatLists
+func (chatLists *ChatLists) MessageType() string {
+	return "chatLists"
+}
+
+// NewChatLists creates a new ChatLists
+//
+// @param chatLists List of chat lists
+func NewChatLists(chatLists []ChatList) *ChatLists {
+	chatListsTemp := ChatLists{
+		tdCommon:  tdCommon{Type: "chatLists"},
+		ChatLists: chatLists,
+	}
+
+	return &chatListsTemp
+}
+
+// ChatSourceMtprotoProxy The chat is sponsored by the user's MTProxy server
+type ChatSourceMtprotoProxy struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of ChatSourceMtprotoProxy
+func (chatSourceMtprotoProxy *ChatSourceMtprotoProxy) MessageType() string {
+	return "chatSourceMtprotoProxy"
+}
+
+// NewChatSourceMtprotoProxy creates a new ChatSourceMtprotoProxy
+//
+func NewChatSourceMtprotoProxy() *ChatSourceMtprotoProxy {
+	chatSourceMtprotoProxyTemp := ChatSourceMtprotoProxy{
+		tdCommon: tdCommon{Type: "chatSourceMtprotoProxy"},
+	}
+
+	return &chatSourceMtprotoProxyTemp
+}
+
+// GetChatSourceEnum return the enum type of this object
+func (chatSourceMtprotoProxy *ChatSourceMtprotoProxy) GetChatSourceEnum() ChatSourceEnum {
+	return ChatSourceMtprotoProxyType
+}
+
+// ChatSourcePublicServiceAnnouncement The chat contains a public service announcement
+type ChatSourcePublicServiceAnnouncement struct {
+	tdCommon
+	Type string `json:"type"` // The type of the announcement
+	Text string `json:"text"` // The text of the announcement
+}
+
+// MessageType return the string telegram-type of ChatSourcePublicServiceAnnouncement
+func (chatSourcePublicServiceAnnouncement *ChatSourcePublicServiceAnnouncement) MessageType() string {
+	return "chatSourcePublicServiceAnnouncement"
+}
+
+// NewChatSourcePublicServiceAnnouncement creates a new ChatSourcePublicServiceAnnouncement
+//
+// @param typeParam The type of the announcement
+// @param text The text of the announcement
+func NewChatSourcePublicServiceAnnouncement(typeParam string, text string) *ChatSourcePublicServiceAnnouncement {
+	chatSourcePublicServiceAnnouncementTemp := ChatSourcePublicServiceAnnouncement{
+		tdCommon: tdCommon{Type: "chatSourcePublicServiceAnnouncement"},
+		Type:     typeParam,
+		Text:     text,
+	}
+
+	return &chatSourcePublicServiceAnnouncementTemp
+}
+
+// GetChatSourceEnum return the enum type of this object
+func (chatSourcePublicServiceAnnouncement *ChatSourcePublicServiceAnnouncement) GetChatSourceEnum() ChatSourceEnum {
+	return ChatSourcePublicServiceAnnouncementType
+}
+
+// ChatPosition Describes a position of a chat in a chat list
+type ChatPosition struct {
+	tdCommon
+	List     ChatList   `json:"list"`      // The chat list
+	Order    JSONInt64  `json:"order"`     // A parameter used to determine order of the chat in the chat list. Chats must be sorted by the pair (order, chat.id) in descending order
+	IsPinned bool       `json:"is_pinned"` // True, if the chat is pinned in the chat list
+	Source   ChatSource `json:"source"`    // Source of the chat in the chat list; may be null
+}
+
+// MessageType return the string telegram-type of ChatPosition
+func (chatPosition *ChatPosition) MessageType() string {
+	return "chatPosition"
+}
+
+// NewChatPosition creates a new ChatPosition
+//
+// @param list The chat list
+// @param order A parameter used to determine order of the chat in the chat list. Chats must be sorted by the pair (order, chat.id) in descending order
+// @param isPinned True, if the chat is pinned in the chat list
+// @param source Source of the chat in the chat list; may be null
+func NewChatPosition(list ChatList, order JSONInt64, isPinned bool, source ChatSource) *ChatPosition {
+	chatPositionTemp := ChatPosition{
+		tdCommon: tdCommon{Type: "chatPosition"},
+		List:     list,
+		Order:    order,
+		IsPinned: isPinned,
+		Source:   source,
+	}
+
+	return &chatPositionTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (chatPosition *ChatPosition) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Order    JSONInt64 `json:"order"`     // A parameter used to determine order of the chat in the chat list. Chats must be sorted by the pair (order, chat.id) in descending order
+		IsPinned bool      `json:"is_pinned"` // True, if the chat is pinned in the chat list
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	chatPosition.tdCommon = tempObj.tdCommon
+	chatPosition.Order = tempObj.Order
+	chatPosition.IsPinned = tempObj.IsPinned
+
+	fieldList, _ := unmarshalChatList(objMap["list"])
+	chatPosition.List = fieldList
+
+	fieldSource, _ := unmarshalChatSource(objMap["source"])
+	chatPosition.Source = fieldSource
+
+	return nil
+}
+
 // Chat A chat. (Can be a private chat, basic group, supergroup, or secret chat)
 type Chat struct {
 	tdCommon
 	Id                         int64                     `json:"id"`                           // Chat unique identifier
 	Type                       ChatType                  `json:"type"`                         // Type of the chat
-	ChatList                   ChatList                  `json:"chat_list"`                    // A chat list to which the chat belongs; may be null
 	Title                      string                    `json:"title"`                        // Chat title
 	Photo                      *ChatPhoto                `json:"photo"`                        // Chat photo; may be null
 	Permissions                *ChatPermissions          `json:"permissions"`                  // Actions that non-administrator chat members are allowed to take in the chat
 	LastMessage                *Message                  `json:"last_message"`                 // Last message in the chat; may be null
-	Order                      JSONInt64                 `json:"order"`                        // Descending parameter by which chats are sorted in the main chat list. If the order number of two chats is the same, they must be sorted in descending order by ID. If 0, the position of the chat in the list is undetermined
-	IsPinned                   bool                      `json:"is_pinned"`                    // True, if the chat is pinned
+	Positions                  []ChatPosition            `json:"positions"`                    // Positions of the chat in chat lists
 	IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
-	IsSponsored                bool                      `json:"is_sponsored"`                 // True, if the chat is sponsored by the user's MTProxy server
 	HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
 	CanBeDeletedOnlyForSelf    bool                      `json:"can_be_deleted_only_for_self"` // True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 	CanBeDeletedForAllUsers    bool                      `json:"can_be_deleted_for_all_users"` // True, if the chat messages can be deleted for all users
@@ -5926,7 +6481,7 @@ type Chat struct {
 	PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 	ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 	DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
-	ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
+	ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
 }
 
 // MessageType return the string telegram-type of Chat
@@ -5938,15 +6493,12 @@ func (chat *Chat) MessageType() string {
 //
 // @param id Chat unique identifier
 // @param typeParam Type of the chat
-// @param chatList A chat list to which the chat belongs; may be null
 // @param title Chat title
 // @param photo Chat photo; may be null
 // @param permissions Actions that non-administrator chat members are allowed to take in the chat
 // @param lastMessage Last message in the chat; may be null
-// @param order Descending parameter by which chats are sorted in the main chat list. If the order number of two chats is the same, they must be sorted in descending order by ID. If 0, the position of the chat in the list is undetermined
-// @param isPinned True, if the chat is pinned
+// @param positions Positions of the chat in chat lists
 // @param isMarkedAsUnread True, if the chat is marked as unread
-// @param isSponsored True, if the chat is sponsored by the user's MTProxy server
 // @param hasScheduledMessages True, if the chat has scheduled messages
 // @param canBeDeletedOnlyForSelf True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 // @param canBeDeletedForAllUsers True, if the chat messages can be deleted for all users
@@ -5961,21 +6513,18 @@ func (chat *Chat) MessageType() string {
 // @param pinnedMessageId Identifier of the pinned message in the chat; 0 if none
 // @param replyMarkupMessageId Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 // @param draftMessage A draft of a message in the chat; may be null
-// @param clientData Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
-func NewChat(id int64, typeParam ChatType, chatList ChatList, title string, photo *ChatPhoto, permissions *ChatPermissions, lastMessage *Message, order JSONInt64, isPinned bool, isMarkedAsUnread bool, isSponsored bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, pinnedMessageId int64, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
+// @param clientData Contains client-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
+func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhoto, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, pinnedMessageId int64, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
 	chatTemp := Chat{
 		tdCommon:                   tdCommon{Type: "chat"},
 		Id:                         id,
 		Type:                       typeParam,
-		ChatList:                   chatList,
 		Title:                      title,
 		Photo:                      photo,
 		Permissions:                permissions,
 		LastMessage:                lastMessage,
-		Order:                      order,
-		IsPinned:                   isPinned,
+		Positions:                  positions,
 		IsMarkedAsUnread:           isMarkedAsUnread,
-		IsSponsored:                isSponsored,
 		HasScheduledMessages:       hasScheduledMessages,
 		CanBeDeletedOnlyForSelf:    canBeDeletedOnlyForSelf,
 		CanBeDeletedForAllUsers:    canBeDeletedForAllUsers,
@@ -6010,10 +6559,8 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		Photo                      *ChatPhoto                `json:"photo"`                        // Chat photo; may be null
 		Permissions                *ChatPermissions          `json:"permissions"`                  // Actions that non-administrator chat members are allowed to take in the chat
 		LastMessage                *Message                  `json:"last_message"`                 // Last message in the chat; may be null
-		Order                      JSONInt64                 `json:"order"`                        // Descending parameter by which chats are sorted in the main chat list. If the order number of two chats is the same, they must be sorted in descending order by ID. If 0, the position of the chat in the list is undetermined
-		IsPinned                   bool                      `json:"is_pinned"`                    // True, if the chat is pinned
+		Positions                  []ChatPosition            `json:"positions"`                    // Positions of the chat in chat lists
 		IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
-		IsSponsored                bool                      `json:"is_sponsored"`                 // True, if the chat is sponsored by the user's MTProxy server
 		HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
 		CanBeDeletedOnlyForSelf    bool                      `json:"can_be_deleted_only_for_self"` // True, if the chat messages can be deleted only for the current user while other users will continue to see the messages
 		CanBeDeletedForAllUsers    bool                      `json:"can_be_deleted_for_all_users"` // True, if the chat messages can be deleted for all users
@@ -6027,7 +6574,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 		ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 		DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
-		ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat position or local chat notification settings can be stored here.) Persistent if the message database is used
+		ClientData                 string                    `json:"client_data"`                  // Contains client-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -6040,10 +6587,8 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 	chat.Photo = tempObj.Photo
 	chat.Permissions = tempObj.Permissions
 	chat.LastMessage = tempObj.LastMessage
-	chat.Order = tempObj.Order
-	chat.IsPinned = tempObj.IsPinned
+	chat.Positions = tempObj.Positions
 	chat.IsMarkedAsUnread = tempObj.IsMarkedAsUnread
-	chat.IsSponsored = tempObj.IsSponsored
 	chat.HasScheduledMessages = tempObj.HasScheduledMessages
 	chat.CanBeDeletedOnlyForSelf = tempObj.CanBeDeletedOnlyForSelf
 	chat.CanBeDeletedForAllUsers = tempObj.CanBeDeletedForAllUsers
@@ -6061,9 +6606,6 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 
 	fieldType, _ := unmarshalChatType(objMap["type"])
 	chat.Type = fieldType
-
-	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
-	chat.ChatList = fieldChatList
 
 	fieldActionBar, _ := unmarshalChatActionBar(objMap["action_bar"])
 	chat.ActionBar = fieldActionBar
@@ -14212,12 +14754,13 @@ func (inputMessageText *InputMessageText) GetInputMessageContentEnum() InputMess
 // InputMessageAnimation An animation message (GIF-style).
 type InputMessageAnimation struct {
 	tdCommon
-	Animation InputFile       `json:"animation"` // Animation file to be sent
-	Thumbnail *InputThumbnail `json:"thumbnail"` // Animation thumbnail, if available
-	Duration  int32           `json:"duration"`  // Duration of the animation, in seconds
-	Width     int32           `json:"width"`     // Width of the animation; may be replaced by the server
-	Height    int32           `json:"height"`    // Height of the animation; may be replaced by the server
-	Caption   *FormattedText  `json:"caption"`   // Animation caption; 0-GetOption("message_caption_length_max") characters
+	Animation           InputFile       `json:"animation"`              // Animation file to be sent
+	Thumbnail           *InputThumbnail `json:"thumbnail"`              // Animation thumbnail, if available
+	AddedStickerFileIds []int32         `json:"added_sticker_file_ids"` // File identifiers of the stickers added to the animation, if applicable
+	Duration            int32           `json:"duration"`               // Duration of the animation, in seconds
+	Width               int32           `json:"width"`                  // Width of the animation; may be replaced by the server
+	Height              int32           `json:"height"`                 // Height of the animation; may be replaced by the server
+	Caption             *FormattedText  `json:"caption"`                // Animation caption; 0-GetOption("message_caption_length_max") characters
 }
 
 // MessageType return the string telegram-type of InputMessageAnimation
@@ -14229,19 +14772,21 @@ func (inputMessageAnimation *InputMessageAnimation) MessageType() string {
 //
 // @param animation Animation file to be sent
 // @param thumbnail Animation thumbnail, if available
+// @param addedStickerFileIds File identifiers of the stickers added to the animation, if applicable
 // @param duration Duration of the animation, in seconds
 // @param width Width of the animation; may be replaced by the server
 // @param height Height of the animation; may be replaced by the server
 // @param caption Animation caption; 0-GetOption("message_caption_length_max") characters
-func NewInputMessageAnimation(animation InputFile, thumbnail *InputThumbnail, duration int32, width int32, height int32, caption *FormattedText) *InputMessageAnimation {
+func NewInputMessageAnimation(animation InputFile, thumbnail *InputThumbnail, addedStickerFileIds []int32, duration int32, width int32, height int32, caption *FormattedText) *InputMessageAnimation {
 	inputMessageAnimationTemp := InputMessageAnimation{
-		tdCommon:  tdCommon{Type: "inputMessageAnimation"},
-		Animation: animation,
-		Thumbnail: thumbnail,
-		Duration:  duration,
-		Width:     width,
-		Height:    height,
-		Caption:   caption,
+		tdCommon:            tdCommon{Type: "inputMessageAnimation"},
+		Animation:           animation,
+		Thumbnail:           thumbnail,
+		AddedStickerFileIds: addedStickerFileIds,
+		Duration:            duration,
+		Width:               width,
+		Height:              height,
+		Caption:             caption,
 	}
 
 	return &inputMessageAnimationTemp
@@ -14256,11 +14801,12 @@ func (inputMessageAnimation *InputMessageAnimation) UnmarshalJSON(b []byte) erro
 	}
 	tempObj := struct {
 		tdCommon
-		Thumbnail *InputThumbnail `json:"thumbnail"` // Animation thumbnail, if available
-		Duration  int32           `json:"duration"`  // Duration of the animation, in seconds
-		Width     int32           `json:"width"`     // Width of the animation; may be replaced by the server
-		Height    int32           `json:"height"`    // Height of the animation; may be replaced by the server
-		Caption   *FormattedText  `json:"caption"`   // Animation caption; 0-GetOption("message_caption_length_max") characters
+		Thumbnail           *InputThumbnail `json:"thumbnail"`              // Animation thumbnail, if available
+		AddedStickerFileIds []int32         `json:"added_sticker_file_ids"` // File identifiers of the stickers added to the animation, if applicable
+		Duration            int32           `json:"duration"`               // Duration of the animation, in seconds
+		Width               int32           `json:"width"`                  // Width of the animation; may be replaced by the server
+		Height              int32           `json:"height"`                 // Height of the animation; may be replaced by the server
+		Caption             *FormattedText  `json:"caption"`                // Animation caption; 0-GetOption("message_caption_length_max") characters
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -14269,6 +14815,7 @@ func (inputMessageAnimation *InputMessageAnimation) UnmarshalJSON(b []byte) erro
 
 	inputMessageAnimation.tdCommon = tempObj.tdCommon
 	inputMessageAnimation.Thumbnail = tempObj.Thumbnail
+	inputMessageAnimation.AddedStickerFileIds = tempObj.AddedStickerFileIds
 	inputMessageAnimation.Duration = tempObj.Duration
 	inputMessageAnimation.Width = tempObj.Width
 	inputMessageAnimation.Height = tempObj.Height
@@ -15520,6 +16067,31 @@ func (searchMessagesFilterUnreadMention *SearchMessagesFilterUnreadMention) GetS
 	return SearchMessagesFilterUnreadMentionType
 }
 
+// SearchMessagesFilterFailedToSend Returns only failed to send messages. This filter can be used only if the message database is used
+type SearchMessagesFilterFailedToSend struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of SearchMessagesFilterFailedToSend
+func (searchMessagesFilterFailedToSend *SearchMessagesFilterFailedToSend) MessageType() string {
+	return "searchMessagesFilterFailedToSend"
+}
+
+// NewSearchMessagesFilterFailedToSend creates a new SearchMessagesFilterFailedToSend
+//
+func NewSearchMessagesFilterFailedToSend() *SearchMessagesFilterFailedToSend {
+	searchMessagesFilterFailedToSendTemp := SearchMessagesFilterFailedToSend{
+		tdCommon: tdCommon{Type: "searchMessagesFilterFailedToSend"},
+	}
+
+	return &searchMessagesFilterFailedToSendTemp
+}
+
+// GetSearchMessagesFilterEnum return the enum type of this object
+func (searchMessagesFilterFailedToSend *SearchMessagesFilterFailedToSend) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
+	return SearchMessagesFilterFailedToSendType
+}
+
 // ChatActionTyping The user is typing a message
 type ChatActionTyping struct {
 	tdCommon
@@ -16068,7 +16640,7 @@ type StickerSet struct {
 	Id          JSONInt64  `json:"id"`           // Identifier of the sticker set
 	Title       string     `json:"title"`        // Title of the sticker set
 	Name        string     `json:"name"`         // Name of the sticker set
-	Thumbnail   *PhotoSize `json:"thumbnail"`    // Sticker set thumbnail in WEBP format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
+	Thumbnail   *Thumbnail `json:"thumbnail"`    // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
 	IsInstalled bool       `json:"is_installed"` // True, if the sticker set has been installed by the current user
 	IsArchived  bool       `json:"is_archived"`  // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 	IsOfficial  bool       `json:"is_official"`  // True, if the sticker set is official
@@ -16089,7 +16661,7 @@ func (stickerSet *StickerSet) MessageType() string {
 // @param id Identifier of the sticker set
 // @param title Title of the sticker set
 // @param name Name of the sticker set
-// @param thumbnail Sticker set thumbnail in WEBP format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
+// @param thumbnail Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
 // @param isInstalled True, if the sticker set has been installed by the current user
 // @param isArchived True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 // @param isOfficial True, if the sticker set is official
@@ -16098,7 +16670,7 @@ func (stickerSet *StickerSet) MessageType() string {
 // @param isViewed True for already viewed trending sticker sets
 // @param stickers List of stickers in this set
 // @param emojis A list of emoji corresponding to the stickers in the same order. The list is only for informational purposes, because a sticker is always sent with a fixed emoji from the corresponding Sticker object
-func NewStickerSet(id JSONInt64, title string, name string, thumbnail *PhotoSize, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, stickers []Sticker, emojis []Emojis) *StickerSet {
+func NewStickerSet(id JSONInt64, title string, name string, thumbnail *Thumbnail, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, stickers []Sticker, emojis []Emojis) *StickerSet {
 	stickerSetTemp := StickerSet{
 		tdCommon:    tdCommon{Type: "stickerSet"},
 		Id:          id,
@@ -16124,7 +16696,7 @@ type StickerSetInfo struct {
 	Id          JSONInt64  `json:"id"`           // Identifier of the sticker set
 	Title       string     `json:"title"`        // Title of the sticker set
 	Name        string     `json:"name"`         // Name of the sticker set
-	Thumbnail   *PhotoSize `json:"thumbnail"`    // Sticker set thumbnail in WEBP format with width and height 100; may be null
+	Thumbnail   *Thumbnail `json:"thumbnail"`    // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
 	IsInstalled bool       `json:"is_installed"` // True, if the sticker set has been installed by current user
 	IsArchived  bool       `json:"is_archived"`  // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 	IsOfficial  bool       `json:"is_official"`  // True, if the sticker set is official
@@ -16145,7 +16717,7 @@ func (stickerSetInfo *StickerSetInfo) MessageType() string {
 // @param id Identifier of the sticker set
 // @param title Title of the sticker set
 // @param name Name of the sticker set
-// @param thumbnail Sticker set thumbnail in WEBP format with width and height 100; may be null
+// @param thumbnail Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
 // @param isInstalled True, if the sticker set has been installed by current user
 // @param isArchived True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 // @param isOfficial True, if the sticker set is official
@@ -16154,7 +16726,7 @@ func (stickerSetInfo *StickerSetInfo) MessageType() string {
 // @param isViewed True for already viewed trending sticker sets
 // @param size Total number of stickers in the set
 // @param covers Contains up to the first 5 stickers from the set, depending on the context. If the client needs more stickers the full set should be requested
-func NewStickerSetInfo(id JSONInt64, title string, name string, thumbnail *PhotoSize, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, size int32, covers []Sticker) *StickerSetInfo {
+func NewStickerSetInfo(id JSONInt64, title string, name string, thumbnail *Thumbnail, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, size int32, covers []Sticker) *StickerSetInfo {
 	stickerSetInfoTemp := StickerSetInfo{
 		tdCommon:    tdCommon{Type: "stickerSetInfo"},
 		Id:          id,
@@ -16969,55 +17541,61 @@ func NewHttpUrl(url string) *HttpUrl {
 	return &httpUrlTemp
 }
 
-// InputInlineQueryResultAnimatedGif Represents a link to an animated GIF
-type InputInlineQueryResultAnimatedGif struct {
+// InputInlineQueryResultAnimation Represents a link to an animated GIF or an animated (i.e. without sound) H.264/MPEG-4 AVC video
+type InputInlineQueryResultAnimation struct {
 	tdCommon
 	Id                  string              `json:"id"`                    // Unique identifier of the query result
 	Title               string              `json:"title"`                 // Title of the query result
-	ThumbnailUrl        string              `json:"thumbnail_url"`         // URL of the static result thumbnail (JPEG or GIF), if it exists
-	GifUrl              string              `json:"gif_url"`               // The URL of the GIF-file (file size must not exceed 1MB)
-	GifDuration         int32               `json:"gif_duration"`          // Duration of the GIF, in seconds
-	GifWidth            int32               `json:"gif_width"`             // Width of the GIF
-	GifHeight           int32               `json:"gif_height"`            // Height of the GIF
+	ThumbnailUrl        string              `json:"thumbnail_url"`         // URL of the result thumbnail (JPEG, GIF, or MPEG4), if it exists
+	ThumbnailMimeType   string              `json:"thumbnail_mime_type"`   // MIME type of the video thumbnail. If non-empty, must be one of "image/jpeg", "image/gif" and "video/mp4"
+	VideoUrl            string              `json:"video_url"`             // The URL of the video file (file size must not exceed 1MB)
+	VideoMimeType       string              `json:"video_mime_type"`       // MIME type of the video file. Must be one of "image/gif" and "video/mp4"
+	VideoDuration       int32               `json:"video_duration"`        // Duration of the video, in seconds
+	VideoWidth          int32               `json:"video_width"`           // Width of the video
+	VideoHeight         int32               `json:"video_height"`          // Height of the video
 	ReplyMarkup         ReplyMarkup         `json:"reply_markup"`          // The message reply markup. Must be of type replyMarkupInlineKeyboard or null
 	InputMessageContent InputMessageContent `json:"input_message_content"` // The content of the message to be sent. Must be one of the following types: InputMessageText, InputMessageAnimation, InputMessageLocation, InputMessageVenue or InputMessageContact
 }
 
-// MessageType return the string telegram-type of InputInlineQueryResultAnimatedGif
-func (inputInlineQueryResultAnimatedGif *InputInlineQueryResultAnimatedGif) MessageType() string {
-	return "inputInlineQueryResultAnimatedGif"
+// MessageType return the string telegram-type of InputInlineQueryResultAnimation
+func (inputInlineQueryResultAnimation *InputInlineQueryResultAnimation) MessageType() string {
+	return "inputInlineQueryResultAnimation"
 }
 
-// NewInputInlineQueryResultAnimatedGif creates a new InputInlineQueryResultAnimatedGif
+// NewInputInlineQueryResultAnimation creates a new InputInlineQueryResultAnimation
 //
 // @param id Unique identifier of the query result
 // @param title Title of the query result
-// @param thumbnailUrl URL of the static result thumbnail (JPEG or GIF), if it exists
-// @param gifUrl The URL of the GIF-file (file size must not exceed 1MB)
-// @param gifDuration Duration of the GIF, in seconds
-// @param gifWidth Width of the GIF
-// @param gifHeight Height of the GIF
+// @param thumbnailUrl URL of the result thumbnail (JPEG, GIF, or MPEG4), if it exists
+// @param thumbnailMimeType MIME type of the video thumbnail. If non-empty, must be one of "image/jpeg", "image/gif" and "video/mp4"
+// @param videoUrl The URL of the video file (file size must not exceed 1MB)
+// @param videoMimeType MIME type of the video file. Must be one of "image/gif" and "video/mp4"
+// @param videoDuration Duration of the video, in seconds
+// @param videoWidth Width of the video
+// @param videoHeight Height of the video
 // @param replyMarkup The message reply markup. Must be of type replyMarkupInlineKeyboard or null
 // @param inputMessageContent The content of the message to be sent. Must be one of the following types: InputMessageText, InputMessageAnimation, InputMessageLocation, InputMessageVenue or InputMessageContact
-func NewInputInlineQueryResultAnimatedGif(id string, title string, thumbnailUrl string, gifUrl string, gifDuration int32, gifWidth int32, gifHeight int32, replyMarkup ReplyMarkup, inputMessageContent InputMessageContent) *InputInlineQueryResultAnimatedGif {
-	inputInlineQueryResultAnimatedGifTemp := InputInlineQueryResultAnimatedGif{
-		tdCommon:            tdCommon{Type: "inputInlineQueryResultAnimatedGif"},
+func NewInputInlineQueryResultAnimation(id string, title string, thumbnailUrl string, thumbnailMimeType string, videoUrl string, videoMimeType string, videoDuration int32, videoWidth int32, videoHeight int32, replyMarkup ReplyMarkup, inputMessageContent InputMessageContent) *InputInlineQueryResultAnimation {
+	inputInlineQueryResultAnimationTemp := InputInlineQueryResultAnimation{
+		tdCommon:            tdCommon{Type: "inputInlineQueryResultAnimation"},
 		Id:                  id,
 		Title:               title,
 		ThumbnailUrl:        thumbnailUrl,
-		GifUrl:              gifUrl,
-		GifDuration:         gifDuration,
-		GifWidth:            gifWidth,
-		GifHeight:           gifHeight,
+		ThumbnailMimeType:   thumbnailMimeType,
+		VideoUrl:            videoUrl,
+		VideoMimeType:       videoMimeType,
+		VideoDuration:       videoDuration,
+		VideoWidth:          videoWidth,
+		VideoHeight:         videoHeight,
 		ReplyMarkup:         replyMarkup,
 		InputMessageContent: inputMessageContent,
 	}
 
-	return &inputInlineQueryResultAnimatedGifTemp
+	return &inputInlineQueryResultAnimationTemp
 }
 
 // UnmarshalJSON unmarshal to json
-func (inputInlineQueryResultAnimatedGif *InputInlineQueryResultAnimatedGif) UnmarshalJSON(b []byte) error {
+func (inputInlineQueryResultAnimation *InputInlineQueryResultAnimation) UnmarshalJSON(b []byte) error {
 	var objMap map[string]*json.RawMessage
 	err := json.Unmarshal(b, &objMap)
 	if err != nil {
@@ -17025,13 +17603,15 @@ func (inputInlineQueryResultAnimatedGif *InputInlineQueryResultAnimatedGif) Unma
 	}
 	tempObj := struct {
 		tdCommon
-		Id           string `json:"id"`            // Unique identifier of the query result
-		Title        string `json:"title"`         // Title of the query result
-		ThumbnailUrl string `json:"thumbnail_url"` // URL of the static result thumbnail (JPEG or GIF), if it exists
-		GifUrl       string `json:"gif_url"`       // The URL of the GIF-file (file size must not exceed 1MB)
-		GifDuration  int32  `json:"gif_duration"`  // Duration of the GIF, in seconds
-		GifWidth     int32  `json:"gif_width"`     // Width of the GIF
-		GifHeight    int32  `json:"gif_height"`    // Height of the GIF
+		Id                string `json:"id"`                  // Unique identifier of the query result
+		Title             string `json:"title"`               // Title of the query result
+		ThumbnailUrl      string `json:"thumbnail_url"`       // URL of the result thumbnail (JPEG, GIF, or MPEG4), if it exists
+		ThumbnailMimeType string `json:"thumbnail_mime_type"` // MIME type of the video thumbnail. If non-empty, must be one of "image/jpeg", "image/gif" and "video/mp4"
+		VideoUrl          string `json:"video_url"`           // The URL of the video file (file size must not exceed 1MB)
+		VideoMimeType     string `json:"video_mime_type"`     // MIME type of the video file. Must be one of "image/gif" and "video/mp4"
+		VideoDuration     int32  `json:"video_duration"`      // Duration of the video, in seconds
+		VideoWidth        int32  `json:"video_width"`         // Width of the video
+		VideoHeight       int32  `json:"video_height"`        // Height of the video
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -17039,120 +17619,29 @@ func (inputInlineQueryResultAnimatedGif *InputInlineQueryResultAnimatedGif) Unma
 		return err
 	}
 
-	inputInlineQueryResultAnimatedGif.tdCommon = tempObj.tdCommon
-	inputInlineQueryResultAnimatedGif.Id = tempObj.Id
-	inputInlineQueryResultAnimatedGif.Title = tempObj.Title
-	inputInlineQueryResultAnimatedGif.ThumbnailUrl = tempObj.ThumbnailUrl
-	inputInlineQueryResultAnimatedGif.GifUrl = tempObj.GifUrl
-	inputInlineQueryResultAnimatedGif.GifDuration = tempObj.GifDuration
-	inputInlineQueryResultAnimatedGif.GifWidth = tempObj.GifWidth
-	inputInlineQueryResultAnimatedGif.GifHeight = tempObj.GifHeight
+	inputInlineQueryResultAnimation.tdCommon = tempObj.tdCommon
+	inputInlineQueryResultAnimation.Id = tempObj.Id
+	inputInlineQueryResultAnimation.Title = tempObj.Title
+	inputInlineQueryResultAnimation.ThumbnailUrl = tempObj.ThumbnailUrl
+	inputInlineQueryResultAnimation.ThumbnailMimeType = tempObj.ThumbnailMimeType
+	inputInlineQueryResultAnimation.VideoUrl = tempObj.VideoUrl
+	inputInlineQueryResultAnimation.VideoMimeType = tempObj.VideoMimeType
+	inputInlineQueryResultAnimation.VideoDuration = tempObj.VideoDuration
+	inputInlineQueryResultAnimation.VideoWidth = tempObj.VideoWidth
+	inputInlineQueryResultAnimation.VideoHeight = tempObj.VideoHeight
 
 	fieldReplyMarkup, _ := unmarshalReplyMarkup(objMap["reply_markup"])
-	inputInlineQueryResultAnimatedGif.ReplyMarkup = fieldReplyMarkup
+	inputInlineQueryResultAnimation.ReplyMarkup = fieldReplyMarkup
 
 	fieldInputMessageContent, _ := unmarshalInputMessageContent(objMap["input_message_content"])
-	inputInlineQueryResultAnimatedGif.InputMessageContent = fieldInputMessageContent
+	inputInlineQueryResultAnimation.InputMessageContent = fieldInputMessageContent
 
 	return nil
 }
 
 // GetInputInlineQueryResultEnum return the enum type of this object
-func (inputInlineQueryResultAnimatedGif *InputInlineQueryResultAnimatedGif) GetInputInlineQueryResultEnum() InputInlineQueryResultEnum {
-	return InputInlineQueryResultAnimatedGifType
-}
-
-// InputInlineQueryResultAnimatedMpeg4 Represents a link to an animated (i.e. without sound) H.264/MPEG-4 AVC video
-type InputInlineQueryResultAnimatedMpeg4 struct {
-	tdCommon
-	Id                  string              `json:"id"`                    // Unique identifier of the query result
-	Title               string              `json:"title"`                 // Title of the result
-	ThumbnailUrl        string              `json:"thumbnail_url"`         // URL of the static result thumbnail (JPEG or GIF), if it exists
-	Mpeg4Url            string              `json:"mpeg4_url"`             // The URL of the MPEG4-file (file size must not exceed 1MB)
-	Mpeg4Duration       int32               `json:"mpeg4_duration"`        // Duration of the video, in seconds
-	Mpeg4Width          int32               `json:"mpeg4_width"`           // Width of the video
-	Mpeg4Height         int32               `json:"mpeg4_height"`          // Height of the video
-	ReplyMarkup         ReplyMarkup         `json:"reply_markup"`          // The message reply markup. Must be of type replyMarkupInlineKeyboard or null
-	InputMessageContent InputMessageContent `json:"input_message_content"` // The content of the message to be sent. Must be one of the following types: InputMessageText, InputMessageAnimation, InputMessageLocation, InputMessageVenue or InputMessageContact
-}
-
-// MessageType return the string telegram-type of InputInlineQueryResultAnimatedMpeg4
-func (inputInlineQueryResultAnimatedMpeg4 *InputInlineQueryResultAnimatedMpeg4) MessageType() string {
-	return "inputInlineQueryResultAnimatedMpeg4"
-}
-
-// NewInputInlineQueryResultAnimatedMpeg4 creates a new InputInlineQueryResultAnimatedMpeg4
-//
-// @param id Unique identifier of the query result
-// @param title Title of the result
-// @param thumbnailUrl URL of the static result thumbnail (JPEG or GIF), if it exists
-// @param mpeg4Url The URL of the MPEG4-file (file size must not exceed 1MB)
-// @param mpeg4Duration Duration of the video, in seconds
-// @param mpeg4Width Width of the video
-// @param mpeg4Height Height of the video
-// @param replyMarkup The message reply markup. Must be of type replyMarkupInlineKeyboard or null
-// @param inputMessageContent The content of the message to be sent. Must be one of the following types: InputMessageText, InputMessageAnimation, InputMessageLocation, InputMessageVenue or InputMessageContact
-func NewInputInlineQueryResultAnimatedMpeg4(id string, title string, thumbnailUrl string, mpeg4Url string, mpeg4Duration int32, mpeg4Width int32, mpeg4Height int32, replyMarkup ReplyMarkup, inputMessageContent InputMessageContent) *InputInlineQueryResultAnimatedMpeg4 {
-	inputInlineQueryResultAnimatedMpeg4Temp := InputInlineQueryResultAnimatedMpeg4{
-		tdCommon:            tdCommon{Type: "inputInlineQueryResultAnimatedMpeg4"},
-		Id:                  id,
-		Title:               title,
-		ThumbnailUrl:        thumbnailUrl,
-		Mpeg4Url:            mpeg4Url,
-		Mpeg4Duration:       mpeg4Duration,
-		Mpeg4Width:          mpeg4Width,
-		Mpeg4Height:         mpeg4Height,
-		ReplyMarkup:         replyMarkup,
-		InputMessageContent: inputMessageContent,
-	}
-
-	return &inputInlineQueryResultAnimatedMpeg4Temp
-}
-
-// UnmarshalJSON unmarshal to json
-func (inputInlineQueryResultAnimatedMpeg4 *InputInlineQueryResultAnimatedMpeg4) UnmarshalJSON(b []byte) error {
-	var objMap map[string]*json.RawMessage
-	err := json.Unmarshal(b, &objMap)
-	if err != nil {
-		return err
-	}
-	tempObj := struct {
-		tdCommon
-		Id            string `json:"id"`             // Unique identifier of the query result
-		Title         string `json:"title"`          // Title of the result
-		ThumbnailUrl  string `json:"thumbnail_url"`  // URL of the static result thumbnail (JPEG or GIF), if it exists
-		Mpeg4Url      string `json:"mpeg4_url"`      // The URL of the MPEG4-file (file size must not exceed 1MB)
-		Mpeg4Duration int32  `json:"mpeg4_duration"` // Duration of the video, in seconds
-		Mpeg4Width    int32  `json:"mpeg4_width"`    // Width of the video
-		Mpeg4Height   int32  `json:"mpeg4_height"`   // Height of the video
-
-	}{}
-	err = json.Unmarshal(b, &tempObj)
-	if err != nil {
-		return err
-	}
-
-	inputInlineQueryResultAnimatedMpeg4.tdCommon = tempObj.tdCommon
-	inputInlineQueryResultAnimatedMpeg4.Id = tempObj.Id
-	inputInlineQueryResultAnimatedMpeg4.Title = tempObj.Title
-	inputInlineQueryResultAnimatedMpeg4.ThumbnailUrl = tempObj.ThumbnailUrl
-	inputInlineQueryResultAnimatedMpeg4.Mpeg4Url = tempObj.Mpeg4Url
-	inputInlineQueryResultAnimatedMpeg4.Mpeg4Duration = tempObj.Mpeg4Duration
-	inputInlineQueryResultAnimatedMpeg4.Mpeg4Width = tempObj.Mpeg4Width
-	inputInlineQueryResultAnimatedMpeg4.Mpeg4Height = tempObj.Mpeg4Height
-
-	fieldReplyMarkup, _ := unmarshalReplyMarkup(objMap["reply_markup"])
-	inputInlineQueryResultAnimatedMpeg4.ReplyMarkup = fieldReplyMarkup
-
-	fieldInputMessageContent, _ := unmarshalInputMessageContent(objMap["input_message_content"])
-	inputInlineQueryResultAnimatedMpeg4.InputMessageContent = fieldInputMessageContent
-
-	return nil
-}
-
-// GetInputInlineQueryResultEnum return the enum type of this object
-func (inputInlineQueryResultAnimatedMpeg4 *InputInlineQueryResultAnimatedMpeg4) GetInputInlineQueryResultEnum() InputInlineQueryResultEnum {
-	return InputInlineQueryResultAnimatedMpeg4Type
+func (inputInlineQueryResultAnimation *InputInlineQueryResultAnimation) GetInputInlineQueryResultEnum() InputInlineQueryResultEnum {
+	return InputInlineQueryResultAnimationType
 }
 
 // InputInlineQueryResultArticle Represents a link to an article or web page
@@ -18120,7 +18609,7 @@ type InlineQueryResultArticle struct {
 	HideUrl     bool       `json:"hide_url"`    // True, if the URL must be not shown
 	Title       string     `json:"title"`       // Title of the result
 	Description string     `json:"description"` //
-	Thumbnail   *PhotoSize `json:"thumbnail"`   // Result thumbnail; may be null
+	Thumbnail   *Thumbnail `json:"thumbnail"`   // Result thumbnail in JPEG format; may be null
 }
 
 // MessageType return the string telegram-type of InlineQueryResultArticle
@@ -18135,8 +18624,8 @@ func (inlineQueryResultArticle *InlineQueryResultArticle) MessageType() string {
 // @param hideUrl True, if the URL must be not shown
 // @param title Title of the result
 // @param description
-// @param thumbnail Result thumbnail; may be null
-func NewInlineQueryResultArticle(id string, url string, hideUrl bool, title string, description string, thumbnail *PhotoSize) *InlineQueryResultArticle {
+// @param thumbnail Result thumbnail in JPEG format; may be null
+func NewInlineQueryResultArticle(id string, url string, hideUrl bool, title string, description string, thumbnail *Thumbnail) *InlineQueryResultArticle {
 	inlineQueryResultArticleTemp := InlineQueryResultArticle{
 		tdCommon:    tdCommon{Type: "inlineQueryResultArticle"},
 		Id:          id,
@@ -18160,7 +18649,7 @@ type InlineQueryResultContact struct {
 	tdCommon
 	Id        string     `json:"id"`        // Unique identifier of the query result
 	Contact   *Contact   `json:"contact"`   // A user contact
-	Thumbnail *PhotoSize `json:"thumbnail"` // Result thumbnail; may be null
+	Thumbnail *Thumbnail `json:"thumbnail"` // Result thumbnail in JPEG format; may be null
 }
 
 // MessageType return the string telegram-type of InlineQueryResultContact
@@ -18172,8 +18661,8 @@ func (inlineQueryResultContact *InlineQueryResultContact) MessageType() string {
 //
 // @param id Unique identifier of the query result
 // @param contact A user contact
-// @param thumbnail Result thumbnail; may be null
-func NewInlineQueryResultContact(id string, contact *Contact, thumbnail *PhotoSize) *InlineQueryResultContact {
+// @param thumbnail Result thumbnail in JPEG format; may be null
+func NewInlineQueryResultContact(id string, contact *Contact, thumbnail *Thumbnail) *InlineQueryResultContact {
 	inlineQueryResultContactTemp := InlineQueryResultContact{
 		tdCommon:  tdCommon{Type: "inlineQueryResultContact"},
 		Id:        id,
@@ -18195,7 +18684,7 @@ type InlineQueryResultLocation struct {
 	Id        string     `json:"id"`        // Unique identifier of the query result
 	Location  *Location  `json:"location"`  // Location result
 	Title     string     `json:"title"`     // Title of the result
-	Thumbnail *PhotoSize `json:"thumbnail"` // Result thumbnail; may be null
+	Thumbnail *Thumbnail `json:"thumbnail"` // Result thumbnail in JPEG format; may be null
 }
 
 // MessageType return the string telegram-type of InlineQueryResultLocation
@@ -18208,8 +18697,8 @@ func (inlineQueryResultLocation *InlineQueryResultLocation) MessageType() string
 // @param id Unique identifier of the query result
 // @param location Location result
 // @param title Title of the result
-// @param thumbnail Result thumbnail; may be null
-func NewInlineQueryResultLocation(id string, location *Location, title string, thumbnail *PhotoSize) *InlineQueryResultLocation {
+// @param thumbnail Result thumbnail in JPEG format; may be null
+func NewInlineQueryResultLocation(id string, location *Location, title string, thumbnail *Thumbnail) *InlineQueryResultLocation {
 	inlineQueryResultLocationTemp := InlineQueryResultLocation{
 		tdCommon:  tdCommon{Type: "inlineQueryResultLocation"},
 		Id:        id,
@@ -18231,7 +18720,7 @@ type InlineQueryResultVenue struct {
 	tdCommon
 	Id        string     `json:"id"`        // Unique identifier of the query result
 	Venue     *Venue     `json:"venue"`     // Venue result
-	Thumbnail *PhotoSize `json:"thumbnail"` // Result thumbnail; may be null
+	Thumbnail *Thumbnail `json:"thumbnail"` // Result thumbnail in JPEG format; may be null
 }
 
 // MessageType return the string telegram-type of InlineQueryResultVenue
@@ -18243,8 +18732,8 @@ func (inlineQueryResultVenue *InlineQueryResultVenue) MessageType() string {
 //
 // @param id Unique identifier of the query result
 // @param venue Venue result
-// @param thumbnail Result thumbnail; may be null
-func NewInlineQueryResultVenue(id string, venue *Venue, thumbnail *PhotoSize) *InlineQueryResultVenue {
+// @param thumbnail Result thumbnail in JPEG format; may be null
+func NewInlineQueryResultVenue(id string, venue *Venue, thumbnail *Thumbnail) *InlineQueryResultVenue {
 	inlineQueryResultVenueTemp := InlineQueryResultVenue{
 		tdCommon:  tdCommon{Type: "inlineQueryResultVenue"},
 		Id:        id,
@@ -25847,63 +26336,6 @@ func (updateNewChat *UpdateNewChat) GetUpdateEnum() UpdateEnum {
 	return UpdateNewChatType
 }
 
-// UpdateChatChatList The list to which the chat belongs was changed. This update is guaranteed to be sent only when chat.order == 0 and the current or the new chat list is null
-type UpdateChatChatList struct {
-	tdCommon
-	ChatId   int64    `json:"chat_id"`   // Chat identifier
-	ChatList ChatList `json:"chat_list"` // The new chat's chat list; may be null
-}
-
-// MessageType return the string telegram-type of UpdateChatChatList
-func (updateChatChatList *UpdateChatChatList) MessageType() string {
-	return "updateChatChatList"
-}
-
-// NewUpdateChatChatList creates a new UpdateChatChatList
-//
-// @param chatId Chat identifier
-// @param chatList The new chat's chat list; may be null
-func NewUpdateChatChatList(chatId int64, chatList ChatList) *UpdateChatChatList {
-	updateChatChatListTemp := UpdateChatChatList{
-		tdCommon: tdCommon{Type: "updateChatChatList"},
-		ChatId:   chatId,
-		ChatList: chatList,
-	}
-
-	return &updateChatChatListTemp
-}
-
-// UnmarshalJSON unmarshal to json
-func (updateChatChatList *UpdateChatChatList) UnmarshalJSON(b []byte) error {
-	var objMap map[string]*json.RawMessage
-	err := json.Unmarshal(b, &objMap)
-	if err != nil {
-		return err
-	}
-	tempObj := struct {
-		tdCommon
-		ChatId int64 `json:"chat_id"` // Chat identifier
-
-	}{}
-	err = json.Unmarshal(b, &tempObj)
-	if err != nil {
-		return err
-	}
-
-	updateChatChatList.tdCommon = tempObj.tdCommon
-	updateChatChatList.ChatId = tempObj.ChatId
-
-	fieldChatList, _ := unmarshalChatList(objMap["chat_list"])
-	updateChatChatList.ChatList = fieldChatList
-
-	return nil
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatChatList *UpdateChatChatList) GetUpdateEnum() UpdateEnum {
-	return UpdateChatChatListType
-}
-
 // UpdateChatTitle The title of a chat was changed
 type UpdateChatTitle struct {
 	tdCommon
@@ -26000,9 +26432,9 @@ func (updateChatPermissions *UpdateChatPermissions) GetUpdateEnum() UpdateEnum {
 // UpdateChatLastMessage The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some new unknown messages might be added to the chat in this case
 type UpdateChatLastMessage struct {
 	tdCommon
-	ChatId      int64     `json:"chat_id"`      // Chat identifier
-	LastMessage *Message  `json:"last_message"` // The new last message in the chat; may be null
-	Order       JSONInt64 `json:"order"`        // New value of the chat order
+	ChatId      int64          `json:"chat_id"`      // Chat identifier
+	LastMessage *Message       `json:"last_message"` // The new last message in the chat; may be null
+	Positions   []ChatPosition `json:"positions"`    // The new chat positions in the chat lists
 }
 
 // MessageType return the string telegram-type of UpdateChatLastMessage
@@ -26014,13 +26446,13 @@ func (updateChatLastMessage *UpdateChatLastMessage) MessageType() string {
 //
 // @param chatId Chat identifier
 // @param lastMessage The new last message in the chat; may be null
-// @param order New value of the chat order
-func NewUpdateChatLastMessage(chatId int64, lastMessage *Message, order JSONInt64) *UpdateChatLastMessage {
+// @param positions The new chat positions in the chat lists
+func NewUpdateChatLastMessage(chatId int64, lastMessage *Message, positions []ChatPosition) *UpdateChatLastMessage {
 	updateChatLastMessageTemp := UpdateChatLastMessage{
 		tdCommon:    tdCommon{Type: "updateChatLastMessage"},
 		ChatId:      chatId,
 		LastMessage: lastMessage,
-		Order:       order,
+		Positions:   positions,
 	}
 
 	return &updateChatLastMessageTemp
@@ -26031,69 +26463,35 @@ func (updateChatLastMessage *UpdateChatLastMessage) GetUpdateEnum() UpdateEnum {
 	return UpdateChatLastMessageType
 }
 
-// UpdateChatOrder The order of the chat in the chat list has changed. Instead of this update updateChatLastMessage, updateChatIsPinned, updateChatDraftMessage, or updateChatIsSponsored might be sent
-type UpdateChatOrder struct {
+// UpdateChatPosition The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or updateChatDraftMessage might be sent
+type UpdateChatPosition struct {
 	tdCommon
-	ChatId int64     `json:"chat_id"` // Chat identifier
-	Order  JSONInt64 `json:"order"`   // New value of the order
+	ChatId   int64         `json:"chat_id"`  // Chat identifier
+	Position *ChatPosition `json:"position"` // New chat position. If new order is 0, then the chat needs to be removed from the list
 }
 
-// MessageType return the string telegram-type of UpdateChatOrder
-func (updateChatOrder *UpdateChatOrder) MessageType() string {
-	return "updateChatOrder"
+// MessageType return the string telegram-type of UpdateChatPosition
+func (updateChatPosition *UpdateChatPosition) MessageType() string {
+	return "updateChatPosition"
 }
 
-// NewUpdateChatOrder creates a new UpdateChatOrder
+// NewUpdateChatPosition creates a new UpdateChatPosition
 //
 // @param chatId Chat identifier
-// @param order New value of the order
-func NewUpdateChatOrder(chatId int64, order JSONInt64) *UpdateChatOrder {
-	updateChatOrderTemp := UpdateChatOrder{
-		tdCommon: tdCommon{Type: "updateChatOrder"},
+// @param position New chat position. If new order is 0, then the chat needs to be removed from the list
+func NewUpdateChatPosition(chatId int64, position *ChatPosition) *UpdateChatPosition {
+	updateChatPositionTemp := UpdateChatPosition{
+		tdCommon: tdCommon{Type: "updateChatPosition"},
 		ChatId:   chatId,
-		Order:    order,
+		Position: position,
 	}
 
-	return &updateChatOrderTemp
+	return &updateChatPositionTemp
 }
 
 // GetUpdateEnum return the enum type of this object
-func (updateChatOrder *UpdateChatOrder) GetUpdateEnum() UpdateEnum {
-	return UpdateChatOrderType
-}
-
-// UpdateChatIsPinned A chat was pinned or unpinned
-type UpdateChatIsPinned struct {
-	tdCommon
-	ChatId   int64     `json:"chat_id"`   // Chat identifier
-	IsPinned bool      `json:"is_pinned"` // New value of is_pinned
-	Order    JSONInt64 `json:"order"`     // New value of the chat order
-}
-
-// MessageType return the string telegram-type of UpdateChatIsPinned
-func (updateChatIsPinned *UpdateChatIsPinned) MessageType() string {
-	return "updateChatIsPinned"
-}
-
-// NewUpdateChatIsPinned creates a new UpdateChatIsPinned
-//
-// @param chatId Chat identifier
-// @param isPinned New value of is_pinned
-// @param order New value of the chat order
-func NewUpdateChatIsPinned(chatId int64, isPinned bool, order JSONInt64) *UpdateChatIsPinned {
-	updateChatIsPinnedTemp := UpdateChatIsPinned{
-		tdCommon: tdCommon{Type: "updateChatIsPinned"},
-		ChatId:   chatId,
-		IsPinned: isPinned,
-		Order:    order,
-	}
-
-	return &updateChatIsPinnedTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatIsPinned *UpdateChatIsPinned) GetUpdateEnum() UpdateEnum {
-	return UpdateChatIsPinnedType
+func (updateChatPosition *UpdateChatPosition) GetUpdateEnum() UpdateEnum {
+	return UpdateChatPositionType
 }
 
 // UpdateChatIsMarkedAsUnread A chat was marked as unread or was read
@@ -26125,40 +26523,6 @@ func NewUpdateChatIsMarkedAsUnread(chatId int64, isMarkedAsUnread bool) *UpdateC
 // GetUpdateEnum return the enum type of this object
 func (updateChatIsMarkedAsUnread *UpdateChatIsMarkedAsUnread) GetUpdateEnum() UpdateEnum {
 	return UpdateChatIsMarkedAsUnreadType
-}
-
-// UpdateChatIsSponsored A chat's is_sponsored field has changed
-type UpdateChatIsSponsored struct {
-	tdCommon
-	ChatId      int64     `json:"chat_id"`      // Chat identifier
-	IsSponsored bool      `json:"is_sponsored"` // New value of is_sponsored
-	Order       JSONInt64 `json:"order"`        // New value of chat order
-}
-
-// MessageType return the string telegram-type of UpdateChatIsSponsored
-func (updateChatIsSponsored *UpdateChatIsSponsored) MessageType() string {
-	return "updateChatIsSponsored"
-}
-
-// NewUpdateChatIsSponsored creates a new UpdateChatIsSponsored
-//
-// @param chatId Chat identifier
-// @param isSponsored New value of is_sponsored
-// @param order New value of chat order
-func NewUpdateChatIsSponsored(chatId int64, isSponsored bool, order JSONInt64) *UpdateChatIsSponsored {
-	updateChatIsSponsoredTemp := UpdateChatIsSponsored{
-		tdCommon:    tdCommon{Type: "updateChatIsSponsored"},
-		ChatId:      chatId,
-		IsSponsored: isSponsored,
-		Order:       order,
-	}
-
-	return &updateChatIsSponsoredTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatIsSponsored *UpdateChatIsSponsored) GetUpdateEnum() UpdateEnum {
-	return UpdateChatIsSponsoredType
 }
 
 // UpdateChatHasScheduledMessages A chat's has_scheduled_messages field has changed
@@ -26528,9 +26892,9 @@ func (updateChatReplyMarkup *UpdateChatReplyMarkup) GetUpdateEnum() UpdateEnum {
 // UpdateChatDraftMessage A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update shouldn't be applied
 type UpdateChatDraftMessage struct {
 	tdCommon
-	ChatId       int64         `json:"chat_id"`       // Chat identifier
-	DraftMessage *DraftMessage `json:"draft_message"` // The new draft message; may be null
-	Order        JSONInt64     `json:"order"`         // New value of the chat order
+	ChatId       int64          `json:"chat_id"`       // Chat identifier
+	DraftMessage *DraftMessage  `json:"draft_message"` // The new draft message; may be null
+	Positions    []ChatPosition `json:"positions"`     // The new chat positions in the chat lists
 }
 
 // MessageType return the string telegram-type of UpdateChatDraftMessage
@@ -26542,13 +26906,13 @@ func (updateChatDraftMessage *UpdateChatDraftMessage) MessageType() string {
 //
 // @param chatId Chat identifier
 // @param draftMessage The new draft message; may be null
-// @param order New value of the chat order
-func NewUpdateChatDraftMessage(chatId int64, draftMessage *DraftMessage, order JSONInt64) *UpdateChatDraftMessage {
+// @param positions The new chat positions in the chat lists
+func NewUpdateChatDraftMessage(chatId int64, draftMessage *DraftMessage, positions []ChatPosition) *UpdateChatDraftMessage {
 	updateChatDraftMessageTemp := UpdateChatDraftMessage{
 		tdCommon:     tdCommon{Type: "updateChatDraftMessage"},
 		ChatId:       chatId,
 		DraftMessage: draftMessage,
-		Order:        order,
+		Positions:    positions,
 	}
 
 	return &updateChatDraftMessageTemp
@@ -26557,6 +26921,34 @@ func NewUpdateChatDraftMessage(chatId int64, draftMessage *DraftMessage, order J
 // GetUpdateEnum return the enum type of this object
 func (updateChatDraftMessage *UpdateChatDraftMessage) GetUpdateEnum() UpdateEnum {
 	return UpdateChatDraftMessageType
+}
+
+// UpdateChatFilters The list of chat filters or a chat filter has changed
+type UpdateChatFilters struct {
+	tdCommon
+	ChatFilters []ChatFilterInfo `json:"chat_filters"` // The new list of chat filters
+}
+
+// MessageType return the string telegram-type of UpdateChatFilters
+func (updateChatFilters *UpdateChatFilters) MessageType() string {
+	return "updateChatFilters"
+}
+
+// NewUpdateChatFilters creates a new UpdateChatFilters
+//
+// @param chatFilters The new list of chat filters
+func NewUpdateChatFilters(chatFilters []ChatFilterInfo) *UpdateChatFilters {
+	updateChatFiltersTemp := UpdateChatFilters{
+		tdCommon:    tdCommon{Type: "updateChatFilters"},
+		ChatFilters: chatFilters,
+	}
+
+	return &updateChatFiltersTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatFilters *UpdateChatFilters) GetUpdateEnum() UpdateEnum {
+	return UpdateChatFiltersType
 }
 
 // UpdateChatOnlineMemberCount The number of online group members has changed. This update with non-zero count is sent only for currently opened chats. There is no guarantee that it will be sent just after the count has changed
@@ -27932,6 +28324,37 @@ func (updateDiceEmojis *UpdateDiceEmojis) GetUpdateEnum() UpdateEnum {
 	return UpdateDiceEmojisType
 }
 
+// UpdateAnimationSearchParameters The parameters of animation search through GetOption("animation_search_bot_username") bot has changed
+type UpdateAnimationSearchParameters struct {
+	tdCommon
+	Provider string   `json:"provider"` // Name of the animation search provider
+	Emojis   []string `json:"emojis"`   // The new list of emojis suggested for searching
+}
+
+// MessageType return the string telegram-type of UpdateAnimationSearchParameters
+func (updateAnimationSearchParameters *UpdateAnimationSearchParameters) MessageType() string {
+	return "updateAnimationSearchParameters"
+}
+
+// NewUpdateAnimationSearchParameters creates a new UpdateAnimationSearchParameters
+//
+// @param provider Name of the animation search provider
+// @param emojis The new list of emojis suggested for searching
+func NewUpdateAnimationSearchParameters(provider string, emojis []string) *UpdateAnimationSearchParameters {
+	updateAnimationSearchParametersTemp := UpdateAnimationSearchParameters{
+		tdCommon: tdCommon{Type: "updateAnimationSearchParameters"},
+		Provider: provider,
+		Emojis:   emojis,
+	}
+
+	return &updateAnimationSearchParametersTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateAnimationSearchParameters *UpdateAnimationSearchParameters) GetUpdateEnum() UpdateEnum {
+	return UpdateAnimationSearchParametersType
+}
+
 // UpdateNewInlineQuery A new incoming inline query; for bots only
 type UpdateNewInlineQuery struct {
 	tdCommon
@@ -28825,6 +29248,53 @@ func unmarshalInputFile(rawMsg *json.RawMessage) (InputFile, error) {
 	}
 }
 
+func unmarshalThumbnailFormat(rawMsg *json.RawMessage) (ThumbnailFormat, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch ThumbnailFormatEnum(objMap["@type"].(string)) {
+	case ThumbnailFormatJpegType:
+		var thumbnailFormatJpeg ThumbnailFormatJpeg
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatJpeg)
+		return &thumbnailFormatJpeg, err
+
+	case ThumbnailFormatPngType:
+		var thumbnailFormatPng ThumbnailFormatPng
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatPng)
+		return &thumbnailFormatPng, err
+
+	case ThumbnailFormatWebpType:
+		var thumbnailFormatWebp ThumbnailFormatWebp
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatWebp)
+		return &thumbnailFormatWebp, err
+
+	case ThumbnailFormatGifType:
+		var thumbnailFormatGif ThumbnailFormatGif
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatGif)
+		return &thumbnailFormatGif, err
+
+	case ThumbnailFormatTgsType:
+		var thumbnailFormatTgs ThumbnailFormatTgs
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatTgs)
+		return &thumbnailFormatTgs, err
+
+	case ThumbnailFormatMpeg4Type:
+		var thumbnailFormatMpeg4 ThumbnailFormatMpeg4
+		err := json.Unmarshal(*rawMsg, &thumbnailFormatMpeg4)
+		return &thumbnailFormatMpeg4, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalMaskPoint(rawMsg *json.RawMessage) (MaskPoint, error) {
 
 	if rawMsg == nil {
@@ -29253,6 +29723,38 @@ func unmarshalChatList(rawMsg *json.RawMessage) (ChatList, error) {
 		var chatListArchive ChatListArchive
 		err := json.Unmarshal(*rawMsg, &chatListArchive)
 		return &chatListArchive, err
+
+	case ChatListFilterType:
+		var chatListFilter ChatListFilter
+		err := json.Unmarshal(*rawMsg, &chatListFilter)
+		return &chatListFilter, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalChatSource(rawMsg *json.RawMessage) (ChatSource, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch ChatSourceEnum(objMap["@type"].(string)) {
+	case ChatSourceMtprotoProxyType:
+		var chatSourceMtprotoProxy ChatSourceMtprotoProxy
+		err := json.Unmarshal(*rawMsg, &chatSourceMtprotoProxy)
+		return &chatSourceMtprotoProxy, err
+
+	case ChatSourcePublicServiceAnnouncementType:
+		var chatSourcePublicServiceAnnouncement ChatSourcePublicServiceAnnouncement
+		err := json.Unmarshal(*rawMsg, &chatSourcePublicServiceAnnouncement)
+		return &chatSourcePublicServiceAnnouncement, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -30756,6 +31258,11 @@ func unmarshalSearchMessagesFilter(rawMsg *json.RawMessage) (SearchMessagesFilte
 		err := json.Unmarshal(*rawMsg, &searchMessagesFilterUnreadMention)
 		return &searchMessagesFilterUnreadMention, err
 
+	case SearchMessagesFilterFailedToSendType:
+		var searchMessagesFilterFailedToSend SearchMessagesFilterFailedToSend
+		err := json.Unmarshal(*rawMsg, &searchMessagesFilterFailedToSend)
+		return &searchMessagesFilterFailedToSend, err
+
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
 	}
@@ -31043,15 +31550,10 @@ func unmarshalInputInlineQueryResult(rawMsg *json.RawMessage) (InputInlineQueryR
 	}
 
 	switch InputInlineQueryResultEnum(objMap["@type"].(string)) {
-	case InputInlineQueryResultAnimatedGifType:
-		var inputInlineQueryResultAnimatedGif InputInlineQueryResultAnimatedGif
-		err := json.Unmarshal(*rawMsg, &inputInlineQueryResultAnimatedGif)
-		return &inputInlineQueryResultAnimatedGif, err
-
-	case InputInlineQueryResultAnimatedMpeg4Type:
-		var inputInlineQueryResultAnimatedMpeg4 InputInlineQueryResultAnimatedMpeg4
-		err := json.Unmarshal(*rawMsg, &inputInlineQueryResultAnimatedMpeg4)
-		return &inputInlineQueryResultAnimatedMpeg4, err
+	case InputInlineQueryResultAnimationType:
+		var inputInlineQueryResultAnimation InputInlineQueryResultAnimation
+		err := json.Unmarshal(*rawMsg, &inputInlineQueryResultAnimation)
+		return &inputInlineQueryResultAnimation, err
 
 	case InputInlineQueryResultArticleType:
 		var inputInlineQueryResultArticle InputInlineQueryResultArticle
@@ -32571,11 +33073,6 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateNewChat)
 		return &updateNewChat, err
 
-	case UpdateChatChatListType:
-		var updateChatChatList UpdateChatChatList
-		err := json.Unmarshal(*rawMsg, &updateChatChatList)
-		return &updateChatChatList, err
-
 	case UpdateChatTitleType:
 		var updateChatTitle UpdateChatTitle
 		err := json.Unmarshal(*rawMsg, &updateChatTitle)
@@ -32596,25 +33093,15 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatLastMessage)
 		return &updateChatLastMessage, err
 
-	case UpdateChatOrderType:
-		var updateChatOrder UpdateChatOrder
-		err := json.Unmarshal(*rawMsg, &updateChatOrder)
-		return &updateChatOrder, err
-
-	case UpdateChatIsPinnedType:
-		var updateChatIsPinned UpdateChatIsPinned
-		err := json.Unmarshal(*rawMsg, &updateChatIsPinned)
-		return &updateChatIsPinned, err
+	case UpdateChatPositionType:
+		var updateChatPosition UpdateChatPosition
+		err := json.Unmarshal(*rawMsg, &updateChatPosition)
+		return &updateChatPosition, err
 
 	case UpdateChatIsMarkedAsUnreadType:
 		var updateChatIsMarkedAsUnread UpdateChatIsMarkedAsUnread
 		err := json.Unmarshal(*rawMsg, &updateChatIsMarkedAsUnread)
 		return &updateChatIsMarkedAsUnread, err
-
-	case UpdateChatIsSponsoredType:
-		var updateChatIsSponsored UpdateChatIsSponsored
-		err := json.Unmarshal(*rawMsg, &updateChatIsSponsored)
-		return &updateChatIsSponsored, err
 
 	case UpdateChatHasScheduledMessagesType:
 		var updateChatHasScheduledMessages UpdateChatHasScheduledMessages
@@ -32670,6 +33157,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateChatDraftMessage UpdateChatDraftMessage
 		err := json.Unmarshal(*rawMsg, &updateChatDraftMessage)
 		return &updateChatDraftMessage, err
+
+	case UpdateChatFiltersType:
+		var updateChatFilters UpdateChatFilters
+		err := json.Unmarshal(*rawMsg, &updateChatFilters)
+		return &updateChatFilters, err
 
 	case UpdateChatOnlineMemberCountType:
 		var updateChatOnlineMemberCount UpdateChatOnlineMemberCount
@@ -32850,6 +33342,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateDiceEmojis UpdateDiceEmojis
 		err := json.Unmarshal(*rawMsg, &updateDiceEmojis)
 		return &updateDiceEmojis, err
+
+	case UpdateAnimationSearchParametersType:
+		var updateAnimationSearchParameters UpdateAnimationSearchParameters
+		err := json.Unmarshal(*rawMsg, &updateAnimationSearchParameters)
+		return &updateAnimationSearchParameters, err
 
 	case UpdateNewInlineQueryType:
 		var updateNewInlineQuery UpdateNewInlineQuery

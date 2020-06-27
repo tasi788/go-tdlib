@@ -191,7 +191,7 @@ func (client *Client) CheckAuthenticationCode(code string) (*Ok, error) {
 
 }
 
-// RequestQrCodeAuthentication Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber
+// RequestQrCodeAuthentication Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber,
 // @param otherUserIds List of user identifiers of other users currently using the client
 func (client *Client) RequestQrCodeAuthentication(otherUserIds []int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -1031,7 +1031,7 @@ func (client *Client) GetRemoteFile(remoteFileId string, fileType FileType) (*Fi
 
 }
 
-// GetChats Returns an ordered list of chats in a chat list. Chats are sorted by the pair (order, chat_id) in decreasing order. (For example, to get a list of chats from the beginning, the offset_order should be equal to a biggest signed 64-bit number 9223372036854775807 == 2^63 - 1).
+// GetChats Returns an ordered list of chats in a chat list. Chats are sorted by the pair (chat.position.order, chat.id) in descending order. (For example, to get a list of chats from the beginning, the offset_order should be equal to a biggest signed 64-bit number 9223372036854775807 == 2^63 - 1).
 // @param chatList The chat list in which to return chats
 // @param offsetOrder Chat order to return chats from
 // @param offsetChatId Chat identifier to return chats from
@@ -1103,7 +1103,7 @@ func (client *Client) SearchPublicChats(query string) (*Chats, error) {
 
 }
 
-// SearchChats Searches for the specified query in the title and username of already known chats, this is an offline request. Returns chats in the order seen in the chat list
+// SearchChats Searches for the specified query in the title and username of already known chats, this is an offline request. Returns chats in the order seen in the main chat list
 // @param query Query to search for. If the query is empty, returns up to 20 recently found chats
 // @param limit The maximum number of chats to be returned
 func (client *Client) SearchChats(query string, limit int32) (*Chats, error) {
@@ -1127,7 +1127,7 @@ func (client *Client) SearchChats(query string, limit int32) (*Chats, error) {
 
 }
 
-// SearchChatsOnServer Searches for the specified query in the title and username of already known chats via request to the server. Returns chats in the order seen in the chat list
+// SearchChatsOnServer Searches for the specified query in the title and username of already known chats via request to the server. Returns chats in the order seen in the main chat list
 // @param query Query to search for
 // @param limit The maximum number of chats to be returned
 func (client *Client) SearchChatsOnServer(query string, limit int32) (*Chats, error) {
@@ -3509,12 +3509,34 @@ func (client *Client) UpgradeBasicGroupChatToSupergroupChat(chatId int64) (*Chat
 
 }
 
-// SetChatChatList Moves a chat to a different chat list. Current chat list of the chat must ne non-null
+// GetChatListsToAddChat Returns chat lists to which the chat can be added. This is an offline request
 // @param chatId Chat identifier
-// @param chatList New chat list of the chat. The chat with the current user (Saved Messages) and the chat 777000 (Telegram) can't be moved to the Archive chat list
-func (client *Client) SetChatChatList(chatId int64, chatList ChatList) (*Ok, error) {
+func (client *Client) GetChatListsToAddChat(chatId int64) (*ChatLists, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":     "setChatChatList",
+		"@type":   "getChatListsToAddChat",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatLists ChatLists
+	err = json.Unmarshal(result.Raw, &chatLists)
+	return &chatLists, err
+
+}
+
+// AddChatToList Adds a chat to a chat list. A chat can't be simultaneously in Main and Archive chat lists, so it is automatically removed from another one if needed
+// @param chatId Chat identifier
+// @param chatList The chat list. Use getChatListsToAddChat to get suitable chat lists
+func (client *Client) AddChatToList(chatId int64, chatList ChatList) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":     "addChatToList",
 		"chat_id":   chatId,
 		"chat_list": chatList,
 	})
@@ -3530,6 +3552,160 @@ func (client *Client) SetChatChatList(chatId int64, chatList ChatList) (*Ok, err
 	var ok Ok
 	err = json.Unmarshal(result.Raw, &ok)
 	return &ok, err
+
+}
+
+// GetChatFilter Returns information about a chat filter by its identifier
+// @param chatFilterId Chat filter identifier
+func (client *Client) GetChatFilter(chatFilterId int32) (*ChatFilter, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "getChatFilter",
+		"chat_filter_id": chatFilterId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatFilterDummy ChatFilter
+	err = json.Unmarshal(result.Raw, &chatFilterDummy)
+	return &chatFilterDummy, err
+
+}
+
+// CreateChatFilter Creates new chat filter. Returns information about the created chat filter
+// @param filter Chat filter
+func (client *Client) CreateChatFilter(filter *ChatFilter) (*ChatFilterInfo, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":  "createChatFilter",
+		"filter": filter,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatFilterInfo ChatFilterInfo
+	err = json.Unmarshal(result.Raw, &chatFilterInfo)
+	return &chatFilterInfo, err
+
+}
+
+// EditChatFilter Edits existing chat filter. Returns information about the edited chat filter
+// @param chatFilterId Chat filter identifier
+// @param filter The edited chat filter
+func (client *Client) EditChatFilter(chatFilterId int32, filter *ChatFilter) (*ChatFilterInfo, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "editChatFilter",
+		"chat_filter_id": chatFilterId,
+		"filter":         filter,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatFilterInfo ChatFilterInfo
+	err = json.Unmarshal(result.Raw, &chatFilterInfo)
+	return &chatFilterInfo, err
+
+}
+
+// DeleteChatFilter Deletes existing chat filter
+// @param chatFilterId Chat filter identifier
+func (client *Client) DeleteChatFilter(chatFilterId int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "deleteChatFilter",
+		"chat_filter_id": chatFilterId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ReorderChatFilters Changes the order of chat filters
+// @param chatFilterIds Identifiers of chat filters in the new correct order
+func (client *Client) ReorderChatFilters(chatFilterIds []int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":           "reorderChatFilters",
+		"chat_filter_ids": chatFilterIds,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// GetRecommendedChatFilters Returns recommended chat filters for the current user
+func (client *Client) GetRecommendedChatFilters() (*RecommendedChatFilters, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getRecommendedChatFilters",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var recommendedChatFilters RecommendedChatFilters
+	err = json.Unmarshal(result.Raw, &recommendedChatFilters)
+	return &recommendedChatFilters, err
+
+}
+
+// GetChatFilterDefaultIconName Returns default icon name for a filter. This is an offline method. Can be called before authorization. Can be called synchronously
+// @param filter Chat filter
+func (client *Client) GetChatFilterDefaultIconName(filter *ChatFilter) (*Text, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":  "getChatFilterDefaultIconName",
+		"filter": filter,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var text Text
+	err = json.Unmarshal(result.Raw, &text)
+	return &text, err
 
 }
 
@@ -3637,30 +3813,6 @@ func (client *Client) SetChatNotificationSettings(chatId int64, notificationSett
 		"@type":                 "setChatNotificationSettings",
 		"chat_id":               chatId,
 		"notification_settings": notificationSettings,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
-
-}
-
-// ToggleChatIsPinned Changes the pinned state of a chat. You can pin up to GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") non-secret chats and the same number of secret chats in the main/archive chat list
-// @param chatId Chat identifier
-// @param isPinned New value of is_pinned
-func (client *Client) ToggleChatIsPinned(chatId int64, isPinned bool) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":     "toggleChatIsPinned",
-		"chat_id":   chatId,
-		"is_pinned": isPinned,
 	})
 
 	if err != nil {
@@ -4250,6 +4402,32 @@ func (client *Client) SetScopeNotificationSettings(scope NotificationSettingsSco
 func (client *Client) ResetAllNotificationSettings() (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "resetAllNotificationSettings",
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ToggleChatIsPinned Changes the pinned state of a chat. You can pin up to GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") non-secret chats and the same number of secret chats in the main/arhive chat list
+// @param chatList Chat list in which to change the pinned state of the chat
+// @param chatId Chat identifier
+// @param isPinned True, if the chat is pinned
+func (client *Client) ToggleChatIsPinned(chatList ChatList, chatId int64, isPinned bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":     "toggleChatIsPinned",
+		"chat_list": chatList,
+		"chat_id":   chatId,
+		"is_pinned": isPinned,
 	})
 
 	if err != nil {
@@ -7423,7 +7601,7 @@ func (client *Client) ResetNetworkStatistics() (*Ok, error) {
 
 }
 
-// GetAutoDownloadSettingsPresets Returns auto-download settings presets for the currently logged in user
+// GetAutoDownloadSettingsPresets Returns auto-download settings presets for the current user
 func (client *Client) GetAutoDownloadSettingsPresets() (*AutoDownloadSettingsPresets, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getAutoDownloadSettingsPresets",
@@ -8333,7 +8511,7 @@ func (client *Client) SetAlarm(seconds float64) (*Ok, error) {
 
 }
 
-// GetCountryCode Uses current user IP to found their country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
+// GetCountryCode Uses current user IP address to find their country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
 func (client *Client) GetCountryCode() (*Text, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getCountryCode",
@@ -9168,11 +9346,6 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatChatListType:
-		var update UpdateChatChatList
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
 	case UpdateChatTitleType:
 		var update UpdateChatTitle
 		err = json.Unmarshal(result.Raw, &update)
@@ -9193,23 +9366,13 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatOrderType:
-		var update UpdateChatOrder
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatIsPinnedType:
-		var update UpdateChatIsPinned
+	case UpdateChatPositionType:
+		var update UpdateChatPosition
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
 	case UpdateChatIsMarkedAsUnreadType:
 		var update UpdateChatIsMarkedAsUnread
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatIsSponsoredType:
-		var update UpdateChatIsSponsored
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -9265,6 +9428,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateChatDraftMessageType:
 		var update UpdateChatDraftMessage
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatFiltersType:
+		var update UpdateChatFilters
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -9445,6 +9613,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateDiceEmojisType:
 		var update UpdateDiceEmojis
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateAnimationSearchParametersType:
+		var update UpdateAnimationSearchParameters
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
