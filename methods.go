@@ -192,7 +192,7 @@ func (client *Client) CheckAuthenticationCode(code string) (*Ok, error) {
 }
 
 // RequestQrCodeAuthentication Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current authorization state is authorizationStateWaitPhoneNumber,
-// @param otherUserIds List of user identifiers of other users currently using the client
+// @param otherUserIds List of user identifiers of other users currently using the application
 func (client *Client) RequestQrCodeAuthentication(otherUserIds []int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":          "requestQrCodeAuthentication",
@@ -1647,7 +1647,7 @@ func (client *Client) SearchChatRecentLocationMessages(chatId int64, limit int32
 
 }
 
-// GetActiveLiveLocationMessages Returns all active live locations that should be updated by the client. The list is persistent across application restarts only if the message database is used
+// GetActiveLiveLocationMessages Returns all active live locations that should be updated by the application. The list is persistent across application restarts only if the message database is used
 func (client *Client) GetActiveLiveLocationMessages() (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getActiveLiveLocationMessages",
@@ -2808,6 +2808,28 @@ func (client *Client) StopPoll(chatId int64, messageId int64, replyMarkup ReplyM
 
 }
 
+// HideSuggestedAction Hides a suggested action
+// @param action Suggested action to hide
+func (client *Client) HideSuggestedAction(action SuggestedAction) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":  "hideSuggestedAction",
+		"action": action,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // GetLoginUrlInfo Returns information about a button of type inlineKeyboardButtonTypeLoginUrl. The method needs to be called when the user presses the button
 // @param chatId Chat identifier of the message with the button
 // @param messageId Message identifier of the message with the button
@@ -3709,7 +3731,7 @@ func (client *Client) GetChatFilterDefaultIconName(filter *ChatFilter) (*Text, e
 
 }
 
-// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info rights. The title will not be changed until the request to the server has been completed
+// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info rights
 // @param chatId Chat identifier
 // @param title New title of the chat; 1-128 characters
 func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
@@ -3733,10 +3755,10 @@ func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
 
 }
 
-// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info rights. The photo will not be changed before request to the server has been completed
+// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info rights
 // @param chatId Chat identifier
-// @param photo New chat photo. You can use a zero InputFileId to delete the chat photo. Files that are accessible only by HTTP URL are not acceptable
-func (client *Client) SetChatPhoto(chatId int64, photo InputFile) (*Ok, error) {
+// @param photo New chat photo. You can pass null to delete the chat photo
+func (client *Client) SetChatPhoto(chatId int64, photo InputChatPhoto) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":   "setChatPhoto",
 		"chat_id": chatId,
@@ -3877,7 +3899,7 @@ func (client *Client) ToggleChatDefaultDisableNotification(chatId int64, default
 
 }
 
-// SetChatClientData Changes client data associated with a chat
+// SetChatClientData Changes application-specific data associated with a chat
 // @param chatId Chat identifier
 // @param clientData New value of client_data
 func (client *Client) SetChatClientData(chatId int64, clientData string) (*Ok, error) {
@@ -4594,7 +4616,7 @@ func (client *Client) CancelUploadFile(fileId int32) (*Ok, error) {
 
 }
 
-// WriteGeneratedFilePart Writes a part of a generated file. This method is intended to be used only if the client has no direct access to TDLib's file system, because it is usually slower than a direct write to the destination file
+// WriteGeneratedFilePart Writes a part of a generated file. This method is intended to be used only if the application has no direct access to TDLib's file system, because it is usually slower than a direct write to the destination file
 // @param generationId The identifier of the generation process
 // @param offset The offset from which to write the data to the file
 // @param data The data to write
@@ -4670,7 +4692,7 @@ func (client *Client) FinishFileGeneration(generationId JSONInt64, error *Error)
 
 }
 
-// ReadFilePart Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the client has no direct access to TDLib's file system, because it is usually slower than a direct read from the file
+// ReadFilePart Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file
 // @param fileId Identifier of the file. The file must be located in the TDLib file cache
 // @param offset The offset from which to read the file
 // @param count Number of bytes to read. An error will be returned if there are not enough bytes available in the file from the specified position. Pass 0 to read all available data from the specified position
@@ -4786,7 +4808,7 @@ func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 
 // CreateCall Creates a new call
 // @param userId Identifier of the user to be called
-// @param protocol Description of the call protocols supported by the client
+// @param protocol Description of the call protocols supported by the application
 func (client *Client) CreateCall(userId int32, protocol *CallProtocol) (*CallId, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "createCall",
@@ -4810,7 +4832,7 @@ func (client *Client) CreateCall(userId int32, protocol *CallProtocol) (*CallId,
 
 // AcceptCall Accepts an incoming call
 // @param callId Call identifier
-// @param protocol Description of the call protocols supported by the client
+// @param protocol Description of the call protocols supported by the application
 func (client *Client) AcceptCall(callId int32, protocol *CallProtocol) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "acceptCall",
@@ -4912,7 +4934,7 @@ func (client *Client) SendCallDebugInformation(callId int32, debugInformation st
 
 }
 
-// BlockUser Adds a user to the blacklist
+// BlockUser Blocks a user
 // @param userId User identifier
 func (client *Client) BlockUser(userId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -4934,7 +4956,7 @@ func (client *Client) BlockUser(userId int32) (*Ok, error) {
 
 }
 
-// UnblockUser Removes a user from the blacklist
+// UnblockUser Unblocks a user
 // @param userId User identifier
 func (client *Client) UnblockUser(userId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -5180,7 +5202,7 @@ func (client *Client) SharePhoneNumber(userId int32) (*Ok, error) {
 // @param userId User identifier
 // @param offset The number of photos to skip; must be non-negative
 // @param limit The maximum number of photos to be returned; up to 100
-func (client *Client) GetUserProfilePhotos(userId int32, offset int32, limit int32) (*UserProfilePhotos, error) {
+func (client *Client) GetUserProfilePhotos(userId int32, offset int32, limit int32) (*ChatPhotos, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":   "getUserProfilePhotos",
 		"user_id": userId,
@@ -5196,9 +5218,9 @@ func (client *Client) GetUserProfilePhotos(userId int32, offset int32, limit int
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	var userProfilePhotos UserProfilePhotos
-	err = json.Unmarshal(result.Raw, &userProfilePhotos)
-	return &userProfilePhotos, err
+	var chatPhotos ChatPhotos
+	err = json.Unmarshal(result.Raw, &chatPhotos)
+	return &chatPhotos, err
 
 }
 
@@ -5910,9 +5932,9 @@ func (client *Client) GetWebPageInstantView(url string, forceFull bool) (*WebPag
 
 }
 
-// SetProfilePhoto Uploads a new profile photo for the current user. If something changes, updateUser will be sent
-// @param photo Profile photo to set. inputFileId and inputFileRemote may still be unsupported
-func (client *Client) SetProfilePhoto(photo InputFile) (*Ok, error) {
+// SetProfilePhoto Changes a profile photo for the current user
+// @param photo Profile photo to set
+func (client *Client) SetProfilePhoto(photo InputChatPhoto) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "setProfilePhoto",
 		"photo": photo,
@@ -5932,7 +5954,7 @@ func (client *Client) SetProfilePhoto(photo InputFile) (*Ok, error) {
 
 }
 
-// DeleteProfilePhoto Deletes a profile photo. If something changes, updateUser will be sent
+// DeleteProfilePhoto Deletes a profile photo
 // @param profilePhotoId Identifier of the profile photo to delete
 func (client *Client) DeleteProfilePhoto(profilePhotoId JSONInt64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -5954,7 +5976,7 @@ func (client *Client) DeleteProfilePhoto(profilePhotoId JSONInt64) (*Ok, error) 
 
 }
 
-// SetName Changes the first and last name of the current user. If something changes, updateUser will be sent
+// SetName Changes the first and last name of the current user
 // @param firstName The new value of the first name for the user; 1-64 characters
 // @param lastName The new value of the optional last name for the user; 0-64 characters
 func (client *Client) SetName(firstName string, lastName string) (*Ok, error) {
@@ -6000,7 +6022,7 @@ func (client *Client) SetBio(bio string) (*Ok, error) {
 
 }
 
-// SetUsername Changes the username of the current user. If something changes, updateUser will be sent
+// SetUsername Changes the username of the current user
 // @param username The new value of the username. Use an empty string to remove the username
 func (client *Client) SetUsername(username string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -7010,7 +7032,7 @@ func (client *Client) DeleteLanguagePack(languagePackId string) (*Ok, error) {
 
 // RegisterDevice Registers the currently used device for receiving push notifications. Returns a globally unique identifier of the push notification subscription
 // @param deviceToken Device token
-// @param otherUserIds List of user identifiers of other users currently using the client
+// @param otherUserIds List of user identifiers of other users currently using the application
 func (client *Client) RegisterDevice(deviceToken DeviceToken, otherUserIds []int32) (*PushReceiverId, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":          "registerDevice",
@@ -7349,10 +7371,10 @@ func (client *Client) GetChatStatisticsUrl(chatId int64, parameters string, isDa
 
 }
 
-// GetChatStatistics Returns detailed statistics about a chat. Currently this method can be used only for channels. Requires administrator rights in the channel
+// GetChatStatistics Returns detailed statistics about a chat. Currently this method can be used only for supergroups and channels. Requires administrator rights in the channel
 // @param chatId Chat identifier
 // @param isDark Pass true if a dark theme is used by the app
-func (client *Client) GetChatStatistics(chatId int64, isDark bool) (*ChatStatistics, error) {
+func (client *Client) GetChatStatistics(chatId int64, isDark bool) (ChatStatistics, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":   "getChatStatistics",
 		"chat_id": chatId,
@@ -7367,10 +7389,21 @@ func (client *Client) GetChatStatistics(chatId int64, isDark bool) (*ChatStatist
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	var chatStatistics ChatStatistics
-	err = json.Unmarshal(result.Raw, &chatStatistics)
-	return &chatStatistics, err
+	switch ChatStatisticsEnum(result.Data["@type"].(string)) {
 
+	case ChatStatisticsSupergroupType:
+		var chatStatistics ChatStatisticsSupergroup
+		err = json.Unmarshal(result.Raw, &chatStatistics)
+		return &chatStatistics, err
+
+	case ChatStatisticsChannelType:
+		var chatStatistics ChatStatisticsChannel
+		err = json.Unmarshal(result.Raw, &chatStatistics)
+		return &chatStatistics, err
+
+	default:
+		return nil, fmt.Errorf("Invalid type")
+	}
 }
 
 // GetChatStatisticsGraph Loads asynchronous or zoomed in chat statistics graph
@@ -9618,6 +9651,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateAnimationSearchParametersType:
 		var update UpdateAnimationSearchParameters
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateSuggestedActionsType:
+		var update UpdateSuggestedActions
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
