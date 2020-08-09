@@ -19,6 +19,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 	"unsafe"
@@ -301,8 +302,8 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 						var successMsg UpdateMessageSendSucceeded
 						json.Unmarshal(updateResp.Raw, &successMsg)
 
-						response.Data = updateResp.Data["message"].(map[string]interface {})
-						if str, err := json.Marshal(updateResp.Data["message"].(map[string]interface {})); err == nil {
+						response.Data = updateResp.Data["message"].(map[string]interface{})
+						if str, err := json.Marshal(updateResp.Data["message"].(map[string]interface{})); err == nil {
 							response.Raw = []byte(str)
 						} else {
 							response.Raw = bytes.Replace(response.Raw, []byte("{\"@type\":\"messageSendingStatePending\"}"), []byte("{\"@type\":\"updateMessageSendSucceeded\"}"), 1)
@@ -404,4 +405,55 @@ func (client *Client) SendAuthPassword(password string) (AuthorizationState, err
 
 	authState, err := client.GetAuthorizationState()
 	return authState, err
+}
+
+func IsCommmand(text string) bool {
+	if text != "" {
+		if text[0] == '/' {
+			return true
+		}
+	}
+	return false
+}
+
+func CheckCommand(text string, entities []TextEntity) string {
+	if IsCommmand(text) {
+		// Check text entities and make bot happy!
+		if len(entities) >= 1 {
+			// Get first command
+			if entities[0].Type.GetTextEntityTypeEnum() == "textEntityTypeBotCommand" {
+				// e.g.: { "text": "/hello@world_bot", "textEntity": { offset: 0, length: 16 } }
+				// Result: "/hello"
+				if i := strings.Index(text[:entities[0].Length], "@"); i != -1 {
+					return text[:i]
+				}
+				return text[:entities[0].Length]
+			}
+		} else {
+			// Since userbot do not have bot command entities in Private Chat, so make userbot happy too!
+			// e.g.: ["/hello@world_bot", "/hello@", "/hello@123"]
+			// Result: "/hello"
+			if i := strings.Index(text, "@"); i != -1 {
+				return text[:i]
+			}
+			// e.g. ["/hello 123", "/hell o 123"]
+			// Result: "/hello", "/hell"
+			if i := strings.Index(text, " "); i != -1 {
+				return text[:i]
+			}
+			return text
+		}
+	}
+	return ""
+}
+
+func CommandArgument(text string) string {
+	if IsCommmand(text) {
+		// e.g. ["/hello 123", "/hell o 123"]
+		// Result: "123", "o 123"
+		if i := strings.Index(text, " "); i != -1 {
+			return text[i+1:]
+		}
+	}
+	return ""
 }
