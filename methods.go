@@ -1865,7 +1865,7 @@ func (client *Client) GetMessageLinkInfo(url string) (*MessageLinkInfo, error) {
 // @param options Options to be used to send the message
 // @param replyMarkup Markup for replying to the message; for bots only
 // @param inputMessageContent The content of the message to be sent
-func (client *Client) SendMessage(chatId int64, replyToMessageId int64, options *SendMessageOptions, replyMarkup ReplyMarkup, inputMessageContent InputMessageContent) (*Message, error) {
+func (client *Client) SendMessage(chatId int64, replyToMessageId int64, options *MessageSendOptions, replyMarkup ReplyMarkup, inputMessageContent InputMessageContent) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                 "sendMessage",
 		"chat_id":               chatId,
@@ -1894,7 +1894,7 @@ func (client *Client) SendMessage(chatId int64, replyToMessageId int64, options 
 // @param replyToMessageId Identifier of a message to reply to or 0
 // @param options Options to be used to send the messages
 // @param inputMessageContents Contents of messages to be sent
-func (client *Client) SendMessageAlbum(chatId int64, replyToMessageId int64, options *SendMessageOptions, inputMessageContents []InputMessageContent) (*Messages, error) {
+func (client *Client) SendMessageAlbum(chatId int64, replyToMessageId int64, options *MessageSendOptions, inputMessageContents []InputMessageContent) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                  "sendMessageAlbum",
 		"chat_id":                chatId,
@@ -1950,7 +1950,7 @@ func (client *Client) SendBotStartMessage(botUserId int32, chatId int64, paramet
 // @param queryId Identifier of the inline query
 // @param resultId Identifier of the inline result
 // @param hideViaBot If true, there will be no mention of a bot, via which the message is sent. Can be used only for bots GetOption("animation_search_bot_username"), GetOption("photo_search_bot_username") and GetOption("venue_search_bot_username")
-func (client *Client) SendInlineQueryResultMessage(chatId int64, replyToMessageId int64, options *SendMessageOptions, queryId JSONInt64, resultId string, hideViaBot bool) (*Message, error) {
+func (client *Client) SendInlineQueryResultMessage(chatId int64, replyToMessageId int64, options *MessageSendOptions, queryId JSONInt64, resultId string, hideViaBot bool) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":               "sendInlineQueryResultMessage",
 		"chat_id":             chatId,
@@ -1983,7 +1983,7 @@ func (client *Client) SendInlineQueryResultMessage(chatId int64, replyToMessageI
 // @param asAlbum True, if the messages should be grouped into an album after forwarding. For this to work, no more than 10 messages may be forwarded, and all of them must be photo or video messages
 // @param sendCopy True, if content of the messages needs to be copied without links to the original messages. Always true if the messages are forwarded to a secret chat
 // @param removeCaption True, if media captions of message copies needs to be removed. Ignored if send_copy is false
-func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds []int64, options *SendMessageOptions, asAlbum bool, sendCopy bool, removeCaption bool) (*Messages, error) {
+func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds []int64, options *MessageSendOptions, asAlbum bool, sendCopy bool, removeCaption bool) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":          "forwardMessages",
 		"chat_id":        chatId,
@@ -4809,11 +4809,13 @@ func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 // CreateCall Creates a new call
 // @param userId Identifier of the user to be called
 // @param protocol Description of the call protocols supported by the application
-func (client *Client) CreateCall(userId int32, protocol *CallProtocol) (*CallId, error) {
+// @param isVideo True, if a video call needs to be created
+func (client *Client) CreateCall(userId int32, protocol *CallProtocol, isVideo bool) (*CallId, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "createCall",
 		"user_id":  userId,
 		"protocol": protocol,
+		"is_video": isVideo,
 	})
 
 	if err != nil {
@@ -4854,17 +4856,43 @@ func (client *Client) AcceptCall(callId int32, protocol *CallProtocol) (*Ok, err
 
 }
 
+// SendCallSignalingData Sends call signaling data
+// @param callId Call identifier
+// @param data The data
+func (client *Client) SendCallSignalingData(callId int32, data []byte) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "sendCallSignalingData",
+		"call_id": callId,
+		"data":    data,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // DiscardCall Discards a call
 // @param callId Call identifier
 // @param isDisconnected True, if the user was disconnected
 // @param duration The call duration, in seconds
+// @param isVideo True, if the call was a video call
 // @param connectionId Identifier of the connection used during the call
-func (client *Client) DiscardCall(callId int32, isDisconnected bool, duration int32, connectionId JSONInt64) (*Ok, error) {
+func (client *Client) DiscardCall(callId int32, isDisconnected bool, duration int32, isVideo bool, connectionId JSONInt64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":           "discardCall",
 		"call_id":         callId,
 		"is_disconnected": isDisconnected,
 		"duration":        duration,
+		"is_video":        isVideo,
 		"connection_id":   connectionId,
 	})
 
@@ -9566,6 +9594,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateCallType:
 		var update UpdateCall
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateNewCallSignalingDataType:
+		var update UpdateNewCallSignalingData
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 

@@ -663,6 +663,15 @@ const (
 	CallDiscardReasonHungUpType       CallDiscardReasonEnum = "callDiscardReasonHungUp"
 )
 
+// CallServerTypeEnum Alias for abstract CallServerType 'Sub-Classes', used as constant-enum here
+type CallServerTypeEnum string
+
+// CallServerType enums
+const (
+	CallServerTypeTelegramReflectorType CallServerTypeEnum = "callServerTypeTelegramReflector"
+	CallServerTypeWebrtcType            CallServerTypeEnum = "callServerTypeWebrtc"
+)
+
 // CallStateEnum Alias for abstract CallState 'Sub-Classes', used as constant-enum here
 type CallStateEnum string
 
@@ -1160,6 +1169,7 @@ const (
 	UpdateFileGenerationStartType            UpdateEnum = "updateFileGenerationStart"
 	UpdateFileGenerationStopType             UpdateEnum = "updateFileGenerationStop"
 	UpdateCallType                           UpdateEnum = "updateCall"
+	UpdateNewCallSignalingDataType           UpdateEnum = "updateNewCallSignalingData"
 	UpdateUserPrivacySettingRulesType        UpdateEnum = "updateUserPrivacySettingRules"
 	UpdateUnreadMessageCountType             UpdateEnum = "updateUnreadMessageCount"
 	UpdateUnreadChatCountType                UpdateEnum = "updateUnreadChatCount"
@@ -1406,6 +1416,11 @@ type UserStatus interface {
 // CallDiscardReason Describes the reason why a call was discarded
 type CallDiscardReason interface {
 	GetCallDiscardReasonEnum() CallDiscardReasonEnum
+}
+
+// CallServerType Describes the type of a call server
+type CallServerType interface {
+	GetCallServerTypeEnum() CallServerTypeEnum
 }
 
 // CallState Describes the current call state
@@ -4325,6 +4340,7 @@ type UserFullInfo struct {
 	Photo                           *ChatPhoto `json:"photo"`                               // User profile photo; may be null
 	IsBlocked                       bool       `json:"is_blocked"`                          // True, if the user is blocked by the current user
 	CanBeCalled                     bool       `json:"can_be_called"`                       // True, if the user can be called
+	SupportsVideoCalls              bool       `json:"supports_video_calls"`                // True, if a video call can be created with the user
 	HasPrivateCalls                 bool       `json:"has_private_calls"`                   // True, if the user can't be called due to their privacy settings
 	NeedPhoneNumberPrivacyException bool       `json:"need_phone_number_privacy_exception"` // True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
 	Bio                             string     `json:"bio"`                                 // A short user bio
@@ -4343,18 +4359,20 @@ func (userFullInfo *UserFullInfo) MessageType() string {
 // @param photo User profile photo; may be null
 // @param isBlocked True, if the user is blocked by the current user
 // @param canBeCalled True, if the user can be called
+// @param supportsVideoCalls True, if a video call can be created with the user
 // @param hasPrivateCalls True, if the user can't be called due to their privacy settings
 // @param needPhoneNumberPrivacyException True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
 // @param bio A short user bio
 // @param shareText For bots, the text that is included with the link when users share the bot
 // @param groupInCommonCount Number of group chats where both the other user and the current user are a member; 0 for the current user
 // @param botInfo If the user is a bot, information about the bot; may be null
-func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
+func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, supportsVideoCalls bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
 	userFullInfoTemp := UserFullInfo{
 		tdCommon:                        tdCommon{Type: "userFullInfo"},
 		Photo:                           photo,
 		IsBlocked:                       isBlocked,
 		CanBeCalled:                     canBeCalled,
+		SupportsVideoCalls:              supportsVideoCalls,
 		HasPrivateCalls:                 hasPrivateCalls,
 		NeedPhoneNumberPrivacyException: needPhoneNumberPrivacyException,
 		Bio:                             bio,
@@ -13664,6 +13682,7 @@ func (messageInvoice *MessageInvoice) GetMessageContentEnum() MessageContentEnum
 // MessageCall A message with information about an ended call
 type MessageCall struct {
 	tdCommon
+	IsVideo       bool              `json:"is_video"`       // True, if the call was a video call
 	DiscardReason CallDiscardReason `json:"discard_reason"` // Reason why the call was discarded
 	Duration      int32             `json:"duration"`       // Call duration, in seconds
 }
@@ -13675,11 +13694,13 @@ func (messageCall *MessageCall) MessageType() string {
 
 // NewMessageCall creates a new MessageCall
 //
+// @param isVideo True, if the call was a video call
 // @param discardReason Reason why the call was discarded
 // @param duration Call duration, in seconds
-func NewMessageCall(discardReason CallDiscardReason, duration int32) *MessageCall {
+func NewMessageCall(isVideo bool, discardReason CallDiscardReason, duration int32) *MessageCall {
 	messageCallTemp := MessageCall{
 		tdCommon:      tdCommon{Type: "messageCall"},
+		IsVideo:       isVideo,
 		DiscardReason: discardReason,
 		Duration:      duration,
 	}
@@ -13696,6 +13717,7 @@ func (messageCall *MessageCall) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
+		IsVideo  bool  `json:"is_video"` // True, if the call was a video call
 		Duration int32 `json:"duration"` // Call duration, in seconds
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -13704,6 +13726,7 @@ func (messageCall *MessageCall) UnmarshalJSON(b []byte) error {
 	}
 
 	messageCall.tdCommon = tempObj.tdCommon
+	messageCall.IsVideo = tempObj.IsVideo
 	messageCall.Duration = tempObj.Duration
 
 	fieldDiscardReason, _ := unmarshalCallDiscardReason(objMap["discard_reason"])
@@ -14903,37 +14926,37 @@ func (messageSchedulingStateSendWhenOnline *MessageSchedulingStateSendWhenOnline
 	return MessageSchedulingStateSendWhenOnlineType
 }
 
-// SendMessageOptions Options to be used when a message is send
-type SendMessageOptions struct {
+// MessageSendOptions Options to be used when a message is sent
+type MessageSendOptions struct {
 	tdCommon
 	DisableNotification bool                   `json:"disable_notification"` // Pass true to disable notification for the message. Must be false if the message is sent to a secret chat
 	FromBackground      bool                   `json:"from_background"`      // Pass true if the message is sent from the background
 	SchedulingState     MessageSchedulingState `json:"scheduling_state"`     // Message scheduling state. Messages sent to a secret chat, live location messages and self-destructing messages can't be scheduled
 }
 
-// MessageType return the string telegram-type of SendMessageOptions
-func (sendMessageOptions *SendMessageOptions) MessageType() string {
-	return "sendMessageOptions"
+// MessageType return the string telegram-type of MessageSendOptions
+func (messageSendOptions *MessageSendOptions) MessageType() string {
+	return "messageSendOptions"
 }
 
-// NewSendMessageOptions creates a new SendMessageOptions
+// NewMessageSendOptions creates a new MessageSendOptions
 //
 // @param disableNotification Pass true to disable notification for the message. Must be false if the message is sent to a secret chat
 // @param fromBackground Pass true if the message is sent from the background
 // @param schedulingState Message scheduling state. Messages sent to a secret chat, live location messages and self-destructing messages can't be scheduled
-func NewSendMessageOptions(disableNotification bool, fromBackground bool, schedulingState MessageSchedulingState) *SendMessageOptions {
-	sendMessageOptionsTemp := SendMessageOptions{
-		tdCommon:            tdCommon{Type: "sendMessageOptions"},
+func NewMessageSendOptions(disableNotification bool, fromBackground bool, schedulingState MessageSchedulingState) *MessageSendOptions {
+	messageSendOptionsTemp := MessageSendOptions{
+		tdCommon:            tdCommon{Type: "messageSendOptions"},
 		DisableNotification: disableNotification,
 		FromBackground:      fromBackground,
 		SchedulingState:     schedulingState,
 	}
 
-	return &sendMessageOptionsTemp
+	return &messageSendOptionsTemp
 }
 
 // UnmarshalJSON unmarshal to json
-func (sendMessageOptions *SendMessageOptions) UnmarshalJSON(b []byte) error {
+func (messageSendOptions *MessageSendOptions) UnmarshalJSON(b []byte) error {
 	var objMap map[string]*json.RawMessage
 	err := json.Unmarshal(b, &objMap)
 	if err != nil {
@@ -14950,14 +14973,43 @@ func (sendMessageOptions *SendMessageOptions) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	sendMessageOptions.tdCommon = tempObj.tdCommon
-	sendMessageOptions.DisableNotification = tempObj.DisableNotification
-	sendMessageOptions.FromBackground = tempObj.FromBackground
+	messageSendOptions.tdCommon = tempObj.tdCommon
+	messageSendOptions.DisableNotification = tempObj.DisableNotification
+	messageSendOptions.FromBackground = tempObj.FromBackground
 
 	fieldSchedulingState, _ := unmarshalMessageSchedulingState(objMap["scheduling_state"])
-	sendMessageOptions.SchedulingState = fieldSchedulingState
+	messageSendOptions.SchedulingState = fieldSchedulingState
 
 	return nil
+}
+
+// MessageCopyOptions Options to be used when a message content is copied without a link to the original message
+type MessageCopyOptions struct {
+	tdCommon
+	SendCopy       bool           `json:"send_copy"`       // True, if content of the message needs to be copied without a link to the original message. Always true if the message is forwarded to a secret chat
+	ReplaceCaption bool           `json:"replace_caption"` // True, if media caption of the message copy needs to be replaced. Ignored if send_copy is false
+	NewCaption     *FormattedText `json:"new_caption"`     // New message caption. Ignored if replace_caption is false
+}
+
+// MessageType return the string telegram-type of MessageCopyOptions
+func (messageCopyOptions *MessageCopyOptions) MessageType() string {
+	return "messageCopyOptions"
+}
+
+// NewMessageCopyOptions creates a new MessageCopyOptions
+//
+// @param sendCopy True, if content of the message needs to be copied without a link to the original message. Always true if the message is forwarded to a secret chat
+// @param replaceCaption True, if media caption of the message copy needs to be replaced. Ignored if send_copy is false
+// @param newCaption New message caption. Ignored if replace_caption is false
+func NewMessageCopyOptions(sendCopy bool, replaceCaption bool, newCaption *FormattedText) *MessageCopyOptions {
+	messageCopyOptionsTemp := MessageCopyOptions{
+		tdCommon:       tdCommon{Type: "messageCopyOptions"},
+		SendCopy:       sendCopy,
+		ReplaceCaption: replaceCaption,
+		NewCaption:     newCaption,
+	}
+
+	return &messageCopyOptionsTemp
 }
 
 // InputMessageText A text message
@@ -15878,11 +15930,10 @@ func (inputMessagePoll *InputMessagePoll) GetInputMessageContentEnum() InputMess
 // InputMessageForwarded A forwarded message
 type InputMessageForwarded struct {
 	tdCommon
-	FromChatId    int64 `json:"from_chat_id"`   // Identifier for the chat this forwarded message came from
-	MessageId     int64 `json:"message_id"`     // Identifier of the message to forward
-	InGameShare   bool  `json:"in_game_share"`  // True, if a game message should be shared within a launched game; applies only to game messages
-	SendCopy      bool  `json:"send_copy"`      // True, if content of the message needs to be copied without a link to the original message. Always true if the message is forwarded to a secret chat
-	RemoveCaption bool  `json:"remove_caption"` // True, if media caption of the message copy needs to be removed. Ignored if send_copy is false
+	FromChatId  int64               `json:"from_chat_id"`  // Identifier for the chat this forwarded message came from
+	MessageId   int64               `json:"message_id"`    // Identifier of the message to forward
+	InGameShare bool                `json:"in_game_share"` // True, if a game message should be shared within a launched game; applies only to game messages
+	CopyOptions *MessageCopyOptions `json:"copy_options"`  // Options to be used to copy content of the message without a link to the original message
 }
 
 // MessageType return the string telegram-type of InputMessageForwarded
@@ -15895,16 +15946,14 @@ func (inputMessageForwarded *InputMessageForwarded) MessageType() string {
 // @param fromChatId Identifier for the chat this forwarded message came from
 // @param messageId Identifier of the message to forward
 // @param inGameShare True, if a game message should be shared within a launched game; applies only to game messages
-// @param sendCopy True, if content of the message needs to be copied without a link to the original message. Always true if the message is forwarded to a secret chat
-// @param removeCaption True, if media caption of the message copy needs to be removed. Ignored if send_copy is false
-func NewInputMessageForwarded(fromChatId int64, messageId int64, inGameShare bool, sendCopy bool, removeCaption bool) *InputMessageForwarded {
+// @param copyOptions Options to be used to copy content of the message without a link to the original message
+func NewInputMessageForwarded(fromChatId int64, messageId int64, inGameShare bool, copyOptions *MessageCopyOptions) *InputMessageForwarded {
 	inputMessageForwardedTemp := InputMessageForwarded{
-		tdCommon:      tdCommon{Type: "inputMessageForwarded"},
-		FromChatId:    fromChatId,
-		MessageId:     messageId,
-		InGameShare:   inGameShare,
-		SendCopy:      sendCopy,
-		RemoveCaption: removeCaption,
+		tdCommon:    tdCommon{Type: "inputMessageForwarded"},
+		FromChatId:  fromChatId,
+		MessageId:   messageId,
+		InGameShare: inGameShare,
+		CopyOptions: copyOptions,
 	}
 
 	return &inputMessageForwardedTemp
@@ -17180,39 +17229,136 @@ func NewCallProtocol(udpP2p bool, udpReflector bool, minLayer int32, maxLayer in
 	return &callProtocolTemp
 }
 
-// CallConnection Describes the address of UDP reflectors
-type CallConnection struct {
+// CallServerTypeTelegramReflector A Telegram call reflector
+type CallServerTypeTelegramReflector struct {
 	tdCommon
-	Id      JSONInt64 `json:"id"`       // Reflector identifier
-	Ip      string    `json:"ip"`       // IPv4 reflector address
-	Ipv6    string    `json:"ipv6"`     // IPv6 reflector address
-	Port    int32     `json:"port"`     // Reflector port number
-	PeerTag []byte    `json:"peer_tag"` // Connection peer tag
+	PeerTag []byte `json:"peer_tag"` // A peer tag to be used with the reflector
 }
 
-// MessageType return the string telegram-type of CallConnection
-func (callConnection *CallConnection) MessageType() string {
-	return "callConnection"
+// MessageType return the string telegram-type of CallServerTypeTelegramReflector
+func (callServerTypeTelegramReflector *CallServerTypeTelegramReflector) MessageType() string {
+	return "callServerTypeTelegramReflector"
 }
 
-// NewCallConnection creates a new CallConnection
+// NewCallServerTypeTelegramReflector creates a new CallServerTypeTelegramReflector
 //
-// @param id Reflector identifier
-// @param ip IPv4 reflector address
-// @param ipv6 IPv6 reflector address
-// @param port Reflector port number
-// @param peerTag Connection peer tag
-func NewCallConnection(id JSONInt64, ip string, ipv6 string, port int32, peerTag []byte) *CallConnection {
-	callConnectionTemp := CallConnection{
-		tdCommon: tdCommon{Type: "callConnection"},
-		Id:       id,
-		Ip:       ip,
-		Ipv6:     ipv6,
-		Port:     port,
+// @param peerTag A peer tag to be used with the reflector
+func NewCallServerTypeTelegramReflector(peerTag []byte) *CallServerTypeTelegramReflector {
+	callServerTypeTelegramReflectorTemp := CallServerTypeTelegramReflector{
+		tdCommon: tdCommon{Type: "callServerTypeTelegramReflector"},
 		PeerTag:  peerTag,
 	}
 
-	return &callConnectionTemp
+	return &callServerTypeTelegramReflectorTemp
+}
+
+// GetCallServerTypeEnum return the enum type of this object
+func (callServerTypeTelegramReflector *CallServerTypeTelegramReflector) GetCallServerTypeEnum() CallServerTypeEnum {
+	return CallServerTypeTelegramReflectorType
+}
+
+// CallServerTypeWebrtc A WebRTC server
+type CallServerTypeWebrtc struct {
+	tdCommon
+	Username     string `json:"username"`      // Username to be used for authentification
+	Password     string `json:"password"`      // Authentication password
+	SupportsTurn bool   `json:"supports_turn"` // True, if the server supports TURN
+	SupportsStun bool   `json:"supports_stun"` // True, if the server supports STUN
+}
+
+// MessageType return the string telegram-type of CallServerTypeWebrtc
+func (callServerTypeWebrtc *CallServerTypeWebrtc) MessageType() string {
+	return "callServerTypeWebrtc"
+}
+
+// NewCallServerTypeWebrtc creates a new CallServerTypeWebrtc
+//
+// @param username Username to be used for authentification
+// @param password Authentication password
+// @param supportsTurn True, if the server supports TURN
+// @param supportsStun True, if the server supports STUN
+func NewCallServerTypeWebrtc(username string, password string, supportsTurn bool, supportsStun bool) *CallServerTypeWebrtc {
+	callServerTypeWebrtcTemp := CallServerTypeWebrtc{
+		tdCommon:     tdCommon{Type: "callServerTypeWebrtc"},
+		Username:     username,
+		Password:     password,
+		SupportsTurn: supportsTurn,
+		SupportsStun: supportsStun,
+	}
+
+	return &callServerTypeWebrtcTemp
+}
+
+// GetCallServerTypeEnum return the enum type of this object
+func (callServerTypeWebrtc *CallServerTypeWebrtc) GetCallServerTypeEnum() CallServerTypeEnum {
+	return CallServerTypeWebrtcType
+}
+
+// CallServer Describes a server for relaying call data
+type CallServer struct {
+	tdCommon
+	Id          JSONInt64      `json:"id"`           // Server identifier
+	IpAddress   string         `json:"ip_address"`   // Server IPv4 address
+	Ipv6Address string         `json:"ipv6_address"` // Server IPv6 address
+	Port        int32          `json:"port"`         // Server port number
+	Type        CallServerType `json:"type"`         // Server type
+}
+
+// MessageType return the string telegram-type of CallServer
+func (callServer *CallServer) MessageType() string {
+	return "callServer"
+}
+
+// NewCallServer creates a new CallServer
+//
+// @param id Server identifier
+// @param ipAddress Server IPv4 address
+// @param ipv6Address Server IPv6 address
+// @param port Server port number
+// @param typeParam Server type
+func NewCallServer(id JSONInt64, ipAddress string, ipv6Address string, port int32, typeParam CallServerType) *CallServer {
+	callServerTemp := CallServer{
+		tdCommon:    tdCommon{Type: "callServer"},
+		Id:          id,
+		IpAddress:   ipAddress,
+		Ipv6Address: ipv6Address,
+		Port:        port,
+		Type:        typeParam,
+	}
+
+	return &callServerTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (callServer *CallServer) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Id          JSONInt64 `json:"id"`           // Server identifier
+		IpAddress   string    `json:"ip_address"`   // Server IPv4 address
+		Ipv6Address string    `json:"ipv6_address"` // Server IPv6 address
+		Port        int32     `json:"port"`         // Server port number
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	callServer.tdCommon = tempObj.tdCommon
+	callServer.Id = tempObj.Id
+	callServer.IpAddress = tempObj.IpAddress
+	callServer.Ipv6Address = tempObj.Ipv6Address
+	callServer.Port = tempObj.Port
+
+	fieldType, _ := unmarshalCallServerType(objMap["type"])
+	callServer.Type = fieldType
+
+	return nil
 }
 
 // CallId Contains the call identifier
@@ -17297,12 +17443,12 @@ func (callStateExchangingKeys *CallStateExchangingKeys) GetCallStateEnum() CallS
 // CallStateReady The call is ready to use
 type CallStateReady struct {
 	tdCommon
-	Protocol      *CallProtocol    `json:"protocol"`       // Call protocols supported by the peer
-	Connections   []CallConnection `json:"connections"`    // Available UDP reflectors
-	Config        string           `json:"config"`         // A JSON-encoded call config
-	EncryptionKey []byte           `json:"encryption_key"` // Call encryption key
-	Emojis        []string         `json:"emojis"`         // Encryption key emojis fingerprint
-	AllowP2p      bool             `json:"allow_p2p"`      // True, if peer-to-peer connection is allowed by users privacy settings
+	Protocol      *CallProtocol `json:"protocol"`       // Call protocols supported by the peer
+	Servers       []CallServer  `json:"servers"`        // List of available call servers
+	Config        string        `json:"config"`         // A JSON-encoded call config
+	EncryptionKey []byte        `json:"encryption_key"` // Call encryption key
+	Emojis        []string      `json:"emojis"`         // Encryption key emojis fingerprint
+	AllowP2p      bool          `json:"allow_p2p"`      // True, if peer-to-peer connection is allowed by users privacy settings
 }
 
 // MessageType return the string telegram-type of CallStateReady
@@ -17313,16 +17459,16 @@ func (callStateReady *CallStateReady) MessageType() string {
 // NewCallStateReady creates a new CallStateReady
 //
 // @param protocol Call protocols supported by the peer
-// @param connections Available UDP reflectors
+// @param servers List of available call servers
 // @param config A JSON-encoded call config
 // @param encryptionKey Call encryption key
 // @param emojis Encryption key emojis fingerprint
 // @param allowP2p True, if peer-to-peer connection is allowed by users privacy settings
-func NewCallStateReady(protocol *CallProtocol, connections []CallConnection, config string, encryptionKey []byte, emojis []string, allowP2p bool) *CallStateReady {
+func NewCallStateReady(protocol *CallProtocol, servers []CallServer, config string, encryptionKey []byte, emojis []string, allowP2p bool) *CallStateReady {
 	callStateReadyTemp := CallStateReady{
 		tdCommon:      tdCommon{Type: "callStateReady"},
 		Protocol:      protocol,
-		Connections:   connections,
+		Servers:       servers,
 		Config:        config,
 		EncryptionKey: encryptionKey,
 		Emojis:        emojis,
@@ -17632,6 +17778,7 @@ type Call struct {
 	Id         int32     `json:"id"`          // Call identifier, not persistent
 	UserId     int32     `json:"user_id"`     // Peer user identifier
 	IsOutgoing bool      `json:"is_outgoing"` // True, if the call is outgoing
+	IsVideo    bool      `json:"is_video"`    // True, if the call is a video call
 	State      CallState `json:"state"`       // Call state
 }
 
@@ -17645,13 +17792,15 @@ func (call *Call) MessageType() string {
 // @param id Call identifier, not persistent
 // @param userId Peer user identifier
 // @param isOutgoing True, if the call is outgoing
+// @param isVideo True, if the call is a video call
 // @param state Call state
-func NewCall(id int32, userId int32, isOutgoing bool, state CallState) *Call {
+func NewCall(id int32, userId int32, isOutgoing bool, isVideo bool, state CallState) *Call {
 	callTemp := Call{
 		tdCommon:   tdCommon{Type: "call"},
 		Id:         id,
 		UserId:     userId,
 		IsOutgoing: isOutgoing,
+		IsVideo:    isVideo,
 		State:      state,
 	}
 
@@ -17670,6 +17819,7 @@ func (call *Call) UnmarshalJSON(b []byte) error {
 		Id         int32 `json:"id"`          // Call identifier, not persistent
 		UserId     int32 `json:"user_id"`     // Peer user identifier
 		IsOutgoing bool  `json:"is_outgoing"` // True, if the call is outgoing
+		IsVideo    bool  `json:"is_video"`    // True, if the call is a video call
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -17681,6 +17831,7 @@ func (call *Call) UnmarshalJSON(b []byte) error {
 	call.Id = tempObj.Id
 	call.UserId = tempObj.UserId
 	call.IsOutgoing = tempObj.IsOutgoing
+	call.IsVideo = tempObj.IsVideo
 
 	fieldState, _ := unmarshalCallState(objMap["state"])
 	call.State = fieldState
@@ -28220,6 +28371,37 @@ func (updateCall *UpdateCall) GetUpdateEnum() UpdateEnum {
 	return UpdateCallType
 }
 
+// UpdateNewCallSignalingData New call signaling data arrived
+type UpdateNewCallSignalingData struct {
+	tdCommon
+	CallId int32  `json:"call_id"` // The call identifier
+	Data   []byte `json:"data"`    // The data
+}
+
+// MessageType return the string telegram-type of UpdateNewCallSignalingData
+func (updateNewCallSignalingData *UpdateNewCallSignalingData) MessageType() string {
+	return "updateNewCallSignalingData"
+}
+
+// NewUpdateNewCallSignalingData creates a new UpdateNewCallSignalingData
+//
+// @param callId The call identifier
+// @param data The data
+func NewUpdateNewCallSignalingData(callId int32, data []byte) *UpdateNewCallSignalingData {
+	updateNewCallSignalingDataTemp := UpdateNewCallSignalingData{
+		tdCommon: tdCommon{Type: "updateNewCallSignalingData"},
+		CallId:   callId,
+		Data:     data,
+	}
+
+	return &updateNewCallSignalingDataTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateNewCallSignalingData *UpdateNewCallSignalingData) GetUpdateEnum() UpdateEnum {
+	return UpdateNewCallSignalingDataType
+}
+
 // UpdateUserPrivacySettingRules Some privacy setting rules have been changed
 type UpdateUserPrivacySettingRules struct {
 	tdCommon
@@ -32025,6 +32207,33 @@ func unmarshalCallDiscardReason(rawMsg *json.RawMessage) (CallDiscardReason, err
 	}
 }
 
+func unmarshalCallServerType(rawMsg *json.RawMessage) (CallServerType, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch CallServerTypeEnum(objMap["@type"].(string)) {
+	case CallServerTypeTelegramReflectorType:
+		var callServerTypeTelegramReflector CallServerTypeTelegramReflector
+		err := json.Unmarshal(*rawMsg, &callServerTypeTelegramReflector)
+		return &callServerTypeTelegramReflector, err
+
+	case CallServerTypeWebrtcType:
+		var callServerTypeWebrtc CallServerTypeWebrtc
+		err := json.Unmarshal(*rawMsg, &callServerTypeWebrtc)
+		return &callServerTypeWebrtc, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalCallState(rawMsg *json.RawMessage) (CallState, error) {
 
 	if rawMsg == nil {
@@ -33902,6 +34111,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateCall UpdateCall
 		err := json.Unmarshal(*rawMsg, &updateCall)
 		return &updateCall, err
+
+	case UpdateNewCallSignalingDataType:
+		var updateNewCallSignalingData UpdateNewCallSignalingData
+		err := json.Unmarshal(*rawMsg, &updateNewCallSignalingData)
+		return &updateNewCallSignalingData, err
 
 	case UpdateUserPrivacySettingRulesType:
 		var updateUserPrivacySettingRules UpdateUserPrivacySettingRules
