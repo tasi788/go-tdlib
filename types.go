@@ -153,6 +153,7 @@ const (
 	ChatMembersFilterContactsType       ChatMembersFilterEnum = "chatMembersFilterContacts"
 	ChatMembersFilterAdministratorsType ChatMembersFilterEnum = "chatMembersFilterAdministrators"
 	ChatMembersFilterMembersType        ChatMembersFilterEnum = "chatMembersFilterMembers"
+	ChatMembersFilterMentionType        ChatMembersFilterEnum = "chatMembersFilterMention"
 	ChatMembersFilterRestrictedType     ChatMembersFilterEnum = "chatMembersFilterRestricted"
 	ChatMembersFilterBannedType         ChatMembersFilterEnum = "chatMembersFilterBanned"
 	ChatMembersFilterBotsType           ChatMembersFilterEnum = "chatMembersFilterBots"
@@ -169,6 +170,7 @@ const (
 	SupergroupMembersFilterSearchType         SupergroupMembersFilterEnum = "supergroupMembersFilterSearch"
 	SupergroupMembersFilterRestrictedType     SupergroupMembersFilterEnum = "supergroupMembersFilterRestricted"
 	SupergroupMembersFilterBannedType         SupergroupMembersFilterEnum = "supergroupMembersFilterBanned"
+	SupergroupMembersFilterMentionType        SupergroupMembersFilterEnum = "supergroupMembersFilterMention"
 	SupergroupMembersFilterBotsType           SupergroupMembersFilterEnum = "supergroupMembersFilterBots"
 )
 
@@ -180,6 +182,15 @@ const (
 	SecretChatStatePendingType SecretChatStateEnum = "secretChatStatePending"
 	SecretChatStateReadyType   SecretChatStateEnum = "secretChatStateReady"
 	SecretChatStateClosedType  SecretChatStateEnum = "secretChatStateClosed"
+)
+
+// MessageSenderEnum Alias for abstract MessageSender 'Sub-Classes', used as constant-enum here
+type MessageSenderEnum string
+
+// MessageSender enums
+const (
+	MessageSenderUserType MessageSenderEnum = "messageSenderUser"
+	MessageSenderChatType MessageSenderEnum = "messageSenderChat"
 )
 
 // MessageForwardOriginEnum Alias for abstract MessageForwardOrigin 'Sub-Classes', used as constant-enum here
@@ -496,47 +507,48 @@ type MessageContentEnum string
 
 // MessageContent enums
 const (
-	MessageTextType                 MessageContentEnum = "messageText"
-	MessageAnimationType            MessageContentEnum = "messageAnimation"
-	MessageAudioType                MessageContentEnum = "messageAudio"
-	MessageDocumentType             MessageContentEnum = "messageDocument"
-	MessagePhotoType                MessageContentEnum = "messagePhoto"
-	MessageExpiredPhotoType         MessageContentEnum = "messageExpiredPhoto"
-	MessageStickerType              MessageContentEnum = "messageSticker"
-	MessageVideoType                MessageContentEnum = "messageVideo"
-	MessageExpiredVideoType         MessageContentEnum = "messageExpiredVideo"
-	MessageVideoNoteType            MessageContentEnum = "messageVideoNote"
-	MessageVoiceNoteType            MessageContentEnum = "messageVoiceNote"
-	MessageLocationType             MessageContentEnum = "messageLocation"
-	MessageVenueType                MessageContentEnum = "messageVenue"
-	MessageContactType              MessageContentEnum = "messageContact"
-	MessageDiceType                 MessageContentEnum = "messageDice"
-	MessageGameType                 MessageContentEnum = "messageGame"
-	MessagePollType                 MessageContentEnum = "messagePoll"
-	MessageInvoiceType              MessageContentEnum = "messageInvoice"
-	MessageCallType                 MessageContentEnum = "messageCall"
-	MessageBasicGroupChatCreateType MessageContentEnum = "messageBasicGroupChatCreate"
-	MessageSupergroupChatCreateType MessageContentEnum = "messageSupergroupChatCreate"
-	MessageChatChangeTitleType      MessageContentEnum = "messageChatChangeTitle"
-	MessageChatChangePhotoType      MessageContentEnum = "messageChatChangePhoto"
-	MessageChatDeletePhotoType      MessageContentEnum = "messageChatDeletePhoto"
-	MessageChatAddMembersType       MessageContentEnum = "messageChatAddMembers"
-	MessageChatJoinByLinkType       MessageContentEnum = "messageChatJoinByLink"
-	MessageChatDeleteMemberType     MessageContentEnum = "messageChatDeleteMember"
-	MessageChatUpgradeToType        MessageContentEnum = "messageChatUpgradeTo"
-	MessageChatUpgradeFromType      MessageContentEnum = "messageChatUpgradeFrom"
-	MessagePinMessageType           MessageContentEnum = "messagePinMessage"
-	MessageScreenshotTakenType      MessageContentEnum = "messageScreenshotTaken"
-	MessageChatSetTtlType           MessageContentEnum = "messageChatSetTtl"
-	MessageCustomServiceActionType  MessageContentEnum = "messageCustomServiceAction"
-	MessageGameScoreType            MessageContentEnum = "messageGameScore"
-	MessagePaymentSuccessfulType    MessageContentEnum = "messagePaymentSuccessful"
-	MessagePaymentSuccessfulBotType MessageContentEnum = "messagePaymentSuccessfulBot"
-	MessageContactRegisteredType    MessageContentEnum = "messageContactRegistered"
-	MessageWebsiteConnectedType     MessageContentEnum = "messageWebsiteConnected"
-	MessagePassportDataSentType     MessageContentEnum = "messagePassportDataSent"
-	MessagePassportDataReceivedType MessageContentEnum = "messagePassportDataReceived"
-	MessageUnsupportedType          MessageContentEnum = "messageUnsupported"
+	MessageTextType                    MessageContentEnum = "messageText"
+	MessageAnimationType               MessageContentEnum = "messageAnimation"
+	MessageAudioType                   MessageContentEnum = "messageAudio"
+	MessageDocumentType                MessageContentEnum = "messageDocument"
+	MessagePhotoType                   MessageContentEnum = "messagePhoto"
+	MessageExpiredPhotoType            MessageContentEnum = "messageExpiredPhoto"
+	MessageStickerType                 MessageContentEnum = "messageSticker"
+	MessageVideoType                   MessageContentEnum = "messageVideo"
+	MessageExpiredVideoType            MessageContentEnum = "messageExpiredVideo"
+	MessageVideoNoteType               MessageContentEnum = "messageVideoNote"
+	MessageVoiceNoteType               MessageContentEnum = "messageVoiceNote"
+	MessageLocationType                MessageContentEnum = "messageLocation"
+	MessageVenueType                   MessageContentEnum = "messageVenue"
+	MessageContactType                 MessageContentEnum = "messageContact"
+	MessageDiceType                    MessageContentEnum = "messageDice"
+	MessageGameType                    MessageContentEnum = "messageGame"
+	MessagePollType                    MessageContentEnum = "messagePoll"
+	MessageInvoiceType                 MessageContentEnum = "messageInvoice"
+	MessageCallType                    MessageContentEnum = "messageCall"
+	MessageBasicGroupChatCreateType    MessageContentEnum = "messageBasicGroupChatCreate"
+	MessageSupergroupChatCreateType    MessageContentEnum = "messageSupergroupChatCreate"
+	MessageChatChangeTitleType         MessageContentEnum = "messageChatChangeTitle"
+	MessageChatChangePhotoType         MessageContentEnum = "messageChatChangePhoto"
+	MessageChatDeletePhotoType         MessageContentEnum = "messageChatDeletePhoto"
+	MessageChatAddMembersType          MessageContentEnum = "messageChatAddMembers"
+	MessageChatJoinByLinkType          MessageContentEnum = "messageChatJoinByLink"
+	MessageChatDeleteMemberType        MessageContentEnum = "messageChatDeleteMember"
+	MessageChatUpgradeToType           MessageContentEnum = "messageChatUpgradeTo"
+	MessageChatUpgradeFromType         MessageContentEnum = "messageChatUpgradeFrom"
+	MessagePinMessageType              MessageContentEnum = "messagePinMessage"
+	MessageScreenshotTakenType         MessageContentEnum = "messageScreenshotTaken"
+	MessageChatSetTtlType              MessageContentEnum = "messageChatSetTtl"
+	MessageCustomServiceActionType     MessageContentEnum = "messageCustomServiceAction"
+	MessageGameScoreType               MessageContentEnum = "messageGameScore"
+	MessagePaymentSuccessfulType       MessageContentEnum = "messagePaymentSuccessful"
+	MessagePaymentSuccessfulBotType    MessageContentEnum = "messagePaymentSuccessfulBot"
+	MessageContactRegisteredType       MessageContentEnum = "messageContactRegistered"
+	MessageWebsiteConnectedType        MessageContentEnum = "messageWebsiteConnected"
+	MessagePassportDataSentType        MessageContentEnum = "messagePassportDataSent"
+	MessagePassportDataReceivedType    MessageContentEnum = "messagePassportDataReceived"
+	MessageProximityAlertTriggeredType MessageContentEnum = "messageProximityAlertTriggered"
+	MessageUnsupportedType             MessageContentEnum = "messageUnsupported"
 )
 
 // TextEntityTypeEnum Alias for abstract TextEntityType 'Sub-Classes', used as constant-enum here
@@ -618,6 +630,7 @@ const (
 	SearchMessagesFilterMentionType           SearchMessagesFilterEnum = "searchMessagesFilterMention"
 	SearchMessagesFilterUnreadMentionType     SearchMessagesFilterEnum = "searchMessagesFilterUnreadMention"
 	SearchMessagesFilterFailedToSendType      SearchMessagesFilterEnum = "searchMessagesFilterFailedToSend"
+	SearchMessagesFilterPinnedType            SearchMessagesFilterEnum = "searchMessagesFilterPinned"
 )
 
 // ChatActionEnum Alias for abstract ChatAction 'Sub-Classes', used as constant-enum here
@@ -701,6 +714,15 @@ const (
 	CallProblemDroppedType         CallProblemEnum = "callProblemDropped"
 	CallProblemDistortedVideoType  CallProblemEnum = "callProblemDistortedVideo"
 	CallProblemPixelatedVideoType  CallProblemEnum = "callProblemPixelatedVideo"
+)
+
+// DiceStickersEnum Alias for abstract DiceStickers 'Sub-Classes', used as constant-enum here
+type DiceStickersEnum string
+
+// DiceStickers enums
+const (
+	DiceStickersRegularType     DiceStickersEnum = "diceStickersRegular"
+	DiceStickersSlotMachineType DiceStickersEnum = "diceStickersSlotMachine"
 )
 
 // InputInlineQueryResultEnum Alias for abstract InputInlineQueryResult 'Sub-Classes', used as constant-enum here
@@ -1131,6 +1153,7 @@ const (
 	UpdateMessageSendFailedType              UpdateEnum = "updateMessageSendFailed"
 	UpdateMessageContentType                 UpdateEnum = "updateMessageContent"
 	UpdateMessageEditedType                  UpdateEnum = "updateMessageEdited"
+	UpdateMessageIsPinnedType                UpdateEnum = "updateMessageIsPinned"
 	UpdateMessageInteractionInfoType         UpdateEnum = "updateMessageInteractionInfo"
 	UpdateMessageContentOpenedType           UpdateEnum = "updateMessageContentOpened"
 	UpdateMessageMentionReadType             UpdateEnum = "updateMessageMentionRead"
@@ -1151,7 +1174,6 @@ const (
 	UpdateChatNotificationSettingsType       UpdateEnum = "updateChatNotificationSettings"
 	UpdateScopeNotificationSettingsType      UpdateEnum = "updateScopeNotificationSettings"
 	UpdateChatActionBarType                  UpdateEnum = "updateChatActionBar"
-	UpdateChatPinnedMessageType              UpdateEnum = "updateChatPinnedMessage"
 	UpdateChatReplyMarkupType                UpdateEnum = "updateChatReplyMarkup"
 	UpdateChatDraftMessageType               UpdateEnum = "updateChatDraftMessage"
 	UpdateChatFiltersType                    UpdateEnum = "updateChatFilters"
@@ -1272,6 +1294,11 @@ type SupergroupMembersFilter interface {
 // SecretChatState Describes the current secret chat state
 type SecretChatState interface {
 	GetSecretChatStateEnum() SecretChatStateEnum
+}
+
+// MessageSender Contains information about the sender of a message
+type MessageSender interface {
+	GetMessageSenderEnum() MessageSenderEnum
 }
 
 // MessageForwardOrigin Contains information about the origin of a forwarded message
@@ -1437,6 +1464,11 @@ type CallState interface {
 // CallProblem Describes the exact type of a problem with a call
 type CallProblem interface {
 	GetCallProblemEnum() CallProblemEnum
+}
+
+// DiceStickers Contains animated stickers which should be used for dice animation rendering
+type DiceStickers interface {
+	GetDiceStickersEnum() DiceStickersEnum
 }
 
 // InputInlineQueryResult Represents a single result of an inline query; for bots only
@@ -2513,7 +2545,6 @@ func NewRemoteFile(id string, uniqueId string, isUploadingActive bool, isUploadi
 type File struct {
 	tdCommon
 	Id           int32       `json:"id"`            // Unique file identifier
-	DcId         int32       `json:"dc_id"`         // File data center
 	Size         int32       `json:"size"`          // File size; 0 if unknown
 	ExpectedSize int32       `json:"expected_size"` // Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 	Local        *LocalFile  `json:"local"`         // Information about the local copy of the file
@@ -2528,16 +2559,14 @@ func (file *File) MessageType() string {
 // NewFile creates a new File
 //
 // @param id Unique file identifier
-// @param dcId File data center
 // @param size File size; 0 if unknown
 // @param expectedSize Expected file size in case the exact file size is unknown, but an approximate size is known. Can be used to show download/upload progress
 // @param local Information about the local copy of the file
 // @param remote Information about the remote copy of the file
-func NewFile(id int32, dcId int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
+func NewFile(id int32, size int32, expectedSize int32, local *LocalFile, remote *RemoteFile) *File {
 	fileTemp := File{
 		tdCommon:     tdCommon{Type: "file"},
 		Id:           id,
-		DcId:         dcId,
 		Size:         size,
 		ExpectedSize: expectedSize,
 		Local:        local,
@@ -3552,8 +3581,9 @@ func NewContact(phoneNumber string, firstName string, lastName string, vcard str
 // Location Describes a location on planet Earth
 type Location struct {
 	tdCommon
-	Latitude  float64 `json:"latitude"`  // Latitude of the location in degrees; as defined by the sender
-	Longitude float64 `json:"longitude"` // Longitude of the location, in degrees; as defined by the sender
+	Latitude           float64 `json:"latitude"`            // Latitude of the location in degrees; as defined by the sender
+	Longitude          float64 `json:"longitude"`           // Longitude of the location, in degrees; as defined by the sender
+	HorizontalAccuracy float64 `json:"horizontal_accuracy"` // The estimated horizontal accuracy of the location, in meters; as defined by the sender. 0 if unknown
 }
 
 // MessageType return the string telegram-type of Location
@@ -3565,11 +3595,13 @@ func (location *Location) MessageType() string {
 //
 // @param latitude Latitude of the location in degrees; as defined by the sender
 // @param longitude Longitude of the location, in degrees; as defined by the sender
-func NewLocation(latitude float64, longitude float64) *Location {
+// @param horizontalAccuracy The estimated horizontal accuracy of the location, in meters; as defined by the sender. 0 if unknown
+func NewLocation(latitude float64, longitude float64, horizontalAccuracy float64) *Location {
 	locationTemp := Location{
-		tdCommon:  tdCommon{Type: "location"},
-		Latitude:  latitude,
-		Longitude: longitude,
+		tdCommon:           tdCommon{Type: "location"},
+		Latitude:           latitude,
+		Longitude:          longitude,
+		HorizontalAccuracy: horizontalAccuracy,
 	}
 
 	return &locationTemp
@@ -4228,7 +4260,6 @@ func (inputChatPhotoAnimation *InputChatPhotoAnimation) GetInputChatPhotoEnum() 
 type User struct {
 	tdCommon
 	Id                int32         `json:"id"`                 // User identifier
-	AccessHash        JSONInt64     `json:"access_hash"`        // User access hash
 	FirstName         string        `json:"first_name"`         // First name of the user
 	LastName          string        `json:"last_name"`          // Last name of the user
 	Username          string        `json:"username"`           // Username of the user
@@ -4254,7 +4285,6 @@ func (user *User) MessageType() string {
 // NewUser creates a new User
 //
 // @param id User identifier
-// @param accessHash User access hash
 // @param firstName First name of the user
 // @param lastName Last name of the user
 // @param username Username of the user
@@ -4270,11 +4300,10 @@ func (user *User) MessageType() string {
 // @param haveAccess If false, the user is inaccessible, and the only information known about the user is inside this class. It can't be passed to any method except GetUser
 // @param typeParam Type of the user
 // @param languageCode IETF language tag of the user's language; only available to bots
-func NewUser(id int32, accessHash JSONInt64, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, isContact bool, isMutualContact bool, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
+func NewUser(id int32, firstName string, lastName string, username string, phoneNumber string, status UserStatus, profilePhoto *ProfilePhoto, isContact bool, isMutualContact bool, isVerified bool, isSupport bool, restrictionReason string, isScam bool, haveAccess bool, typeParam UserType, languageCode string) *User {
 	userTemp := User{
 		tdCommon:          tdCommon{Type: "user"},
 		Id:                id,
-		AccessHash:        accessHash,
 		FirstName:         firstName,
 		LastName:          lastName,
 		Username:          username,
@@ -4305,7 +4334,6 @@ func (user *User) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		Id                int32         `json:"id"`                 // User identifier
-		AccessHash        JSONInt64     `json:"access_hash"`        // User access hash
 		FirstName         string        `json:"first_name"`         // First name of the user
 		LastName          string        `json:"last_name"`          // Last name of the user
 		Username          string        `json:"username"`           // Username of the user
@@ -4327,7 +4355,6 @@ func (user *User) UnmarshalJSON(b []byte) error {
 
 	user.tdCommon = tempObj.tdCommon
 	user.Id = tempObj.Id
-	user.AccessHash = tempObj.AccessHash
 	user.FirstName = tempObj.FirstName
 	user.LastName = tempObj.LastName
 	user.Username = tempObj.Username
@@ -4355,6 +4382,7 @@ func (user *User) UnmarshalJSON(b []byte) error {
 type UserFullInfo struct {
 	tdCommon
 	Photo                           *ChatPhoto `json:"photo"`                               // User profile photo; may be null
+	IsBlocked                       bool       `json:"is_blocked"`                          // True, if the user is blocked by the current user
 	CanBeCalled                     bool       `json:"can_be_called"`                       // True, if the user can be called
 	SupportsVideoCalls              bool       `json:"supports_video_calls"`                // True, if a video call can be created with the user
 	HasPrivateCalls                 bool       `json:"has_private_calls"`                   // True, if the user can't be called due to their privacy settings
@@ -4373,6 +4401,7 @@ func (userFullInfo *UserFullInfo) MessageType() string {
 // NewUserFullInfo creates a new UserFullInfo
 //
 // @param photo User profile photo; may be null
+// @param isBlocked True, if the user is blocked by the current user
 // @param canBeCalled True, if the user can be called
 // @param supportsVideoCalls True, if a video call can be created with the user
 // @param hasPrivateCalls True, if the user can't be called due to their privacy settings
@@ -4381,10 +4410,11 @@ func (userFullInfo *UserFullInfo) MessageType() string {
 // @param shareText For bots, the text that is included with the link when users share the bot
 // @param groupInCommonCount Number of group chats where both the other user and the current user are a member; 0 for the current user
 // @param botInfo If the user is a bot, information about the bot; may be null
-func NewUserFullInfo(photo *ChatPhoto, canBeCalled bool, supportsVideoCalls bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
+func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, supportsVideoCalls bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, groupInCommonCount int32, botInfo *BotInfo) *UserFullInfo {
 	userFullInfoTemp := UserFullInfo{
 		tdCommon:                        tdCommon{Type: "userFullInfo"},
 		Photo:                           photo,
+		IsBlocked:                       isBlocked,
 		CanBeCalled:                     canBeCalled,
 		SupportsVideoCalls:              supportsVideoCalls,
 		HasPrivateCalls:                 hasPrivateCalls,
@@ -4482,10 +4512,7 @@ type ChatPermissions struct {
 	CanSendMessages       bool `json:"can_send_messages"`         // True, if the user can send text messages, contacts, locations, and venues
 	CanSendMediaMessages  bool `json:"can_send_media_messages"`   // True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies can_send_messages permissions
 	CanSendPolls          bool `json:"can_send_polls"`            // True, if the user can send polls. Implies can_send_messages permissions
-	CanSendStickers       bool `json:"can_send_stickers"`         // True, if the user can send stickers. Implies can_send_messages permissions
-	CanSendAnimations     bool `json:"can_send_animations"`       // True, if the user can send animations. Implies can_send_messages permissions
-	CanSendGames          bool `json:"can_send_games"`            // True, if the user can send games. Implies can_send_messages permissions
-	CanUseInlineBots      bool `json:"can_use_inline_bots"`       // True, if the user can use inline bots. Implies can_send_messages permissions
+	CanSendOtherMessages  bool `json:"can_send_other_messages"`   // True, if the user can send animations, games, stickers, and dice and use inline bots. Implies can_send_messages permissions
 	CanAddWebPagePreviews bool `json:"can_add_web_page_previews"` // True, if the user may add a web page preview to their messages. Implies can_send_messages permissions
 	CanChangeInfo         bool `json:"can_change_info"`           // True, if the user can change the chat title, photo, and other settings
 	CanInviteUsers        bool `json:"can_invite_users"`          // True, if the user can invite new users to the chat
@@ -4502,24 +4529,18 @@ func (chatPermissions *ChatPermissions) MessageType() string {
 // @param canSendMessages True, if the user can send text messages, contacts, locations, and venues
 // @param canSendMediaMessages True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies can_send_messages permissions
 // @param canSendPolls True, if the user can send polls. Implies can_send_messages permissions
-// @param canSendStickers True, if the user can send stickers. Implies can_send_messages permissions
-// @param canSendAnimations True, if the user can send animations. Implies can_send_messages permissions
-// @param canSendGames True, if the user can send games. Implies can_send_messages permissions
-// @param canUseInlineBots True, if the user can use inline bots. Implies can_send_messages permissions
+// @param canSendOtherMessages True, if the user can send animations, games, stickers, and dice and use inline bots. Implies can_send_messages permissions
 // @param canAddWebPagePreviews True, if the user may add a web page preview to their messages. Implies can_send_messages permissions
 // @param canChangeInfo True, if the user can change the chat title, photo, and other settings
 // @param canInviteUsers True, if the user can invite new users to the chat
 // @param canPinMessages True, if the user can pin messages
-func NewChatPermissions(canSendMessages bool, canSendMediaMessages bool, canSendPolls bool, canSendStickers bool, canSendAnimations bool, canSendGames bool, canUseInlineBots bool, canAddWebPagePreviews bool, canChangeInfo bool, canInviteUsers bool, canPinMessages bool) *ChatPermissions {
+func NewChatPermissions(canSendMessages bool, canSendMediaMessages bool, canSendPolls bool, canSendOtherMessages bool, canAddWebPagePreviews bool, canChangeInfo bool, canInviteUsers bool, canPinMessages bool) *ChatPermissions {
 	chatPermissionsTemp := ChatPermissions{
 		tdCommon:              tdCommon{Type: "chatPermissions"},
 		CanSendMessages:       canSendMessages,
 		CanSendMediaMessages:  canSendMediaMessages,
 		CanSendPolls:          canSendPolls,
-		CanSendStickers:       canSendStickers,
-		CanSendAnimations:     canSendAnimations,
-		CanSendGames:          canSendGames,
-		CanUseInlineBots:      canUseInlineBots,
+		CanSendOtherMessages:  canSendOtherMessages,
 		CanAddWebPagePreviews: canAddWebPagePreviews,
 		CanChangeInfo:         canChangeInfo,
 		CanInviteUsers:        canInviteUsers,
@@ -4533,7 +4554,7 @@ func NewChatPermissions(canSendMessages bool, canSendMediaMessages bool, canSend
 type ChatMemberStatusCreator struct {
 	tdCommon
 	CustomTitle string `json:"custom_title"` // A custom title of the owner; 0-16 characters without emojis; applicable to supergroups only
-	IsAnonymous bool   `json:"is_anonymous"` // True, if the creator isn't shown in the chat member list and sends messages anonymously
+	IsAnonymous bool   `json:"is_anonymous"` // True, if the creator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
 	IsMember    bool   `json:"is_member"`    // True, if the user is a member of the chat
 }
 
@@ -4545,7 +4566,7 @@ func (chatMemberStatusCreator *ChatMemberStatusCreator) MessageType() string {
 // NewChatMemberStatusCreator creates a new ChatMemberStatusCreator
 //
 // @param customTitle A custom title of the owner; 0-16 characters without emojis; applicable to supergroups only
-// @param isAnonymous True, if the creator isn't shown in the chat member list and sends messages anonymously
+// @param isAnonymous True, if the creator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
 // @param isMember True, if the user is a member of the chat
 func NewChatMemberStatusCreator(customTitle string, isAnonymous bool, isMember bool) *ChatMemberStatusCreator {
 	chatMemberStatusCreatorTemp := ChatMemberStatusCreator{
@@ -4576,7 +4597,7 @@ type ChatMemberStatusAdministrator struct {
 	CanRestrictMembers bool   `json:"can_restrict_members"` // True, if the administrator can restrict, ban, or unban chat members
 	CanPinMessages     bool   `json:"can_pin_messages"`     // True, if the administrator can pin messages; applicable to groups only
 	CanPromoteMembers  bool   `json:"can_promote_members"`  // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
-	IsAnonymous        bool   `json:"is_anonymous"`         // True, if the administrator isn't shown in the chat member list and sends messages anonymously
+	IsAnonymous        bool   `json:"is_anonymous"`         // True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
 }
 
 // MessageType return the string telegram-type of ChatMemberStatusAdministrator
@@ -4596,7 +4617,7 @@ func (chatMemberStatusAdministrator *ChatMemberStatusAdministrator) MessageType(
 // @param canRestrictMembers True, if the administrator can restrict, ban, or unban chat members
 // @param canPinMessages True, if the administrator can pin messages; applicable to groups only
 // @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
-// @param isAnonymous True, if the administrator isn't shown in the chat member list and sends messages anonymously
+// @param isAnonymous True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
 func NewChatMemberStatusAdministrator(customTitle string, canBeEdited bool, canChangeInfo bool, canPostMessages bool, canEditMessages bool, canDeleteMessages bool, canInviteUsers bool, canRestrictMembers bool, canPinMessages bool, canPromoteMembers bool, isAnonymous bool) *ChatMemberStatusAdministrator {
 	chatMemberStatusAdministratorTemp := ChatMemberStatusAdministrator{
 		tdCommon:           tdCommon{Type: "chatMemberStatusAdministrator"},
@@ -4900,6 +4921,34 @@ func (chatMembersFilterMembers *ChatMembersFilterMembers) GetChatMembersFilterEn
 	return ChatMembersFilterMembersType
 }
 
+// ChatMembersFilterMention Returns users which can be mentioned in the chat
+type ChatMembersFilterMention struct {
+	tdCommon
+	MessageThreadId int64 `json:"message_thread_id"` // If non-zero, the identifier of the current message thread
+}
+
+// MessageType return the string telegram-type of ChatMembersFilterMention
+func (chatMembersFilterMention *ChatMembersFilterMention) MessageType() string {
+	return "chatMembersFilterMention"
+}
+
+// NewChatMembersFilterMention creates a new ChatMembersFilterMention
+//
+// @param messageThreadId If non-zero, the identifier of the current message thread
+func NewChatMembersFilterMention(messageThreadId int64) *ChatMembersFilterMention {
+	chatMembersFilterMentionTemp := ChatMembersFilterMention{
+		tdCommon:        tdCommon{Type: "chatMembersFilterMention"},
+		MessageThreadId: messageThreadId,
+	}
+
+	return &chatMembersFilterMentionTemp
+}
+
+// GetChatMembersFilterEnum return the enum type of this object
+func (chatMembersFilterMention *ChatMembersFilterMention) GetChatMembersFilterEnum() ChatMembersFilterEnum {
+	return ChatMembersFilterMentionType
+}
+
 // ChatMembersFilterRestricted Returns users under certain restrictions in the chat; can be used only by administrators in a supergroup
 type ChatMembersFilterRestricted struct {
 	tdCommon
@@ -5137,6 +5186,37 @@ func (supergroupMembersFilterBanned *SupergroupMembersFilterBanned) GetSupergrou
 	return SupergroupMembersFilterBannedType
 }
 
+// SupergroupMembersFilterMention Returns users which can be mentioned in the supergroup
+type SupergroupMembersFilterMention struct {
+	tdCommon
+	Query           string `json:"query"`             // Query to search for
+	MessageThreadId int64  `json:"message_thread_id"` // If non-zero, the identifier of the current message thread
+}
+
+// MessageType return the string telegram-type of SupergroupMembersFilterMention
+func (supergroupMembersFilterMention *SupergroupMembersFilterMention) MessageType() string {
+	return "supergroupMembersFilterMention"
+}
+
+// NewSupergroupMembersFilterMention creates a new SupergroupMembersFilterMention
+//
+// @param query Query to search for
+// @param messageThreadId If non-zero, the identifier of the current message thread
+func NewSupergroupMembersFilterMention(query string, messageThreadId int64) *SupergroupMembersFilterMention {
+	supergroupMembersFilterMentionTemp := SupergroupMembersFilterMention{
+		tdCommon:        tdCommon{Type: "supergroupMembersFilterMention"},
+		Query:           query,
+		MessageThreadId: messageThreadId,
+	}
+
+	return &supergroupMembersFilterMentionTemp
+}
+
+// GetSupergroupMembersFilterEnum return the enum type of this object
+func (supergroupMembersFilterMention *SupergroupMembersFilterMention) GetSupergroupMembersFilterEnum() SupergroupMembersFilterEnum {
+	return SupergroupMembersFilterMentionType
+}
+
 // SupergroupMembersFilterBots Returns bot members of the supergroup or channel
 type SupergroupMembersFilterBots struct {
 	tdCommon
@@ -5166,7 +5246,6 @@ func (supergroupMembersFilterBots *SupergroupMembersFilterBots) GetSupergroupMem
 type BasicGroup struct {
 	tdCommon
 	Id                     int32            `json:"id"`                        // Group identifier
-	AccessHash             JSONInt64        `json:"access_hash"`               // Group access hash
 	MemberCount            int32            `json:"member_count"`              // Number of members in the group
 	Status                 ChatMemberStatus `json:"status"`                    // Status of the current user in the group
 	IsActive               bool             `json:"is_active"`                 // True, if the group is active
@@ -5181,16 +5260,14 @@ func (basicGroup *BasicGroup) MessageType() string {
 // NewBasicGroup creates a new BasicGroup
 //
 // @param id Group identifier
-// @param accessHash Group access hash
 // @param memberCount Number of members in the group
 // @param status Status of the current user in the group
 // @param isActive True, if the group is active
 // @param upgradedToSupergroupId Identifier of the supergroup to which this group was upgraded; 0 if none
-func NewBasicGroup(id int32, accessHash JSONInt64, memberCount int32, status ChatMemberStatus, isActive bool, upgradedToSupergroupId int32) *BasicGroup {
+func NewBasicGroup(id int32, memberCount int32, status ChatMemberStatus, isActive bool, upgradedToSupergroupId int32) *BasicGroup {
 	basicGroupTemp := BasicGroup{
 		tdCommon:               tdCommon{Type: "basicGroup"},
 		Id:                     id,
-		AccessHash:             accessHash,
 		MemberCount:            memberCount,
 		Status:                 status,
 		IsActive:               isActive,
@@ -5209,11 +5286,10 @@ func (basicGroup *BasicGroup) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id                     int32     `json:"id"`                        // Group identifier
-		AccessHash             JSONInt64 `json:"access_hash"`               // Group access hash
-		MemberCount            int32     `json:"member_count"`              // Number of members in the group
-		IsActive               bool      `json:"is_active"`                 // True, if the group is active
-		UpgradedToSupergroupId int32     `json:"upgraded_to_supergroup_id"` // Identifier of the supergroup to which this group was upgraded; 0 if none
+		Id                     int32 `json:"id"`                        // Group identifier
+		MemberCount            int32 `json:"member_count"`              // Number of members in the group
+		IsActive               bool  `json:"is_active"`                 // True, if the group is active
+		UpgradedToSupergroupId int32 `json:"upgraded_to_supergroup_id"` // Identifier of the supergroup to which this group was upgraded; 0 if none
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -5222,7 +5298,6 @@ func (basicGroup *BasicGroup) UnmarshalJSON(b []byte) error {
 
 	basicGroup.tdCommon = tempObj.tdCommon
 	basicGroup.Id = tempObj.Id
-	basicGroup.AccessHash = tempObj.AccessHash
 	basicGroup.MemberCount = tempObj.MemberCount
 	basicGroup.IsActive = tempObj.IsActive
 	basicGroup.UpgradedToSupergroupId = tempObj.UpgradedToSupergroupId
@@ -5272,7 +5347,6 @@ func NewBasicGroupFullInfo(photo *ChatPhoto, description string, creatorUserId i
 type Supergroup struct {
 	tdCommon
 	Id                int32            `json:"id"`                   // Supergroup or channel identifier
-	AccessHash        JSONInt64        `json:"access_hash"`          // Supergroup or channel access hash
 	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
@@ -5295,7 +5369,6 @@ func (supergroup *Supergroup) MessageType() string {
 // NewSupergroup creates a new Supergroup
 //
 // @param id Supergroup or channel identifier
-// @param accessHash Supergroup or channel access hash
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 // @param status Status of the current user in the supergroup or channel; custom title will be always empty
@@ -5308,11 +5381,10 @@ func (supergroup *Supergroup) MessageType() string {
 // @param isVerified True, if the supergroup or channel is verified
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 // @param isScam True, if many users reported this supergroup as a scam
-func NewSupergroup(id int32, accessHash JSONInt64, username string, date int32, status ChatMemberStatus, memberCount int32, hasLinkedChat bool, hasLocation bool, signMessages bool, isSlowModeEnabled bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
+func NewSupergroup(id int32, username string, date int32, status ChatMemberStatus, memberCount int32, hasLinkedChat bool, hasLocation bool, signMessages bool, isSlowModeEnabled bool, isChannel bool, isVerified bool, restrictionReason string, isScam bool) *Supergroup {
 	supergroupTemp := Supergroup{
 		tdCommon:          tdCommon{Type: "supergroup"},
 		Id:                id,
-		AccessHash:        accessHash,
 		Username:          username,
 		Date:              date,
 		Status:            status,
@@ -5339,19 +5411,18 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Id                int32     `json:"id"`                   // Supergroup or channel identifier
-		AccessHash        JSONInt64 `json:"access_hash"`          // Supergroup or channel access hash
-		Username          string    `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
-		Date              int32     `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32     `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
-		HasLinkedChat     bool      `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
-		HasLocation       bool      `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
-		SignMessages      bool      `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
-		IsSlowModeEnabled bool      `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
-		IsChannel         bool      `json:"is_channel"`           // True, if the supergroup is a channel
-		IsVerified        bool      `json:"is_verified"`          // True, if the supergroup or channel is verified
-		RestrictionReason string    `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
-		IsScam            bool      `json:"is_scam"`              // True, if many users reported this supergroup as a scam
+		Id                int32  `json:"id"`                   // Supergroup or channel identifier
+		Username          string `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
+		Date              int32  `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
+		MemberCount       int32  `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
+		HasLinkedChat     bool   `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
+		HasLocation       bool   `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
+		SignMessages      bool   `json:"sign_messages"`        // True, if messages sent to the channel should contain information about the sender. This field is only applicable to channels
+		IsSlowModeEnabled bool   `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
+		IsChannel         bool   `json:"is_channel"`           // True, if the supergroup is a channel
+		IsVerified        bool   `json:"is_verified"`          // True, if the supergroup or channel is verified
+		RestrictionReason string `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
+		IsScam            bool   `json:"is_scam"`              // True, if many users reported this supergroup as a scam
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -5360,7 +5431,6 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 
 	supergroup.tdCommon = tempObj.tdCommon
 	supergroup.Id = tempObj.Id
-	supergroup.AccessHash = tempObj.AccessHash
 	supergroup.Username = tempObj.Username
 	supergroup.Date = tempObj.Date
 	supergroup.MemberCount = tempObj.MemberCount
@@ -5610,7 +5680,89 @@ func (secretChat *SecretChat) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// MessageForwardOriginUser The message was originally written by a known user
+// MessageSenderUser The message was sent by a known user
+type MessageSenderUser struct {
+	tdCommon
+	UserId int32 `json:"user_id"` // Identifier of the user that sent the message
+}
+
+// MessageType return the string telegram-type of MessageSenderUser
+func (messageSenderUser *MessageSenderUser) MessageType() string {
+	return "messageSenderUser"
+}
+
+// NewMessageSenderUser creates a new MessageSenderUser
+//
+// @param userId Identifier of the user that sent the message
+func NewMessageSenderUser(userId int32) *MessageSenderUser {
+	messageSenderUserTemp := MessageSenderUser{
+		tdCommon: tdCommon{Type: "messageSenderUser"},
+		UserId:   userId,
+	}
+
+	return &messageSenderUserTemp
+}
+
+// GetMessageSenderEnum return the enum type of this object
+func (messageSenderUser *MessageSenderUser) GetMessageSenderEnum() MessageSenderEnum {
+	return MessageSenderUserType
+}
+
+// MessageSenderChat The message was sent on behalf of a chat
+type MessageSenderChat struct {
+	tdCommon
+	ChatId int64 `json:"chat_id"` // Identifier of the chat that sent the message
+}
+
+// MessageType return the string telegram-type of MessageSenderChat
+func (messageSenderChat *MessageSenderChat) MessageType() string {
+	return "messageSenderChat"
+}
+
+// NewMessageSenderChat creates a new MessageSenderChat
+//
+// @param chatId Identifier of the chat that sent the message
+func NewMessageSenderChat(chatId int64) *MessageSenderChat {
+	messageSenderChatTemp := MessageSenderChat{
+		tdCommon: tdCommon{Type: "messageSenderChat"},
+		ChatId:   chatId,
+	}
+
+	return &messageSenderChatTemp
+}
+
+// GetMessageSenderEnum return the enum type of this object
+func (messageSenderChat *MessageSenderChat) GetMessageSenderEnum() MessageSenderEnum {
+	return MessageSenderChatType
+}
+
+// MessageSenders Represents a list of message senders
+type MessageSenders struct {
+	tdCommon
+	TotalCount int32           `json:"total_count"` // Approximate total count of messages senders found
+	Senders    []MessageSender `json:"senders"`     // List of message senders
+}
+
+// MessageType return the string telegram-type of MessageSenders
+func (messageSenders *MessageSenders) MessageType() string {
+	return "messageSenders"
+}
+
+// NewMessageSenders creates a new MessageSenders
+//
+// @param totalCount Approximate total count of messages senders found
+// @param senders List of message senders
+func NewMessageSenders(totalCount int32, senders []MessageSender) *MessageSenders {
+	messageSendersTemp := MessageSenders{
+		tdCommon:   tdCommon{Type: "messageSenders"},
+		TotalCount: totalCount,
+		Senders:    senders,
+	}
+
+	return &messageSendersTemp
+}
+
+// MessageForwardOriginUser The message was originally sent by a known user
 type MessageForwardOriginUser struct {
 	tdCommon
 	SenderUserId int32 `json:"sender_user_id"` // Identifier of the user that originally sent the message
@@ -5638,10 +5790,11 @@ func (messageForwardOriginUser *MessageForwardOriginUser) GetMessageForwardOrigi
 	return MessageForwardOriginUserType
 }
 
-// MessageForwardOriginChat The message was originally written by an anonymous chat administrator on behalf of the chat
+// MessageForwardOriginChat The message was originally sent by an anonymous chat administrator on behalf of the chat
 type MessageForwardOriginChat struct {
 	tdCommon
-	SenderChatId int64 `json:"sender_chat_id"` // Identifier of the chat that originally sent the message
+	SenderChatId    int64  `json:"sender_chat_id"`   // Identifier of the chat that originally sent the message
+	AuthorSignature string `json:"author_signature"` // Original message author signature
 }
 
 // MessageType return the string telegram-type of MessageForwardOriginChat
@@ -5652,10 +5805,12 @@ func (messageForwardOriginChat *MessageForwardOriginChat) MessageType() string {
 // NewMessageForwardOriginChat creates a new MessageForwardOriginChat
 //
 // @param senderChatId Identifier of the chat that originally sent the message
-func NewMessageForwardOriginChat(senderChatId int64) *MessageForwardOriginChat {
+// @param authorSignature Original message author signature
+func NewMessageForwardOriginChat(senderChatId int64, authorSignature string) *MessageForwardOriginChat {
 	messageForwardOriginChatTemp := MessageForwardOriginChat{
-		tdCommon:     tdCommon{Type: "messageForwardOriginChat"},
-		SenderChatId: senderChatId,
+		tdCommon:        tdCommon{Type: "messageForwardOriginChat"},
+		SenderChatId:    senderChatId,
+		AuthorSignature: authorSignature,
 	}
 
 	return &messageForwardOriginChatTemp
@@ -5666,7 +5821,7 @@ func (messageForwardOriginChat *MessageForwardOriginChat) GetMessageForwardOrigi
 	return MessageForwardOriginChatType
 }
 
-// MessageForwardOriginHiddenUser The message was originally written by a user, which is hidden by their privacy settings
+// MessageForwardOriginHiddenUser The message was originally sent by a user, which is hidden by their privacy settings
 type MessageForwardOriginHiddenUser struct {
 	tdCommon
 	SenderName string `json:"sender_name"` // Name of the sender
@@ -5794,16 +5949,47 @@ func (messageForwardInfo *MessageForwardInfo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MessageReplyInfo Contains information about message replies
+type MessageReplyInfo struct {
+	tdCommon
+	ReplyCount              int32           `json:"reply_count"`                 // Number of times the message was directly or indirectly replied
+	RecentRepliers          []MessageSender `json:"recent_repliers"`             // Recent repliers to the message; available in channels with a discussion supergroup
+	LastReadInboxMessageId  int64           `json:"last_read_inbox_message_id"`  // Identifier of the last read incoming reply to the message
+	LastReadOutboxMessageId int64           `json:"last_read_outbox_message_id"` // Identifier of the last read outgoing reply to the message
+	LastMessageId           int64           `json:"last_message_id"`             // Identifier of the last reply to the message
+}
+
+// MessageType return the string telegram-type of MessageReplyInfo
+func (messageReplyInfo *MessageReplyInfo) MessageType() string {
+	return "messageReplyInfo"
+}
+
+// NewMessageReplyInfo creates a new MessageReplyInfo
+//
+// @param replyCount Number of times the message was directly or indirectly replied
+// @param recentRepliers Recent repliers to the message; available in channels with a discussion supergroup
+// @param lastReadInboxMessageId Identifier of the last read incoming reply to the message
+// @param lastReadOutboxMessageId Identifier of the last read outgoing reply to the message
+// @param lastMessageId Identifier of the last reply to the message
+func NewMessageReplyInfo(replyCount int32, recentRepliers []MessageSender, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, lastMessageId int64) *MessageReplyInfo {
+	messageReplyInfoTemp := MessageReplyInfo{
+		tdCommon:                tdCommon{Type: "messageReplyInfo"},
+		ReplyCount:              replyCount,
+		RecentRepliers:          recentRepliers,
+		LastReadInboxMessageId:  lastReadInboxMessageId,
+		LastReadOutboxMessageId: lastReadOutboxMessageId,
+		LastMessageId:           lastMessageId,
+	}
+
+	return &messageReplyInfoTemp
+}
+
 // MessageInteractionInfo Contains information about interactions with a message
 type MessageInteractionInfo struct {
 	tdCommon
-	ViewCount                      int32   `json:"view_count"`                          // Number of times the message was viewed
-	ForwardCount                   int32   `json:"forward_count"`                       // Number of times the message was forwarded
-	ReplyCount                     int32   `json:"reply_count"`                         // Number of times the message was directly or indirectly replied; available in discussion supergroups and channels with a discussion supergroup
-	RecentReplierUserIds           []int32 `json:"recent_replier_user_ids"`             // User identifiers of the recent repliers to the message; available in channels with a discussion supergroup
-	LastReadInboxCommentMessageId  int64   `json:"last_read_inbox_comment_message_id"`  // Identifier of the last read incoming comment to the message
-	LastReadOutboxCommentMessageId int64   `json:"last_read_outbox_comment_message_id"` // Identifier of the last read outgoing comment to the message
-	LastCommentMessageId           int64   `json:"last_comment_message_id"`             // Identifier of the last comment to the message
+	ViewCount    int32             `json:"view_count"`    // Number of times the message was viewed
+	ForwardCount int32             `json:"forward_count"` // Number of times the message was forwarded
+	ReplyInfo    *MessageReplyInfo `json:"reply_info"`    // Contains information about direct or indirect replies to the message; may be null. Currently, available only in channels with a discussion supergroup and discussion supergroups for messages, which are not replies itself
 }
 
 // MessageType return the string telegram-type of MessageInteractionInfo
@@ -5815,21 +6001,13 @@ func (messageInteractionInfo *MessageInteractionInfo) MessageType() string {
 //
 // @param viewCount Number of times the message was viewed
 // @param forwardCount Number of times the message was forwarded
-// @param replyCount Number of times the message was directly or indirectly replied; available in discussion supergroups and channels with a discussion supergroup
-// @param recentReplierUserIds User identifiers of the recent repliers to the message; available in channels with a discussion supergroup
-// @param lastReadInboxCommentMessageId Identifier of the last read incoming comment to the message
-// @param lastReadOutboxCommentMessageId Identifier of the last read outgoing comment to the message
-// @param lastCommentMessageId Identifier of the last comment to the message
-func NewMessageInteractionInfo(viewCount int32, forwardCount int32, replyCount int32, recentReplierUserIds []int32, lastReadInboxCommentMessageId int64, lastReadOutboxCommentMessageId int64, lastCommentMessageId int64) *MessageInteractionInfo {
+// @param replyInfo Contains information about direct or indirect replies to the message; may be null. Currently, available only in channels with a discussion supergroup and discussion supergroups for messages, which are not replies itself
+func NewMessageInteractionInfo(viewCount int32, forwardCount int32, replyInfo *MessageReplyInfo) *MessageInteractionInfo {
 	messageInteractionInfoTemp := MessageInteractionInfo{
-		tdCommon:                       tdCommon{Type: "messageInteractionInfo"},
-		ViewCount:                      viewCount,
-		ForwardCount:                   forwardCount,
-		ReplyCount:                     replyCount,
-		RecentReplierUserIds:           recentReplierUserIds,
-		LastReadInboxCommentMessageId:  lastReadInboxCommentMessageId,
-		LastReadOutboxCommentMessageId: lastReadOutboxCommentMessageId,
-		LastCommentMessageId:           lastCommentMessageId,
+		tdCommon:     tdCommon{Type: "messageInteractionInfo"},
+		ViewCount:    viewCount,
+		ForwardCount: forwardCount,
+		ReplyInfo:    replyInfo,
 	}
 
 	return &messageInteractionInfoTemp
@@ -5901,12 +6079,12 @@ func (messageSendingStateFailed *MessageSendingStateFailed) GetMessageSendingSta
 type Message struct {
 	tdCommon
 	Id                      int64                   `json:"id"`                           // Message identifier; unique for the chat to which the message belongs
-	SenderUserId            int32                   `json:"sender_user_id"`               // Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts, for channel posts automatically forwarded to discussion group and for anonymously sent supergroup messages
-	SenderChatId            int64                   `json:"sender_chat_id"`               // Identifier of the chat on behalf of which the message was sent; 0 if none
+	Sender                  MessageSender           `json:"sender"`                       // The sender of the message
 	ChatId                  int64                   `json:"chat_id"`                      // Chat identifier
 	SendingState            MessageSendingState     `json:"sending_state"`                // Information about the sending state of the message; may be null
 	SchedulingState         MessageSchedulingState  `json:"scheduling_state"`             // Information about the scheduling state of the message; may be null
 	IsOutgoing              bool                    `json:"is_outgoing"`                  // True, if the message is outgoing
+	IsPinned                bool                    `json:"is_pinned"`                    // True, if the message is pinned
 	CanBeEdited             bool                    `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 	CanBeForwarded          bool                    `json:"can_be_forwarded"`             // True, if the message can be forwarded
 	CanBeDeletedOnlyForSelf bool                    `json:"can_be_deleted_only_for_self"` // True, if the message can be deleted only for the current user while other users will continue to see it
@@ -5925,7 +6103,7 @@ type Message struct {
 	Ttl                     int32                   `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 	TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 	ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
-	AuthorSignature         string                  `json:"author_signature"`             // For channel posts, optional author signature
+	AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous administrator messages, optional author signature
 	MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 	RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 	Content                 MessageContent          `json:"content"`                      // Content of the message
@@ -5940,12 +6118,12 @@ func (message *Message) MessageType() string {
 // NewMessage creates a new Message
 //
 // @param id Message identifier; unique for the chat to which the message belongs
-// @param senderUserId Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts, for channel posts automatically forwarded to discussion group and for anonymously sent supergroup messages
-// @param senderChatId Identifier of the chat on behalf of which the message was sent; 0 if none
+// @param sender The sender of the message
 // @param chatId Chat identifier
 // @param sendingState Information about the sending state of the message; may be null
 // @param schedulingState Information about the scheduling state of the message; may be null
 // @param isOutgoing True, if the message is outgoing
+// @param isPinned True, if the message is pinned
 // @param canBeEdited True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 // @param canBeForwarded True, if the message can be forwarded
 // @param canBeDeletedOnlyForSelf True, if the message can be deleted only for the current user while other users will continue to see it
@@ -5964,21 +6142,21 @@ func (message *Message) MessageType() string {
 // @param ttl For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 // @param ttlExpiresIn Time left before the message expires, in seconds
 // @param viaBotUserId If non-zero, the user identifier of the bot through which this message was sent
-// @param authorSignature For channel posts, optional author signature
+// @param authorSignature For channel posts and anonymous administrator messages, optional author signature
 // @param mediaAlbumId Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 // @param content Content of the message
 // @param replyMarkup Reply markup for the message; may be null
-func NewMessage(id int64, senderUserId int32, senderChatId int64, chatId int64, sendingState MessageSendingState, schedulingState MessageSchedulingState, isOutgoing bool, canBeEdited bool, canBeForwarded bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canGetStatistics bool, canGetMessageThread bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, interactionInfo *MessageInteractionInfo, replyInChatId int64, replyToMessageId int64, messageThreadId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int32, authorSignature string, mediaAlbumId JSONInt64, restrictionReason string, content MessageContent, replyMarkup ReplyMarkup) *Message {
+func NewMessage(id int64, sender MessageSender, chatId int64, sendingState MessageSendingState, schedulingState MessageSchedulingState, isOutgoing bool, isPinned bool, canBeEdited bool, canBeForwarded bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canGetStatistics bool, canGetMessageThread bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, interactionInfo *MessageInteractionInfo, replyInChatId int64, replyToMessageId int64, messageThreadId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int32, authorSignature string, mediaAlbumId JSONInt64, restrictionReason string, content MessageContent, replyMarkup ReplyMarkup) *Message {
 	messageTemp := Message{
 		tdCommon:                tdCommon{Type: "message"},
 		Id:                      id,
-		SenderUserId:            senderUserId,
-		SenderChatId:            senderChatId,
+		Sender:                  sender,
 		ChatId:                  chatId,
 		SendingState:            sendingState,
 		SchedulingState:         schedulingState,
 		IsOutgoing:              isOutgoing,
+		IsPinned:                isPinned,
 		CanBeEdited:             canBeEdited,
 		CanBeForwarded:          canBeForwarded,
 		CanBeDeletedOnlyForSelf: canBeDeletedOnlyForSelf,
@@ -6017,10 +6195,9 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		Id                      int64                   `json:"id"`                           // Message identifier; unique for the chat to which the message belongs
-		SenderUserId            int32                   `json:"sender_user_id"`               // Identifier of the user who sent the message; 0 if unknown. Currently, it is unknown for channel posts, for channel posts automatically forwarded to discussion group and for anonymously sent supergroup messages
-		SenderChatId            int64                   `json:"sender_chat_id"`               // Identifier of the chat on behalf of which the message was sent; 0 if none
 		ChatId                  int64                   `json:"chat_id"`                      // Chat identifier
 		IsOutgoing              bool                    `json:"is_outgoing"`                  // True, if the message is outgoing
+		IsPinned                bool                    `json:"is_pinned"`                    // True, if the message is pinned
 		CanBeEdited             bool                    `json:"can_be_edited"`                // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 		CanBeForwarded          bool                    `json:"can_be_forwarded"`             // True, if the message can be forwarded
 		CanBeDeletedOnlyForSelf bool                    `json:"can_be_deleted_only_for_self"` // True, if the message can be deleted only for the current user while other users will continue to see it
@@ -6039,7 +6216,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		Ttl                     int32                   `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 		TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 		ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
-		AuthorSignature         string                  `json:"author_signature"`             // For channel posts, optional author signature
+		AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous administrator messages, optional author signature
 		MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 		RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 
@@ -6051,10 +6228,9 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 
 	message.tdCommon = tempObj.tdCommon
 	message.Id = tempObj.Id
-	message.SenderUserId = tempObj.SenderUserId
-	message.SenderChatId = tempObj.SenderChatId
 	message.ChatId = tempObj.ChatId
 	message.IsOutgoing = tempObj.IsOutgoing
+	message.IsPinned = tempObj.IsPinned
 	message.CanBeEdited = tempObj.CanBeEdited
 	message.CanBeForwarded = tempObj.CanBeForwarded
 	message.CanBeDeletedOnlyForSelf = tempObj.CanBeDeletedOnlyForSelf
@@ -6076,6 +6252,9 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	message.AuthorSignature = tempObj.AuthorSignature
 	message.MediaAlbumId = tempObj.MediaAlbumId
 	message.RestrictionReason = tempObj.RestrictionReason
+
+	fieldSender, _ := unmarshalMessageSender(objMap["sender"])
+	message.Sender = fieldSender
 
 	fieldSendingState, _ := unmarshalMessageSendingState(objMap["sending_state"])
 	message.SendingState = fieldSendingState
@@ -6862,7 +7041,6 @@ type Chat struct {
 	UnreadMentionCount         int32                     `json:"unread_mention_count"`         // Number of unread messages with a mention/reply in the chat
 	NotificationSettings       *ChatNotificationSettings `json:"notification_settings"`        // Notification settings for this chat
 	ActionBar                  ChatActionBar             `json:"action_bar"`                   // Describes actions which should be possible to do through a chat action bar; may be null
-	PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 	ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 	DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
 	ClientData                 string                    `json:"client_data"`                  // Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
@@ -6895,11 +7073,10 @@ func (chat *Chat) MessageType() string {
 // @param unreadMentionCount Number of unread messages with a mention/reply in the chat
 // @param notificationSettings Notification settings for this chat
 // @param actionBar Describes actions which should be possible to do through a chat action bar; may be null
-// @param pinnedMessageId Identifier of the pinned message in the chat; 0 if none
 // @param replyMarkupMessageId Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 // @param draftMessage A draft of a message in the chat; may be null
 // @param clientData Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
-func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, pinnedMessageId int64, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
+func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
 	chatTemp := Chat{
 		tdCommon:                   tdCommon{Type: "chat"},
 		Id:                         id,
@@ -6922,7 +7099,6 @@ func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, p
 		UnreadMentionCount:         unreadMentionCount,
 		NotificationSettings:       notificationSettings,
 		ActionBar:                  actionBar,
-		PinnedMessageId:            pinnedMessageId,
 		ReplyMarkupMessageId:       replyMarkupMessageId,
 		DraftMessage:               draftMessage,
 		ClientData:                 clientData,
@@ -6958,7 +7134,6 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		LastReadOutboxMessageId    int64                     `json:"last_read_outbox_message_id"`  // Identifier of the last read outgoing message
 		UnreadMentionCount         int32                     `json:"unread_mention_count"`         // Number of unread messages with a mention/reply in the chat
 		NotificationSettings       *ChatNotificationSettings `json:"notification_settings"`        // Notification settings for this chat
-		PinnedMessageId            int64                     `json:"pinned_message_id"`            // Identifier of the pinned message in the chat; 0 if none
 		ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 		DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
 		ClientData                 string                    `json:"client_data"`                  // Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
@@ -6987,7 +7162,6 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 	chat.LastReadOutboxMessageId = tempObj.LastReadOutboxMessageId
 	chat.UnreadMentionCount = tempObj.UnreadMentionCount
 	chat.NotificationSettings = tempObj.NotificationSettings
-	chat.PinnedMessageId = tempObj.PinnedMessageId
 	chat.ReplyMarkupMessageId = tempObj.ReplyMarkupMessageId
 	chat.DraftMessage = tempObj.DraftMessage
 	chat.ClientData = tempObj.ClientData
@@ -7031,7 +7205,7 @@ func NewChats(totalCount int32, chatIds []int64) *Chats {
 type ChatNearby struct {
 	tdCommon
 	ChatId   int64 `json:"chat_id"`  // Chat identifier
-	Distance int32 `json:"distance"` // Distance to the chat location in meters
+	Distance int32 `json:"distance"` // Distance to the chat location, in meters
 }
 
 // MessageType return the string telegram-type of ChatNearby
@@ -7042,7 +7216,7 @@ func (chatNearby *ChatNearby) MessageType() string {
 // NewChatNearby creates a new ChatNearby
 //
 // @param chatId Chat identifier
-// @param distance Distance to the chat location in meters
+// @param distance Distance to the chat location, in meters
 func NewChatNearby(chatId int64, distance int32) *ChatNearby {
 	chatNearbyTemp := ChatNearby{
 		tdCommon: tdCommon{Type: "chatNearby"},
@@ -7968,10 +8142,11 @@ func (loginUrlInfoRequestConfirmation *LoginUrlInfoRequestConfirmation) GetLogin
 // MessageThreadInfo Contains information about a message thread
 type MessageThreadInfo struct {
 	tdCommon
-	ChatId          int64         `json:"chat_id"`           // Identifier of the chat to which the message thread belongs
-	MessageThreadId int64         `json:"message_thread_id"` // Message thread identifier, unique within the chat
-	Messages        []Message     `json:"messages"`          // The messages from which the thread starts. The messages are returned in a reverse chronological order (i.e., in order of decreasing message_id)
-	DraftMessage    *DraftMessage `json:"draft_message"`     // A draft of a message in the message thread; may be null
+	ChatId          int64             `json:"chat_id"`           // Identifier of the chat to which the message thread belongs
+	MessageThreadId int64             `json:"message_thread_id"` // Message thread identifier, unique within the chat
+	ReplyInfo       *MessageReplyInfo `json:"reply_info"`        // Contains information about the message thread
+	Messages        []Message         `json:"messages"`          // The messages from which the thread starts. The messages are returned in a reverse chronological order (i.e., in order of decreasing message_id)
+	DraftMessage    *DraftMessage     `json:"draft_message"`     // A draft of a message in the message thread; may be null
 }
 
 // MessageType return the string telegram-type of MessageThreadInfo
@@ -7983,13 +8158,15 @@ func (messageThreadInfo *MessageThreadInfo) MessageType() string {
 //
 // @param chatId Identifier of the chat to which the message thread belongs
 // @param messageThreadId Message thread identifier, unique within the chat
+// @param replyInfo Contains information about the message thread
 // @param messages The messages from which the thread starts. The messages are returned in a reverse chronological order (i.e., in order of decreasing message_id)
 // @param draftMessage A draft of a message in the message thread; may be null
-func NewMessageThreadInfo(chatId int64, messageThreadId int64, messages []Message, draftMessage *DraftMessage) *MessageThreadInfo {
+func NewMessageThreadInfo(chatId int64, messageThreadId int64, replyInfo *MessageReplyInfo, messages []Message, draftMessage *DraftMessage) *MessageThreadInfo {
 	messageThreadInfoTemp := MessageThreadInfo{
 		tdCommon:        tdCommon{Type: "messageThreadInfo"},
 		ChatId:          chatId,
 		MessageThreadId: messageThreadId,
+		ReplyInfo:       replyInfo,
 		Messages:        messages,
 		DraftMessage:    draftMessage,
 	}
@@ -13735,9 +13912,11 @@ func (messageVoiceNote *MessageVoiceNote) GetMessageContentEnum() MessageContent
 // MessageLocation A message with a location
 type MessageLocation struct {
 	tdCommon
-	Location   *Location `json:"location"`    // The location description
-	LivePeriod int32     `json:"live_period"` // Time relative to the message sent date until which the location can be updated, in seconds
-	ExpiresIn  int32     `json:"expires_in"`  // Left time for which the location can be updated, in seconds. updateMessageContent is not sent when this field changes
+	Location             *Location `json:"location"`               // The location description
+	LivePeriod           int32     `json:"live_period"`            // Time relative to the message send date, for which the location can be updated, in seconds
+	ExpiresIn            int32     `json:"expires_in"`             // Left time for which the location can be updated, in seconds. updateMessageContent is not sent when this field changes
+	Heading              int32     `json:"heading"`                // For live locations, a direction in which the location moves, in degrees; 1-360. If 0 the direction is unknown
+	ProximityAlertRadius int32     `json:"proximity_alert_radius"` // For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). 0 if the notification is disabled. Available only for the message sender
 }
 
 // MessageType return the string telegram-type of MessageLocation
@@ -13748,14 +13927,18 @@ func (messageLocation *MessageLocation) MessageType() string {
 // NewMessageLocation creates a new MessageLocation
 //
 // @param location The location description
-// @param livePeriod Time relative to the message sent date until which the location can be updated, in seconds
+// @param livePeriod Time relative to the message send date, for which the location can be updated, in seconds
 // @param expiresIn Left time for which the location can be updated, in seconds. updateMessageContent is not sent when this field changes
-func NewMessageLocation(location *Location, livePeriod int32, expiresIn int32) *MessageLocation {
+// @param heading For live locations, a direction in which the location moves, in degrees; 1-360. If 0 the direction is unknown
+// @param proximityAlertRadius For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). 0 if the notification is disabled. Available only for the message sender
+func NewMessageLocation(location *Location, livePeriod int32, expiresIn int32, heading int32, proximityAlertRadius int32) *MessageLocation {
 	messageLocationTemp := MessageLocation{
-		tdCommon:   tdCommon{Type: "messageLocation"},
-		Location:   location,
-		LivePeriod: livePeriod,
-		ExpiresIn:  expiresIn,
+		tdCommon:             tdCommon{Type: "messageLocation"},
+		Location:             location,
+		LivePeriod:           livePeriod,
+		ExpiresIn:            expiresIn,
+		Heading:              heading,
+		ProximityAlertRadius: proximityAlertRadius,
 	}
 
 	return &messageLocationTemp
@@ -13825,11 +14008,11 @@ func (messageContact *MessageContact) GetMessageContentEnum() MessageContentEnum
 // MessageDice A dice message. The dice value is randomly generated by the server
 type MessageDice struct {
 	tdCommon
-	InitialStateSticker         *Sticker `json:"initial_state_sticker"`          // The animated sticker with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
-	FinalStateSticker           *Sticker `json:"final_state_sticker"`            // The animated sticker with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
-	Emoji                       string   `json:"emoji"`                          // Emoji on which the dice throw animation is based
-	Value                       int32    `json:"value"`                          // The dice value. If the value is 0, the dice don't have final state yet
-	SuccessAnimationFrameNumber int32    `json:"success_animation_frame_number"` // Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
+	InitialState                DiceStickers `json:"initial_state"`                  // The animated stickers with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+	FinalState                  DiceStickers `json:"final_state"`                    // The animated stickers with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+	Emoji                       string       `json:"emoji"`                          // Emoji on which the dice throw animation is based
+	Value                       int32        `json:"value"`                          // The dice value. If the value is 0, the dice don't have final state yet
+	SuccessAnimationFrameNumber int32        `json:"success_animation_frame_number"` // Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
 }
 
 // MessageType return the string telegram-type of MessageDice
@@ -13839,22 +14022,54 @@ func (messageDice *MessageDice) MessageType() string {
 
 // NewMessageDice creates a new MessageDice
 //
-// @param initialStateSticker The animated sticker with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
-// @param finalStateSticker The animated sticker with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+// @param initialState The animated stickers with the initial dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
+// @param finalState The animated stickers with the final dice animation; may be null if unknown. updateMessageContent will be sent when the sticker became known
 // @param emoji Emoji on which the dice throw animation is based
 // @param value The dice value. If the value is 0, the dice don't have final state yet
 // @param successAnimationFrameNumber Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
-func NewMessageDice(initialStateSticker *Sticker, finalStateSticker *Sticker, emoji string, value int32, successAnimationFrameNumber int32) *MessageDice {
+func NewMessageDice(initialState DiceStickers, finalState DiceStickers, emoji string, value int32, successAnimationFrameNumber int32) *MessageDice {
 	messageDiceTemp := MessageDice{
 		tdCommon:                    tdCommon{Type: "messageDice"},
-		InitialStateSticker:         initialStateSticker,
-		FinalStateSticker:           finalStateSticker,
+		InitialState:                initialState,
+		FinalState:                  finalState,
 		Emoji:                       emoji,
 		Value:                       value,
 		SuccessAnimationFrameNumber: successAnimationFrameNumber,
 	}
 
 	return &messageDiceTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (messageDice *MessageDice) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Emoji                       string `json:"emoji"`                          // Emoji on which the dice throw animation is based
+		Value                       int32  `json:"value"`                          // The dice value. If the value is 0, the dice don't have final state yet
+		SuccessAnimationFrameNumber int32  `json:"success_animation_frame_number"` // Number of frame after which a success animation like a shower of confetti needs to be shown on updateMessageSendSucceeded
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	messageDice.tdCommon = tempObj.tdCommon
+	messageDice.Emoji = tempObj.Emoji
+	messageDice.Value = tempObj.Value
+	messageDice.SuccessAnimationFrameNumber = tempObj.SuccessAnimationFrameNumber
+
+	fieldInitialState, _ := unmarshalDiceStickers(objMap["initial_state"])
+	messageDice.InitialState = fieldInitialState
+
+	fieldFinalState, _ := unmarshalDiceStickers(objMap["final_state"])
+	messageDice.FinalState = fieldFinalState
+
+	return nil
 }
 
 // GetMessageContentEnum return the enum type of this object
@@ -14647,6 +14862,68 @@ func NewMessagePassportDataReceived(elements []EncryptedPassportElement, credent
 // GetMessageContentEnum return the enum type of this object
 func (messagePassportDataReceived *MessagePassportDataReceived) GetMessageContentEnum() MessageContentEnum {
 	return MessagePassportDataReceivedType
+}
+
+// MessageProximityAlertTriggered A user in the chat came within proximity alert range
+type MessageProximityAlertTriggered struct {
+	tdCommon
+	Traveler MessageSender `json:"traveler"` // The user or chat, which triggered the proximity alert
+	Watcher  MessageSender `json:"watcher"`  // The user or chat, which subscribed for the proximity alert
+	Distance int32         `json:"distance"` // The distance between the users
+}
+
+// MessageType return the string telegram-type of MessageProximityAlertTriggered
+func (messageProximityAlertTriggered *MessageProximityAlertTriggered) MessageType() string {
+	return "messageProximityAlertTriggered"
+}
+
+// NewMessageProximityAlertTriggered creates a new MessageProximityAlertTriggered
+//
+// @param traveler The user or chat, which triggered the proximity alert
+// @param watcher The user or chat, which subscribed for the proximity alert
+// @param distance The distance between the users
+func NewMessageProximityAlertTriggered(traveler MessageSender, watcher MessageSender, distance int32) *MessageProximityAlertTriggered {
+	messageProximityAlertTriggeredTemp := MessageProximityAlertTriggered{
+		tdCommon: tdCommon{Type: "messageProximityAlertTriggered"},
+		Traveler: traveler,
+		Watcher:  watcher,
+		Distance: distance,
+	}
+
+	return &messageProximityAlertTriggeredTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (messageProximityAlertTriggered *MessageProximityAlertTriggered) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Distance int32 `json:"distance"` // The distance between the users
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	messageProximityAlertTriggered.tdCommon = tempObj.tdCommon
+	messageProximityAlertTriggered.Distance = tempObj.Distance
+
+	fieldTraveler, _ := unmarshalMessageSender(objMap["traveler"])
+	messageProximityAlertTriggered.Traveler = fieldTraveler
+
+	fieldWatcher, _ := unmarshalMessageSender(objMap["watcher"])
+	messageProximityAlertTriggered.Watcher = fieldWatcher
+
+	return nil
+}
+
+// GetMessageContentEnum return the enum type of this object
+func (messageProximityAlertTriggered *MessageProximityAlertTriggered) GetMessageContentEnum() MessageContentEnum {
+	return MessageProximityAlertTriggeredType
 }
 
 // MessageUnsupported Message content that is not supported in the current TDLib version
@@ -15933,8 +16210,10 @@ func (inputMessageVoiceNote *InputMessageVoiceNote) GetInputMessageContentEnum()
 // InputMessageLocation A message with a location
 type InputMessageLocation struct {
 	tdCommon
-	Location   *Location `json:"location"`    // Location to be sent
-	LivePeriod int32     `json:"live_period"` // Period for which the location can be updated, in seconds; should be between 60 and 86400 for a live location and 0 otherwise
+	Location             *Location `json:"location"`               // Location to be sent
+	LivePeriod           int32     `json:"live_period"`            // Period for which the location can be updated, in seconds; should be between 60 and 86400 for a live location and 0 otherwise
+	Heading              int32     `json:"heading"`                // For live locations, a direction in which the location moves, in degrees; 1-360. Pass 0 if unknown
+	ProximityAlertRadius int32     `json:"proximity_alert_radius"` // For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled. Can't be enabled in channels and Saved Messages
 }
 
 // MessageType return the string telegram-type of InputMessageLocation
@@ -15946,11 +16225,15 @@ func (inputMessageLocation *InputMessageLocation) MessageType() string {
 //
 // @param location Location to be sent
 // @param livePeriod Period for which the location can be updated, in seconds; should be between 60 and 86400 for a live location and 0 otherwise
-func NewInputMessageLocation(location *Location, livePeriod int32) *InputMessageLocation {
+// @param heading For live locations, a direction in which the location moves, in degrees; 1-360. Pass 0 if unknown
+// @param proximityAlertRadius For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled. Can't be enabled in channels and Saved Messages
+func NewInputMessageLocation(location *Location, livePeriod int32, heading int32, proximityAlertRadius int32) *InputMessageLocation {
 	inputMessageLocationTemp := InputMessageLocation{
-		tdCommon:   tdCommon{Type: "inputMessageLocation"},
-		Location:   location,
-		LivePeriod: livePeriod,
+		tdCommon:             tdCommon{Type: "inputMessageLocation"},
+		Location:             location,
+		LivePeriod:           livePeriod,
+		Heading:              heading,
+		ProximityAlertRadius: proximityAlertRadius,
 	}
 
 	return &inputMessageLocationTemp
@@ -16678,6 +16961,31 @@ func NewSearchMessagesFilterFailedToSend() *SearchMessagesFilterFailedToSend {
 // GetSearchMessagesFilterEnum return the enum type of this object
 func (searchMessagesFilterFailedToSend *SearchMessagesFilterFailedToSend) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
 	return SearchMessagesFilterFailedToSendType
+}
+
+// SearchMessagesFilterPinned Returns only pinned messages
+type SearchMessagesFilterPinned struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of SearchMessagesFilterPinned
+func (searchMessagesFilterPinned *SearchMessagesFilterPinned) MessageType() string {
+	return "searchMessagesFilterPinned"
+}
+
+// NewSearchMessagesFilterPinned creates a new SearchMessagesFilterPinned
+//
+func NewSearchMessagesFilterPinned() *SearchMessagesFilterPinned {
+	searchMessagesFilterPinnedTemp := SearchMessagesFilterPinned{
+		tdCommon: tdCommon{Type: "searchMessagesFilterPinned"},
+	}
+
+	return &searchMessagesFilterPinnedTemp
+}
+
+// GetSearchMessagesFilterEnum return the enum type of this object
+func (searchMessagesFilterPinned *SearchMessagesFilterPinned) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
+	return SearchMessagesFilterPinnedType
 }
 
 // ChatActionTyping The user is typing a message
@@ -18230,6 +18538,74 @@ func NewAnimations(animations []Animation) *Animations {
 	}
 
 	return &animationsTemp
+}
+
+// DiceStickersRegular A regular animated sticker
+type DiceStickersRegular struct {
+	tdCommon
+	Sticker *Sticker `json:"sticker"` // The animated sticker with the dice animation
+}
+
+// MessageType return the string telegram-type of DiceStickersRegular
+func (diceStickersRegular *DiceStickersRegular) MessageType() string {
+	return "diceStickersRegular"
+}
+
+// NewDiceStickersRegular creates a new DiceStickersRegular
+//
+// @param sticker The animated sticker with the dice animation
+func NewDiceStickersRegular(sticker *Sticker) *DiceStickersRegular {
+	diceStickersRegularTemp := DiceStickersRegular{
+		tdCommon: tdCommon{Type: "diceStickersRegular"},
+		Sticker:  sticker,
+	}
+
+	return &diceStickersRegularTemp
+}
+
+// GetDiceStickersEnum return the enum type of this object
+func (diceStickersRegular *DiceStickersRegular) GetDiceStickersEnum() DiceStickersEnum {
+	return DiceStickersRegularType
+}
+
+// DiceStickersSlotMachine Animated stickers to be combined into a slot machine
+type DiceStickersSlotMachine struct {
+	tdCommon
+	Background *Sticker `json:"background"`  // The animated sticker with the slot machine background. The background animation must start playing after all reel animations finish
+	Lever      *Sticker `json:"lever"`       // The animated sticker with the lever animation. The lever animation must play once in the initial dice state
+	LeftReel   *Sticker `json:"left_reel"`   // The animated sticker with the left reel
+	CenterReel *Sticker `json:"center_reel"` // The animated sticker with the center reel
+	RightReel  *Sticker `json:"right_reel"`  // The animated sticker with the right reel
+}
+
+// MessageType return the string telegram-type of DiceStickersSlotMachine
+func (diceStickersSlotMachine *DiceStickersSlotMachine) MessageType() string {
+	return "diceStickersSlotMachine"
+}
+
+// NewDiceStickersSlotMachine creates a new DiceStickersSlotMachine
+//
+// @param background The animated sticker with the slot machine background. The background animation must start playing after all reel animations finish
+// @param lever The animated sticker with the lever animation. The lever animation must play once in the initial dice state
+// @param leftReel The animated sticker with the left reel
+// @param centerReel The animated sticker with the center reel
+// @param rightReel The animated sticker with the right reel
+func NewDiceStickersSlotMachine(background *Sticker, lever *Sticker, leftReel *Sticker, centerReel *Sticker, rightReel *Sticker) *DiceStickersSlotMachine {
+	diceStickersSlotMachineTemp := DiceStickersSlotMachine{
+		tdCommon:   tdCommon{Type: "diceStickersSlotMachine"},
+		Background: background,
+		Lever:      lever,
+		LeftReel:   leftReel,
+		CenterReel: centerReel,
+		RightReel:  rightReel,
+	}
+
+	return &diceStickersSlotMachineTemp
+}
+
+// GetDiceStickersEnum return the enum type of this object
+func (diceStickersSlotMachine *DiceStickersSlotMachine) GetDiceStickersEnum() DiceStickersEnum {
+	return DiceStickersSlotMachineType
 }
 
 // ImportedContacts Represents the result of an ImportContacts request
@@ -20105,6 +20481,7 @@ func (chatEventMessagePinned *ChatEventMessagePinned) GetChatEventActionEnum() C
 // ChatEventMessageUnpinned A message was unpinned
 type ChatEventMessageUnpinned struct {
 	tdCommon
+	Message *Message `json:"message"` // Unpinned message
 }
 
 // MessageType return the string telegram-type of ChatEventMessageUnpinned
@@ -20114,9 +20491,11 @@ func (chatEventMessageUnpinned *ChatEventMessageUnpinned) MessageType() string {
 
 // NewChatEventMessageUnpinned creates a new ChatEventMessageUnpinned
 //
-func NewChatEventMessageUnpinned() *ChatEventMessageUnpinned {
+// @param message Unpinned message
+func NewChatEventMessageUnpinned(message *Message) *ChatEventMessageUnpinned {
 	chatEventMessageUnpinnedTemp := ChatEventMessageUnpinned{
 		tdCommon: tdCommon{Type: "chatEventMessageUnpinned"},
+		Message:  message,
 	}
 
 	return &chatEventMessageUnpinnedTemp
@@ -22862,9 +23241,11 @@ func (pushMessageContentMessageForwards *PushMessageContentMessageForwards) GetP
 // PushMessageContentMediaAlbum A media album
 type PushMessageContentMediaAlbum struct {
 	tdCommon
-	TotalCount int32 `json:"total_count"` // Number of messages in the album
-	HasPhotos  bool  `json:"has_photos"`  // True, if the album has at least one photo
-	HasVideos  bool  `json:"has_videos"`  // True, if the album has at least one video
+	TotalCount   int32 `json:"total_count"`   // Number of messages in the album
+	HasPhotos    bool  `json:"has_photos"`    // True, if the album has at least one photo
+	HasVideos    bool  `json:"has_videos"`    // True, if the album has at least one video
+	HasAudios    bool  `json:"has_audios"`    // True, if the album has at least one audio file
+	HasDocuments bool  `json:"has_documents"` // True, if the album has at least one document
 }
 
 // MessageType return the string telegram-type of PushMessageContentMediaAlbum
@@ -22877,12 +23258,16 @@ func (pushMessageContentMediaAlbum *PushMessageContentMediaAlbum) MessageType() 
 // @param totalCount Number of messages in the album
 // @param hasPhotos True, if the album has at least one photo
 // @param hasVideos True, if the album has at least one video
-func NewPushMessageContentMediaAlbum(totalCount int32, hasPhotos bool, hasVideos bool) *PushMessageContentMediaAlbum {
+// @param hasAudios True, if the album has at least one audio file
+// @param hasDocuments True, if the album has at least one document
+func NewPushMessageContentMediaAlbum(totalCount int32, hasPhotos bool, hasVideos bool, hasAudios bool, hasDocuments bool) *PushMessageContentMediaAlbum {
 	pushMessageContentMediaAlbumTemp := PushMessageContentMediaAlbum{
-		tdCommon:   tdCommon{Type: "pushMessageContentMediaAlbum"},
-		TotalCount: totalCount,
-		HasPhotos:  hasPhotos,
-		HasVideos:  hasVideos,
+		tdCommon:     tdCommon{Type: "pushMessageContentMediaAlbum"},
+		TotalCount:   totalCount,
+		HasPhotos:    hasPhotos,
+		HasVideos:    hasVideos,
+		HasAudios:    hasAudios,
+		HasDocuments: hasDocuments,
 	}
 
 	return &pushMessageContentMediaAlbumTemp
@@ -22977,12 +23362,11 @@ func (notificationTypeNewCall *NotificationTypeNewCall) GetNotificationTypeEnum(
 // NotificationTypeNewPushMessage New message was received through a push notification
 type NotificationTypeNewPushMessage struct {
 	tdCommon
-	MessageId    int64              `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-	SenderUserId int32              `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
-	SenderChatId int64              `json:"sender_chat_id"` // Sender chat of the message; 0 if none
-	SenderName   string             `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
-	IsOutgoing   bool               `json:"is_outgoing"`    // True, if the message is outgoing
-	Content      PushMessageContent `json:"content"`        // Push message content
+	MessageId  int64              `json:"message_id"`  // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
+	Sender     MessageSender      `json:"sender"`      // The sender of the message. Corresponding user or chat may be inaccessible
+	SenderName string             `json:"sender_name"` // Name of the sender; can be different from the name of the sender user
+	IsOutgoing bool               `json:"is_outgoing"` // True, if the message is outgoing
+	Content    PushMessageContent `json:"content"`     // Push message content
 }
 
 // MessageType return the string telegram-type of NotificationTypeNewPushMessage
@@ -22993,20 +23377,18 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) MessageTyp
 // NewNotificationTypeNewPushMessage creates a new NotificationTypeNewPushMessage
 //
 // @param messageId The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-// @param senderUserId Sender of the message; 0 if unknown. Corresponding user may be inaccessible
-// @param senderChatId Sender chat of the message; 0 if none
+// @param sender The sender of the message. Corresponding user or chat may be inaccessible
 // @param senderName Name of the sender; can be different from the name of the sender user
 // @param isOutgoing True, if the message is outgoing
 // @param content Push message content
-func NewNotificationTypeNewPushMessage(messageId int64, senderUserId int32, senderChatId int64, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
+func NewNotificationTypeNewPushMessage(messageId int64, sender MessageSender, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
 	notificationTypeNewPushMessageTemp := NotificationTypeNewPushMessage{
-		tdCommon:     tdCommon{Type: "notificationTypeNewPushMessage"},
-		MessageId:    messageId,
-		SenderUserId: senderUserId,
-		SenderChatId: senderChatId,
-		SenderName:   senderName,
-		IsOutgoing:   isOutgoing,
-		Content:      content,
+		tdCommon:   tdCommon{Type: "notificationTypeNewPushMessage"},
+		MessageId:  messageId,
+		Sender:     sender,
+		SenderName: senderName,
+		IsOutgoing: isOutgoing,
+		Content:    content,
 	}
 
 	return &notificationTypeNewPushMessageTemp
@@ -23021,11 +23403,9 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	}
 	tempObj := struct {
 		tdCommon
-		MessageId    int64  `json:"message_id"`     // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-		SenderUserId int32  `json:"sender_user_id"` // Sender of the message; 0 if unknown. Corresponding user may be inaccessible
-		SenderChatId int64  `json:"sender_chat_id"` // Sender chat of the message; 0 if none
-		SenderName   string `json:"sender_name"`    // Name of the sender; can be different from the name of the sender user
-		IsOutgoing   bool   `json:"is_outgoing"`    // True, if the message is outgoing
+		MessageId  int64  `json:"message_id"`  // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
+		SenderName string `json:"sender_name"` // Name of the sender; can be different from the name of the sender user
+		IsOutgoing bool   `json:"is_outgoing"` // True, if the message is outgoing
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -23035,10 +23415,11 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 
 	notificationTypeNewPushMessage.tdCommon = tempObj.tdCommon
 	notificationTypeNewPushMessage.MessageId = tempObj.MessageId
-	notificationTypeNewPushMessage.SenderUserId = tempObj.SenderUserId
-	notificationTypeNewPushMessage.SenderChatId = tempObj.SenderChatId
 	notificationTypeNewPushMessage.SenderName = tempObj.SenderName
 	notificationTypeNewPushMessage.IsOutgoing = tempObj.IsOutgoing
+
+	fieldSender, _ := unmarshalMessageSender(objMap["sender"])
+	notificationTypeNewPushMessage.Sender = fieldSender
 
 	fieldContent, _ := unmarshalPushMessageContent(objMap["content"])
 	notificationTypeNewPushMessage.Content = fieldContent
@@ -27278,6 +27659,40 @@ func (updateMessageEdited *UpdateMessageEdited) GetUpdateEnum() UpdateEnum {
 	return UpdateMessageEditedType
 }
 
+// UpdateMessageIsPinned The message pinned state was changed
+type UpdateMessageIsPinned struct {
+	tdCommon
+	ChatId    int64 `json:"chat_id"`    // Chat identifier
+	MessageId int64 `json:"message_id"` // The message identifier
+	IsPinned  bool  `json:"is_pinned"`  // True, if the message is pinned
+}
+
+// MessageType return the string telegram-type of UpdateMessageIsPinned
+func (updateMessageIsPinned *UpdateMessageIsPinned) MessageType() string {
+	return "updateMessageIsPinned"
+}
+
+// NewUpdateMessageIsPinned creates a new UpdateMessageIsPinned
+//
+// @param chatId Chat identifier
+// @param messageId The message identifier
+// @param isPinned True, if the message is pinned
+func NewUpdateMessageIsPinned(chatId int64, messageId int64, isPinned bool) *UpdateMessageIsPinned {
+	updateMessageIsPinnedTemp := UpdateMessageIsPinned{
+		tdCommon:  tdCommon{Type: "updateMessageIsPinned"},
+		ChatId:    chatId,
+		MessageId: messageId,
+		IsPinned:  isPinned,
+	}
+
+	return &updateMessageIsPinnedTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateMessageIsPinned *UpdateMessageIsPinned) GetUpdateEnum() UpdateEnum {
+	return UpdateMessageIsPinnedType
+}
+
 // UpdateMessageInteractionInfo The information about interactions with a message has changed
 type UpdateMessageInteractionInfo struct {
 	tdCommon
@@ -27956,37 +28371,6 @@ func (updateChatActionBar *UpdateChatActionBar) UnmarshalJSON(b []byte) error {
 // GetUpdateEnum return the enum type of this object
 func (updateChatActionBar *UpdateChatActionBar) GetUpdateEnum() UpdateEnum {
 	return UpdateChatActionBarType
-}
-
-// UpdateChatPinnedMessage The chat pinned message was changed
-type UpdateChatPinnedMessage struct {
-	tdCommon
-	ChatId          int64 `json:"chat_id"`           // Chat identifier
-	PinnedMessageId int64 `json:"pinned_message_id"` // The new identifier of the pinned message; 0 if there is no pinned message in the chat
-}
-
-// MessageType return the string telegram-type of UpdateChatPinnedMessage
-func (updateChatPinnedMessage *UpdateChatPinnedMessage) MessageType() string {
-	return "updateChatPinnedMessage"
-}
-
-// NewUpdateChatPinnedMessage creates a new UpdateChatPinnedMessage
-//
-// @param chatId Chat identifier
-// @param pinnedMessageId The new identifier of the pinned message; 0 if there is no pinned message in the chat
-func NewUpdateChatPinnedMessage(chatId int64, pinnedMessageId int64) *UpdateChatPinnedMessage {
-	updateChatPinnedMessageTemp := UpdateChatPinnedMessage{
-		tdCommon:        tdCommon{Type: "updateChatPinnedMessage"},
-		ChatId:          chatId,
-		PinnedMessageId: pinnedMessageId,
-	}
-
-	return &updateChatPinnedMessageTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatPinnedMessage *UpdateChatPinnedMessage) GetUpdateEnum() UpdateEnum {
-	return UpdateChatPinnedMessageType
 }
 
 // UpdateChatReplyMarkup The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an old reply markup was hidden by the user
@@ -30703,6 +31087,11 @@ func unmarshalChatMembersFilter(rawMsg *json.RawMessage) (ChatMembersFilter, err
 		err := json.Unmarshal(*rawMsg, &chatMembersFilterMembers)
 		return &chatMembersFilterMembers, err
 
+	case ChatMembersFilterMentionType:
+		var chatMembersFilterMention ChatMembersFilterMention
+		err := json.Unmarshal(*rawMsg, &chatMembersFilterMention)
+		return &chatMembersFilterMention, err
+
 	case ChatMembersFilterRestrictedType:
 		var chatMembersFilterRestricted ChatMembersFilterRestricted
 		err := json.Unmarshal(*rawMsg, &chatMembersFilterRestricted)
@@ -30765,6 +31154,11 @@ func unmarshalSupergroupMembersFilter(rawMsg *json.RawMessage) (SupergroupMember
 		err := json.Unmarshal(*rawMsg, &supergroupMembersFilterBanned)
 		return &supergroupMembersFilterBanned, err
 
+	case SupergroupMembersFilterMentionType:
+		var supergroupMembersFilterMention SupergroupMembersFilterMention
+		err := json.Unmarshal(*rawMsg, &supergroupMembersFilterMention)
+		return &supergroupMembersFilterMention, err
+
 	case SupergroupMembersFilterBotsType:
 		var supergroupMembersFilterBots SupergroupMembersFilterBots
 		err := json.Unmarshal(*rawMsg, &supergroupMembersFilterBots)
@@ -30801,6 +31195,33 @@ func unmarshalSecretChatState(rawMsg *json.RawMessage) (SecretChatState, error) 
 		var secretChatStateClosed SecretChatStateClosed
 		err := json.Unmarshal(*rawMsg, &secretChatStateClosed)
 		return &secretChatStateClosed, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalMessageSender(rawMsg *json.RawMessage) (MessageSender, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch MessageSenderEnum(objMap["@type"].(string)) {
+	case MessageSenderUserType:
+		var messageSenderUser MessageSenderUser
+		err := json.Unmarshal(*rawMsg, &messageSenderUser)
+		return &messageSenderUser, err
+
+	case MessageSenderChatType:
+		var messageSenderChat MessageSenderChat
+		err := json.Unmarshal(*rawMsg, &messageSenderChat)
+		return &messageSenderChat, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -32168,6 +32589,11 @@ func unmarshalMessageContent(rawMsg *json.RawMessage) (MessageContent, error) {
 		err := json.Unmarshal(*rawMsg, &messagePassportDataReceived)
 		return &messagePassportDataReceived, err
 
+	case MessageProximityAlertTriggeredType:
+		var messageProximityAlertTriggered MessageProximityAlertTriggered
+		err := json.Unmarshal(*rawMsg, &messageProximityAlertTriggered)
+		return &messageProximityAlertTriggered, err
+
 	case MessageUnsupportedType:
 		var messageUnsupported MessageUnsupported
 		err := json.Unmarshal(*rawMsg, &messageUnsupported)
@@ -32506,6 +32932,11 @@ func unmarshalSearchMessagesFilter(rawMsg *json.RawMessage) (SearchMessagesFilte
 		err := json.Unmarshal(*rawMsg, &searchMessagesFilterFailedToSend)
 		return &searchMessagesFilterFailedToSend, err
 
+	case SearchMessagesFilterPinnedType:
+		var searchMessagesFilterPinned SearchMessagesFilterPinned
+		err := json.Unmarshal(*rawMsg, &searchMessagesFilterPinned)
+		return &searchMessagesFilterPinned, err
+
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
 	}
@@ -32812,6 +33243,33 @@ func unmarshalCallProblem(rawMsg *json.RawMessage) (CallProblem, error) {
 		var callProblemPixelatedVideo CallProblemPixelatedVideo
 		err := json.Unmarshal(*rawMsg, &callProblemPixelatedVideo)
 		return &callProblemPixelatedVideo, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
+func unmarshalDiceStickers(rawMsg *json.RawMessage) (DiceStickers, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch DiceStickersEnum(objMap["@type"].(string)) {
+	case DiceStickersRegularType:
+		var diceStickersRegular DiceStickersRegular
+		err := json.Unmarshal(*rawMsg, &diceStickersRegular)
+		return &diceStickersRegular, err
+
+	case DiceStickersSlotMachineType:
+		var diceStickersSlotMachine DiceStickersSlotMachine
+		err := json.Unmarshal(*rawMsg, &diceStickersSlotMachine)
+		return &diceStickersSlotMachine, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -34387,6 +34845,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateMessageEdited)
 		return &updateMessageEdited, err
 
+	case UpdateMessageIsPinnedType:
+		var updateMessageIsPinned UpdateMessageIsPinned
+		err := json.Unmarshal(*rawMsg, &updateMessageIsPinned)
+		return &updateMessageIsPinned, err
+
 	case UpdateMessageInteractionInfoType:
 		var updateMessageInteractionInfo UpdateMessageInteractionInfo
 		err := json.Unmarshal(*rawMsg, &updateMessageInteractionInfo)
@@ -34486,11 +34949,6 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateChatActionBar UpdateChatActionBar
 		err := json.Unmarshal(*rawMsg, &updateChatActionBar)
 		return &updateChatActionBar, err
-
-	case UpdateChatPinnedMessageType:
-		var updateChatPinnedMessage UpdateChatPinnedMessage
-		err := json.Unmarshal(*rawMsg, &updateChatPinnedMessage)
-		return &updateChatPinnedMessage, err
 
 	case UpdateChatReplyMarkupType:
 		var updateChatReplyMarkup UpdateChatReplyMarkup
