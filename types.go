@@ -1122,14 +1122,14 @@ const (
 	InputStickerAnimatedType InputStickerEnum = "inputStickerAnimated"
 )
 
-// StatisticsGraphEnum Alias for abstract StatisticsGraph 'Sub-Classes', used as constant-enum here
-type StatisticsGraphEnum string
+// StatisticalGraphEnum Alias for abstract StatisticalGraph 'Sub-Classes', used as constant-enum here
+type StatisticalGraphEnum string
 
-// StatisticsGraph enums
+// StatisticalGraph enums
 const (
-	StatisticsGraphDataType  StatisticsGraphEnum = "statisticsGraphData"
-	StatisticsGraphAsyncType StatisticsGraphEnum = "statisticsGraphAsync"
-	StatisticsGraphErrorType StatisticsGraphEnum = "statisticsGraphError"
+	StatisticalGraphDataType  StatisticalGraphEnum = "statisticalGraphData"
+	StatisticalGraphAsyncType StatisticalGraphEnum = "statisticalGraphAsync"
+	StatisticalGraphErrorType StatisticalGraphEnum = "statisticalGraphError"
 )
 
 // ChatStatisticsEnum Alias for abstract ChatStatistics 'Sub-Classes', used as constant-enum here
@@ -1616,9 +1616,9 @@ type InputSticker interface {
 	GetInputStickerEnum() InputStickerEnum
 }
 
-// StatisticsGraph Describes a statistics graph
-type StatisticsGraph interface {
-	GetStatisticsGraphEnum() StatisticsGraphEnum
+// StatisticalGraph Describes a statistical graph
+type StatisticalGraph interface {
+	GetStatisticalGraphEnum() StatisticalGraphEnum
 }
 
 // ChatStatistics Contains a detailed statistics about a chat
@@ -5853,7 +5853,7 @@ func (messageForwardOriginHiddenUser *MessageForwardOriginHiddenUser) GetMessage
 type MessageForwardOriginChannel struct {
 	tdCommon
 	ChatId          int64  `json:"chat_id"`          // Identifier of the chat from which the message was originally forwarded
-	MessageId       int64  `json:"message_id"`       // Message identifier of the original message; 0 if unknown
+	MessageId       int64  `json:"message_id"`       // Message identifier of the original message
 	AuthorSignature string `json:"author_signature"` // Original post author signature
 }
 
@@ -5865,7 +5865,7 @@ func (messageForwardOriginChannel *MessageForwardOriginChannel) MessageType() st
 // NewMessageForwardOriginChannel creates a new MessageForwardOriginChannel
 //
 // @param chatId Identifier of the chat from which the message was originally forwarded
-// @param messageId Message identifier of the original message; 0 if unknown
+// @param messageId Message identifier of the original message
 // @param authorSignature Original post author signature
 func NewMessageForwardOriginChannel(chatId int64, messageId int64, authorSignature string) *MessageForwardOriginChannel {
 	messageForwardOriginChannelTemp := MessageForwardOriginChannel{
@@ -5949,7 +5949,7 @@ func (messageForwardInfo *MessageForwardInfo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// MessageReplyInfo Contains information about message replies
+// MessageReplyInfo Contains information about replies to a message
 type MessageReplyInfo struct {
 	tdCommon
 	ReplyCount              int32           `json:"reply_count"`                 // Number of times the message was directly or indirectly replied
@@ -6103,7 +6103,7 @@ type Message struct {
 	Ttl                     int32                   `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 	TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 	ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
-	AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous administrator messages, optional author signature
+	AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous group messages, optional author signature
 	MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 	RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 	Content                 MessageContent          `json:"content"`                      // Content of the message
@@ -6142,7 +6142,7 @@ func (message *Message) MessageType() string {
 // @param ttl For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 // @param ttlExpiresIn Time left before the message expires, in seconds
 // @param viaBotUserId If non-zero, the user identifier of the bot through which this message was sent
-// @param authorSignature For channel posts and anonymous administrator messages, optional author signature
+// @param authorSignature For channel posts and anonymous group messages, optional author signature
 // @param mediaAlbumId Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 // @param content Content of the message
@@ -6216,7 +6216,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		Ttl                     int32                   `json:"ttl"`                          // For self-destructing messages, the message's TTL (Time To Live), in seconds; 0 if none. TDLib will send updateDeleteMessages or updateMessageContent once the TTL expires
 		TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 		ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
-		AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous administrator messages, optional author signature
+		AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous group messages, optional author signature
 		MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
 		RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 
@@ -6669,7 +6669,7 @@ type ChatFilter struct {
 	PinnedChatIds      []int64 `json:"pinned_chat_ids"`      // The chat identifiers of pinned chats in the filtered chat list
 	IncludedChatIds    []int64 `json:"included_chat_ids"`    // The chat identifiers of always included chats in the filtered chat list
 	ExcludedChatIds    []int64 `json:"excluded_chat_ids"`    // The chat identifiers of always excluded chats in the filtered chat list
-	ExcludeMuted       bool    `json:"exclude_muted"`        // True, if the muted chats need to be excluded
+	ExcludeMuted       bool    `json:"exclude_muted"`        // True, if muted chats need to be excluded
 	ExcludeRead        bool    `json:"exclude_read"`         // True, if read chats need to be excluded
 	ExcludeArchived    bool    `json:"exclude_archived"`     // True, if archived chats need to be excluded
 	IncludeContacts    bool    `json:"include_contacts"`     // True, if contacts need to be included
@@ -6691,7 +6691,7 @@ func (chatFilter *ChatFilter) MessageType() string {
 // @param pinnedChatIds The chat identifiers of pinned chats in the filtered chat list
 // @param includedChatIds The chat identifiers of always included chats in the filtered chat list
 // @param excludedChatIds The chat identifiers of always excluded chats in the filtered chat list
-// @param excludeMuted True, if the muted chats need to be excluded
+// @param excludeMuted True, if muted chats need to be excluded
 // @param excludeRead True, if read chats need to be excluded
 // @param excludeArchived True, if archived chats need to be excluded
 // @param includeContacts True, if contacts need to be included
@@ -7280,7 +7280,7 @@ func NewChatInviteLink(inviteLink string) *ChatInviteLink {
 type ChatInviteLinkInfo struct {
 	tdCommon
 	ChatId        int64          `json:"chat_id"`         // Chat identifier of the invite link; 0 if the user has no access to the chat before joining
-	AccessibleFor int32          `json:"accessible_for"`  // If non-zero, the remaining time for which read access is granted to the chat, in seconds
+	AccessibleFor int32          `json:"accessible_for"`  // If non-zero, the amount of time for which read access to the chat will remain available, in seconds
 	Type          ChatType       `json:"type"`            // Contains information about the type of the chat
 	Title         string         `json:"title"`           // Title of the chat
 	Photo         *ChatPhotoInfo `json:"photo"`           // Chat photo; may be null
@@ -7297,7 +7297,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) MessageType() string {
 // NewChatInviteLinkInfo creates a new ChatInviteLinkInfo
 //
 // @param chatId Chat identifier of the invite link; 0 if the user has no access to the chat before joining
-// @param accessibleFor If non-zero, the remaining time for which read access is granted to the chat, in seconds
+// @param accessibleFor If non-zero, the amount of time for which read access to the chat will remain available, in seconds
 // @param typeParam Contains information about the type of the chat
 // @param title Title of the chat
 // @param photo Chat photo; may be null
@@ -7330,7 +7330,7 @@ func (chatInviteLinkInfo *ChatInviteLinkInfo) UnmarshalJSON(b []byte) error {
 	tempObj := struct {
 		tdCommon
 		ChatId        int64          `json:"chat_id"`         // Chat identifier of the invite link; 0 if the user has no access to the chat before joining
-		AccessibleFor int32          `json:"accessible_for"`  // If non-zero, the remaining time for which read access is granted to the chat, in seconds
+		AccessibleFor int32          `json:"accessible_for"`  // If non-zero, the amount of time for which read access to the chat will remain available, in seconds
 		Title         string         `json:"title"`           // Title of the chat
 		Photo         *ChatPhotoInfo `json:"photo"`           // Chat photo; may be null
 		MemberCount   int32          `json:"member_count"`    // Number of members in the chat
@@ -8817,12 +8817,12 @@ func (richTextIcon *RichTextIcon) GetRichTextEnum() RichTextEnum {
 	return RichTextIconType
 }
 
-// RichTextReference A rich text reference of a text on the same web page
+// RichTextReference A reference to a richTexts object on the same web page
 type RichTextReference struct {
 	tdCommon
-	Text          RichText `json:"text"`           // The text
-	ReferenceText RichText `json:"reference_text"` // The text to show on click
-	Url           string   `json:"url"`            // An HTTP URL, opening the reference
+	Text       RichText `json:"text"`        // The text
+	AnchorName string   `json:"anchor_name"` // The name of a richTextAnchor object, which is the first element of the target richTexts object
+	Url        string   `json:"url"`         // An HTTP URL, opening the reference
 }
 
 // MessageType return the string telegram-type of RichTextReference
@@ -8833,14 +8833,14 @@ func (richTextReference *RichTextReference) MessageType() string {
 // NewRichTextReference creates a new RichTextReference
 //
 // @param text The text
-// @param referenceText The text to show on click
+// @param anchorName The name of a richTextAnchor object, which is the first element of the target richTexts object
 // @param url An HTTP URL, opening the reference
-func NewRichTextReference(text RichText, referenceText RichText, url string) *RichTextReference {
+func NewRichTextReference(text RichText, anchorName string, url string) *RichTextReference {
 	richTextReferenceTemp := RichTextReference{
-		tdCommon:      tdCommon{Type: "richTextReference"},
-		Text:          text,
-		ReferenceText: referenceText,
-		Url:           url,
+		tdCommon:   tdCommon{Type: "richTextReference"},
+		Text:       text,
+		AnchorName: anchorName,
+		Url:        url,
 	}
 
 	return &richTextReferenceTemp
@@ -8855,7 +8855,8 @@ func (richTextReference *RichTextReference) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Url string `json:"url"` // An HTTP URL, opening the reference
+		AnchorName string `json:"anchor_name"` // The name of a richTextAnchor object, which is the first element of the target richTexts object
+		Url        string `json:"url"`         // An HTTP URL, opening the reference
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -8863,13 +8864,11 @@ func (richTextReference *RichTextReference) UnmarshalJSON(b []byte) error {
 	}
 
 	richTextReference.tdCommon = tempObj.tdCommon
+	richTextReference.AnchorName = tempObj.AnchorName
 	richTextReference.Url = tempObj.Url
 
 	fieldText, _ := unmarshalRichText(objMap["text"])
 	richTextReference.Text = fieldText
-
-	fieldReferenceText, _ := unmarshalRichText(objMap["reference_text"])
-	richTextReference.ReferenceText = fieldReferenceText
 
 	return nil
 }
@@ -8910,9 +8909,9 @@ func (richTextAnchor *RichTextAnchor) GetRichTextEnum() RichTextEnum {
 // RichTextAnchorLink A link to an anchor on the same web page
 type RichTextAnchorLink struct {
 	tdCommon
-	Text RichText `json:"text"` // The link text
-	Name string   `json:"name"` // The anchor name. If the name is empty, the link should bring back to top
-	Url  string   `json:"url"`  // An HTTP URL, opening the anchor
+	Text       RichText `json:"text"`        // The link text
+	AnchorName string   `json:"anchor_name"` // The anchor name. If the name is empty, the link should bring back to top
+	Url        string   `json:"url"`         // An HTTP URL, opening the anchor
 }
 
 // MessageType return the string telegram-type of RichTextAnchorLink
@@ -8923,14 +8922,14 @@ func (richTextAnchorLink *RichTextAnchorLink) MessageType() string {
 // NewRichTextAnchorLink creates a new RichTextAnchorLink
 //
 // @param text The link text
-// @param name The anchor name. If the name is empty, the link should bring back to top
+// @param anchorName The anchor name. If the name is empty, the link should bring back to top
 // @param url An HTTP URL, opening the anchor
-func NewRichTextAnchorLink(text RichText, name string, url string) *RichTextAnchorLink {
+func NewRichTextAnchorLink(text RichText, anchorName string, url string) *RichTextAnchorLink {
 	richTextAnchorLinkTemp := RichTextAnchorLink{
-		tdCommon: tdCommon{Type: "richTextAnchorLink"},
-		Text:     text,
-		Name:     name,
-		Url:      url,
+		tdCommon:   tdCommon{Type: "richTextAnchorLink"},
+		Text:       text,
+		AnchorName: anchorName,
+		Url:        url,
 	}
 
 	return &richTextAnchorLinkTemp
@@ -8945,8 +8944,8 @@ func (richTextAnchorLink *RichTextAnchorLink) UnmarshalJSON(b []byte) error {
 	}
 	tempObj := struct {
 		tdCommon
-		Name string `json:"name"` // The anchor name. If the name is empty, the link should bring back to top
-		Url  string `json:"url"`  // An HTTP URL, opening the anchor
+		AnchorName string `json:"anchor_name"` // The anchor name. If the name is empty, the link should bring back to top
+		Url        string `json:"url"`         // An HTTP URL, opening the anchor
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -8954,7 +8953,7 @@ func (richTextAnchorLink *RichTextAnchorLink) UnmarshalJSON(b []byte) error {
 	}
 
 	richTextAnchorLink.tdCommon = tempObj.tdCommon
-	richTextAnchorLink.Name = tempObj.Name
+	richTextAnchorLink.AnchorName = tempObj.AnchorName
 	richTextAnchorLink.Url = tempObj.Url
 
 	fieldText, _ := unmarshalRichText(objMap["text"])
@@ -13089,7 +13088,7 @@ func NewPassportRequiredElement(suitableElements []PassportSuitableElement) *Pas
 type PassportAuthorizationForm struct {
 	tdCommon
 	Id               int32                     `json:"id"`                 // Unique identifier of the authorization form
-	RequiredElements []PassportRequiredElement `json:"required_elements"`  // Information about the Telegram Passport elements that need to be provided to complete the form
+	RequiredElements []PassportRequiredElement `json:"required_elements"`  // Information about the Telegram Passport elements that must be provided to complete the form
 	PrivacyPolicyUrl string                    `json:"privacy_policy_url"` // URL for the privacy policy of the service; may be empty
 }
 
@@ -13101,7 +13100,7 @@ func (passportAuthorizationForm *PassportAuthorizationForm) MessageType() string
 // NewPassportAuthorizationForm creates a new PassportAuthorizationForm
 //
 // @param id Unique identifier of the authorization form
-// @param requiredElements Information about the Telegram Passport elements that need to be provided to complete the form
+// @param requiredElements Information about the Telegram Passport elements that must be provided to complete the form
 // @param privacyPolicyUrl URL for the privacy policy of the service; may be empty
 func NewPassportAuthorizationForm(id int32, requiredElements []PassportRequiredElement, privacyPolicyUrl string) *PassportAuthorizationForm {
 	passportAuthorizationFormTemp := PassportAuthorizationForm{
@@ -23364,7 +23363,7 @@ type NotificationTypeNewPushMessage struct {
 	tdCommon
 	MessageId  int64              `json:"message_id"`  // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
 	Sender     MessageSender      `json:"sender"`      // The sender of the message. Corresponding user or chat may be inaccessible
-	SenderName string             `json:"sender_name"` // Name of the sender; can be different from the name of the sender user
+	SenderName string             `json:"sender_name"` // Name of the sender
 	IsOutgoing bool               `json:"is_outgoing"` // True, if the message is outgoing
 	Content    PushMessageContent `json:"content"`     // Push message content
 }
@@ -23378,7 +23377,7 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) MessageTyp
 //
 // @param messageId The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
 // @param sender The sender of the message. Corresponding user or chat may be inaccessible
-// @param senderName Name of the sender; can be different from the name of the sender user
+// @param senderName Name of the sender
 // @param isOutgoing True, if the message is outgoing
 // @param content Push message content
 func NewNotificationTypeNewPushMessage(messageId int64, sender MessageSender, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
@@ -23404,7 +23403,7 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	tempObj := struct {
 		tdCommon
 		MessageId  int64  `json:"message_id"`  // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-		SenderName string `json:"sender_name"` // Name of the sender; can be different from the name of the sender user
+		SenderName string `json:"sender_name"` // Name of the sender
 		IsOutgoing bool   `json:"is_outgoing"` // True, if the message is outgoing
 
 	}{}
@@ -26812,120 +26811,120 @@ func NewDateRange(startDate int32, endDate int32) *DateRange {
 	return &dateRangeTemp
 }
 
-// StatisticsValue A statistics value
-type StatisticsValue struct {
+// StatisticalValue A value with information about its recent changes
+type StatisticalValue struct {
 	tdCommon
-	Value                float64 `json:"value"`                  // The value
+	Value                float64 `json:"value"`                  // The current value
 	PreviousValue        float64 `json:"previous_value"`         // The value for the previous day
 	GrowthRatePercentage float64 `json:"growth_rate_percentage"` // The growth rate of the value, as a percentage
 }
 
-// MessageType return the string telegram-type of StatisticsValue
-func (statisticsValue *StatisticsValue) MessageType() string {
-	return "statisticsValue"
+// MessageType return the string telegram-type of StatisticalValue
+func (statisticalValue *StatisticalValue) MessageType() string {
+	return "statisticalValue"
 }
 
-// NewStatisticsValue creates a new StatisticsValue
+// NewStatisticalValue creates a new StatisticalValue
 //
-// @param value The value
+// @param value The current value
 // @param previousValue The value for the previous day
 // @param growthRatePercentage The growth rate of the value, as a percentage
-func NewStatisticsValue(value float64, previousValue float64, growthRatePercentage float64) *StatisticsValue {
-	statisticsValueTemp := StatisticsValue{
-		tdCommon:             tdCommon{Type: "statisticsValue"},
+func NewStatisticalValue(value float64, previousValue float64, growthRatePercentage float64) *StatisticalValue {
+	statisticalValueTemp := StatisticalValue{
+		tdCommon:             tdCommon{Type: "statisticalValue"},
 		Value:                value,
 		PreviousValue:        previousValue,
 		GrowthRatePercentage: growthRatePercentage,
 	}
 
-	return &statisticsValueTemp
+	return &statisticalValueTemp
 }
 
-// StatisticsGraphData A graph data
-type StatisticsGraphData struct {
+// StatisticalGraphData A graph data
+type StatisticalGraphData struct {
 	tdCommon
 	JsonData  string `json:"json_data"`  // Graph data in JSON format
 	ZoomToken string `json:"zoom_token"` // If non-empty, a token which can be used to receive a zoomed in graph
 }
 
-// MessageType return the string telegram-type of StatisticsGraphData
-func (statisticsGraphData *StatisticsGraphData) MessageType() string {
-	return "statisticsGraphData"
+// MessageType return the string telegram-type of StatisticalGraphData
+func (statisticalGraphData *StatisticalGraphData) MessageType() string {
+	return "statisticalGraphData"
 }
 
-// NewStatisticsGraphData creates a new StatisticsGraphData
+// NewStatisticalGraphData creates a new StatisticalGraphData
 //
 // @param jsonData Graph data in JSON format
 // @param zoomToken If non-empty, a token which can be used to receive a zoomed in graph
-func NewStatisticsGraphData(jsonData string, zoomToken string) *StatisticsGraphData {
-	statisticsGraphDataTemp := StatisticsGraphData{
-		tdCommon:  tdCommon{Type: "statisticsGraphData"},
+func NewStatisticalGraphData(jsonData string, zoomToken string) *StatisticalGraphData {
+	statisticalGraphDataTemp := StatisticalGraphData{
+		tdCommon:  tdCommon{Type: "statisticalGraphData"},
 		JsonData:  jsonData,
 		ZoomToken: zoomToken,
 	}
 
-	return &statisticsGraphDataTemp
+	return &statisticalGraphDataTemp
 }
 
-// GetStatisticsGraphEnum return the enum type of this object
-func (statisticsGraphData *StatisticsGraphData) GetStatisticsGraphEnum() StatisticsGraphEnum {
-	return StatisticsGraphDataType
+// GetStatisticalGraphEnum return the enum type of this object
+func (statisticalGraphData *StatisticalGraphData) GetStatisticalGraphEnum() StatisticalGraphEnum {
+	return StatisticalGraphDataType
 }
 
-// StatisticsGraphAsync The graph data to be asynchronously loaded through getStatisticsGraph
-type StatisticsGraphAsync struct {
+// StatisticalGraphAsync The graph data to be asynchronously loaded through getStatisticalGraph
+type StatisticalGraphAsync struct {
 	tdCommon
 	Token string `json:"token"` // The token to use for data loading
 }
 
-// MessageType return the string telegram-type of StatisticsGraphAsync
-func (statisticsGraphAsync *StatisticsGraphAsync) MessageType() string {
-	return "statisticsGraphAsync"
+// MessageType return the string telegram-type of StatisticalGraphAsync
+func (statisticalGraphAsync *StatisticalGraphAsync) MessageType() string {
+	return "statisticalGraphAsync"
 }
 
-// NewStatisticsGraphAsync creates a new StatisticsGraphAsync
+// NewStatisticalGraphAsync creates a new StatisticalGraphAsync
 //
 // @param token The token to use for data loading
-func NewStatisticsGraphAsync(token string) *StatisticsGraphAsync {
-	statisticsGraphAsyncTemp := StatisticsGraphAsync{
-		tdCommon: tdCommon{Type: "statisticsGraphAsync"},
+func NewStatisticalGraphAsync(token string) *StatisticalGraphAsync {
+	statisticalGraphAsyncTemp := StatisticalGraphAsync{
+		tdCommon: tdCommon{Type: "statisticalGraphAsync"},
 		Token:    token,
 	}
 
-	return &statisticsGraphAsyncTemp
+	return &statisticalGraphAsyncTemp
 }
 
-// GetStatisticsGraphEnum return the enum type of this object
-func (statisticsGraphAsync *StatisticsGraphAsync) GetStatisticsGraphEnum() StatisticsGraphEnum {
-	return StatisticsGraphAsyncType
+// GetStatisticalGraphEnum return the enum type of this object
+func (statisticalGraphAsync *StatisticalGraphAsync) GetStatisticalGraphEnum() StatisticalGraphEnum {
+	return StatisticalGraphAsyncType
 }
 
-// StatisticsGraphError An error message to be shown to the user instead of the graph
-type StatisticsGraphError struct {
+// StatisticalGraphError An error message to be shown to the user instead of the graph
+type StatisticalGraphError struct {
 	tdCommon
 	ErrorMessage string `json:"error_message"` // The error message
 }
 
-// MessageType return the string telegram-type of StatisticsGraphError
-func (statisticsGraphError *StatisticsGraphError) MessageType() string {
-	return "statisticsGraphError"
+// MessageType return the string telegram-type of StatisticalGraphError
+func (statisticalGraphError *StatisticalGraphError) MessageType() string {
+	return "statisticalGraphError"
 }
 
-// NewStatisticsGraphError creates a new StatisticsGraphError
+// NewStatisticalGraphError creates a new StatisticalGraphError
 //
 // @param errorMessage The error message
-func NewStatisticsGraphError(errorMessage string) *StatisticsGraphError {
-	statisticsGraphErrorTemp := StatisticsGraphError{
-		tdCommon:     tdCommon{Type: "statisticsGraphError"},
+func NewStatisticalGraphError(errorMessage string) *StatisticalGraphError {
+	statisticalGraphErrorTemp := StatisticalGraphError{
+		tdCommon:     tdCommon{Type: "statisticalGraphError"},
 		ErrorMessage: errorMessage,
 	}
 
-	return &statisticsGraphErrorTemp
+	return &statisticalGraphErrorTemp
 }
 
-// GetStatisticsGraphEnum return the enum type of this object
-func (statisticsGraphError *StatisticsGraphError) GetStatisticsGraphEnum() StatisticsGraphEnum {
-	return StatisticsGraphErrorType
+// GetStatisticalGraphEnum return the enum type of this object
+func (statisticalGraphError *StatisticalGraphError) GetStatisticalGraphEnum() StatisticalGraphEnum {
+	return StatisticalGraphErrorType
 }
 
 // ChatStatisticsMessageInteractionInfo Contains statistics about interactions with a message
@@ -27048,18 +27047,18 @@ func NewChatStatisticsInviterInfo(userId int32, addedMemberCount int32) *ChatSta
 type ChatStatisticsSupergroup struct {
 	tdCommon
 	Period              *DateRange                               `json:"period"`                // A period to which the statistics applies
-	MemberCount         *StatisticsValue                         `json:"member_count"`          // Number of members in the chat
-	MessageCount        *StatisticsValue                         `json:"message_count"`         // Number of messages sent to the chat
-	ViewerCount         *StatisticsValue                         `json:"viewer_count"`          // Number of users who viewed messages in the chat
-	SenderCount         *StatisticsValue                         `json:"sender_count"`          // Number of users who sent messages to the chat
-	MemberCountGraph    StatisticsGraph                          `json:"member_count_graph"`    // A graph containing number of members in the chat
-	JoinGraph           StatisticsGraph                          `json:"join_graph"`            // A graph containing number of members joined and left the chat
-	JoinBySourceGraph   StatisticsGraph                          `json:"join_by_source_graph"`  // A graph containing number of new member joins per source
-	LanguageGraph       StatisticsGraph                          `json:"language_graph"`        // A graph containing distribution of active users per language
-	MessageContentGraph StatisticsGraph                          `json:"message_content_graph"` // A graph containing distribution of sent messages by content type
-	ActionGraph         StatisticsGraph                          `json:"action_graph"`          // A graph containing number of different actions in the chat
-	DayGraph            StatisticsGraph                          `json:"day_graph"`             // A graph containing distribution of message views per hour
-	WeekGraph           StatisticsGraph                          `json:"week_graph"`            // A graph containing distribution of message views per day of week
+	MemberCount         *StatisticalValue                        `json:"member_count"`          // Number of members in the chat
+	MessageCount        *StatisticalValue                        `json:"message_count"`         // Number of messages sent to the chat
+	ViewerCount         *StatisticalValue                        `json:"viewer_count"`          // Number of users who viewed messages in the chat
+	SenderCount         *StatisticalValue                        `json:"sender_count"`          // Number of users who sent messages to the chat
+	MemberCountGraph    StatisticalGraph                         `json:"member_count_graph"`    // A graph containing number of members in the chat
+	JoinGraph           StatisticalGraph                         `json:"join_graph"`            // A graph containing number of members joined and left the chat
+	JoinBySourceGraph   StatisticalGraph                         `json:"join_by_source_graph"`  // A graph containing number of new member joins per source
+	LanguageGraph       StatisticalGraph                         `json:"language_graph"`        // A graph containing distribution of active users per language
+	MessageContentGraph StatisticalGraph                         `json:"message_content_graph"` // A graph containing distribution of sent messages by content type
+	ActionGraph         StatisticalGraph                         `json:"action_graph"`          // A graph containing number of different actions in the chat
+	DayGraph            StatisticalGraph                         `json:"day_graph"`             // A graph containing distribution of message views per hour
+	WeekGraph           StatisticalGraph                         `json:"week_graph"`            // A graph containing distribution of message views per day of week
 	TopSenders          []ChatStatisticsMessageSenderInfo        `json:"top_senders"`           // List of users sent most messages in the last week
 	TopAdministrators   []ChatStatisticsAdministratorActionsInfo `json:"top_administrators"`    // List of most active administrators in the last week
 	TopInviters         []ChatStatisticsInviterInfo              `json:"top_inviters"`          // List of most active inviters of new members in the last week
@@ -27088,7 +27087,7 @@ func (chatStatisticsSupergroup *ChatStatisticsSupergroup) MessageType() string {
 // @param topSenders List of users sent most messages in the last week
 // @param topAdministrators List of most active administrators in the last week
 // @param topInviters List of most active inviters of new members in the last week
-func NewChatStatisticsSupergroup(period *DateRange, memberCount *StatisticsValue, messageCount *StatisticsValue, viewerCount *StatisticsValue, senderCount *StatisticsValue, memberCountGraph StatisticsGraph, joinGraph StatisticsGraph, joinBySourceGraph StatisticsGraph, languageGraph StatisticsGraph, messageContentGraph StatisticsGraph, actionGraph StatisticsGraph, dayGraph StatisticsGraph, weekGraph StatisticsGraph, topSenders []ChatStatisticsMessageSenderInfo, topAdministrators []ChatStatisticsAdministratorActionsInfo, topInviters []ChatStatisticsInviterInfo) *ChatStatisticsSupergroup {
+func NewChatStatisticsSupergroup(period *DateRange, memberCount *StatisticalValue, messageCount *StatisticalValue, viewerCount *StatisticalValue, senderCount *StatisticalValue, memberCountGraph StatisticalGraph, joinGraph StatisticalGraph, joinBySourceGraph StatisticalGraph, languageGraph StatisticalGraph, messageContentGraph StatisticalGraph, actionGraph StatisticalGraph, dayGraph StatisticalGraph, weekGraph StatisticalGraph, topSenders []ChatStatisticsMessageSenderInfo, topAdministrators []ChatStatisticsAdministratorActionsInfo, topInviters []ChatStatisticsInviterInfo) *ChatStatisticsSupergroup {
 	chatStatisticsSupergroupTemp := ChatStatisticsSupergroup{
 		tdCommon:            tdCommon{Type: "chatStatisticsSupergroup"},
 		Period:              period,
@@ -27122,10 +27121,10 @@ func (chatStatisticsSupergroup *ChatStatisticsSupergroup) UnmarshalJSON(b []byte
 	tempObj := struct {
 		tdCommon
 		Period            *DateRange                               `json:"period"`             // A period to which the statistics applies
-		MemberCount       *StatisticsValue                         `json:"member_count"`       // Number of members in the chat
-		MessageCount      *StatisticsValue                         `json:"message_count"`      // Number of messages sent to the chat
-		ViewerCount       *StatisticsValue                         `json:"viewer_count"`       // Number of users who viewed messages in the chat
-		SenderCount       *StatisticsValue                         `json:"sender_count"`       // Number of users who sent messages to the chat
+		MemberCount       *StatisticalValue                        `json:"member_count"`       // Number of members in the chat
+		MessageCount      *StatisticalValue                        `json:"message_count"`      // Number of messages sent to the chat
+		ViewerCount       *StatisticalValue                        `json:"viewer_count"`       // Number of users who viewed messages in the chat
+		SenderCount       *StatisticalValue                        `json:"sender_count"`       // Number of users who sent messages to the chat
 		TopSenders        []ChatStatisticsMessageSenderInfo        `json:"top_senders"`        // List of users sent most messages in the last week
 		TopAdministrators []ChatStatisticsAdministratorActionsInfo `json:"top_administrators"` // List of most active administrators in the last week
 		TopInviters       []ChatStatisticsInviterInfo              `json:"top_inviters"`       // List of most active inviters of new members in the last week
@@ -27145,28 +27144,28 @@ func (chatStatisticsSupergroup *ChatStatisticsSupergroup) UnmarshalJSON(b []byte
 	chatStatisticsSupergroup.TopAdministrators = tempObj.TopAdministrators
 	chatStatisticsSupergroup.TopInviters = tempObj.TopInviters
 
-	fieldMemberCountGraph, _ := unmarshalStatisticsGraph(objMap["member_count_graph"])
+	fieldMemberCountGraph, _ := unmarshalStatisticalGraph(objMap["member_count_graph"])
 	chatStatisticsSupergroup.MemberCountGraph = fieldMemberCountGraph
 
-	fieldJoinGraph, _ := unmarshalStatisticsGraph(objMap["join_graph"])
+	fieldJoinGraph, _ := unmarshalStatisticalGraph(objMap["join_graph"])
 	chatStatisticsSupergroup.JoinGraph = fieldJoinGraph
 
-	fieldJoinBySourceGraph, _ := unmarshalStatisticsGraph(objMap["join_by_source_graph"])
+	fieldJoinBySourceGraph, _ := unmarshalStatisticalGraph(objMap["join_by_source_graph"])
 	chatStatisticsSupergroup.JoinBySourceGraph = fieldJoinBySourceGraph
 
-	fieldLanguageGraph, _ := unmarshalStatisticsGraph(objMap["language_graph"])
+	fieldLanguageGraph, _ := unmarshalStatisticalGraph(objMap["language_graph"])
 	chatStatisticsSupergroup.LanguageGraph = fieldLanguageGraph
 
-	fieldMessageContentGraph, _ := unmarshalStatisticsGraph(objMap["message_content_graph"])
+	fieldMessageContentGraph, _ := unmarshalStatisticalGraph(objMap["message_content_graph"])
 	chatStatisticsSupergroup.MessageContentGraph = fieldMessageContentGraph
 
-	fieldActionGraph, _ := unmarshalStatisticsGraph(objMap["action_graph"])
+	fieldActionGraph, _ := unmarshalStatisticalGraph(objMap["action_graph"])
 	chatStatisticsSupergroup.ActionGraph = fieldActionGraph
 
-	fieldDayGraph, _ := unmarshalStatisticsGraph(objMap["day_graph"])
+	fieldDayGraph, _ := unmarshalStatisticalGraph(objMap["day_graph"])
 	chatStatisticsSupergroup.DayGraph = fieldDayGraph
 
-	fieldWeekGraph, _ := unmarshalStatisticsGraph(objMap["week_graph"])
+	fieldWeekGraph, _ := unmarshalStatisticalGraph(objMap["week_graph"])
 	chatStatisticsSupergroup.WeekGraph = fieldWeekGraph
 
 	return nil
@@ -27181,19 +27180,19 @@ func (chatStatisticsSupergroup *ChatStatisticsSupergroup) GetChatStatisticsEnum(
 type ChatStatisticsChannel struct {
 	tdCommon
 	Period                         *DateRange                             `json:"period"`                           // A period to which the statistics applies
-	MemberCount                    *StatisticsValue                       `json:"member_count"`                     // Number of members in the chat
-	MeanViewCount                  *StatisticsValue                       `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
-	MeanShareCount                 *StatisticsValue                       `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
+	MemberCount                    *StatisticalValue                      `json:"member_count"`                     // Number of members in the chat
+	MeanViewCount                  *StatisticalValue                      `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
+	MeanShareCount                 *StatisticalValue                      `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
 	EnabledNotificationsPercentage float64                                `json:"enabled_notifications_percentage"` // A percentage of users with enabled notifications for the chat
-	MemberCountGraph               StatisticsGraph                        `json:"member_count_graph"`               // A graph containing number of members in the chat
-	JoinGraph                      StatisticsGraph                        `json:"join_graph"`                       // A graph containing number of members joined and left the chat
-	MuteGraph                      StatisticsGraph                        `json:"mute_graph"`                       // A graph containing number of members muted and unmuted the chat
-	ViewCountByHourGraph           StatisticsGraph                        `json:"view_count_by_hour_graph"`         // A graph containing number of message views in a given hour in the last two weeks
-	ViewCountBySourceGraph         StatisticsGraph                        `json:"view_count_by_source_graph"`       // A graph containing number of message views per source
-	JoinBySourceGraph              StatisticsGraph                        `json:"join_by_source_graph"`             // A graph containing number of new member joins per source
-	LanguageGraph                  StatisticsGraph                        `json:"language_graph"`                   // A graph containing number of users viewed chat messages per language
-	MessageInteractionGraph        StatisticsGraph                        `json:"message_interaction_graph"`        // A graph containing number of chat message views and shares
-	InstantViewInteractionGraph    StatisticsGraph                        `json:"instant_view_interaction_graph"`   // A graph containing number of views of associated with the chat instant views
+	MemberCountGraph               StatisticalGraph                       `json:"member_count_graph"`               // A graph containing number of members in the chat
+	JoinGraph                      StatisticalGraph                       `json:"join_graph"`                       // A graph containing number of members joined and left the chat
+	MuteGraph                      StatisticalGraph                       `json:"mute_graph"`                       // A graph containing number of members muted and unmuted the chat
+	ViewCountByHourGraph           StatisticalGraph                       `json:"view_count_by_hour_graph"`         // A graph containing number of message views in a given hour in the last two weeks
+	ViewCountBySourceGraph         StatisticalGraph                       `json:"view_count_by_source_graph"`       // A graph containing number of message views per source
+	JoinBySourceGraph              StatisticalGraph                       `json:"join_by_source_graph"`             // A graph containing number of new member joins per source
+	LanguageGraph                  StatisticalGraph                       `json:"language_graph"`                   // A graph containing number of users viewed chat messages per language
+	MessageInteractionGraph        StatisticalGraph                       `json:"message_interaction_graph"`        // A graph containing number of chat message views and shares
+	InstantViewInteractionGraph    StatisticalGraph                       `json:"instant_view_interaction_graph"`   // A graph containing number of views of associated with the chat instant views
 	RecentMessageInteractions      []ChatStatisticsMessageInteractionInfo `json:"recent_message_interactions"`      // Detailed statistics about number of views and shares of recently sent messages
 }
 
@@ -27219,7 +27218,7 @@ func (chatStatisticsChannel *ChatStatisticsChannel) MessageType() string {
 // @param messageInteractionGraph A graph containing number of chat message views and shares
 // @param instantViewInteractionGraph A graph containing number of views of associated with the chat instant views
 // @param recentMessageInteractions Detailed statistics about number of views and shares of recently sent messages
-func NewChatStatisticsChannel(period *DateRange, memberCount *StatisticsValue, meanViewCount *StatisticsValue, meanShareCount *StatisticsValue, enabledNotificationsPercentage float64, memberCountGraph StatisticsGraph, joinGraph StatisticsGraph, muteGraph StatisticsGraph, viewCountByHourGraph StatisticsGraph, viewCountBySourceGraph StatisticsGraph, joinBySourceGraph StatisticsGraph, languageGraph StatisticsGraph, messageInteractionGraph StatisticsGraph, instantViewInteractionGraph StatisticsGraph, recentMessageInteractions []ChatStatisticsMessageInteractionInfo) *ChatStatisticsChannel {
+func NewChatStatisticsChannel(period *DateRange, memberCount *StatisticalValue, meanViewCount *StatisticalValue, meanShareCount *StatisticalValue, enabledNotificationsPercentage float64, memberCountGraph StatisticalGraph, joinGraph StatisticalGraph, muteGraph StatisticalGraph, viewCountByHourGraph StatisticalGraph, viewCountBySourceGraph StatisticalGraph, joinBySourceGraph StatisticalGraph, languageGraph StatisticalGraph, messageInteractionGraph StatisticalGraph, instantViewInteractionGraph StatisticalGraph, recentMessageInteractions []ChatStatisticsMessageInteractionInfo) *ChatStatisticsChannel {
 	chatStatisticsChannelTemp := ChatStatisticsChannel{
 		tdCommon:                       tdCommon{Type: "chatStatisticsChannel"},
 		Period:                         period,
@@ -27252,9 +27251,9 @@ func (chatStatisticsChannel *ChatStatisticsChannel) UnmarshalJSON(b []byte) erro
 	tempObj := struct {
 		tdCommon
 		Period                         *DateRange                             `json:"period"`                           // A period to which the statistics applies
-		MemberCount                    *StatisticsValue                       `json:"member_count"`                     // Number of members in the chat
-		MeanViewCount                  *StatisticsValue                       `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
-		MeanShareCount                 *StatisticsValue                       `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
+		MemberCount                    *StatisticalValue                      `json:"member_count"`                     // Number of members in the chat
+		MeanViewCount                  *StatisticalValue                      `json:"mean_view_count"`                  // Mean number of times the recently sent messages was viewed
+		MeanShareCount                 *StatisticalValue                      `json:"mean_share_count"`                 // Mean number of times the recently sent messages was shared
 		EnabledNotificationsPercentage float64                                `json:"enabled_notifications_percentage"` // A percentage of users with enabled notifications for the chat
 		RecentMessageInteractions      []ChatStatisticsMessageInteractionInfo `json:"recent_message_interactions"`      // Detailed statistics about number of views and shares of recently sent messages
 	}{}
@@ -27271,31 +27270,31 @@ func (chatStatisticsChannel *ChatStatisticsChannel) UnmarshalJSON(b []byte) erro
 	chatStatisticsChannel.EnabledNotificationsPercentage = tempObj.EnabledNotificationsPercentage
 	chatStatisticsChannel.RecentMessageInteractions = tempObj.RecentMessageInteractions
 
-	fieldMemberCountGraph, _ := unmarshalStatisticsGraph(objMap["member_count_graph"])
+	fieldMemberCountGraph, _ := unmarshalStatisticalGraph(objMap["member_count_graph"])
 	chatStatisticsChannel.MemberCountGraph = fieldMemberCountGraph
 
-	fieldJoinGraph, _ := unmarshalStatisticsGraph(objMap["join_graph"])
+	fieldJoinGraph, _ := unmarshalStatisticalGraph(objMap["join_graph"])
 	chatStatisticsChannel.JoinGraph = fieldJoinGraph
 
-	fieldMuteGraph, _ := unmarshalStatisticsGraph(objMap["mute_graph"])
+	fieldMuteGraph, _ := unmarshalStatisticalGraph(objMap["mute_graph"])
 	chatStatisticsChannel.MuteGraph = fieldMuteGraph
 
-	fieldViewCountByHourGraph, _ := unmarshalStatisticsGraph(objMap["view_count_by_hour_graph"])
+	fieldViewCountByHourGraph, _ := unmarshalStatisticalGraph(objMap["view_count_by_hour_graph"])
 	chatStatisticsChannel.ViewCountByHourGraph = fieldViewCountByHourGraph
 
-	fieldViewCountBySourceGraph, _ := unmarshalStatisticsGraph(objMap["view_count_by_source_graph"])
+	fieldViewCountBySourceGraph, _ := unmarshalStatisticalGraph(objMap["view_count_by_source_graph"])
 	chatStatisticsChannel.ViewCountBySourceGraph = fieldViewCountBySourceGraph
 
-	fieldJoinBySourceGraph, _ := unmarshalStatisticsGraph(objMap["join_by_source_graph"])
+	fieldJoinBySourceGraph, _ := unmarshalStatisticalGraph(objMap["join_by_source_graph"])
 	chatStatisticsChannel.JoinBySourceGraph = fieldJoinBySourceGraph
 
-	fieldLanguageGraph, _ := unmarshalStatisticsGraph(objMap["language_graph"])
+	fieldLanguageGraph, _ := unmarshalStatisticalGraph(objMap["language_graph"])
 	chatStatisticsChannel.LanguageGraph = fieldLanguageGraph
 
-	fieldMessageInteractionGraph, _ := unmarshalStatisticsGraph(objMap["message_interaction_graph"])
+	fieldMessageInteractionGraph, _ := unmarshalStatisticalGraph(objMap["message_interaction_graph"])
 	chatStatisticsChannel.MessageInteractionGraph = fieldMessageInteractionGraph
 
-	fieldInstantViewInteractionGraph, _ := unmarshalStatisticsGraph(objMap["instant_view_interaction_graph"])
+	fieldInstantViewInteractionGraph, _ := unmarshalStatisticalGraph(objMap["instant_view_interaction_graph"])
 	chatStatisticsChannel.InstantViewInteractionGraph = fieldInstantViewInteractionGraph
 
 	return nil
@@ -27309,7 +27308,7 @@ func (chatStatisticsChannel *ChatStatisticsChannel) GetChatStatisticsEnum() Chat
 // MessageStatistics A detailed statistics about a message
 type MessageStatistics struct {
 	tdCommon
-	MessageInteractionGraph StatisticsGraph `json:"message_interaction_graph"` // A graph containing number of message views and shares
+	MessageInteractionGraph StatisticalGraph `json:"message_interaction_graph"` // A graph containing number of message views and shares
 }
 
 // MessageType return the string telegram-type of MessageStatistics
@@ -27320,7 +27319,7 @@ func (messageStatistics *MessageStatistics) MessageType() string {
 // NewMessageStatistics creates a new MessageStatistics
 //
 // @param messageInteractionGraph A graph containing number of message views and shares
-func NewMessageStatistics(messageInteractionGraph StatisticsGraph) *MessageStatistics {
+func NewMessageStatistics(messageInteractionGraph StatisticalGraph) *MessageStatistics {
 	messageStatisticsTemp := MessageStatistics{
 		tdCommon:                tdCommon{Type: "messageStatistics"},
 		MessageInteractionGraph: messageInteractionGraph,
@@ -27346,7 +27345,7 @@ func (messageStatistics *MessageStatistics) UnmarshalJSON(b []byte) error {
 
 	messageStatistics.tdCommon = tempObj.tdCommon
 
-	fieldMessageInteractionGraph, _ := unmarshalStatisticsGraph(objMap["message_interaction_graph"])
+	fieldMessageInteractionGraph, _ := unmarshalStatisticalGraph(objMap["message_interaction_graph"])
 	messageStatistics.MessageInteractionGraph = fieldMessageInteractionGraph
 
 	return nil
@@ -29737,7 +29736,7 @@ func (updateLanguagePackStrings *UpdateLanguagePackStrings) GetUpdateEnum() Upda
 	return UpdateLanguagePackStringsType
 }
 
-// UpdateConnectionState The connection state has changed. This update must be used only to show the user a human-readable description of the connection state
+// UpdateConnectionState The connection state has changed. This update must be used only to show a human-readable description of the connection state
 type UpdateConnectionState struct {
 	tdCommon
 	State ConnectionState `json:"state"` // The new connection state
@@ -34739,7 +34738,7 @@ func unmarshalInputSticker(rawMsg *json.RawMessage) (InputSticker, error) {
 	}
 }
 
-func unmarshalStatisticsGraph(rawMsg *json.RawMessage) (StatisticsGraph, error) {
+func unmarshalStatisticalGraph(rawMsg *json.RawMessage) (StatisticalGraph, error) {
 
 	if rawMsg == nil {
 		return nil, nil
@@ -34750,21 +34749,21 @@ func unmarshalStatisticsGraph(rawMsg *json.RawMessage) (StatisticsGraph, error) 
 		return nil, err
 	}
 
-	switch StatisticsGraphEnum(objMap["@type"].(string)) {
-	case StatisticsGraphDataType:
-		var statisticsGraphData StatisticsGraphData
-		err := json.Unmarshal(*rawMsg, &statisticsGraphData)
-		return &statisticsGraphData, err
+	switch StatisticalGraphEnum(objMap["@type"].(string)) {
+	case StatisticalGraphDataType:
+		var statisticalGraphData StatisticalGraphData
+		err := json.Unmarshal(*rawMsg, &statisticalGraphData)
+		return &statisticalGraphData, err
 
-	case StatisticsGraphAsyncType:
-		var statisticsGraphAsync StatisticsGraphAsync
-		err := json.Unmarshal(*rawMsg, &statisticsGraphAsync)
-		return &statisticsGraphAsync, err
+	case StatisticalGraphAsyncType:
+		var statisticalGraphAsync StatisticalGraphAsync
+		err := json.Unmarshal(*rawMsg, &statisticalGraphAsync)
+		return &statisticalGraphAsync, err
 
-	case StatisticsGraphErrorType:
-		var statisticsGraphError StatisticsGraphError
-		err := json.Unmarshal(*rawMsg, &statisticsGraphError)
-		return &statisticsGraphError, err
+	case StatisticalGraphErrorType:
+		var statisticalGraphError StatisticalGraphError
+		err := json.Unmarshal(*rawMsg, &statisticalGraphError)
+		return &statisticalGraphError, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))

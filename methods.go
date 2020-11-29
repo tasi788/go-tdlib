@@ -939,7 +939,7 @@ func (client *Client) GetRepliedMessage(chatId int64, messageId int64) (*Message
 
 }
 
-// GetChatPinnedMessage Returns information about a newest pinned chat message
+// GetChatPinnedMessage Returns information about a newest pinned message in the chat
 // @param chatId Identifier of the chat the message belongs to
 func (client *Client) GetChatPinnedMessage(chatId int64) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -2011,7 +2011,7 @@ func (client *Client) SendMessage(chatId int64, messageThreadId int64, replyToMe
 
 }
 
-// SendMessageAlbum Sends messages grouped together into an album. Currently only photo and video messages can be grouped into an album. Returns sent messages
+// SendMessageAlbum Sends messages grouped together into an album. Currently only audio, document, photo and video messages can be grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns sent messages
 // @param chatId Target chat
 // @param messageThreadId If not 0, a message thread identifier in which the messages will be sent
 // @param replyToMessageId Identifier of a message to reply to or 0
@@ -4161,7 +4161,7 @@ func (client *Client) SetChatSlowModeDelay(chatId int64, slowModeDelay int32) (*
 // @param chatId Identifier of the chat
 // @param messageId Identifier of the new pinned message
 // @param disableNotification True, if there should be no notification about the pinned message. Notifications are always disabled in channels and private chats
-// @param onlyForSelf True, if the message needs to be pinned only for self; private chats only
+// @param onlyForSelf True, if the message needs to be pinned for one side only; private chats only
 func (client *Client) PinChatMessage(chatId int64, messageId int64, disableNotification bool, onlyForSelf bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                "pinChatMessage",
@@ -6602,7 +6602,7 @@ func (client *Client) ReportSupergroupSpam(supergroupId int32, userId int32, mes
 
 // GetSupergroupMembers Returns information about members or banned users in a supergroup or channel. Can be used only if SupergroupFullInfo.can_get_members == true; additionally, administrator privileges may be required for some filters
 // @param supergroupId Identifier of the supergroup or channel
-// @param filter The type of users to return. By default, supergroupMembersRecent
+// @param filter The type of users to return. By default, supergroupMembersFilterRecent
 // @param offset Number of users to skip
 // @param limit The maximum number of users be returned; up to 200
 func (client *Client) GetSupergroupMembers(supergroupId int32, filter SupergroupMembersFilter, offset int32, limit int32) (*ChatMembers, error) {
@@ -6891,7 +6891,7 @@ func (client *Client) GetSupportUser() (*User, error) {
 }
 
 // GetBackgrounds Returns backgrounds installed by the user
-// @param forDarkTheme True, if the backgrounds need to be ordered for dark theme
+// @param forDarkTheme True, if the backgrounds must be ordered for dark theme
 func (client *Client) GetBackgrounds(forDarkTheme bool) (*Backgrounds, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":          "getBackgrounds",
@@ -7094,7 +7094,7 @@ func (client *Client) GetLanguagePackStrings(languagePackId string, keys []strin
 
 }
 
-// SynchronizeLanguagePack Fetches the latest versions of all strings from a language pack in the current localization target from the server. This method doesn't need to be called explicitly for the current used/base language packs. Can be called before authorization
+// SynchronizeLanguagePack Fetches the latest versions of all strings from a language pack in the current localization target from the server. This method shouldn't be called explicitly for the current used/base language packs. Can be called before authorization
 // @param languagePackId Language pack identifier
 func (client *Client) SynchronizeLanguagePack(languagePackId string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -7632,13 +7632,13 @@ func (client *Client) GetMessageStatistics(chatId int64, messageId int64, isDark
 
 }
 
-// GetStatisticsGraph Loads asynchronous or zoomed in chat or message statistics graph
+// GetStatisticalGraph Loads an asynchronous or a zoomed in statistical graph
 // @param chatId Chat identifier
 // @param token The token for graph loading
 // @param x X-value for zoomed in graph or 0 otherwise
-func (client *Client) GetStatisticsGraph(chatId int64, token string, x int64) (StatisticsGraph, error) {
+func (client *Client) GetStatisticalGraph(chatId int64, token string, x int64) (StatisticalGraph, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "getStatisticsGraph",
+		"@type":   "getStatisticalGraph",
 		"chat_id": chatId,
 		"token":   token,
 		"x":       x,
@@ -7652,22 +7652,22 @@ func (client *Client) GetStatisticsGraph(chatId int64, token string, x int64) (S
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	switch StatisticsGraphEnum(result.Data["@type"].(string)) {
+	switch StatisticalGraphEnum(result.Data["@type"].(string)) {
 
-	case StatisticsGraphDataType:
-		var statisticsGraph StatisticsGraphData
-		err = json.Unmarshal(result.Raw, &statisticsGraph)
-		return &statisticsGraph, err
+	case StatisticalGraphDataType:
+		var statisticalGraph StatisticalGraphData
+		err = json.Unmarshal(result.Raw, &statisticalGraph)
+		return &statisticalGraph, err
 
-	case StatisticsGraphAsyncType:
-		var statisticsGraph StatisticsGraphAsync
-		err = json.Unmarshal(result.Raw, &statisticsGraph)
-		return &statisticsGraph, err
+	case StatisticalGraphAsyncType:
+		var statisticalGraph StatisticalGraphAsync
+		err = json.Unmarshal(result.Raw, &statisticalGraph)
+		return &statisticalGraph, err
 
-	case StatisticsGraphErrorType:
-		var statisticsGraph StatisticsGraphError
-		err = json.Unmarshal(result.Raw, &statisticsGraph)
-		return &statisticsGraph, err
+	case StatisticalGraphErrorType:
+		var statisticalGraph StatisticalGraphError
+		err = json.Unmarshal(result.Raw, &statisticalGraph)
+		return &statisticalGraph, err
 
 	default:
 		return nil, fmt.Errorf("Invalid type")
@@ -7744,7 +7744,7 @@ func (client *Client) GetDatabaseStatistics() (*DatabaseStatistics, error) {
 // @param fileTypes If not empty, only files with the given type(s) are considered. By default, all types except thumbnails, profile photos, stickers and wallpapers are deleted
 // @param chatIds If not empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to any chat (e.g., profile photos)
 // @param excludeChatIds If not empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to any chat (e.g., profile photos)
-// @param returnDeletedFileStatistics Pass true if deleted file statistics need to be returned instead of the whole storage usage statistics. Affects only returned statistics
+// @param returnDeletedFileStatistics Pass true if statistics about the files that were deleted must be returned instead of the whole storage usage statistics. Affects only returned statistics
 // @param chatLimit Same as in getStorageStatistics. Affects only returned statistics
 func (client *Client) OptimizeStorage(size int64, ttl int32, count int32, immunityDelay int32, fileTypes []FileType, chatIds []int64, excludeChatIds []int64, returnDeletedFileStatistics bool, chatLimit int32) (*StorageStatistics, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -8378,7 +8378,7 @@ func (client *Client) GetPassportAuthorizationFormAvailableElements(autorization
 
 }
 
-// SendPassportAuthorizationForm Sends a Telegram Passport authorization form, effectively sharing data with the service. This method must be called after getPassportAuthorizationFormAvailableElements if some previously available elements need to be used
+// SendPassportAuthorizationForm Sends a Telegram Passport authorization form, effectively sharing data with the service. This method must be called after getPassportAuthorizationFormAvailableElements if some previously available elements are going to be reused
 // @param autorizationFormId Authorization form identifier
 // @param typeParams Types of Telegram Passport elements chosen by user to complete the authorization form
 func (client *Client) SendPassportAuthorizationForm(autorizationFormId int32, typeParams []PassportElementType) (*Ok, error) {
@@ -9990,4 +9990,26 @@ func (client *Client) TestUseUpdate() (Update, error) {
 	default:
 		return nil, fmt.Errorf("Invalid type")
 	}
+}
+
+// TestReturnError Returns the specified error and ensures that the Error object is used; for testing only. Can be called synchronously
+// @param error The error to be returned
+func (client *Client) TestReturnError(error *Error) (*Error, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "testReturnError",
+		"error": error,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var errorDummy Error
+	err = json.Unmarshal(result.Raw, &errorDummy)
+	return &errorDummy, err
+
 }
