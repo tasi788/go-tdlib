@@ -507,48 +507,51 @@ type MessageContentEnum string
 
 // MessageContent enums
 const (
-	MessageTextType                    MessageContentEnum = "messageText"
-	MessageAnimationType               MessageContentEnum = "messageAnimation"
-	MessageAudioType                   MessageContentEnum = "messageAudio"
-	MessageDocumentType                MessageContentEnum = "messageDocument"
-	MessagePhotoType                   MessageContentEnum = "messagePhoto"
-	MessageExpiredPhotoType            MessageContentEnum = "messageExpiredPhoto"
-	MessageStickerType                 MessageContentEnum = "messageSticker"
-	MessageVideoType                   MessageContentEnum = "messageVideo"
-	MessageExpiredVideoType            MessageContentEnum = "messageExpiredVideo"
-	MessageVideoNoteType               MessageContentEnum = "messageVideoNote"
-	MessageVoiceNoteType               MessageContentEnum = "messageVoiceNote"
-	MessageLocationType                MessageContentEnum = "messageLocation"
-	MessageVenueType                   MessageContentEnum = "messageVenue"
-	MessageContactType                 MessageContentEnum = "messageContact"
-	MessageDiceType                    MessageContentEnum = "messageDice"
-	MessageGameType                    MessageContentEnum = "messageGame"
-	MessagePollType                    MessageContentEnum = "messagePoll"
-	MessageInvoiceType                 MessageContentEnum = "messageInvoice"
-	MessageCallType                    MessageContentEnum = "messageCall"
-	MessageBasicGroupChatCreateType    MessageContentEnum = "messageBasicGroupChatCreate"
-	MessageSupergroupChatCreateType    MessageContentEnum = "messageSupergroupChatCreate"
-	MessageChatChangeTitleType         MessageContentEnum = "messageChatChangeTitle"
-	MessageChatChangePhotoType         MessageContentEnum = "messageChatChangePhoto"
-	MessageChatDeletePhotoType         MessageContentEnum = "messageChatDeletePhoto"
-	MessageChatAddMembersType          MessageContentEnum = "messageChatAddMembers"
-	MessageChatJoinByLinkType          MessageContentEnum = "messageChatJoinByLink"
-	MessageChatDeleteMemberType        MessageContentEnum = "messageChatDeleteMember"
-	MessageChatUpgradeToType           MessageContentEnum = "messageChatUpgradeTo"
-	MessageChatUpgradeFromType         MessageContentEnum = "messageChatUpgradeFrom"
-	MessagePinMessageType              MessageContentEnum = "messagePinMessage"
-	MessageScreenshotTakenType         MessageContentEnum = "messageScreenshotTaken"
-	MessageChatSetTtlType              MessageContentEnum = "messageChatSetTtl"
-	MessageCustomServiceActionType     MessageContentEnum = "messageCustomServiceAction"
-	MessageGameScoreType               MessageContentEnum = "messageGameScore"
-	MessagePaymentSuccessfulType       MessageContentEnum = "messagePaymentSuccessful"
-	MessagePaymentSuccessfulBotType    MessageContentEnum = "messagePaymentSuccessfulBot"
-	MessageContactRegisteredType       MessageContentEnum = "messageContactRegistered"
-	MessageWebsiteConnectedType        MessageContentEnum = "messageWebsiteConnected"
-	MessagePassportDataSentType        MessageContentEnum = "messagePassportDataSent"
-	MessagePassportDataReceivedType    MessageContentEnum = "messagePassportDataReceived"
-	MessageProximityAlertTriggeredType MessageContentEnum = "messageProximityAlertTriggered"
-	MessageUnsupportedType             MessageContentEnum = "messageUnsupported"
+	MessageTextType                        MessageContentEnum = "messageText"
+	MessageAnimationType                   MessageContentEnum = "messageAnimation"
+	MessageAudioType                       MessageContentEnum = "messageAudio"
+	MessageDocumentType                    MessageContentEnum = "messageDocument"
+	MessagePhotoType                       MessageContentEnum = "messagePhoto"
+	MessageExpiredPhotoType                MessageContentEnum = "messageExpiredPhoto"
+	MessageStickerType                     MessageContentEnum = "messageSticker"
+	MessageVideoType                       MessageContentEnum = "messageVideo"
+	MessageExpiredVideoType                MessageContentEnum = "messageExpiredVideo"
+	MessageVideoNoteType                   MessageContentEnum = "messageVideoNote"
+	MessageVoiceNoteType                   MessageContentEnum = "messageVoiceNote"
+	MessageLocationType                    MessageContentEnum = "messageLocation"
+	MessageVenueType                       MessageContentEnum = "messageVenue"
+	MessageContactType                     MessageContentEnum = "messageContact"
+	MessageDiceType                        MessageContentEnum = "messageDice"
+	MessageGameType                        MessageContentEnum = "messageGame"
+	MessagePollType                        MessageContentEnum = "messagePoll"
+	MessageInvoiceType                     MessageContentEnum = "messageInvoice"
+	MessageCallType                        MessageContentEnum = "messageCall"
+	MessageVoiceChatStartedType            MessageContentEnum = "messageVoiceChatStarted"
+	MessageVoiceChatEndedType              MessageContentEnum = "messageVoiceChatEnded"
+	MessageInviteVoiceChatParticipantsType MessageContentEnum = "messageInviteVoiceChatParticipants"
+	MessageBasicGroupChatCreateType        MessageContentEnum = "messageBasicGroupChatCreate"
+	MessageSupergroupChatCreateType        MessageContentEnum = "messageSupergroupChatCreate"
+	MessageChatChangeTitleType             MessageContentEnum = "messageChatChangeTitle"
+	MessageChatChangePhotoType             MessageContentEnum = "messageChatChangePhoto"
+	MessageChatDeletePhotoType             MessageContentEnum = "messageChatDeletePhoto"
+	MessageChatAddMembersType              MessageContentEnum = "messageChatAddMembers"
+	MessageChatJoinByLinkType              MessageContentEnum = "messageChatJoinByLink"
+	MessageChatDeleteMemberType            MessageContentEnum = "messageChatDeleteMember"
+	MessageChatUpgradeToType               MessageContentEnum = "messageChatUpgradeTo"
+	MessageChatUpgradeFromType             MessageContentEnum = "messageChatUpgradeFrom"
+	MessagePinMessageType                  MessageContentEnum = "messagePinMessage"
+	MessageScreenshotTakenType             MessageContentEnum = "messageScreenshotTaken"
+	MessageChatSetTtlType                  MessageContentEnum = "messageChatSetTtl"
+	MessageCustomServiceActionType         MessageContentEnum = "messageCustomServiceAction"
+	MessageGameScoreType                   MessageContentEnum = "messageGameScore"
+	MessagePaymentSuccessfulType           MessageContentEnum = "messagePaymentSuccessful"
+	MessagePaymentSuccessfulBotType        MessageContentEnum = "messagePaymentSuccessfulBot"
+	MessageContactRegisteredType           MessageContentEnum = "messageContactRegistered"
+	MessageWebsiteConnectedType            MessageContentEnum = "messageWebsiteConnected"
+	MessagePassportDataSentType            MessageContentEnum = "messagePassportDataSent"
+	MessagePassportDataReceivedType        MessageContentEnum = "messagePassportDataReceived"
+	MessageProximityAlertTriggeredType     MessageContentEnum = "messageProximityAlertTriggered"
+	MessageUnsupportedType                 MessageContentEnum = "messageUnsupported"
 )
 
 // TextEntityTypeEnum Alias for abstract TextEntityType 'Sub-Classes', used as constant-enum here
@@ -778,28 +781,32 @@ type ChatEventActionEnum string
 
 // ChatEventAction enums
 const (
-	ChatEventMessageEditedType                ChatEventActionEnum = "chatEventMessageEdited"
-	ChatEventMessageDeletedType               ChatEventActionEnum = "chatEventMessageDeleted"
-	ChatEventPollStoppedType                  ChatEventActionEnum = "chatEventPollStopped"
-	ChatEventMessagePinnedType                ChatEventActionEnum = "chatEventMessagePinned"
-	ChatEventMessageUnpinnedType              ChatEventActionEnum = "chatEventMessageUnpinned"
-	ChatEventMemberJoinedType                 ChatEventActionEnum = "chatEventMemberJoined"
-	ChatEventMemberLeftType                   ChatEventActionEnum = "chatEventMemberLeft"
-	ChatEventMemberInvitedType                ChatEventActionEnum = "chatEventMemberInvited"
-	ChatEventMemberPromotedType               ChatEventActionEnum = "chatEventMemberPromoted"
-	ChatEventMemberRestrictedType             ChatEventActionEnum = "chatEventMemberRestricted"
-	ChatEventTitleChangedType                 ChatEventActionEnum = "chatEventTitleChanged"
-	ChatEventPermissionsChangedType           ChatEventActionEnum = "chatEventPermissionsChanged"
-	ChatEventDescriptionChangedType           ChatEventActionEnum = "chatEventDescriptionChanged"
-	ChatEventUsernameChangedType              ChatEventActionEnum = "chatEventUsernameChanged"
-	ChatEventPhotoChangedType                 ChatEventActionEnum = "chatEventPhotoChanged"
-	ChatEventInvitesToggledType               ChatEventActionEnum = "chatEventInvitesToggled"
-	ChatEventLinkedChatChangedType            ChatEventActionEnum = "chatEventLinkedChatChanged"
-	ChatEventSlowModeDelayChangedType         ChatEventActionEnum = "chatEventSlowModeDelayChanged"
-	ChatEventSignMessagesToggledType          ChatEventActionEnum = "chatEventSignMessagesToggled"
-	ChatEventStickerSetChangedType            ChatEventActionEnum = "chatEventStickerSetChanged"
-	ChatEventLocationChangedType              ChatEventActionEnum = "chatEventLocationChanged"
-	ChatEventIsAllHistoryAvailableToggledType ChatEventActionEnum = "chatEventIsAllHistoryAvailableToggled"
+	ChatEventMessageEditedType                       ChatEventActionEnum = "chatEventMessageEdited"
+	ChatEventMessageDeletedType                      ChatEventActionEnum = "chatEventMessageDeleted"
+	ChatEventPollStoppedType                         ChatEventActionEnum = "chatEventPollStopped"
+	ChatEventMessagePinnedType                       ChatEventActionEnum = "chatEventMessagePinned"
+	ChatEventMessageUnpinnedType                     ChatEventActionEnum = "chatEventMessageUnpinned"
+	ChatEventMemberJoinedType                        ChatEventActionEnum = "chatEventMemberJoined"
+	ChatEventMemberLeftType                          ChatEventActionEnum = "chatEventMemberLeft"
+	ChatEventMemberInvitedType                       ChatEventActionEnum = "chatEventMemberInvited"
+	ChatEventMemberPromotedType                      ChatEventActionEnum = "chatEventMemberPromoted"
+	ChatEventMemberRestrictedType                    ChatEventActionEnum = "chatEventMemberRestricted"
+	ChatEventTitleChangedType                        ChatEventActionEnum = "chatEventTitleChanged"
+	ChatEventPermissionsChangedType                  ChatEventActionEnum = "chatEventPermissionsChanged"
+	ChatEventDescriptionChangedType                  ChatEventActionEnum = "chatEventDescriptionChanged"
+	ChatEventUsernameChangedType                     ChatEventActionEnum = "chatEventUsernameChanged"
+	ChatEventPhotoChangedType                        ChatEventActionEnum = "chatEventPhotoChanged"
+	ChatEventInvitesToggledType                      ChatEventActionEnum = "chatEventInvitesToggled"
+	ChatEventLinkedChatChangedType                   ChatEventActionEnum = "chatEventLinkedChatChanged"
+	ChatEventSlowModeDelayChangedType                ChatEventActionEnum = "chatEventSlowModeDelayChanged"
+	ChatEventSignMessagesToggledType                 ChatEventActionEnum = "chatEventSignMessagesToggled"
+	ChatEventStickerSetChangedType                   ChatEventActionEnum = "chatEventStickerSetChanged"
+	ChatEventLocationChangedType                     ChatEventActionEnum = "chatEventLocationChanged"
+	ChatEventIsAllHistoryAvailableToggledType        ChatEventActionEnum = "chatEventIsAllHistoryAvailableToggled"
+	ChatEventVoiceChatCreatedType                    ChatEventActionEnum = "chatEventVoiceChatCreated"
+	ChatEventVoiceChatDiscardedType                  ChatEventActionEnum = "chatEventVoiceChatDiscarded"
+	ChatEventVoiceChatParticipantIsMutedToggledType  ChatEventActionEnum = "chatEventVoiceChatParticipantIsMutedToggled"
+	ChatEventVoiceChatMuteNewParticipantsToggledType ChatEventActionEnum = "chatEventVoiceChatMuteNewParticipantsToggled"
 )
 
 // LanguagePackStringValueEnum Alias for abstract LanguagePackStringValue 'Sub-Classes', used as constant-enum here
@@ -1141,6 +1148,15 @@ const (
 	ChatStatisticsChannelType    ChatStatisticsEnum = "chatStatisticsChannel"
 )
 
+// VectorPathCommandEnum Alias for abstract VectorPathCommand 'Sub-Classes', used as constant-enum here
+type VectorPathCommandEnum string
+
+// VectorPathCommand enums
+const (
+	VectorPathCommandLineType             VectorPathCommandEnum = "vectorPathCommandLine"
+	VectorPathCommandCubicBezierCurveType VectorPathCommandEnum = "vectorPathCommandCubicBezierCurve"
+)
+
 // UpdateEnum Alias for abstract Update 'Sub-Classes', used as constant-enum here
 type UpdateEnum string
 
@@ -1167,6 +1183,7 @@ const (
 	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
 	UpdateChatIsBlockedType                  UpdateEnum = "updateChatIsBlocked"
 	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
+	UpdateChatVoiceChatType                  UpdateEnum = "updateChatVoiceChat"
 	UpdateChatDefaultDisableNotificationType UpdateEnum = "updateChatDefaultDisableNotification"
 	UpdateChatReadInboxType                  UpdateEnum = "updateChatReadInbox"
 	UpdateChatReadOutboxType                 UpdateEnum = "updateChatReadOutbox"
@@ -1197,6 +1214,8 @@ const (
 	UpdateFileGenerationStartType            UpdateEnum = "updateFileGenerationStart"
 	UpdateFileGenerationStopType             UpdateEnum = "updateFileGenerationStop"
 	UpdateCallType                           UpdateEnum = "updateCall"
+	UpdateGroupCallType                      UpdateEnum = "updateGroupCall"
+	UpdateGroupCallParticipantType           UpdateEnum = "updateGroupCallParticipant"
 	UpdateNewCallSignalingDataType           UpdateEnum = "updateNewCallSignalingData"
 	UpdateUserPrivacySettingRulesType        UpdateEnum = "updateUserPrivacySettingRules"
 	UpdateUnreadMessageCountType             UpdateEnum = "updateUnreadMessageCount"
@@ -1624,6 +1643,11 @@ type StatisticalGraph interface {
 // ChatStatistics Contains a detailed statistics about a chat
 type ChatStatistics interface {
 	GetChatStatisticsEnum() ChatStatisticsEnum
+}
+
+// VectorPathCommand Represents a vector path command
+type VectorPathCommand interface {
+	GetVectorPathCommandEnum() VectorPathCommandEnum
 }
 
 // Update Contains notifications about data changes
@@ -3130,6 +3154,29 @@ func (maskPosition *MaskPosition) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// ClosedVectorPath Represents a closed vector path. The path begins at the end point of the last command
+type ClosedVectorPath struct {
+	tdCommon
+	Commands []VectorPathCommand `json:"commands"` // List of vector path commands
+}
+
+// MessageType return the string telegram-type of ClosedVectorPath
+func (closedVectorPath *ClosedVectorPath) MessageType() string {
+	return "closedVectorPath"
+}
+
+// NewClosedVectorPath creates a new ClosedVectorPath
+//
+// @param commands List of vector path commands
+func NewClosedVectorPath(commands []VectorPathCommand) *ClosedVectorPath {
+	closedVectorPathTemp := ClosedVectorPath{
+		tdCommon: tdCommon{Type: "closedVectorPath"},
+		Commands: commands,
+	}
+
+	return &closedVectorPathTemp
+}
+
 // PollOption Describes one answer option of a poll
 type PollOption struct {
 	tdCommon
@@ -3382,15 +3429,16 @@ func NewPhoto(hasStickers bool, minithumbnail *Minithumbnail, sizes []PhotoSize)
 // Sticker Describes a sticker
 type Sticker struct {
 	tdCommon
-	SetId        JSONInt64     `json:"set_id"`        // The identifier of the sticker set to which the sticker belongs; 0 if none
-	Width        int32         `json:"width"`         // Sticker width; as defined by the sender
-	Height       int32         `json:"height"`        // Sticker height; as defined by the sender
-	Emoji        string        `json:"emoji"`         // Emoji corresponding to the sticker
-	IsAnimated   bool          `json:"is_animated"`   // True, if the sticker is an animated sticker in TGS format
-	IsMask       bool          `json:"is_mask"`       // True, if the sticker is a mask
-	MaskPosition *MaskPosition `json:"mask_position"` // Position where the mask should be placed; may be null
-	Thumbnail    *Thumbnail    `json:"thumbnail"`     // Sticker thumbnail in WEBP or JPEG format; may be null
-	Sticker      *File         `json:"sticker"`       // File containing the sticker
+	SetId        JSONInt64          `json:"set_id"`        // The identifier of the sticker set to which the sticker belongs; 0 if none
+	Width        int32              `json:"width"`         // Sticker width; as defined by the sender
+	Height       int32              `json:"height"`        // Sticker height; as defined by the sender
+	Emoji        string             `json:"emoji"`         // Emoji corresponding to the sticker
+	IsAnimated   bool               `json:"is_animated"`   // True, if the sticker is an animated sticker in TGS format
+	IsMask       bool               `json:"is_mask"`       // True, if the sticker is a mask
+	MaskPosition *MaskPosition      `json:"mask_position"` // Position where the mask should be placed; may be null
+	Outline      []ClosedVectorPath `json:"outline"`       // Sticker's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
+	Thumbnail    *Thumbnail         `json:"thumbnail"`     // Sticker thumbnail in WEBP or JPEG format; may be null
+	Sticker      *File              `json:"sticker"`       // File containing the sticker
 }
 
 // MessageType return the string telegram-type of Sticker
@@ -3407,9 +3455,10 @@ func (sticker *Sticker) MessageType() string {
 // @param isAnimated True, if the sticker is an animated sticker in TGS format
 // @param isMask True, if the sticker is a mask
 // @param maskPosition Position where the mask should be placed; may be null
+// @param outline Sticker's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
 // @param thumbnail Sticker thumbnail in WEBP or JPEG format; may be null
 // @param sticker File containing the sticker
-func NewSticker(setId JSONInt64, width int32, height int32, emoji string, isAnimated bool, isMask bool, maskPosition *MaskPosition, thumbnail *Thumbnail, sticker *File) *Sticker {
+func NewSticker(setId JSONInt64, width int32, height int32, emoji string, isAnimated bool, isMask bool, maskPosition *MaskPosition, outline []ClosedVectorPath, thumbnail *Thumbnail, sticker *File) *Sticker {
 	stickerTemp := Sticker{
 		tdCommon:     tdCommon{Type: "sticker"},
 		SetId:        setId,
@@ -3419,6 +3468,7 @@ func NewSticker(setId JSONInt64, width int32, height int32, emoji string, isAnim
 		IsAnimated:   isAnimated,
 		IsMask:       isMask,
 		MaskPosition: maskPosition,
+		Outline:      outline,
 		Thumbnail:    thumbnail,
 		Sticker:      sticker,
 	}
@@ -4584,20 +4634,21 @@ func (chatMemberStatusCreator *ChatMemberStatusCreator) GetChatMemberStatusEnum(
 	return ChatMemberStatusCreatorType
 }
 
-// ChatMemberStatusAdministrator The user is a member of a chat and has some additional privileges. In basic groups, administrators can edit and delete messages sent by others, add new members, and ban unprivileged members. In supergroups and channels, there are more detailed options for administrator privileges
+// ChatMemberStatusAdministrator The user is a member of a chat and has some additional privileges. In basic groups, administrators can edit and delete messages sent by others, add new members, ban unprivileged members, and manage voice chats. In supergroups and channels, there are more detailed options for administrator privileges
 type ChatMemberStatusAdministrator struct {
 	tdCommon
-	CustomTitle        string `json:"custom_title"`         // A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only
-	CanBeEdited        bool   `json:"can_be_edited"`        // True, if the current user can edit the administrator privileges for the called user
-	CanChangeInfo      bool   `json:"can_change_info"`      // True, if the administrator can change the chat title, photo, and other settings
-	CanPostMessages    bool   `json:"can_post_messages"`    // True, if the administrator can create channel posts; applicable to channels only
-	CanEditMessages    bool   `json:"can_edit_messages"`    // True, if the administrator can edit messages of other users and pin messages; applicable to channels only
-	CanDeleteMessages  bool   `json:"can_delete_messages"`  // True, if the administrator can delete messages of other users
-	CanInviteUsers     bool   `json:"can_invite_users"`     // True, if the administrator can invite new users to the chat
-	CanRestrictMembers bool   `json:"can_restrict_members"` // True, if the administrator can restrict, ban, or unban chat members
-	CanPinMessages     bool   `json:"can_pin_messages"`     // True, if the administrator can pin messages; applicable to groups only
-	CanPromoteMembers  bool   `json:"can_promote_members"`  // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
-	IsAnonymous        bool   `json:"is_anonymous"`         // True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
+	CustomTitle         string `json:"custom_title"`           // A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only
+	CanBeEdited         bool   `json:"can_be_edited"`          // True, if the current user can edit the administrator privileges for the called user
+	CanChangeInfo       bool   `json:"can_change_info"`        // True, if the administrator can change the chat title, photo, and other settings
+	CanPostMessages     bool   `json:"can_post_messages"`      // True, if the administrator can create channel posts; applicable to channels only
+	CanEditMessages     bool   `json:"can_edit_messages"`      // True, if the administrator can edit messages of other users and pin messages; applicable to channels only
+	CanDeleteMessages   bool   `json:"can_delete_messages"`    // True, if the administrator can delete messages of other users
+	CanInviteUsers      bool   `json:"can_invite_users"`       // True, if the administrator can invite new users to the chat
+	CanRestrictMembers  bool   `json:"can_restrict_members"`   // True, if the administrator can restrict, ban, or unban chat members
+	CanPinMessages      bool   `json:"can_pin_messages"`       // True, if the administrator can pin messages; applicable to groups only
+	CanPromoteMembers   bool   `json:"can_promote_members"`    // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
+	CanManageVoiceChats bool   `json:"can_manage_voice_chats"` // True, if the administrator can manage voice chats; applicable to groups only
+	IsAnonymous         bool   `json:"is_anonymous"`           // True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
 }
 
 // MessageType return the string telegram-type of ChatMemberStatusAdministrator
@@ -4617,21 +4668,23 @@ func (chatMemberStatusAdministrator *ChatMemberStatusAdministrator) MessageType(
 // @param canRestrictMembers True, if the administrator can restrict, ban, or unban chat members
 // @param canPinMessages True, if the administrator can pin messages; applicable to groups only
 // @param canPromoteMembers True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that were directly or indirectly promoted by them
+// @param canManageVoiceChats True, if the administrator can manage voice chats; applicable to groups only
 // @param isAnonymous True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only
-func NewChatMemberStatusAdministrator(customTitle string, canBeEdited bool, canChangeInfo bool, canPostMessages bool, canEditMessages bool, canDeleteMessages bool, canInviteUsers bool, canRestrictMembers bool, canPinMessages bool, canPromoteMembers bool, isAnonymous bool) *ChatMemberStatusAdministrator {
+func NewChatMemberStatusAdministrator(customTitle string, canBeEdited bool, canChangeInfo bool, canPostMessages bool, canEditMessages bool, canDeleteMessages bool, canInviteUsers bool, canRestrictMembers bool, canPinMessages bool, canPromoteMembers bool, canManageVoiceChats bool, isAnonymous bool) *ChatMemberStatusAdministrator {
 	chatMemberStatusAdministratorTemp := ChatMemberStatusAdministrator{
-		tdCommon:           tdCommon{Type: "chatMemberStatusAdministrator"},
-		CustomTitle:        customTitle,
-		CanBeEdited:        canBeEdited,
-		CanChangeInfo:      canChangeInfo,
-		CanPostMessages:    canPostMessages,
-		CanEditMessages:    canEditMessages,
-		CanDeleteMessages:  canDeleteMessages,
-		CanInviteUsers:     canInviteUsers,
-		CanRestrictMembers: canRestrictMembers,
-		CanPinMessages:     canPinMessages,
-		CanPromoteMembers:  canPromoteMembers,
-		IsAnonymous:        isAnonymous,
+		tdCommon:            tdCommon{Type: "chatMemberStatusAdministrator"},
+		CustomTitle:         customTitle,
+		CanBeEdited:         canBeEdited,
+		CanChangeInfo:       canChangeInfo,
+		CanPostMessages:     canPostMessages,
+		CanEditMessages:     canEditMessages,
+		CanDeleteMessages:   canDeleteMessages,
+		CanInviteUsers:      canInviteUsers,
+		CanRestrictMembers:  canRestrictMembers,
+		CanPinMessages:      canPinMessages,
+		CanPromoteMembers:   canPromoteMembers,
+		CanManageVoiceChats: canManageVoiceChats,
+		IsAnonymous:         isAnonymous,
 	}
 
 	return &chatMemberStatusAdministratorTemp
@@ -6104,7 +6157,7 @@ type Message struct {
 	TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 	ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
 	AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous group messages, optional author signature
-	MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+	MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together in albums
 	RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 	Content                 MessageContent          `json:"content"`                      // Content of the message
 	ReplyMarkup             ReplyMarkup             `json:"reply_markup"`                 // Reply markup for the message; may be null
@@ -6143,7 +6196,7 @@ func (message *Message) MessageType() string {
 // @param ttlExpiresIn Time left before the message expires, in seconds
 // @param viaBotUserId If non-zero, the user identifier of the bot through which this message was sent
 // @param authorSignature For channel posts and anonymous group messages, optional author signature
-// @param mediaAlbumId Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+// @param mediaAlbumId Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together in albums
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 // @param content Content of the message
 // @param replyMarkup Reply markup for the message; may be null
@@ -6217,7 +6270,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		TtlExpiresIn            float64                 `json:"ttl_expires_in"`               // Time left before the message expires, in seconds
 		ViaBotUserId            int32                   `json:"via_bot_user_id"`              // If non-zero, the user identifier of the bot through which this message was sent
 		AuthorSignature         string                  `json:"author_signature"`             // For channel posts and anonymous group messages, optional author signature
-		MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only photos and videos can be grouped together in albums
+		MediaAlbumId            JSONInt64               `json:"media_album_id"`               // Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together in albums
 		RestrictionReason       string                  `json:"restriction_reason"`           // If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 
 	}{}
@@ -7041,6 +7094,8 @@ type Chat struct {
 	UnreadMentionCount         int32                     `json:"unread_mention_count"`         // Number of unread messages with a mention/reply in the chat
 	NotificationSettings       *ChatNotificationSettings `json:"notification_settings"`        // Notification settings for this chat
 	ActionBar                  ChatActionBar             `json:"action_bar"`                   // Describes actions which should be possible to do through a chat action bar; may be null
+	VoiceChatGroupCallId       int32                     `json:"voice_chat_group_call_id"`     // Group call identifier of an active voice chat; 0 if none or unknown. The voice chat can be received through the method getGroupCall
+	IsVoiceChatEmpty           bool                      `json:"is_voice_chat_empty"`          // True, if an active voice chat is empty
 	ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 	DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
 	ClientData                 string                    `json:"client_data"`                  // Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
@@ -7073,10 +7128,12 @@ func (chat *Chat) MessageType() string {
 // @param unreadMentionCount Number of unread messages with a mention/reply in the chat
 // @param notificationSettings Notification settings for this chat
 // @param actionBar Describes actions which should be possible to do through a chat action bar; may be null
+// @param voiceChatGroupCallId Group call identifier of an active voice chat; 0 if none or unknown. The voice chat can be received through the method getGroupCall
+// @param isVoiceChatEmpty True, if an active voice chat is empty
 // @param replyMarkupMessageId Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 // @param draftMessage A draft of a message in the chat; may be null
 // @param clientData Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
-func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
+func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, actionBar ChatActionBar, voiceChatGroupCallId int32, isVoiceChatEmpty bool, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
 	chatTemp := Chat{
 		tdCommon:                   tdCommon{Type: "chat"},
 		Id:                         id,
@@ -7099,6 +7156,8 @@ func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, p
 		UnreadMentionCount:         unreadMentionCount,
 		NotificationSettings:       notificationSettings,
 		ActionBar:                  actionBar,
+		VoiceChatGroupCallId:       voiceChatGroupCallId,
+		IsVoiceChatEmpty:           isVoiceChatEmpty,
 		ReplyMarkupMessageId:       replyMarkupMessageId,
 		DraftMessage:               draftMessage,
 		ClientData:                 clientData,
@@ -7134,6 +7193,8 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		LastReadOutboxMessageId    int64                     `json:"last_read_outbox_message_id"`  // Identifier of the last read outgoing message
 		UnreadMentionCount         int32                     `json:"unread_mention_count"`         // Number of unread messages with a mention/reply in the chat
 		NotificationSettings       *ChatNotificationSettings `json:"notification_settings"`        // Notification settings for this chat
+		VoiceChatGroupCallId       int32                     `json:"voice_chat_group_call_id"`     // Group call identifier of an active voice chat; 0 if none or unknown. The voice chat can be received through the method getGroupCall
+		IsVoiceChatEmpty           bool                      `json:"is_voice_chat_empty"`          // True, if an active voice chat is empty
 		ReplyMarkupMessageId       int64                     `json:"reply_markup_message_id"`      // Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 		DraftMessage               *DraftMessage             `json:"draft_message"`                // A draft of a message in the chat; may be null
 		ClientData                 string                    `json:"client_data"`                  // Contains application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
@@ -7162,6 +7223,8 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 	chat.LastReadOutboxMessageId = tempObj.LastReadOutboxMessageId
 	chat.UnreadMentionCount = tempObj.UnreadMentionCount
 	chat.NotificationSettings = tempObj.NotificationSettings
+	chat.VoiceChatGroupCallId = tempObj.VoiceChatGroupCallId
+	chat.IsVoiceChatEmpty = tempObj.IsVoiceChatEmpty
 	chat.ReplyMarkupMessageId = tempObj.ReplyMarkupMessageId
 	chat.DraftMessage = tempObj.DraftMessage
 	chat.ClientData = tempObj.ClientData
@@ -7727,7 +7790,7 @@ func (inlineKeyboardButtonTypeUrl *InlineKeyboardButtonTypeUrl) GetInlineKeyboar
 	return InlineKeyboardButtonTypeUrlType
 }
 
-// InlineKeyboardButtonTypeLoginUrl A button that opens a specified URL and automatically logs in in current user if they allowed to do that
+// InlineKeyboardButtonTypeLoginUrl A button that opens a specified URL and automatically authorize the current user if allowed to do so
 type InlineKeyboardButtonTypeLoginUrl struct {
 	tdCommon
 	Url         string `json:"url"`          // An HTTP URL to open
@@ -14245,6 +14308,93 @@ func (messageCall *MessageCall) GetMessageContentEnum() MessageContentEnum {
 	return MessageCallType
 }
 
+// MessageVoiceChatStarted A newly created voice chat
+type MessageVoiceChatStarted struct {
+	tdCommon
+	GroupCallId int32 `json:"group_call_id"` // Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+}
+
+// MessageType return the string telegram-type of MessageVoiceChatStarted
+func (messageVoiceChatStarted *MessageVoiceChatStarted) MessageType() string {
+	return "messageVoiceChatStarted"
+}
+
+// NewMessageVoiceChatStarted creates a new MessageVoiceChatStarted
+//
+// @param groupCallId Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+func NewMessageVoiceChatStarted(groupCallId int32) *MessageVoiceChatStarted {
+	messageVoiceChatStartedTemp := MessageVoiceChatStarted{
+		tdCommon:    tdCommon{Type: "messageVoiceChatStarted"},
+		GroupCallId: groupCallId,
+	}
+
+	return &messageVoiceChatStartedTemp
+}
+
+// GetMessageContentEnum return the enum type of this object
+func (messageVoiceChatStarted *MessageVoiceChatStarted) GetMessageContentEnum() MessageContentEnum {
+	return MessageVoiceChatStartedType
+}
+
+// MessageVoiceChatEnded A message with information about an ended voice chat
+type MessageVoiceChatEnded struct {
+	tdCommon
+	Duration int32 `json:"duration"` // Call duration
+}
+
+// MessageType return the string telegram-type of MessageVoiceChatEnded
+func (messageVoiceChatEnded *MessageVoiceChatEnded) MessageType() string {
+	return "messageVoiceChatEnded"
+}
+
+// NewMessageVoiceChatEnded creates a new MessageVoiceChatEnded
+//
+// @param duration Call duration
+func NewMessageVoiceChatEnded(duration int32) *MessageVoiceChatEnded {
+	messageVoiceChatEndedTemp := MessageVoiceChatEnded{
+		tdCommon: tdCommon{Type: "messageVoiceChatEnded"},
+		Duration: duration,
+	}
+
+	return &messageVoiceChatEndedTemp
+}
+
+// GetMessageContentEnum return the enum type of this object
+func (messageVoiceChatEnded *MessageVoiceChatEnded) GetMessageContentEnum() MessageContentEnum {
+	return MessageVoiceChatEndedType
+}
+
+// MessageInviteVoiceChatParticipants A message with information about an invite to a voice chat
+type MessageInviteVoiceChatParticipants struct {
+	tdCommon
+	GroupCallId int32   `json:"group_call_id"` // Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+	UserIds     []int32 `json:"user_ids"`      // Invited user identifiers
+}
+
+// MessageType return the string telegram-type of MessageInviteVoiceChatParticipants
+func (messageInviteVoiceChatParticipants *MessageInviteVoiceChatParticipants) MessageType() string {
+	return "messageInviteVoiceChatParticipants"
+}
+
+// NewMessageInviteVoiceChatParticipants creates a new MessageInviteVoiceChatParticipants
+//
+// @param groupCallId Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+// @param userIds Invited user identifiers
+func NewMessageInviteVoiceChatParticipants(groupCallId int32, userIds []int32) *MessageInviteVoiceChatParticipants {
+	messageInviteVoiceChatParticipantsTemp := MessageInviteVoiceChatParticipants{
+		tdCommon:    tdCommon{Type: "messageInviteVoiceChatParticipants"},
+		GroupCallId: groupCallId,
+		UserIds:     userIds,
+	}
+
+	return &messageInviteVoiceChatParticipantsTemp
+}
+
+// GetMessageContentEnum return the enum type of this object
+func (messageInviteVoiceChatParticipants *MessageInviteVoiceChatParticipants) GetMessageContentEnum() MessageContentEnum {
+	return MessageInviteVoiceChatParticipantsType
+}
+
 // MessageBasicGroupChatCreate A newly created basic group
 type MessageBasicGroupChatCreate struct {
 	tdCommon
@@ -15924,6 +16074,7 @@ type InputMessageSticker struct {
 	Thumbnail *InputThumbnail `json:"thumbnail"` // Sticker thumbnail, if available
 	Width     int32           `json:"width"`     // Sticker width
 	Height    int32           `json:"height"`    // Sticker height
+	Emoji     string          `json:"emoji"`     // Emoji used to choose the sticker
 }
 
 // MessageType return the string telegram-type of InputMessageSticker
@@ -15937,13 +16088,15 @@ func (inputMessageSticker *InputMessageSticker) MessageType() string {
 // @param thumbnail Sticker thumbnail, if available
 // @param width Sticker width
 // @param height Sticker height
-func NewInputMessageSticker(sticker InputFile, thumbnail *InputThumbnail, width int32, height int32) *InputMessageSticker {
+// @param emoji Emoji used to choose the sticker
+func NewInputMessageSticker(sticker InputFile, thumbnail *InputThumbnail, width int32, height int32, emoji string) *InputMessageSticker {
 	inputMessageStickerTemp := InputMessageSticker{
 		tdCommon:  tdCommon{Type: "inputMessageSticker"},
 		Sticker:   sticker,
 		Thumbnail: thumbnail,
 		Width:     width,
 		Height:    height,
+		Emoji:     emoji,
 	}
 
 	return &inputMessageStickerTemp
@@ -15961,6 +16114,7 @@ func (inputMessageSticker *InputMessageSticker) UnmarshalJSON(b []byte) error {
 		Thumbnail *InputThumbnail `json:"thumbnail"` // Sticker thumbnail, if available
 		Width     int32           `json:"width"`     // Sticker width
 		Height    int32           `json:"height"`    // Sticker height
+		Emoji     string          `json:"emoji"`     // Emoji used to choose the sticker
 	}{}
 	err = json.Unmarshal(b, &tempObj)
 	if err != nil {
@@ -15971,6 +16125,7 @@ func (inputMessageSticker *InputMessageSticker) UnmarshalJSON(b []byte) error {
 	inputMessageSticker.Thumbnail = tempObj.Thumbnail
 	inputMessageSticker.Width = tempObj.Width
 	inputMessageSticker.Height = tempObj.Height
+	inputMessageSticker.Emoji = tempObj.Emoji
 
 	fieldSticker, _ := unmarshalInputFile(objMap["sticker"])
 	inputMessageSticker.Sticker = fieldSticker
@@ -17532,18 +17687,19 @@ func NewEmojis(emojis []string) *Emojis {
 // StickerSet Represents a sticker set
 type StickerSet struct {
 	tdCommon
-	Id          JSONInt64  `json:"id"`           // Identifier of the sticker set
-	Title       string     `json:"title"`        // Title of the sticker set
-	Name        string     `json:"name"`         // Name of the sticker set
-	Thumbnail   *Thumbnail `json:"thumbnail"`    // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
-	IsInstalled bool       `json:"is_installed"` // True, if the sticker set has been installed by the current user
-	IsArchived  bool       `json:"is_archived"`  // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
-	IsOfficial  bool       `json:"is_official"`  // True, if the sticker set is official
-	IsAnimated  bool       `json:"is_animated"`  // True, is the stickers in the set are animated
-	IsMasks     bool       `json:"is_masks"`     // True, if the stickers in the set are masks
-	IsViewed    bool       `json:"is_viewed"`    // True for already viewed trending sticker sets
-	Stickers    []Sticker  `json:"stickers"`     // List of stickers in this set
-	Emojis      []Emojis   `json:"emojis"`       // A list of emoji corresponding to the stickers in the same order. The list is only for informational purposes, because a sticker is always sent with a fixed emoji from the corresponding Sticker object
+	Id               JSONInt64          `json:"id"`                // Identifier of the sticker set
+	Title            string             `json:"title"`             // Title of the sticker set
+	Name             string             `json:"name"`              // Name of the sticker set
+	Thumbnail        *Thumbnail         `json:"thumbnail"`         // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
+	ThumbnailOutline []ClosedVectorPath `json:"thumbnail_outline"` // Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
+	IsInstalled      bool               `json:"is_installed"`      // True, if the sticker set has been installed by the current user
+	IsArchived       bool               `json:"is_archived"`       // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
+	IsOfficial       bool               `json:"is_official"`       // True, if the sticker set is official
+	IsAnimated       bool               `json:"is_animated"`       // True, is the stickers in the set are animated
+	IsMasks          bool               `json:"is_masks"`          // True, if the stickers in the set are masks
+	IsViewed         bool               `json:"is_viewed"`         // True for already viewed trending sticker sets
+	Stickers         []Sticker          `json:"stickers"`          // List of stickers in this set
+	Emojis           []Emojis           `json:"emojis"`            // A list of emoji corresponding to the stickers in the same order. The list is only for informational purposes, because a sticker is always sent with a fixed emoji from the corresponding Sticker object
 }
 
 // MessageType return the string telegram-type of StickerSet
@@ -17557,6 +17713,7 @@ func (stickerSet *StickerSet) MessageType() string {
 // @param title Title of the sticker set
 // @param name Name of the sticker set
 // @param thumbnail Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null. The file can be downloaded only before the thumbnail is changed
+// @param thumbnailOutline Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
 // @param isInstalled True, if the sticker set has been installed by the current user
 // @param isArchived True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 // @param isOfficial True, if the sticker set is official
@@ -17565,21 +17722,22 @@ func (stickerSet *StickerSet) MessageType() string {
 // @param isViewed True for already viewed trending sticker sets
 // @param stickers List of stickers in this set
 // @param emojis A list of emoji corresponding to the stickers in the same order. The list is only for informational purposes, because a sticker is always sent with a fixed emoji from the corresponding Sticker object
-func NewStickerSet(id JSONInt64, title string, name string, thumbnail *Thumbnail, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, stickers []Sticker, emojis []Emojis) *StickerSet {
+func NewStickerSet(id JSONInt64, title string, name string, thumbnail *Thumbnail, thumbnailOutline []ClosedVectorPath, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, stickers []Sticker, emojis []Emojis) *StickerSet {
 	stickerSetTemp := StickerSet{
-		tdCommon:    tdCommon{Type: "stickerSet"},
-		Id:          id,
-		Title:       title,
-		Name:        name,
-		Thumbnail:   thumbnail,
-		IsInstalled: isInstalled,
-		IsArchived:  isArchived,
-		IsOfficial:  isOfficial,
-		IsAnimated:  isAnimated,
-		IsMasks:     isMasks,
-		IsViewed:    isViewed,
-		Stickers:    stickers,
-		Emojis:      emojis,
+		tdCommon:         tdCommon{Type: "stickerSet"},
+		Id:               id,
+		Title:            title,
+		Name:             name,
+		Thumbnail:        thumbnail,
+		ThumbnailOutline: thumbnailOutline,
+		IsInstalled:      isInstalled,
+		IsArchived:       isArchived,
+		IsOfficial:       isOfficial,
+		IsAnimated:       isAnimated,
+		IsMasks:          isMasks,
+		IsViewed:         isViewed,
+		Stickers:         stickers,
+		Emojis:           emojis,
 	}
 
 	return &stickerSetTemp
@@ -17588,18 +17746,19 @@ func NewStickerSet(id JSONInt64, title string, name string, thumbnail *Thumbnail
 // StickerSetInfo Represents short information about a sticker set
 type StickerSetInfo struct {
 	tdCommon
-	Id          JSONInt64  `json:"id"`           // Identifier of the sticker set
-	Title       string     `json:"title"`        // Title of the sticker set
-	Name        string     `json:"name"`         // Name of the sticker set
-	Thumbnail   *Thumbnail `json:"thumbnail"`    // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
-	IsInstalled bool       `json:"is_installed"` // True, if the sticker set has been installed by current user
-	IsArchived  bool       `json:"is_archived"`  // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
-	IsOfficial  bool       `json:"is_official"`  // True, if the sticker set is official
-	IsAnimated  bool       `json:"is_animated"`  // True, is the stickers in the set are animated
-	IsMasks     bool       `json:"is_masks"`     // True, if the stickers in the set are masks
-	IsViewed    bool       `json:"is_viewed"`    // True for already viewed trending sticker sets
-	Size        int32      `json:"size"`         // Total number of stickers in the set
-	Covers      []Sticker  `json:"covers"`       // Contains up to the first 5 stickers from the set, depending on the context. If the application needs more stickers the full set should be requested
+	Id               JSONInt64          `json:"id"`                // Identifier of the sticker set
+	Title            string             `json:"title"`             // Title of the sticker set
+	Name             string             `json:"name"`              // Name of the sticker set
+	Thumbnail        *Thumbnail         `json:"thumbnail"`         // Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
+	ThumbnailOutline []ClosedVectorPath `json:"thumbnail_outline"` // Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
+	IsInstalled      bool               `json:"is_installed"`      // True, if the sticker set has been installed by the current user
+	IsArchived       bool               `json:"is_archived"`       // True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
+	IsOfficial       bool               `json:"is_official"`       // True, if the sticker set is official
+	IsAnimated       bool               `json:"is_animated"`       // True, is the stickers in the set are animated
+	IsMasks          bool               `json:"is_masks"`          // True, if the stickers in the set are masks
+	IsViewed         bool               `json:"is_viewed"`         // True for already viewed trending sticker sets
+	Size             int32              `json:"size"`              // Total number of stickers in the set
+	Covers           []Sticker          `json:"covers"`            // Contains up to the first 5 stickers from the set, depending on the context. If the application needs more stickers the full set should be requested
 }
 
 // MessageType return the string telegram-type of StickerSetInfo
@@ -17613,7 +17772,8 @@ func (stickerSetInfo *StickerSetInfo) MessageType() string {
 // @param title Title of the sticker set
 // @param name Name of the sticker set
 // @param thumbnail Sticker set thumbnail in WEBP or TGS format with width and height 100; may be null
-// @param isInstalled True, if the sticker set has been installed by current user
+// @param thumbnailOutline Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner
+// @param isInstalled True, if the sticker set has been installed by the current user
 // @param isArchived True, if the sticker set has been archived. A sticker set can't be installed and archived simultaneously
 // @param isOfficial True, if the sticker set is official
 // @param isAnimated True, is the stickers in the set are animated
@@ -17621,21 +17781,22 @@ func (stickerSetInfo *StickerSetInfo) MessageType() string {
 // @param isViewed True for already viewed trending sticker sets
 // @param size Total number of stickers in the set
 // @param covers Contains up to the first 5 stickers from the set, depending on the context. If the application needs more stickers the full set should be requested
-func NewStickerSetInfo(id JSONInt64, title string, name string, thumbnail *Thumbnail, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, size int32, covers []Sticker) *StickerSetInfo {
+func NewStickerSetInfo(id JSONInt64, title string, name string, thumbnail *Thumbnail, thumbnailOutline []ClosedVectorPath, isInstalled bool, isArchived bool, isOfficial bool, isAnimated bool, isMasks bool, isViewed bool, size int32, covers []Sticker) *StickerSetInfo {
 	stickerSetInfoTemp := StickerSetInfo{
-		tdCommon:    tdCommon{Type: "stickerSetInfo"},
-		Id:          id,
-		Title:       title,
-		Name:        name,
-		Thumbnail:   thumbnail,
-		IsInstalled: isInstalled,
-		IsArchived:  isArchived,
-		IsOfficial:  isOfficial,
-		IsAnimated:  isAnimated,
-		IsMasks:     isMasks,
-		IsViewed:    isViewed,
-		Size:        size,
-		Covers:      covers,
+		tdCommon:         tdCommon{Type: "stickerSetInfo"},
+		Id:               id,
+		Title:            title,
+		Name:             name,
+		Thumbnail:        thumbnail,
+		ThumbnailOutline: thumbnailOutline,
+		IsInstalled:      isInstalled,
+		IsArchived:       isArchived,
+		IsOfficial:       isOfficial,
+		IsAnimated:       isAnimated,
+		IsMasks:          isMasks,
+		IsViewed:         isViewed,
+		Size:             size,
+		Covers:           covers,
 	}
 
 	return &stickerSetInfoTemp
@@ -17799,7 +17960,7 @@ type CallProtocol struct {
 	UdpReflector    bool     `json:"udp_reflector"`    // True, if connection through UDP reflectors is supported
 	MinLayer        int32    `json:"min_layer"`        // The minimum supported API layer; use 65
 	MaxLayer        int32    `json:"max_layer"`        // The maximum supported API layer; use 65
-	LibraryVersions []string `json:"library_versions"` // List of supported libtgvoip versions
+	LibraryVersions []string `json:"library_versions"` // List of supported tgcalls versions
 }
 
 // MessageType return the string telegram-type of CallProtocol
@@ -17813,7 +17974,7 @@ func (callProtocol *CallProtocol) MessageType() string {
 // @param udpReflector True, if connection through UDP reflectors is supported
 // @param minLayer The minimum supported API layer; use 65
 // @param maxLayer The maximum supported API layer; use 65
-// @param libraryVersions List of supported libtgvoip versions
+// @param libraryVersions List of supported tgcalls versions
 func NewCallProtocol(udpP2p bool, udpReflector bool, minLayer int32, maxLayer int32, libraryVersions []string) *CallProtocol {
 	callProtocolTemp := CallProtocol{
 		tdCommon:        tdCommon{Type: "callProtocol"},
@@ -17980,6 +18141,29 @@ func NewCallId(id int32) *CallId {
 	}
 
 	return &callIdTemp
+}
+
+// GroupCallId Contains the group call identifier
+type GroupCallId struct {
+	tdCommon
+	Id int32 `json:"id"` // Group call identifier
+}
+
+// MessageType return the string telegram-type of GroupCallId
+func (groupCallId *GroupCallId) MessageType() string {
+	return "groupCallId"
+}
+
+// NewGroupCallId creates a new GroupCallId
+//
+// @param id Group call identifier
+func NewGroupCallId(id int32) *GroupCallId {
+	groupCallIdTemp := GroupCallId{
+		tdCommon: tdCommon{Type: "groupCallId"},
+		Id:       id,
+	}
+
+	return &groupCallIdTemp
 }
 
 // CallStatePending The call is pending, waiting to be accepted by a user
@@ -18193,6 +18377,275 @@ func NewCallStateError(error *Error) *CallStateError {
 // GetCallStateEnum return the enum type of this object
 func (callStateError *CallStateError) GetCallStateEnum() CallStateEnum {
 	return CallStateErrorType
+}
+
+// GroupCallRecentSpeaker Describes a recently speaking user in a group call
+type GroupCallRecentSpeaker struct {
+	tdCommon
+	UserId     int32 `json:"user_id"`     // User identifier
+	IsSpeaking bool  `json:"is_speaking"` // True, is the user has spoken recently
+}
+
+// MessageType return the string telegram-type of GroupCallRecentSpeaker
+func (groupCallRecentSpeaker *GroupCallRecentSpeaker) MessageType() string {
+	return "groupCallRecentSpeaker"
+}
+
+// NewGroupCallRecentSpeaker creates a new GroupCallRecentSpeaker
+//
+// @param userId User identifier
+// @param isSpeaking True, is the user has spoken recently
+func NewGroupCallRecentSpeaker(userId int32, isSpeaking bool) *GroupCallRecentSpeaker {
+	groupCallRecentSpeakerTemp := GroupCallRecentSpeaker{
+		tdCommon:   tdCommon{Type: "groupCallRecentSpeaker"},
+		UserId:     userId,
+		IsSpeaking: isSpeaking,
+	}
+
+	return &groupCallRecentSpeakerTemp
+}
+
+// GroupCall Describes a group call
+type GroupCall struct {
+	tdCommon
+	Id                               int32                    `json:"id"`                                   // Group call identifier
+	IsActive                         bool                     `json:"is_active"`                            // True, if the call is active
+	IsJoined                         bool                     `json:"is_joined"`                            // True, if the call is joined
+	NeedRejoin                       bool                     `json:"need_rejoin"`                          // True, if user was kicked from the call because of network loss and the call needs to be rejoined
+	CanUnmuteSelf                    bool                     `json:"can_unmute_self"`                      // True, if the current user can unmute themself
+	CanBeManaged                     bool                     `json:"can_be_managed"`                       // True, if the current user can manage the group call
+	ParticipantCount                 int32                    `json:"participant_count"`                    // Number of participants in the group call
+	LoadedAllParticipants            bool                     `json:"loaded_all_participants"`              // True, if all group call participants are loaded
+	RecentSpeakers                   []GroupCallRecentSpeaker `json:"recent_speakers"`                      // Recently speaking users in the group call
+	MuteNewParticipants              bool                     `json:"mute_new_participants"`                // True, if only group call administrators can unmute new participants
+	AllowedChangeMuteNewParticipants bool                     `json:"allowed_change_mute_new_participants"` // True, if group call administrators can enable or disable mute_new_participants setting
+	Duration                         int32                    `json:"duration"`                             // Call duration; for ended calls only
+}
+
+// MessageType return the string telegram-type of GroupCall
+func (groupCall *GroupCall) MessageType() string {
+	return "groupCall"
+}
+
+// NewGroupCall creates a new GroupCall
+//
+// @param id Group call identifier
+// @param isActive True, if the call is active
+// @param isJoined True, if the call is joined
+// @param needRejoin True, if user was kicked from the call because of network loss and the call needs to be rejoined
+// @param canUnmuteSelf True, if the current user can unmute themself
+// @param canBeManaged True, if the current user can manage the group call
+// @param participantCount Number of participants in the group call
+// @param loadedAllParticipants True, if all group call participants are loaded
+// @param recentSpeakers Recently speaking users in the group call
+// @param muteNewParticipants True, if only group call administrators can unmute new participants
+// @param allowedChangeMuteNewParticipants True, if group call administrators can enable or disable mute_new_participants setting
+// @param duration Call duration; for ended calls only
+func NewGroupCall(id int32, isActive bool, isJoined bool, needRejoin bool, canUnmuteSelf bool, canBeManaged bool, participantCount int32, loadedAllParticipants bool, recentSpeakers []GroupCallRecentSpeaker, muteNewParticipants bool, allowedChangeMuteNewParticipants bool, duration int32) *GroupCall {
+	groupCallTemp := GroupCall{
+		tdCommon:                         tdCommon{Type: "groupCall"},
+		Id:                               id,
+		IsActive:                         isActive,
+		IsJoined:                         isJoined,
+		NeedRejoin:                       needRejoin,
+		CanUnmuteSelf:                    canUnmuteSelf,
+		CanBeManaged:                     canBeManaged,
+		ParticipantCount:                 participantCount,
+		LoadedAllParticipants:            loadedAllParticipants,
+		RecentSpeakers:                   recentSpeakers,
+		MuteNewParticipants:              muteNewParticipants,
+		AllowedChangeMuteNewParticipants: allowedChangeMuteNewParticipants,
+		Duration:                         duration,
+	}
+
+	return &groupCallTemp
+}
+
+// GroupCallPayloadFingerprint Describes a payload fingerprint for interaction with tgcalls
+type GroupCallPayloadFingerprint struct {
+	tdCommon
+	Hash        string `json:"hash"`        // Value of the field hash
+	Setup       string `json:"setup"`       // Value of the field setup
+	Fingerprint string `json:"fingerprint"` // Value of the field fingerprint
+}
+
+// MessageType return the string telegram-type of GroupCallPayloadFingerprint
+func (groupCallPayloadFingerprint *GroupCallPayloadFingerprint) MessageType() string {
+	return "groupCallPayloadFingerprint"
+}
+
+// NewGroupCallPayloadFingerprint creates a new GroupCallPayloadFingerprint
+//
+// @param hash Value of the field hash
+// @param setup Value of the field setup
+// @param fingerprint Value of the field fingerprint
+func NewGroupCallPayloadFingerprint(hash string, setup string, fingerprint string) *GroupCallPayloadFingerprint {
+	groupCallPayloadFingerprintTemp := GroupCallPayloadFingerprint{
+		tdCommon:    tdCommon{Type: "groupCallPayloadFingerprint"},
+		Hash:        hash,
+		Setup:       setup,
+		Fingerprint: fingerprint,
+	}
+
+	return &groupCallPayloadFingerprintTemp
+}
+
+// GroupCallPayload Describes a payload for interaction with tgcalls
+type GroupCallPayload struct {
+	tdCommon
+	Ufrag        string                        `json:"ufrag"`        // Value of the field ufrag
+	Pwd          string                        `json:"pwd"`          // Value of the field pwd
+	Fingerprints []GroupCallPayloadFingerprint `json:"fingerprints"` // The list of fingerprints
+}
+
+// MessageType return the string telegram-type of GroupCallPayload
+func (groupCallPayload *GroupCallPayload) MessageType() string {
+	return "groupCallPayload"
+}
+
+// NewGroupCallPayload creates a new GroupCallPayload
+//
+// @param ufrag Value of the field ufrag
+// @param pwd Value of the field pwd
+// @param fingerprints The list of fingerprints
+func NewGroupCallPayload(ufrag string, pwd string, fingerprints []GroupCallPayloadFingerprint) *GroupCallPayload {
+	groupCallPayloadTemp := GroupCallPayload{
+		tdCommon:     tdCommon{Type: "groupCallPayload"},
+		Ufrag:        ufrag,
+		Pwd:          pwd,
+		Fingerprints: fingerprints,
+	}
+
+	return &groupCallPayloadTemp
+}
+
+// GroupCallJoinResponseCandidate Describes a join response candidate for interaction with tgcalls
+type GroupCallJoinResponseCandidate struct {
+	tdCommon
+	Port       string `json:"port"`       // Value of the field port
+	Protocol   string `json:"protocol"`   // Value of the field protocol
+	Network    string `json:"network"`    // Value of the field network
+	Generation string `json:"generation"` // Value of the field generation
+	Id         string `json:"id"`         // Value of the field id
+	Component  string `json:"component"`  // Value of the field component
+	Foundation string `json:"foundation"` // Value of the field foundation
+	Priority   string `json:"priority"`   // Value of the field priority
+	Ip         string `json:"ip"`         // Value of the field ip
+	Type       string `json:"type"`       // Value of the field type
+	TcpType    string `json:"tcp_type"`   // Value of the field tcp_type
+	RelAddr    string `json:"rel_addr"`   // Value of the field rel_addr
+	RelPort    string `json:"rel_port"`   // Value of the field rel_port
+}
+
+// MessageType return the string telegram-type of GroupCallJoinResponseCandidate
+func (groupCallJoinResponseCandidate *GroupCallJoinResponseCandidate) MessageType() string {
+	return "groupCallJoinResponseCandidate"
+}
+
+// NewGroupCallJoinResponseCandidate creates a new GroupCallJoinResponseCandidate
+//
+// @param port Value of the field port
+// @param protocol Value of the field protocol
+// @param network Value of the field network
+// @param generation Value of the field generation
+// @param id Value of the field id
+// @param component Value of the field component
+// @param foundation Value of the field foundation
+// @param priority Value of the field priority
+// @param ip Value of the field ip
+// @param typeParam Value of the field type
+// @param tcpType Value of the field tcp_type
+// @param relAddr Value of the field rel_addr
+// @param relPort Value of the field rel_port
+func NewGroupCallJoinResponseCandidate(port string, protocol string, network string, generation string, id string, component string, foundation string, priority string, ip string, typeParam string, tcpType string, relAddr string, relPort string) *GroupCallJoinResponseCandidate {
+	groupCallJoinResponseCandidateTemp := GroupCallJoinResponseCandidate{
+		tdCommon:   tdCommon{Type: "groupCallJoinResponseCandidate"},
+		Port:       port,
+		Protocol:   protocol,
+		Network:    network,
+		Generation: generation,
+		Id:         id,
+		Component:  component,
+		Foundation: foundation,
+		Priority:   priority,
+		Ip:         ip,
+		Type:       typeParam,
+		TcpType:    tcpType,
+		RelAddr:    relAddr,
+		RelPort:    relPort,
+	}
+
+	return &groupCallJoinResponseCandidateTemp
+}
+
+// GroupCallJoinResponse Describes a join response for interaction with tgcalls
+type GroupCallJoinResponse struct {
+	tdCommon
+	Payload    *GroupCallPayload                `json:"payload"`    // Join response payload to pass to tgcalls
+	Candidates []GroupCallJoinResponseCandidate `json:"candidates"` // Join response candidates to pass to tgcalls
+}
+
+// MessageType return the string telegram-type of GroupCallJoinResponse
+func (groupCallJoinResponse *GroupCallJoinResponse) MessageType() string {
+	return "groupCallJoinResponse"
+}
+
+// NewGroupCallJoinResponse creates a new GroupCallJoinResponse
+//
+// @param payload Join response payload to pass to tgcalls
+// @param candidates Join response candidates to pass to tgcalls
+func NewGroupCallJoinResponse(payload *GroupCallPayload, candidates []GroupCallJoinResponseCandidate) *GroupCallJoinResponse {
+	groupCallJoinResponseTemp := GroupCallJoinResponse{
+		tdCommon:   tdCommon{Type: "groupCallJoinResponse"},
+		Payload:    payload,
+		Candidates: candidates,
+	}
+
+	return &groupCallJoinResponseTemp
+}
+
+// GroupCallParticipant Represents a group call participant
+type GroupCallParticipant struct {
+	tdCommon
+	UserId        int32     `json:"user_id"`         // Identifier of the user
+	Source        int32     `json:"source"`          // User's synchronization source
+	IsSpeaking    bool      `json:"is_speaking"`     // True, if the participant is speaking as set by setGroupCallParticipantIsSpeaking
+	CanBeMuted    bool      `json:"can_be_muted"`    // True, if the current user can mute the participant
+	CanBeUnmuted  bool      `json:"can_be_unmuted"`  // True, if the current user can allow the participant to unmute themself or unmute the participant (only for self)
+	IsMuted       bool      `json:"is_muted"`        // True, if the participant is muted
+	CanUnmuteSelf bool      `json:"can_unmute_self"` // True, if the participant can unmute themself
+	Order         JSONInt64 `json:"order"`           // User's order in the group call participant list. The bigger is order, the higher is user in the list. If order is 0, the user must be removed from the participant list
+}
+
+// MessageType return the string telegram-type of GroupCallParticipant
+func (groupCallParticipant *GroupCallParticipant) MessageType() string {
+	return "groupCallParticipant"
+}
+
+// NewGroupCallParticipant creates a new GroupCallParticipant
+//
+// @param userId Identifier of the user
+// @param source User's synchronization source
+// @param isSpeaking True, if the participant is speaking as set by setGroupCallParticipantIsSpeaking
+// @param canBeMuted True, if the current user can mute the participant
+// @param canBeUnmuted True, if the current user can allow the participant to unmute themself or unmute the participant (only for self)
+// @param isMuted True, if the participant is muted
+// @param canUnmuteSelf True, if the participant can unmute themself
+// @param order User's order in the group call participant list. The bigger is order, the higher is user in the list. If order is 0, the user must be removed from the participant list
+func NewGroupCallParticipant(userId int32, source int32, isSpeaking bool, canBeMuted bool, canBeUnmuted bool, isMuted bool, canUnmuteSelf bool, order JSONInt64) *GroupCallParticipant {
+	groupCallParticipantTemp := GroupCallParticipant{
+		tdCommon:      tdCommon{Type: "groupCallParticipant"},
+		UserId:        userId,
+		Source:        source,
+		IsSpeaking:    isSpeaking,
+		CanBeMuted:    canBeMuted,
+		CanBeUnmuted:  canBeUnmuted,
+		IsMuted:       isMuted,
+		CanUnmuteSelf: canUnmuteSelf,
+		Order:         order,
+	}
+
+	return &groupCallParticipantTemp
 }
 
 // CallProblemEcho The user heard their own voice
@@ -21101,6 +21554,121 @@ func (chatEventIsAllHistoryAvailableToggled *ChatEventIsAllHistoryAvailableToggl
 	return ChatEventIsAllHistoryAvailableToggledType
 }
 
+// ChatEventVoiceChatCreated A voice chat was created
+type ChatEventVoiceChatCreated struct {
+	tdCommon
+	GroupCallId int32 `json:"group_call_id"` // Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+}
+
+// MessageType return the string telegram-type of ChatEventVoiceChatCreated
+func (chatEventVoiceChatCreated *ChatEventVoiceChatCreated) MessageType() string {
+	return "chatEventVoiceChatCreated"
+}
+
+// NewChatEventVoiceChatCreated creates a new ChatEventVoiceChatCreated
+//
+// @param groupCallId Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+func NewChatEventVoiceChatCreated(groupCallId int32) *ChatEventVoiceChatCreated {
+	chatEventVoiceChatCreatedTemp := ChatEventVoiceChatCreated{
+		tdCommon:    tdCommon{Type: "chatEventVoiceChatCreated"},
+		GroupCallId: groupCallId,
+	}
+
+	return &chatEventVoiceChatCreatedTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventVoiceChatCreated *ChatEventVoiceChatCreated) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventVoiceChatCreatedType
+}
+
+// ChatEventVoiceChatDiscarded A voice chat was discarded
+type ChatEventVoiceChatDiscarded struct {
+	tdCommon
+	GroupCallId int32 `json:"group_call_id"` // Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+}
+
+// MessageType return the string telegram-type of ChatEventVoiceChatDiscarded
+func (chatEventVoiceChatDiscarded *ChatEventVoiceChatDiscarded) MessageType() string {
+	return "chatEventVoiceChatDiscarded"
+}
+
+// NewChatEventVoiceChatDiscarded creates a new ChatEventVoiceChatDiscarded
+//
+// @param groupCallId Identifier of the voice chat. The voice chat can be received through the method getGroupCall
+func NewChatEventVoiceChatDiscarded(groupCallId int32) *ChatEventVoiceChatDiscarded {
+	chatEventVoiceChatDiscardedTemp := ChatEventVoiceChatDiscarded{
+		tdCommon:    tdCommon{Type: "chatEventVoiceChatDiscarded"},
+		GroupCallId: groupCallId,
+	}
+
+	return &chatEventVoiceChatDiscardedTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventVoiceChatDiscarded *ChatEventVoiceChatDiscarded) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventVoiceChatDiscardedType
+}
+
+// ChatEventVoiceChatParticipantIsMutedToggled A voice chat participant was muted or unmuted
+type ChatEventVoiceChatParticipantIsMutedToggled struct {
+	tdCommon
+	UserId  int32 `json:"user_id"`  // Identifier of the affected user
+	IsMuted bool  `json:"is_muted"` // New value of is_muted
+}
+
+// MessageType return the string telegram-type of ChatEventVoiceChatParticipantIsMutedToggled
+func (chatEventVoiceChatParticipantIsMutedToggled *ChatEventVoiceChatParticipantIsMutedToggled) MessageType() string {
+	return "chatEventVoiceChatParticipantIsMutedToggled"
+}
+
+// NewChatEventVoiceChatParticipantIsMutedToggled creates a new ChatEventVoiceChatParticipantIsMutedToggled
+//
+// @param userId Identifier of the affected user
+// @param isMuted New value of is_muted
+func NewChatEventVoiceChatParticipantIsMutedToggled(userId int32, isMuted bool) *ChatEventVoiceChatParticipantIsMutedToggled {
+	chatEventVoiceChatParticipantIsMutedToggledTemp := ChatEventVoiceChatParticipantIsMutedToggled{
+		tdCommon: tdCommon{Type: "chatEventVoiceChatParticipantIsMutedToggled"},
+		UserId:   userId,
+		IsMuted:  isMuted,
+	}
+
+	return &chatEventVoiceChatParticipantIsMutedToggledTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventVoiceChatParticipantIsMutedToggled *ChatEventVoiceChatParticipantIsMutedToggled) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventVoiceChatParticipantIsMutedToggledType
+}
+
+// ChatEventVoiceChatMuteNewParticipantsToggled The mute_new_participants setting of a voice chat was toggled
+type ChatEventVoiceChatMuteNewParticipantsToggled struct {
+	tdCommon
+	MuteNewParticipants bool `json:"mute_new_participants"` // New value of the mute_new_participants setting
+}
+
+// MessageType return the string telegram-type of ChatEventVoiceChatMuteNewParticipantsToggled
+func (chatEventVoiceChatMuteNewParticipantsToggled *ChatEventVoiceChatMuteNewParticipantsToggled) MessageType() string {
+	return "chatEventVoiceChatMuteNewParticipantsToggled"
+}
+
+// NewChatEventVoiceChatMuteNewParticipantsToggled creates a new ChatEventVoiceChatMuteNewParticipantsToggled
+//
+// @param muteNewParticipants New value of the mute_new_participants setting
+func NewChatEventVoiceChatMuteNewParticipantsToggled(muteNewParticipants bool) *ChatEventVoiceChatMuteNewParticipantsToggled {
+	chatEventVoiceChatMuteNewParticipantsToggledTemp := ChatEventVoiceChatMuteNewParticipantsToggled{
+		tdCommon:            tdCommon{Type: "chatEventVoiceChatMuteNewParticipantsToggled"},
+		MuteNewParticipants: muteNewParticipants,
+	}
+
+	return &chatEventVoiceChatMuteNewParticipantsToggledTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventVoiceChatMuteNewParticipantsToggled *ChatEventVoiceChatMuteNewParticipantsToggled) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventVoiceChatMuteNewParticipantsToggledType
+}
+
 // ChatEvent Represents a chat event
 type ChatEvent struct {
 	tdCommon
@@ -21199,6 +21767,7 @@ type ChatEventLogFilters struct {
 	MemberRestrictions bool `json:"member_restrictions"` // True, if member restricted/unrestricted/banned/unbanned events should be returned
 	InfoChanges        bool `json:"info_changes"`        // True, if changes in chat information should be returned
 	SettingChanges     bool `json:"setting_changes"`     // True, if changes in chat settings should be returned
+	VoiceChatChanges   bool `json:"voice_chat_changes"`  // True, if voice chat actions should be returned
 }
 
 // MessageType return the string telegram-type of ChatEventLogFilters
@@ -21218,7 +21787,8 @@ func (chatEventLogFilters *ChatEventLogFilters) MessageType() string {
 // @param memberRestrictions True, if member restricted/unrestricted/banned/unbanned events should be returned
 // @param infoChanges True, if changes in chat information should be returned
 // @param settingChanges True, if changes in chat settings should be returned
-func NewChatEventLogFilters(messageEdits bool, messageDeletions bool, messagePins bool, memberJoins bool, memberLeaves bool, memberInvites bool, memberPromotions bool, memberRestrictions bool, infoChanges bool, settingChanges bool) *ChatEventLogFilters {
+// @param voiceChatChanges True, if voice chat actions should be returned
+func NewChatEventLogFilters(messageEdits bool, messageDeletions bool, messagePins bool, memberJoins bool, memberLeaves bool, memberInvites bool, memberPromotions bool, memberRestrictions bool, infoChanges bool, settingChanges bool, voiceChatChanges bool) *ChatEventLogFilters {
 	chatEventLogFiltersTemp := ChatEventLogFilters{
 		tdCommon:           tdCommon{Type: "chatEventLogFilters"},
 		MessageEdits:       messageEdits,
@@ -21231,6 +21801,7 @@ func NewChatEventLogFilters(messageEdits bool, messageDeletions bool, messagePin
 		MemberRestrictions: memberRestrictions,
 		InfoChanges:        infoChanges,
 		SettingChanges:     settingChanges,
+		VoiceChatChanges:   voiceChatChanges,
 	}
 
 	return &chatEventLogFiltersTemp
@@ -27351,6 +27922,94 @@ func (messageStatistics *MessageStatistics) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// Point A point on a Cartesian plane
+type Point struct {
+	tdCommon
+	X float64 `json:"x"` // The point's first coordinate
+	Y float64 `json:"y"` // The point's second coordinate
+}
+
+// MessageType return the string telegram-type of Point
+func (point *Point) MessageType() string {
+	return "point"
+}
+
+// NewPoint creates a new Point
+//
+// @param x The point's first coordinate
+// @param y The point's second coordinate
+func NewPoint(x float64, y float64) *Point {
+	pointTemp := Point{
+		tdCommon: tdCommon{Type: "point"},
+		X:        x,
+		Y:        y,
+	}
+
+	return &pointTemp
+}
+
+// VectorPathCommandLine A straight line to a given point
+type VectorPathCommandLine struct {
+	tdCommon
+	EndPoint *Point `json:"end_point"` // The end point of the straight line
+}
+
+// MessageType return the string telegram-type of VectorPathCommandLine
+func (vectorPathCommandLine *VectorPathCommandLine) MessageType() string {
+	return "vectorPathCommandLine"
+}
+
+// NewVectorPathCommandLine creates a new VectorPathCommandLine
+//
+// @param endPoint The end point of the straight line
+func NewVectorPathCommandLine(endPoint *Point) *VectorPathCommandLine {
+	vectorPathCommandLineTemp := VectorPathCommandLine{
+		tdCommon: tdCommon{Type: "vectorPathCommandLine"},
+		EndPoint: endPoint,
+	}
+
+	return &vectorPathCommandLineTemp
+}
+
+// GetVectorPathCommandEnum return the enum type of this object
+func (vectorPathCommandLine *VectorPathCommandLine) GetVectorPathCommandEnum() VectorPathCommandEnum {
+	return VectorPathCommandLineType
+}
+
+// VectorPathCommandCubicBezierCurve A cubic Bézier curve to a given point
+type VectorPathCommandCubicBezierCurve struct {
+	tdCommon
+	StartControlPoint *Point `json:"start_control_point"` // The start control point of the curve
+	EndControlPoint   *Point `json:"end_control_point"`   // The end control point of the curve
+	EndPoint          *Point `json:"end_point"`           // The end point of the curve
+}
+
+// MessageType return the string telegram-type of VectorPathCommandCubicBezierCurve
+func (vectorPathCommandCubicBezierCurve *VectorPathCommandCubicBezierCurve) MessageType() string {
+	return "vectorPathCommandCubicBezierCurve"
+}
+
+// NewVectorPathCommandCubicBezierCurve creates a new VectorPathCommandCubicBezierCurve
+//
+// @param startControlPoint The start control point of the curve
+// @param endControlPoint The end control point of the curve
+// @param endPoint The end point of the curve
+func NewVectorPathCommandCubicBezierCurve(startControlPoint *Point, endControlPoint *Point, endPoint *Point) *VectorPathCommandCubicBezierCurve {
+	vectorPathCommandCubicBezierCurveTemp := VectorPathCommandCubicBezierCurve{
+		tdCommon:          tdCommon{Type: "vectorPathCommandCubicBezierCurve"},
+		StartControlPoint: startControlPoint,
+		EndControlPoint:   endControlPoint,
+		EndPoint:          endPoint,
+	}
+
+	return &vectorPathCommandCubicBezierCurveTemp
+}
+
+// GetVectorPathCommandEnum return the enum type of this object
+func (vectorPathCommandCubicBezierCurve *VectorPathCommandCubicBezierCurve) GetVectorPathCommandEnum() VectorPathCommandEnum {
+	return VectorPathCommandCubicBezierCurveType
+}
+
 // UpdateAuthorizationState The user authorization state has changed
 type UpdateAuthorizationState struct {
 	tdCommon
@@ -28099,6 +28758,40 @@ func NewUpdateChatHasScheduledMessages(chatId int64, hasScheduledMessages bool) 
 // GetUpdateEnum return the enum type of this object
 func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) GetUpdateEnum() UpdateEnum {
 	return UpdateChatHasScheduledMessagesType
+}
+
+// UpdateChatVoiceChat A chat voice chat state has changed
+type UpdateChatVoiceChat struct {
+	tdCommon
+	ChatId               int64 `json:"chat_id"`                  // Chat identifier
+	VoiceChatGroupCallId int32 `json:"voice_chat_group_call_id"` // New value of voice_chat_group_call_id
+	IsVoiceChatEmpty     bool  `json:"is_voice_chat_empty"`      // New value of is_voice_chat_empty
+}
+
+// MessageType return the string telegram-type of UpdateChatVoiceChat
+func (updateChatVoiceChat *UpdateChatVoiceChat) MessageType() string {
+	return "updateChatVoiceChat"
+}
+
+// NewUpdateChatVoiceChat creates a new UpdateChatVoiceChat
+//
+// @param chatId Chat identifier
+// @param voiceChatGroupCallId New value of voice_chat_group_call_id
+// @param isVoiceChatEmpty New value of is_voice_chat_empty
+func NewUpdateChatVoiceChat(chatId int64, voiceChatGroupCallId int32, isVoiceChatEmpty bool) *UpdateChatVoiceChat {
+	updateChatVoiceChatTemp := UpdateChatVoiceChat{
+		tdCommon:             tdCommon{Type: "updateChatVoiceChat"},
+		ChatId:               chatId,
+		VoiceChatGroupCallId: voiceChatGroupCallId,
+		IsVoiceChatEmpty:     isVoiceChatEmpty,
+	}
+
+	return &updateChatVoiceChatTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatVoiceChat *UpdateChatVoiceChat) GetUpdateEnum() UpdateEnum {
+	return UpdateChatVoiceChatType
 }
 
 // UpdateChatDefaultDisableNotification The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
@@ -29216,6 +29909,65 @@ func (updateCall *UpdateCall) GetUpdateEnum() UpdateEnum {
 	return UpdateCallType
 }
 
+// UpdateGroupCall Information about a group call was updated
+type UpdateGroupCall struct {
+	tdCommon
+	GroupCall *GroupCall `json:"group_call"` // New data about a group call
+}
+
+// MessageType return the string telegram-type of UpdateGroupCall
+func (updateGroupCall *UpdateGroupCall) MessageType() string {
+	return "updateGroupCall"
+}
+
+// NewUpdateGroupCall creates a new UpdateGroupCall
+//
+// @param groupCall New data about a group call
+func NewUpdateGroupCall(groupCall *GroupCall) *UpdateGroupCall {
+	updateGroupCallTemp := UpdateGroupCall{
+		tdCommon:  tdCommon{Type: "updateGroupCall"},
+		GroupCall: groupCall,
+	}
+
+	return &updateGroupCallTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateGroupCall *UpdateGroupCall) GetUpdateEnum() UpdateEnum {
+	return UpdateGroupCallType
+}
+
+// UpdateGroupCallParticipant Information about a group call participant was changed. The updates are sent only after the group call is received through getGroupCall and only if the call is joined or being joined
+type UpdateGroupCallParticipant struct {
+	tdCommon
+	GroupCallId int32                 `json:"group_call_id"` // Identifier of group call
+	Participant *GroupCallParticipant `json:"participant"`   // New data about a participant
+}
+
+// MessageType return the string telegram-type of UpdateGroupCallParticipant
+func (updateGroupCallParticipant *UpdateGroupCallParticipant) MessageType() string {
+	return "updateGroupCallParticipant"
+}
+
+// NewUpdateGroupCallParticipant creates a new UpdateGroupCallParticipant
+//
+// @param groupCallId Identifier of group call
+// @param participant New data about a participant
+func NewUpdateGroupCallParticipant(groupCallId int32, participant *GroupCallParticipant) *UpdateGroupCallParticipant {
+	updateGroupCallParticipantTemp := UpdateGroupCallParticipant{
+		tdCommon:    tdCommon{Type: "updateGroupCallParticipant"},
+		GroupCallId: groupCallId,
+		Participant: participant,
+	}
+
+	return &updateGroupCallParticipantTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateGroupCallParticipant *UpdateGroupCallParticipant) GetUpdateEnum() UpdateEnum {
+	return UpdateGroupCallParticipantType
+}
+
 // UpdateNewCallSignalingData New call signaling data arrived
 type UpdateNewCallSignalingData struct {
 	tdCommon
@@ -29942,6 +30694,7 @@ type UpdateNewInlineQuery struct {
 	Id           JSONInt64 `json:"id"`             // Unique query identifier
 	SenderUserId int32     `json:"sender_user_id"` // Identifier of the user who sent the query
 	UserLocation *Location `json:"user_location"`  // User location; may be null
+	ChatType     ChatType  `json:"chat_type"`      // Contains information about the type of the chat, from which the query originated; may be null if unknown
 	Query        string    `json:"query"`          // Text of the query
 	Offset       string    `json:"offset"`         // Offset of the first entry to return
 }
@@ -29956,19 +30709,54 @@ func (updateNewInlineQuery *UpdateNewInlineQuery) MessageType() string {
 // @param id Unique query identifier
 // @param senderUserId Identifier of the user who sent the query
 // @param userLocation User location; may be null
+// @param chatType Contains information about the type of the chat, from which the query originated; may be null if unknown
 // @param query Text of the query
 // @param offset Offset of the first entry to return
-func NewUpdateNewInlineQuery(id JSONInt64, senderUserId int32, userLocation *Location, query string, offset string) *UpdateNewInlineQuery {
+func NewUpdateNewInlineQuery(id JSONInt64, senderUserId int32, userLocation *Location, chatType ChatType, query string, offset string) *UpdateNewInlineQuery {
 	updateNewInlineQueryTemp := UpdateNewInlineQuery{
 		tdCommon:     tdCommon{Type: "updateNewInlineQuery"},
 		Id:           id,
 		SenderUserId: senderUserId,
 		UserLocation: userLocation,
+		ChatType:     chatType,
 		Query:        query,
 		Offset:       offset,
 	}
 
 	return &updateNewInlineQueryTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateNewInlineQuery *UpdateNewInlineQuery) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		Id           JSONInt64 `json:"id"`             // Unique query identifier
+		SenderUserId int32     `json:"sender_user_id"` // Identifier of the user who sent the query
+		UserLocation *Location `json:"user_location"`  // User location; may be null
+		Query        string    `json:"query"`          // Text of the query
+		Offset       string    `json:"offset"`         // Offset of the first entry to return
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateNewInlineQuery.tdCommon = tempObj.tdCommon
+	updateNewInlineQuery.Id = tempObj.Id
+	updateNewInlineQuery.SenderUserId = tempObj.SenderUserId
+	updateNewInlineQuery.UserLocation = tempObj.UserLocation
+	updateNewInlineQuery.Query = tempObj.Query
+	updateNewInlineQuery.Offset = tempObj.Offset
+
+	fieldChatType, _ := unmarshalChatType(objMap["chat_type"])
+	updateNewInlineQuery.ChatType = fieldChatType
+
+	return nil
 }
 
 // GetUpdateEnum return the enum type of this object
@@ -32483,6 +33271,21 @@ func unmarshalMessageContent(rawMsg *json.RawMessage) (MessageContent, error) {
 		err := json.Unmarshal(*rawMsg, &messageCall)
 		return &messageCall, err
 
+	case MessageVoiceChatStartedType:
+		var messageVoiceChatStarted MessageVoiceChatStarted
+		err := json.Unmarshal(*rawMsg, &messageVoiceChatStarted)
+		return &messageVoiceChatStarted, err
+
+	case MessageVoiceChatEndedType:
+		var messageVoiceChatEnded MessageVoiceChatEnded
+		err := json.Unmarshal(*rawMsg, &messageVoiceChatEnded)
+		return &messageVoiceChatEnded, err
+
+	case MessageInviteVoiceChatParticipantsType:
+		var messageInviteVoiceChatParticipants MessageInviteVoiceChatParticipants
+		err := json.Unmarshal(*rawMsg, &messageInviteVoiceChatParticipants)
+		return &messageInviteVoiceChatParticipants, err
+
 	case MessageBasicGroupChatCreateType:
 		var messageBasicGroupChatCreate MessageBasicGroupChatCreate
 		err := json.Unmarshal(*rawMsg, &messageBasicGroupChatCreate)
@@ -33582,6 +34385,26 @@ func unmarshalChatEventAction(rawMsg *json.RawMessage) (ChatEventAction, error) 
 		var chatEventIsAllHistoryAvailableToggled ChatEventIsAllHistoryAvailableToggled
 		err := json.Unmarshal(*rawMsg, &chatEventIsAllHistoryAvailableToggled)
 		return &chatEventIsAllHistoryAvailableToggled, err
+
+	case ChatEventVoiceChatCreatedType:
+		var chatEventVoiceChatCreated ChatEventVoiceChatCreated
+		err := json.Unmarshal(*rawMsg, &chatEventVoiceChatCreated)
+		return &chatEventVoiceChatCreated, err
+
+	case ChatEventVoiceChatDiscardedType:
+		var chatEventVoiceChatDiscarded ChatEventVoiceChatDiscarded
+		err := json.Unmarshal(*rawMsg, &chatEventVoiceChatDiscarded)
+		return &chatEventVoiceChatDiscarded, err
+
+	case ChatEventVoiceChatParticipantIsMutedToggledType:
+		var chatEventVoiceChatParticipantIsMutedToggled ChatEventVoiceChatParticipantIsMutedToggled
+		err := json.Unmarshal(*rawMsg, &chatEventVoiceChatParticipantIsMutedToggled)
+		return &chatEventVoiceChatParticipantIsMutedToggled, err
+
+	case ChatEventVoiceChatMuteNewParticipantsToggledType:
+		var chatEventVoiceChatMuteNewParticipantsToggled ChatEventVoiceChatMuteNewParticipantsToggled
+		err := json.Unmarshal(*rawMsg, &chatEventVoiceChatMuteNewParticipantsToggled)
+		return &chatEventVoiceChatMuteNewParticipantsToggled, err
 
 	default:
 		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
@@ -34797,6 +35620,33 @@ func unmarshalChatStatistics(rawMsg *json.RawMessage) (ChatStatistics, error) {
 	}
 }
 
+func unmarshalVectorPathCommand(rawMsg *json.RawMessage) (VectorPathCommand, error) {
+
+	if rawMsg == nil {
+		return nil, nil
+	}
+	var objMap map[string]interface{}
+	err := json.Unmarshal(*rawMsg, &objMap)
+	if err != nil {
+		return nil, err
+	}
+
+	switch VectorPathCommandEnum(objMap["@type"].(string)) {
+	case VectorPathCommandLineType:
+		var vectorPathCommandLine VectorPathCommandLine
+		err := json.Unmarshal(*rawMsg, &vectorPathCommandLine)
+		return &vectorPathCommandLine, err
+
+	case VectorPathCommandCubicBezierCurveType:
+		var vectorPathCommandCubicBezierCurve VectorPathCommandCubicBezierCurve
+		err := json.Unmarshal(*rawMsg, &vectorPathCommandCubicBezierCurve)
+		return &vectorPathCommandCubicBezierCurve, err
+
+	default:
+		return nil, fmt.Errorf("Error unmarshaling, unknown type:" + objMap["@type"].(string))
+	}
+}
+
 func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 
 	if rawMsg == nil {
@@ -34913,6 +35763,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateChatHasScheduledMessages UpdateChatHasScheduledMessages
 		err := json.Unmarshal(*rawMsg, &updateChatHasScheduledMessages)
 		return &updateChatHasScheduledMessages, err
+
+	case UpdateChatVoiceChatType:
+		var updateChatVoiceChat UpdateChatVoiceChat
+		err := json.Unmarshal(*rawMsg, &updateChatVoiceChat)
+		return &updateChatVoiceChat, err
 
 	case UpdateChatDefaultDisableNotificationType:
 		var updateChatDefaultDisableNotification UpdateChatDefaultDisableNotification
@@ -35063,6 +35918,16 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateCall UpdateCall
 		err := json.Unmarshal(*rawMsg, &updateCall)
 		return &updateCall, err
+
+	case UpdateGroupCallType:
+		var updateGroupCall UpdateGroupCall
+		err := json.Unmarshal(*rawMsg, &updateGroupCall)
+		return &updateGroupCall, err
+
+	case UpdateGroupCallParticipantType:
+		var updateGroupCallParticipant UpdateGroupCallParticipant
+		err := json.Unmarshal(*rawMsg, &updateGroupCallParticipant)
+		return &updateGroupCallParticipant, err
 
 	case UpdateNewCallSignalingDataType:
 		var updateNewCallSignalingData UpdateNewCallSignalingData

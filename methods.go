@@ -2011,12 +2011,12 @@ func (client *Client) SendMessage(chatId int64, messageThreadId int64, replyToMe
 
 }
 
-// SendMessageAlbum Sends messages grouped together into an album. Currently only audio, document, photo and video messages can be grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns sent messages
+// SendMessageAlbum Sends 2-10 messages grouped together into an album. Currently only audio, document, photo and video messages can be grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns sent messages
 // @param chatId Target chat
 // @param messageThreadId If not 0, a message thread identifier in which the messages will be sent
 // @param replyToMessageId Identifier of a message to reply to or 0
 // @param options Options to be used to send the messages
-// @param inputMessageContents Contents of messages to be sent
+// @param inputMessageContents Contents of messages to be sent. At most 10 messages can be added to an album
 func (client *Client) SendMessageAlbum(chatId int64, messageThreadId int64, replyToMessageId int64, options *MessageSendOptions, inputMessageContents []InputMessageContent) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                  "sendMessageAlbum",
@@ -2104,7 +2104,7 @@ func (client *Client) SendInlineQueryResultMessage(chatId int64, messageThreadId
 // ForwardMessages Forwards previously sent messages. Returns the forwarded messages in the same order as the message identifiers passed in message_ids. If a message can't be forwarded, null will be returned instead of the message
 // @param chatId Identifier of the chat to which to forward messages
 // @param fromChatId Identifier of the chat from which to forward messages
-// @param messageIds Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order
+// @param messageIds Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order. At most 100 messages can be forwarded simultaneously
 // @param options Options to be used to send the messages
 // @param sendCopy True, if content of the messages needs to be copied without links to the original messages. Always true if the messages are forwarded to a secret chat
 // @param removeCaption True, if media caption of message copies needs to be removed. Ignored if send_copy is false
@@ -4231,7 +4231,7 @@ func (client *Client) UnpinAllChatMessages(chatId int64) (*Ok, error) {
 
 }
 
-// JoinChat Adds current user as a new member to a chat. Private and secret chats can't be joined using this method
+// JoinChat Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method
 // @param chatId Chat identifier
 func (client *Client) JoinChat(chatId int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -4253,7 +4253,7 @@ func (client *Client) JoinChat(chatId int64) (*Ok, error) {
 
 }
 
-// LeaveChat Removes current user from chat members. Private and secret chats can't be left using this method
+// LeaveChat Removes the current user from chat members. Private and secret chats can't be left using this method
 // @param chatId Chat identifier
 func (client *Client) LeaveChat(chatId int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -4301,9 +4301,9 @@ func (client *Client) AddChatMember(chatId int64, userId int32, forwardLimit int
 
 }
 
-// AddChatMembers Adds multiple new members to a chat. Currently this option is only available for supergroups and channels. This option can't be used to join a chat. Members can't be added to a channel if it has more than 200 members. Members will not be added until the chat state has been synchronized with the server
+// AddChatMembers Adds multiple new members to a chat. Currently this method is only available for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more than 200 members. Members will not be added until the chat state has been synchronized with the server
 // @param chatId Chat identifier
-// @param userIds Identifiers of the users to be added to the chat
+// @param userIds Identifiers of the users to be added to the chat. The maximum number of added users is 20 for supergroups and 100 for channels
 func (client *Client) AddChatMembers(chatId int64, userIds []int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "addChatMembers",
@@ -5126,6 +5126,246 @@ func (client *Client) SendCallDebugInformation(callId int32, debugInformation st
 
 }
 
+// CreateVoiceChat Creates a voice chat (a group call bound to a chat). Available only for basic groups and supergroups; requires can_manage_voice_chats rights
+// @param chatId Chat identifier
+func (client *Client) CreateVoiceChat(chatId int64) (*GroupCallId, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "createVoiceChat",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var groupCallId GroupCallId
+	err = json.Unmarshal(result.Raw, &groupCallId)
+	return &groupCallId, err
+
+}
+
+// GetGroupCall Returns information about a group call
+// @param groupCallId Group call identifier
+func (client *Client) GetGroupCall(groupCallId int32) (*GroupCall, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "getGroupCall",
+		"group_call_id": groupCallId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var groupCallDummy GroupCall
+	err = json.Unmarshal(result.Raw, &groupCallDummy)
+	return &groupCallDummy, err
+
+}
+
+// JoinGroupCall Joins a group call
+// @param groupCallId Group call identifier
+// @param payload Group join payload, received from tgcalls. Use null to cancel previous joinGroupCall request
+// @param source Caller synchronization source identifier; received from tgcalls
+// @param isMuted True, if the user's microphone is muted
+func (client *Client) JoinGroupCall(groupCallId int32, payload *GroupCallPayload, source int32, isMuted bool) (*GroupCallJoinResponse, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "joinGroupCall",
+		"group_call_id": groupCallId,
+		"payload":       payload,
+		"source":        source,
+		"is_muted":      isMuted,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var groupCallJoinResponse GroupCallJoinResponse
+	err = json.Unmarshal(result.Raw, &groupCallJoinResponse)
+	return &groupCallJoinResponse, err
+
+}
+
+// ToggleGroupCallMuteNewParticipants Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires can_manage_voice_chats rights in the corresponding chat and allowed_change_mute_mew_participants group call flag
+// @param groupCallId Group call identifier
+// @param muteNewParticipants New value of the mute_new_participants setting
+func (client *Client) ToggleGroupCallMuteNewParticipants(groupCallId int32, muteNewParticipants bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":                 "toggleGroupCallMuteNewParticipants",
+		"group_call_id":         groupCallId,
+		"mute_new_participants": muteNewParticipants,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// InviteGroupCallParticipants Invites users to a group call. Sends a service message of type messageInviteToGroupCall for voice chats
+// @param groupCallId Group call identifier
+// @param userIds User identifiers. At most 10 users can be invited simultaneously
+func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "inviteGroupCallParticipants",
+		"group_call_id": groupCallId,
+		"user_ids":      userIds,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// SetGroupCallParticipantIsSpeaking Informs TDLib that a group call participant speaking state has changed
+// @param groupCallId Group call identifier
+// @param source Group call participant's synchronization source identifier, or 0 for the current user
+// @param isSpeaking True, if the user is speaking
+func (client *Client) SetGroupCallParticipantIsSpeaking(groupCallId int32, source int32, isSpeaking bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "setGroupCallParticipantIsSpeaking",
+		"group_call_id": groupCallId,
+		"source":        source,
+		"is_speaking":   isSpeaking,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ToggleGroupCallParticipantIsMuted Toggles whether a group call participant is muted, unmuted, or allowed to unmute themself
+// @param groupCallId Group call identifier
+// @param userId User identifier
+// @param isMuted Pass true if the user must be muted and false otherwise
+func (client *Client) ToggleGroupCallParticipantIsMuted(groupCallId int32, userId int32, isMuted bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "toggleGroupCallParticipantIsMuted",
+		"group_call_id": groupCallId,
+		"user_id":       userId,
+		"is_muted":      isMuted,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// LoadGroupCallParticipants Loads more group call participants. The loaded participants will be received through updates. Use the field groupCall.loaded_all_participants to check whether all participants has already been loaded
+// @param groupCallId Group call identifier. The group call must be previously received through getGroupCall and must be joined or being joined
+// @param limit Maximum number of participants to load
+func (client *Client) LoadGroupCallParticipants(groupCallId int32, limit int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "loadGroupCallParticipants",
+		"group_call_id": groupCallId,
+		"limit":         limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// LeaveGroupCall Leaves a group call
+// @param groupCallId Group call identifier
+func (client *Client) LeaveGroupCall(groupCallId int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "leaveGroupCall",
+		"group_call_id": groupCallId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// DiscardGroupCall Discards a group call. Requires can_manage_voice_chats rights in the corresponding chat
+// @param groupCallId Group call identifier
+func (client *Client) DiscardGroupCall(groupCallId int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "discardGroupCall",
+		"group_call_id": groupCallId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // ToggleMessageSenderIsBlocked Changes the block state of a message sender. Currently, only users and supergroup chats can be blocked
 // @param sender Message Sender
 // @param isBlocked New value of is_blocked
@@ -5334,7 +5574,7 @@ func (client *Client) GetImportedContactCount() (*Count, error) {
 
 }
 
-// ChangeImportedContacts Changes imported contacts using the list of current user contacts saved on the device. Imports newly added contacts and, if at least the file database is enabled, deletes recently deleted contacts.
+// ChangeImportedContacts Changes imported contacts using the list of contacts saved on the device. Imports newly added contacts and, if at least the file database is enabled, deletes recently deleted contacts.
 // @param contacts
 func (client *Client) ChangeImportedContacts(contacts []Contact) (*ImportedContacts, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -8790,7 +9030,7 @@ func (client *Client) GetCountries() (*Countries, error) {
 
 }
 
-// GetCountryCode Uses current user IP address to find their country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
+// GetCountryCode Uses the current IP address to find the current country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be called before authorization
 func (client *Client) GetCountryCode() (*Text, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "getCountryCode",
@@ -9692,6 +9932,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
+	case UpdateChatVoiceChatType:
+		var update UpdateChatVoiceChat
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
 	case UpdateChatDefaultDisableNotificationType:
 		var update UpdateChatDefaultDisableNotification
 		err = json.Unmarshal(result.Raw, &update)
@@ -9839,6 +10084,16 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateCallType:
 		var update UpdateCall
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateGroupCallType:
+		var update UpdateGroupCall
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateGroupCallParticipantType:
+		var update UpdateGroupCallParticipant
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -9990,26 +10245,4 @@ func (client *Client) TestUseUpdate() (Update, error) {
 	default:
 		return nil, fmt.Errorf("Invalid type")
 	}
-}
-
-// TestReturnError Returns the specified error and ensures that the Error object is used; for testing only. Can be called synchronously
-// @param error The error to be returned
-func (client *Client) TestReturnError(error *Error) (*Error, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type": "testReturnError",
-		"error": error,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var errorDummy Error
-	err = json.Unmarshal(result.Raw, &errorDummy)
-	return &errorDummy, err
-
 }
