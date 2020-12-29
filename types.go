@@ -6262,7 +6262,6 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		Date                    int32                   `json:"date"`                         // Point in time (Unix timestamp) when the message was sent
 		EditDate                int32                   `json:"edit_date"`                    // Point in time (Unix timestamp) when the message was last edited
 		ForwardInfo             *MessageForwardInfo     `json:"forward_info"`                 // Information about the initial message sender; may be null
-		InteractionInfo         *MessageInteractionInfo `json:"interaction_info"`             // Information about interactions with the message; may be null
 		ReplyInChatId           int64                   `json:"reply_in_chat_id"`             // If non-zero, the identifier of the chat to which the replied message belongs; Currently, only messages in the Replies chat can have different reply_in_chat_id and chat_id
 		ReplyToMessageId        int64                   `json:"reply_to_message_id"`          // If non-zero, the identifier of the message this message is replying to; can be the identifier of a deleted message
 		MessageThreadId         int64                   `json:"message_thread_id"`            // If non-zero, the identifier of the message thread the message belongs to; unique within the chat to which the message belongs
@@ -6295,7 +6294,6 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	message.Date = tempObj.Date
 	message.EditDate = tempObj.EditDate
 	message.ForwardInfo = tempObj.ForwardInfo
-	message.InteractionInfo = tempObj.InteractionInfo
 	message.ReplyInChatId = tempObj.ReplyInChatId
 	message.ReplyToMessageId = tempObj.ReplyToMessageId
 	message.MessageThreadId = tempObj.MessageThreadId
@@ -6308,6 +6306,51 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 
 	fieldSender, _ := unmarshalMessageSender(objMap["sender"])
 	message.Sender = fieldSender
+	
+	// FYI: Arman92/go-tl-parser can't parse TDLib 1.7 new type `interaction_info`
+	// and that go-tl-parser is HARD TO MAINTENANCE!!!
+	// So we need convert `interaction_info` to Go struct without codegen.
+	if objMap["interaction_info"] != nil {
+		info, _ := objMap["interaction_info"].MarshalJSON()
+
+		infoObj := struct {
+				Type         string    `json:"@type"`
+				ViewCount    int32    `json:"view_count"`
+				ForwardCount int32    `json:"forward_count"`
+				ReplyInfo    struct {
+					Type           string   `json:"@type"`
+					ReplyCount     int32    `json:"reply_count"`
+					RecentRepliers []struct {
+						Type   string   `json:"@type"`
+						UserID int32    `json:"user_id"`
+						ChatId int64    `json:"chat_id"`
+					} `json:"recent_repliers"`
+					LastReadInboxMessageID  int64   `json:"last_read_inbox_message_id"`
+					LastReadOutboxMessageID int64   `json:"last_read_outbox_message_id"`
+					LastMessageID           int64   `json:"last_message_id"`
+				} `json:"reply_info"`
+			}{}
+
+		err = json.Unmarshal(info, &infoObj)
+		if err != nil {
+			return err
+		}
+
+		message.InteractionInfo = NewMessageInteractionInfo(infoObj.ViewCount, infoObj.ForwardCount, nil)
+		message.InteractionInfo.ReplyInfo = NewMessageReplyInfo(infoObj.ReplyInfo.ReplyCount, nil, infoObj.ReplyInfo.LastReadInboxMessageID, infoObj.ReplyInfo.LastReadOutboxMessageID, infoObj.ReplyInfo.LastMessageID)
+		for _, reply := range infoObj.ReplyInfo.RecentRepliers {
+			switch reply.Type {
+			case "messageSenderUser": {
+				message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderUser(reply.UserID))
+			}
+			case "messageSenderChat": {
+				message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderChat(reply.ChatId))
+			}
+			default:
+				return fmt.Errorf("Error unmarshaling, unknown messageSender type:" + reply.Type)
+			}
+		}
+	}
 
 	fieldSendingState, _ := unmarshalMessageSendingState(objMap["sending_state"])
 	message.SendingState = fieldSendingState
