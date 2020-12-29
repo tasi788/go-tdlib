@@ -10246,3 +10246,25 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		return nil, fmt.Errorf("Invalid type")
 	}
 }
+
+// TestReturnError Returns the specified error and ensures that the Error object is used; for testing only. Can be called synchronously
+// @param error The error to be returned
+func (client *Client) TestReturnError(error *Error) (*Error, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "testReturnError",
+		"error": error,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var errorDummy Error
+	err = json.Unmarshal(result.Raw, &errorDummy)
+	return &errorDummy, err
+
+}
