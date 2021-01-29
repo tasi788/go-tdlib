@@ -1581,6 +1581,28 @@ func (client *Client) DeleteChatHistory(chatId int64, removeFromChatList bool, r
 
 }
 
+// DeleteChat Deletes a chat along with all messages in the corresponding chat for all chat members; requires owner privileges. For group chats this will release the username and remove all members. Chats with more than 1000 members can't be deleted using this method
+// @param chatId Chat identifier
+func (client *Client) DeleteChat(chatId int64) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "deleteChat",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // SearchChatMessages Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of decreasing message_id. Cannot be used in secret chats with a non-empty query
 // @param chatId Identifier of the chat in which to search messages
 // @param query Query to search for
@@ -1708,6 +1730,28 @@ func (client *Client) SearchCallMessages(fromMessageId int64, limit int32, onlyM
 	var messages Messages
 	err = json.Unmarshal(result.Raw, &messages)
 	return &messages, err
+
+}
+
+// DeleteAllCallMessages Deletes all call messages
+// @param revoke Pass true to delete the messages for all users
+func (client *Client) DeleteAllCallMessages(revoke bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":  "deleteAllCallMessages",
+		"revoke": revoke,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var okDummy Ok
+	err = json.Unmarshal(result.Raw, &okDummy)
+	return &okDummy, err
 
 }
 
@@ -3597,16 +3641,18 @@ func (client *Client) CreateNewBasicGroupChat(userIds []int32, title string) (*C
 
 // CreateNewSupergroupChat Creates a new supergroup or channel and sends a corresponding messageSupergroupChatCreate. Returns the newly created chat
 // @param title Title of the new chat; 1-128 characters
-// @param isChannel True, if a channel chat should be created
+// @param isChannel True, if a channel chat needs to be created
 // @param description
 // @param location Chat location if a location-based supergroup is being created
-func (client *Client) CreateNewSupergroupChat(title string, isChannel bool, description string, location *ChatLocation) (*Chat, error) {
+// @param forImport True, if the supergroup is created for importing messages using importMessage
+func (client *Client) CreateNewSupergroupChat(title string, isChannel bool, description string, location *ChatLocation, forImport bool) (*Chat, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "createNewSupergroupChat",
 		"title":       title,
 		"is_channel":  isChannel,
 		"description": description,
 		"location":    location,
+		"for_import":  forImport,
 	})
 
 	if err != nil {
@@ -3867,7 +3913,7 @@ func (client *Client) GetChatFilterDefaultIconName(filter *ChatFilter) (*Text, e
 
 }
 
-// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info rights
+// SetChatTitle Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info administrator right
 // @param chatId Chat identifier
 // @param title New title of the chat; 1-128 characters
 func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
@@ -3891,7 +3937,7 @@ func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
 
 }
 
-// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info rights
+// SetChatPhoto Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info administrator right
 // @param chatId Chat identifier
 // @param photo New chat photo. Pass null to delete the chat photo
 func (client *Client) SetChatPhoto(chatId int64, photo InputChatPhoto) (*Ok, error) {
@@ -4061,7 +4107,7 @@ func (client *Client) SetChatClientData(chatId int64, clientData string) (*Ok, e
 
 }
 
-// SetChatDescription Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info rights
+// SetChatDescription Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info administrator right
 // @param chatId Identifier of the chat
 // @param description
 func (client *Client) SetChatDescription(chatId int64, description string) (*Ok, error) {
@@ -4085,7 +4131,7 @@ func (client *Client) SetChatDescription(chatId int64, description string) (*Ok,
 
 }
 
-// SetChatDiscussionGroup Changes the discussion group of a channel chat; requires can_change_info rights in the channel if it is specified
+// SetChatDiscussionGroup Changes the discussion group of a channel chat; requires can_change_info administrator right in the channel if it is specified
 // @param chatId Identifier of the channel chat. Pass 0 to remove a link from the supergroup passed in the second argument to a linked channel chat (requires can_pin_messages rights in the supergroup)
 // @param discussionChatId Identifier of a new channel's discussion group. Use 0 to remove the discussion group.
 func (client *Client) SetChatDiscussionGroup(chatId int64, discussionChatId int64) (*Ok, error) {
@@ -4275,7 +4321,7 @@ func (client *Client) LeaveChat(chatId int64) (*Ok, error) {
 
 }
 
-// AddChatMember Adds a new member to a chat. Members can't be added to private or secret chats. Members will not be added until the chat state has been synchronized with the server
+// AddChatMember Adds a new member to a chat. Members can't be added to private or secret chats
 // @param chatId Chat identifier
 // @param userId Identifier of the user
 // @param forwardLimit The number of earlier messages from the chat to be forwarded to the new member; up to 100. Ignored for supergroups and channels
@@ -4301,7 +4347,7 @@ func (client *Client) AddChatMember(chatId int64, userId int32, forwardLimit int
 
 }
 
-// AddChatMembers Adds multiple new members to a chat. Currently this method is only available for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more than 200 members. Members will not be added until the chat state has been synchronized with the server
+// AddChatMembers Adds multiple new members to a chat. Currently this method is only available for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more than 200 members
 // @param chatId Chat identifier
 // @param userIds Identifiers of the users to be added to the chat. The maximum number of added users is 20 for supergroups and 100 for channels
 func (client *Client) AddChatMembers(chatId int64, userIds []int32) (*Ok, error) {
@@ -4325,7 +4371,7 @@ func (client *Client) AddChatMembers(chatId int64, userIds []int32) (*Ok, error)
 
 }
 
-// SetChatMemberStatus Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for adding new members to the chat and transferring chat ownership; instead, use addChatMember or transferChatOwnership. The chat member status will not be changed until it has been synchronized with the server
+// SetChatMemberStatus Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for adding new members to the chat and transferring chat ownership; instead, use addChatMember or transferChatOwnership
 // @param chatId Chat identifier
 // @param userId User identifier
 // @param status The new status of the member in the chat
@@ -4348,6 +4394,34 @@ func (client *Client) SetChatMemberStatus(chatId int64, userId int32, status Cha
 	var ok Ok
 	err = json.Unmarshal(result.Raw, &ok)
 	return &ok, err
+
+}
+
+// BanChatMember Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless [unbanned](#unbanchatmember) first
+// @param chatId Chat identifier
+// @param userId Identifier of the user
+// @param bannedUntilDate Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups
+// @param revokeMessages Pass true to delete all messages in the chat for the user. Always true for supergroups and channels
+func (client *Client) BanChatMember(chatId int64, userId int32, bannedUntilDate int32, revokeMessages bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":             "banChatMember",
+		"chat_id":           chatId,
+		"user_id":           userId,
+		"banned_until_date": bannedUntilDate,
+		"revoke_messages":   revokeMessages,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var okDummy Ok
+	err = json.Unmarshal(result.Raw, &okDummy)
+	return &okDummy, err
 
 }
 
@@ -4904,11 +4978,75 @@ func (client *Client) DeleteFile(fileId int32) (*Ok, error) {
 
 }
 
-// GenerateChatInviteLink Generates a new invite link for a chat; the previously generated link is revoked. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right
-// @param chatId Chat identifier
-func (client *Client) GenerateChatInviteLink(chatId int64) (*ChatInviteLink, error) {
+// GetMessageFileType Returns information about a file with messages exported from another app
+// @param messageFileHead Beginning of the message file; up to 100 first lines
+func (client *Client) GetMessageFileType(messageFileHead string) (MessageFileType, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "generateChatInviteLink",
+		"@type":             "getMessageFileType",
+		"message_file_head": messageFileHead,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	switch MessageFileTypeEnum(result.Data["@type"].(string)) {
+
+	case MessageFileTypePrivateType:
+		var messageFileType MessageFileTypePrivate
+		err = json.Unmarshal(result.Raw, &messageFileType)
+		return &messageFileType, err
+
+	case MessageFileTypeGroupType:
+		var messageFileType MessageFileTypeGroup
+		err = json.Unmarshal(result.Raw, &messageFileType)
+		return &messageFileType, err
+
+	case MessageFileTypeUnknownType:
+		var messageFileType MessageFileTypeUnknown
+		err = json.Unmarshal(result.Raw, &messageFileType)
+		return &messageFileType, err
+
+	default:
+		return nil, fmt.Errorf("Invalid type")
+	}
+}
+
+// ImportMessages Imports messages exported from another app
+// @param chatId Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual contact or an identifier of a supergroup chat with can_change_info administrator right
+// @param messageFile File with messages to import. Only inputFileLocal and inputFileGenerated are supported. The file must not be previously uploaded
+// @param attachedFiles Files used in the imported messages. Only inputFileLocal and inputFileGenerated are supported. The files must not be previously uploaded
+func (client *Client) ImportMessages(chatId int64, messageFile InputFile, attachedFiles []InputFile) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "importMessages",
+		"chat_id":        chatId,
+		"message_file":   messageFile,
+		"attached_files": attachedFiles,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ReplacePermanentChatInviteLink Replaces current permanent invite link for a chat with a new permanent invite link. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right
+// @param chatId Chat identifier
+func (client *Client) ReplacePermanentChatInviteLink(chatId int64) (*ChatInviteLink, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "replacePermanentChatInviteLink",
 		"chat_id": chatId,
 	})
 
@@ -4927,7 +5065,7 @@ func (client *Client) GenerateChatInviteLink(chatId int64) (*ChatInviteLink, err
 }
 
 // CheckChatInviteLink Checks the validity of an invite link for a chat and returns information about the corresponding chat
-// @param inviteLink Invite link to be checked; should begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
+// @param inviteLink Invite link to be checked; must begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
 func (client *Client) CheckChatInviteLink(inviteLink string) (*ChatInviteLinkInfo, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "checkChatInviteLink",
@@ -4948,8 +5086,8 @@ func (client *Client) CheckChatInviteLink(inviteLink string) (*ChatInviteLinkInf
 
 }
 
-// JoinChatByInviteLink Uses an invite link to add the current user to the chat if possible. The new member will not be added until the chat state has been synchronized with the server
-// @param inviteLink Invite link to import; should begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
+// JoinChatByInviteLink Uses an invite link to add the current user to the chat if possible
+// @param inviteLink Invite link to import; must begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
 func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "joinChatByInviteLink",
@@ -5198,7 +5336,7 @@ func (client *Client) JoinGroupCall(groupCallId int32, payload *GroupCallPayload
 
 }
 
-// ToggleGroupCallMuteNewParticipants Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires can_manage_voice_chats rights in the corresponding chat and allowed_change_mute_mew_participants group call flag
+// ToggleGroupCallMuteNewParticipants Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_be_managed and allowed_change_mute_mew_participants group call flag
 // @param groupCallId Group call identifier
 // @param muteNewParticipants New value of the mute_new_participants setting
 func (client *Client) ToggleGroupCallMuteNewParticipants(groupCallId int32, muteNewParticipants bool) (*Ok, error) {
@@ -5298,6 +5436,32 @@ func (client *Client) ToggleGroupCallParticipantIsMuted(groupCallId int32, userI
 
 }
 
+// SetGroupCallParticipantVolumeLevel Changes a group call participant's volume level. If the current user can manage the group call, then the participant's volume level will be changed for all users with default volume level
+// @param groupCallId Group call identifier
+// @param userId User identifier
+// @param volumeLevel New participant's volume level; 1-20000 in hundreds of percents
+func (client *Client) SetGroupCallParticipantVolumeLevel(groupCallId int32, userId int32, volumeLevel int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "setGroupCallParticipantVolumeLevel",
+		"group_call_id": groupCallId,
+		"user_id":       userId,
+		"volume_level":  volumeLevel,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // LoadGroupCallParticipants Loads more group call participants. The loaded participants will be received through updates. Use the field groupCall.loaded_all_participants to check whether all participants has already been loaded
 // @param groupCallId Group call identifier. The group call must be previously received through getGroupCall and must be joined or being joined
 // @param limit Maximum number of participants to load
@@ -5344,7 +5508,7 @@ func (client *Client) LeaveGroupCall(groupCallId int32) (*Ok, error) {
 
 }
 
-// DiscardGroupCall Discards a group call. Requires can_manage_voice_chats rights in the corresponding chat
+// DiscardGroupCall Discards a group call. Requires groupCall.can_be_managed
 // @param groupCallId Group call identifier
 func (client *Client) DiscardGroupCall(groupCallId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -6742,7 +6906,7 @@ func (client *Client) SetSupergroupUsername(supergroupId int32, username string)
 
 }
 
-// SetSupergroupStickerSet Changes the sticker set of a supergroup; requires can_change_info rights
+// SetSupergroupStickerSet Changes the sticker set of a supergroup; requires can_change_info administrator right
 // @param supergroupId Identifier of the supergroup
 // @param stickerSetId New value of the supergroup sticker set identifier. Use 0 to remove the supergroup sticker set
 func (client *Client) SetSupergroupStickerSet(supergroupId int32, stickerSetId JSONInt64) (*Ok, error) {
@@ -6766,7 +6930,7 @@ func (client *Client) SetSupergroupStickerSet(supergroupId int32, stickerSetId J
 
 }
 
-// ToggleSupergroupSignMessages Toggles sender signatures messages sent in a channel; requires can_change_info rights
+// ToggleSupergroupSignMessages Toggles sender signatures messages sent in a channel; requires can_change_info administrator right
 // @param supergroupId Identifier of the channel
 // @param signMessages New value of sign_messages
 func (client *Client) ToggleSupergroupSignMessages(supergroupId int32, signMessages bool) (*Ok, error) {
@@ -6790,7 +6954,7 @@ func (client *Client) ToggleSupergroupSignMessages(supergroupId int32, signMessa
 
 }
 
-// ToggleSupergroupIsAllHistoryAvailable Toggles whether the message history of a supergroup is available to new members; requires can_change_info rights
+// ToggleSupergroupIsAllHistoryAvailable Toggles whether the message history of a supergroup is available to new members; requires can_change_info administrator right
 // @param supergroupId The identifier of the supergroup
 // @param isAllHistoryAvailable The new value of is_all_history_available
 func (client *Client) ToggleSupergroupIsAllHistoryAvailable(supergroupId int32, isAllHistoryAvailable bool) (*Ok, error) {
@@ -6865,28 +7029,6 @@ func (client *Client) GetSupergroupMembers(supergroupId int32, filter Supergroup
 	var chatMembers ChatMembers
 	err = json.Unmarshal(result.Raw, &chatMembers)
 	return &chatMembers, err
-
-}
-
-// DeleteSupergroup Deletes a supergroup or channel along with all messages in the corresponding chat. This will release the supergroup or channel username and remove all members; requires owner privileges in the supergroup or channel. Chats with more than 1000 members can't be deleted using this method
-// @param supergroupId Identifier of the supergroup or channel
-func (client *Client) DeleteSupergroup(supergroupId int32) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":         "deleteSupergroup",
-		"supergroup_id": supergroupId,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
 
 }
 
@@ -7759,7 +7901,7 @@ func (client *Client) RemoveChatActionBar(chatId int64) (*Ok, error) {
 
 }
 
-// ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if this is a private chats with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
+// ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if this is a private chat with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
 // @param chatId Chat identifier
 // @param reason The reason for reporting the chat
 // @param messageIds Identifiers of reported messages, if any
@@ -9544,7 +9686,7 @@ func (client *Client) GetLogTagVerbosityLevel(tag string) (*LogVerbosityLevel, e
 }
 
 // AddLogMessage Adds a message to TDLib internal log. Can be called synchronously
-// @param verbosityLevel The minimum verbosity level needed for the message to be logged, 0-1023
+// @param verbosityLevel The minimum verbosity level needed for the message to be logged; 0-1023
 // @param text Text of a message to log
 func (client *Client) AddLogMessage(verbosityLevel int32, text string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
