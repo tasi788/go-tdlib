@@ -2201,30 +2201,6 @@ func (client *Client) ResendMessages(chatId int64, messageIds []int64) (*Message
 
 }
 
-// SendChatSetTtlMessage Changes the current TTL setting (sets a new self-destruct timer) in a secret chat and sends the corresponding message
-// @param chatId Chat identifier
-// @param ttl New TTL value, in seconds
-func (client *Client) SendChatSetTtlMessage(chatId int64, ttl int32) (*Message, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "sendChatSetTtlMessage",
-		"chat_id": chatId,
-		"ttl":     ttl,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var message Message
-	err = json.Unmarshal(result.Raw, &message)
-	return &message, err
-
-}
-
 // SendChatScreenshotTakenNotification Sends a notification about a screenshot taken in a chat. Supported only in private and secret chats
 // @param chatId Chat identifier
 func (client *Client) SendChatScreenshotTakenNotification(chatId int64) (*Ok, error) {
@@ -3499,6 +3475,28 @@ func (client *Client) OpenMessageContent(chatId int64, messageId int64) (*Ok, er
 
 }
 
+// GetExternalLink Returns an HTTP URL to open when user clicks on a given HTTP link. This method can be used to automatically login user on a Telegram site
+// @param link The HTTP link
+func (client *Client) GetExternalLink(link string) (*HttpUrl, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getExternalLink",
+		"link":  link,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var httpUrl HttpUrl
+	err = json.Unmarshal(result.Raw, &httpUrl)
+	return &httpUrl, err
+
+}
+
 // ReadAllChatMentions Marks all mentions in a chat as read
 // @param chatId Chat identifier
 func (client *Client) ReadAllChatMentions(chatId int64) (*Ok, error) {
@@ -3961,6 +3959,30 @@ func (client *Client) SetChatPhoto(chatId int64, photo InputChatPhoto) (*Ok, err
 
 }
 
+// SetChatMessageTtlSetting Changes the message TTL setting (sets a new self-destruct timer) in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and channels
+// @param chatId Chat identifier
+// @param ttl New TTL value, in seconds; must be one of 0, 86400, 604800 unless chat is secret
+func (client *Client) SetChatMessageTtlSetting(chatId int64, ttl int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "setChatMessageTtlSetting",
+		"chat_id": chatId,
+		"ttl":     ttl,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // SetChatPermissions Changes the chat members permissions. Supported only for basic groups and supergroups. Requires can_restrict_members administrator right
 // @param chatId Chat identifier
 // @param permissions New non-administrator members permissions in the chat
@@ -4397,7 +4419,7 @@ func (client *Client) SetChatMemberStatus(chatId int64, userId int32, status Cha
 
 }
 
-// BanChatMember Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless [unbanned](#unbanchatmember) first
+// BanChatMember Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first
 // @param chatId Chat identifier
 // @param userId Identifier of the user
 // @param bannedUntilDate Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups
@@ -5016,6 +5038,28 @@ func (client *Client) GetMessageFileType(messageFileHead string) (MessageFileTyp
 	}
 }
 
+// GetMessageImportConfirmationText Returns a confirmation text to be shown to the user before starting message import
+// @param chatId Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual contact or an identifier of a supergroup chat with can_change_info administrator right
+func (client *Client) GetMessageImportConfirmationText(chatId int64) (*Text, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "getMessageImportConfirmationText",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var text Text
+	err = json.Unmarshal(result.Raw, &text)
+	return &text, err
+
+}
+
 // ImportMessages Imports messages exported from another app
 // @param chatId Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual contact or an identifier of a supergroup chat with can_change_info administrator right
 // @param messageFile File with messages to import. Only inputFileLocal and inputFileGenerated are supported. The file must not be previously uploaded
@@ -5042,11 +5086,11 @@ func (client *Client) ImportMessages(chatId int64, messageFile InputFile, attach
 
 }
 
-// ReplacePermanentChatInviteLink Replaces current permanent invite link for a chat with a new permanent invite link. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right
+// ReplacePrimaryChatInviteLink Replaces current primary invite link for a chat with a new primary invite link. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right
 // @param chatId Chat identifier
-func (client *Client) ReplacePermanentChatInviteLink(chatId int64) (*ChatInviteLink, error) {
+func (client *Client) ReplacePrimaryChatInviteLink(chatId int64) (*ChatInviteLink, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "replacePermanentChatInviteLink",
+		"@type":   "replacePrimaryChatInviteLink",
 		"chat_id": chatId,
 	})
 
@@ -5064,8 +5108,240 @@ func (client *Client) ReplacePermanentChatInviteLink(chatId int64) (*ChatInviteL
 
 }
 
+// CreateChatInviteLink Creates a new invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat
+// @param chatId Chat identifier
+// @param expireDate Point in time (Unix timestamp) when the link will expire; pass 0 if never
+// @param memberLimit Maximum number of chat members that can join the chat by the link simultaneously; 0-99999; pass 0 if not limited
+func (client *Client) CreateChatInviteLink(chatId int64, expireDate int32, memberLimit int32) (*ChatInviteLink, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":        "createChatInviteLink",
+		"chat_id":      chatId,
+		"expire_date":  expireDate,
+		"member_limit": memberLimit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLink ChatInviteLink
+	err = json.Unmarshal(result.Raw, &chatInviteLink)
+	return &chatInviteLink, err
+
+}
+
+// EditChatInviteLink Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param chatId Chat identifier
+// @param inviteLink Invite link to be edited
+// @param expireDate Point in time (Unix timestamp) when the link will expire; pass 0 if never
+// @param memberLimit Maximum number of chat members that can join the chat by the link simultaneously; 0-99999; pass 0 if not limited
+func (client *Client) EditChatInviteLink(chatId int64, inviteLink string, expireDate int32, memberLimit int32) (*ChatInviteLink, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":        "editChatInviteLink",
+		"chat_id":      chatId,
+		"invite_link":  inviteLink,
+		"expire_date":  expireDate,
+		"member_limit": memberLimit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLink ChatInviteLink
+	err = json.Unmarshal(result.Raw, &chatInviteLink)
+	return &chatInviteLink, err
+
+}
+
+// GetChatInviteLink Returns information about an invite link. Requires administrator privileges and can_invite_users right in the chat to get own links and owner privileges to get other links
+// @param chatId Chat identifier
+// @param inviteLink Invite link to get
+func (client *Client) GetChatInviteLink(chatId int64, inviteLink string) (*ChatInviteLink, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "getChatInviteLink",
+		"chat_id":     chatId,
+		"invite_link": inviteLink,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLink ChatInviteLink
+	err = json.Unmarshal(result.Raw, &chatInviteLink)
+	return &chatInviteLink, err
+
+}
+
+// GetChatInviteLinkCounts Returns list of chat administrators with number of their invite links. Requires owner privileges in the chat
+// @param chatId Chat identifier
+func (client *Client) GetChatInviteLinkCounts(chatId int64) (*ChatInviteLinkCounts, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "getChatInviteLinkCounts",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLinkCounts ChatInviteLinkCounts
+	err = json.Unmarshal(result.Raw, &chatInviteLinkCounts)
+	return &chatInviteLinkCounts, err
+
+}
+
+// GetChatInviteLinks Returns invite links for a chat created by specified administrator. Requires administrator privileges and can_invite_users right in the chat to get own links and owner privileges to get other links
+// @param chatId Chat identifier
+// @param creatorUserId User identifier of a chat administrator. Must be an identifier of the current user for non-owner
+// @param isRevoked Pass true if revoked links needs to be returned instead of active or expired
+// @param offsetDate Creation date of an invite link starting after which to return invite links; use 0 to get results from the beginning
+// @param offsetInviteLink Invite link starting after which to return invite links; use empty string to get results from the beginning
+// @param limit Maximum number of invite links to return
+func (client *Client) GetChatInviteLinks(chatId int64, creatorUserId int32, isRevoked bool, offsetDate int32, offsetInviteLink string, limit int32) (*ChatInviteLinks, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":              "getChatInviteLinks",
+		"chat_id":            chatId,
+		"creator_user_id":    creatorUserId,
+		"is_revoked":         isRevoked,
+		"offset_date":        offsetDate,
+		"offset_invite_link": offsetInviteLink,
+		"limit":              limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLinks ChatInviteLinks
+	err = json.Unmarshal(result.Raw, &chatInviteLinks)
+	return &chatInviteLinks, err
+
+}
+
+// GetChatInviteLinkMembers Returns chat members joined a chat by an invite link. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param chatId Chat identifier
+// @param inviteLink Invite link for which to return chat members
+// @param offsetMember A chat member from which to return next chat members; use null to get results from the beginning
+// @param limit Maximum number of chat members to return
+func (client *Client) GetChatInviteLinkMembers(chatId int64, inviteLink string, offsetMember *ChatInviteLinkMember, limit int32) (*ChatInviteLinkMembers, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "getChatInviteLinkMembers",
+		"chat_id":       chatId,
+		"invite_link":   inviteLink,
+		"offset_member": offsetMember,
+		"limit":         limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLinkMembers ChatInviteLinkMembers
+	err = json.Unmarshal(result.Raw, &chatInviteLinkMembers)
+	return &chatInviteLinkMembers, err
+
+}
+
+// RevokeChatInviteLink Revokes invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+// @param chatId Chat identifier
+// @param inviteLink Invite link to be revoked
+func (client *Client) RevokeChatInviteLink(chatId int64, inviteLink string) (*ChatInviteLinks, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "revokeChatInviteLink",
+		"chat_id":     chatId,
+		"invite_link": inviteLink,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatInviteLinks ChatInviteLinks
+	err = json.Unmarshal(result.Raw, &chatInviteLinks)
+	return &chatInviteLinks, err
+
+}
+
+// DeleteRevokedChatInviteLink Deletes revoked chat invite links. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param chatId Chat identifier
+// @param inviteLink Invite link to revoke
+func (client *Client) DeleteRevokedChatInviteLink(chatId int64, inviteLink string) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":       "deleteRevokedChatInviteLink",
+		"chat_id":     chatId,
+		"invite_link": inviteLink,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// DeleteAllRevokedChatInviteLinks Deletes all revoked chat invite links created by a given chat administrator. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param chatId Chat identifier
+// @param creatorUserId User identifier of a chat administrator, which links will be deleted. Must be an identifier of the current user for non-owner
+func (client *Client) DeleteAllRevokedChatInviteLinks(chatId int64, creatorUserId int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":           "deleteAllRevokedChatInviteLinks",
+		"chat_id":         chatId,
+		"creator_user_id": creatorUserId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // CheckChatInviteLink Checks the validity of an invite link for a chat and returns information about the corresponding chat
-// @param inviteLink Invite link to be checked; must begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
+// @param inviteLink Invite link to be checked; must have URL "t.me", "telegram.me", or "telegram.dog" and query beginning with "/joinchat/" or "/+"
 func (client *Client) CheckChatInviteLink(inviteLink string) (*ChatInviteLinkInfo, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "checkChatInviteLink",
@@ -5087,7 +5363,7 @@ func (client *Client) CheckChatInviteLink(inviteLink string) (*ChatInviteLinkInf
 }
 
 // JoinChatByInviteLink Uses an invite link to add the current user to the chat if possible
-// @param inviteLink Invite link to import; must begin with "https://t.me/joinchat/", "https://telegram.me/joinchat/", or "https://telegram.dog/joinchat/"
+// @param inviteLink Invite link to import; must have URL "t.me", "telegram.me", or "telegram.dog" and query beginning with "/joinchat/" or "/+"
 func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "joinChatByInviteLink",
@@ -5336,7 +5612,7 @@ func (client *Client) JoinGroupCall(groupCallId int32, payload *GroupCallPayload
 
 }
 
-// ToggleGroupCallMuteNewParticipants Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_be_managed and allowed_change_mute_mew_participants group call flag
+// ToggleGroupCallMuteNewParticipants Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires groupCall.can_change_mute_new_participants group call flag
 // @param groupCallId Group call identifier
 // @param muteNewParticipants New value of the mute_new_participants setting
 func (client *Client) ToggleGroupCallMuteNewParticipants(groupCallId int32, muteNewParticipants bool) (*Ok, error) {
@@ -6978,6 +7254,28 @@ func (client *Client) ToggleSupergroupIsAllHistoryAvailable(supergroupId int32, 
 
 }
 
+// ToggleSupergroupIsBroadcastGroup Upgrades supergroup to a broadcast group; requires owner privileges in the supergroup
+// @param supergroupId Identifier of the supergroup
+func (client *Client) ToggleSupergroupIsBroadcastGroup(supergroupId int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":         "toggleSupergroupIsBroadcastGroup",
+		"supergroup_id": supergroupId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // ReportSupergroupSpam Reports some messages from a user in a supergroup as spam; requires administrator rights in the supergroup
 // @param supergroupId Supergroup identifier
 // @param userId User identifier
@@ -7903,14 +8201,44 @@ func (client *Client) RemoveChatActionBar(chatId int64) (*Ok, error) {
 
 // ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if this is a private chat with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
 // @param chatId Chat identifier
-// @param reason The reason for reporting the chat
 // @param messageIds Identifiers of reported messages, if any
-func (client *Client) ReportChat(chatId int64, reason ChatReportReason, messageIds []int64) (*Ok, error) {
+// @param reason The reason for reporting the chat
+// @param text Additional report details; 0-1024 characters
+func (client *Client) ReportChat(chatId int64, messageIds []int64, reason ChatReportReason, text string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "reportChat",
 		"chat_id":     chatId,
-		"reason":      reason,
 		"message_ids": messageIds,
+		"reason":      reason,
+		"text":        text,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// ReportChatPhoto Reports a chat photo to the Telegram moderators. A chat photo can be reported only if this is a private chat with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
+// @param chatId Chat identifier
+// @param fileId Identifier of the photo to report. Only full photos from chatPhoto can be reported
+// @param reason The reason for reporting the chat photo
+// @param text Additional report details; 0-1024 characters
+func (client *Client) ReportChatPhoto(chatId int64, fileId int32, reason ChatReportReason, text string) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "reportChatPhoto",
+		"chat_id": chatId,
+		"file_id": fileId,
+		"reason":  reason,
+		"text":    text,
 	})
 
 	if err != nil {
@@ -9477,7 +9805,7 @@ func (client *Client) GetProxies() (*Proxies, error) {
 
 // GetProxyLink Returns an HTTPS link, which can be used to add a proxy. Available only for SOCKS5 and MTProto proxies. Can be called before authorization
 // @param proxyId Proxy identifier
-func (client *Client) GetProxyLink(proxyId int32) (*Text, error) {
+func (client *Client) GetProxyLink(proxyId int32) (*HttpUrl, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "getProxyLink",
 		"proxy_id": proxyId,
@@ -9491,9 +9819,9 @@ func (client *Client) GetProxyLink(proxyId int32) (*Text, error) {
 		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
-	var text Text
-	err = json.Unmarshal(result.Raw, &text)
-	return &text, err
+	var httpUrl HttpUrl
+	err = json.Unmarshal(result.Raw, &httpUrl)
+	return &httpUrl, err
 
 }
 
@@ -10109,6 +10437,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
+	case UpdateChatMessageTtlSettingType:
+		var update UpdateChatMessageTtlSetting
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
 	case UpdateChatActionBarType:
 		var update UpdateChatActionBar
 		err = json.Unmarshal(result.Raw, &update)
@@ -10381,6 +10714,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdatePollAnswerType:
 		var update UpdatePollAnswer
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatMemberType:
+		var update UpdateChatMember
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
