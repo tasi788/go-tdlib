@@ -46,13 +46,15 @@ type EventReceiver struct {
 
 // Client is the Telegram TdLib client
 type Client struct {
-	Client       unsafe.Pointer
-	Config       Config
-	rawUpdates   chan UpdateMsg
-	receivers    []EventReceiver
-	waiters      sync.Map
-	msgWaiters   sync.Map
-	receiverLock *sync.Mutex
+	Client         unsafe.Pointer
+	Config         Config
+	rawUpdates     chan UpdateMsg
+	receivers      []EventReceiver
+	waiters        map[string]chan UpdateMsg
+	msgWaiters     map[int64]chan UpdateMsg
+	receiverLock   *sync.Mutex
+	waitersLock    *sync.RWMutex
+	msgWaitersLock *sync.RWMutex
 }
 
 // Config holds tdlibParameters
@@ -85,7 +87,11 @@ func NewClient(config Config) *Client {
 	client := Client{Client: C.td_json_client_create()}
 	client.receivers = make([]EventReceiver, 0, 1)
 	client.receiverLock = &sync.Mutex{}
+	client.waitersLock = &sync.RWMutex{}
+	client.msgWaitersLock = &sync.RWMutex{}
 	client.Config = config
+	client.waiters = make(map[string]chan UpdateMsg)
+	client.msgWaiters = make(map[int64]chan UpdateMsg)
 
 	go func() {
 		for {
@@ -96,26 +102,32 @@ func NewClient(config Config) *Client {
 
 			// does new update has @extra field?
 			if extra, hasExtra := updateData["@extra"].(string); hasExtra {
+				client.waitersLock.RLock()
+				waiter, found := client.waiters[extra]
+				client.waitersLock.RUnlock()
 
 				// trying to load update with this salt
-				if waiter, found := client.waiters.Load(extra); found {
+				if found {
 					// found? send it to waiter channel
-					waiter.(chan UpdateMsg) <- UpdateMsg{Data: updateData, Raw: updateBytes}
+					waiter <- UpdateMsg{Data: updateData, Raw: updateBytes}
 
 					// trying to prevent memory leak
-					close(waiter.(chan UpdateMsg))
+					close(waiter)
 				}
 			} else {
 				// does new updates has @type field?
 				if msgType, hasType := updateData["@type"]; hasType {
-
 					if msgType == "updateMessageSendSucceeded" {
-						if waiter, found := client.msgWaiters.Load(int64(updateData["old_message_id"].(float64))); found {
+						client.msgWaitersLock.RLock()
+						msgWaiter, found2 := client.msgWaiters[int64(updateData["old_message_id"].(float64))]
+						client.msgWaitersLock.RUnlock()
+
+						if found2 {
 							// found? send it to waiter channel
-							waiter.(chan UpdateMsg) <- UpdateMsg{Data: updateData, Raw: updateBytes}
+							msgWaiter <- UpdateMsg{Data: updateData, Raw: updateBytes}
 
 							// trying to prevent memory leak
-							close(waiter.(chan UpdateMsg))
+							close(msgWaiter)
 						}
 					}
 
@@ -280,7 +292,10 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 
 	// create waiter chan and save it in Waiters
 	waiter := make(chan UpdateMsg, 1)
-	client.waiters.Store(randomString, waiter)
+
+	client.waitersLock.Lock()
+	client.waiters[randomString] = waiter
+	client.waitersLock.Unlock()
 
 	// send it through already implemented method
 	client.Send(update)
@@ -288,6 +303,10 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 	select {
 	// wait response from main loop in NewClient()
 	case response := <-waiter:
+		client.waitersLock.Lock()
+		delete(client.waiters, randomString)
+		client.waitersLock.Unlock()
+
 		if update["@type"] == "sendMessage" {
 			var messageDummy Message
 			json.Unmarshal(response.Raw, &messageDummy)
@@ -295,7 +314,9 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 			if messageDummy.Content != nil {
 				if messageDummy.Content.GetMessageContentEnum() == "messageText" || messageDummy.Content.GetMessageContentEnum() == "messageDice" {
 					msgWaiter := make(chan UpdateMsg, 1)
-					client.msgWaiters.Store(messageDummy.Id, msgWaiter)
+					client.msgWaitersLock.Lock()
+					client.msgWaiters[messageDummy.Id] = msgWaiter
+					client.msgWaitersLock.Unlock()
 
 					select {
 					case updateResp := <-msgWaiter:
@@ -312,7 +333,9 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 
 						return response, nil
 					case <-time.After(1 * time.Second):
-						client.msgWaiters.Delete(messageDummy.Id)
+						client.msgWaitersLock.Lock()
+						delete(client.msgWaiters, messageDummy.Id)
+						client.msgWaitersLock.Unlock()
 					}
 				}
 			}
@@ -321,7 +344,10 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 		return response, nil
 		// or timeout
 	case <-time.After(10 * time.Second):
-		client.waiters.Delete(randomString)
+		client.waitersLock.Lock()
+		delete(client.waiters, randomString)
+		client.waitersLock.Unlock()
+
 		return UpdateMsg{}, errors.New("timeout")
 	}
 }
