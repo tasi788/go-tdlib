@@ -6790,7 +6790,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 					ReplyCount     int32    `json:"reply_count"`
 					RecentRepliers []struct {
 						Type   string   `json:"@type"`
-						UserID int32    `json:"user_id"`
+						UserID int64    `json:"user_id"`
 						ChatId int64    `json:"chat_id"`
 					} `json:"recent_repliers"`
 					LastReadInboxMessageID  int64   `json:"last_read_inbox_message_id"`
