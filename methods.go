@@ -1997,6 +1997,60 @@ func (client *Client) GetChatMessageByDate(chatId int64, date int32) (*Message, 
 
 }
 
+// GetChatSparseMessagePositions Returns sparse positions of messages of the specified type in the chat to be used for shared media scroll implementation. Returns the results in reverse chronological order (i.e., in order of decreasing message_id).
+// @param chatId Identifier of the chat in which to return information about message positions
+// @param filter Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterCall, searchMessagesFilterMissedCall, searchMessagesFilterMention and searchMessagesFilterUnreadMention are unsupported in this function
+// @param fromMessageId The message identifier from which to return information about message positions
+// @param limit The expected number of message positions to be returned; 50-2000. A smaller number of positions can be returned, if there are not enough appropriate messages
+func (client *Client) GetChatSparseMessagePositions(chatId int64, filter SearchMessagesFilter, fromMessageId int64, limit int32) (*MessagePositions, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":           "getChatSparseMessagePositions",
+		"chat_id":         chatId,
+		"filter":          filter,
+		"from_message_id": fromMessageId,
+		"limit":           limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var messagePositions MessagePositions
+	err = json.Unmarshal(result.Raw, &messagePositions)
+	return &messagePositions, err
+
+}
+
+// GetChatMessageCalendar Returns information about the next messages of the specified type in the chat splitted by days. Returns the results in reverse chronological order. Can return partial result for the last returned day. Behavior of this method depends on the value of the option "utc_time_offset"
+// @param chatId Identifier of the chat in which to return information about messages
+// @param filter Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterCall, searchMessagesFilterMissedCall, searchMessagesFilterMention and searchMessagesFilterUnreadMention are unsupported in this function
+// @param fromMessageId The message identifier from which to return information about messages; use 0 to get results from the last message
+func (client *Client) GetChatMessageCalendar(chatId int64, filter SearchMessagesFilter, fromMessageId int64) (*MessageCalendar, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":           "getChatMessageCalendar",
+		"chat_id":         chatId,
+		"filter":          filter,
+		"from_message_id": fromMessageId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var messageCalendar MessageCalendar
+	err = json.Unmarshal(result.Raw, &messageCalendar)
+	return &messageCalendar, err
+
+}
+
 // GetChatMessageCount Returns approximate number of messages of the specified type in the chat
 // @param chatId Identifier of the chat in which to count messages
 // @param filter Filter for message content; searchMessagesFilterEmpty is unsupported in this function
@@ -2524,6 +2578,34 @@ func (client *Client) DeleteChatMessagesFromUser(chatId int64, userId int64) (*O
 	var ok Ok
 	err = json.Unmarshal(result.Raw, &ok)
 	return &ok, err
+
+}
+
+// DeleteChatMessagesByDate Deletes all messages between the specified dates in a chat. Supported only for private chats and basic groups. Messages sent in the last 30 seconds will not be deleted
+// @param chatId Chat identifier
+// @param minDate The minimum date of the messages to delete
+// @param maxDate The maximum date of the messages to delete
+// @param revoke Pass true to try to delete chat messages for all users; private chats only
+func (client *Client) DeleteChatMessagesByDate(chatId int64, minDate int32, maxDate int32, revoke bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":    "deleteChatMessagesByDate",
+		"chat_id":  chatId,
+		"min_date": minDate,
+		"max_date": maxDate,
+		"revoke":   revoke,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var okDummy Ok
+	err = json.Unmarshal(result.Raw, &okDummy)
+	return &okDummy, err
 
 }
 
@@ -3851,8 +3933,13 @@ func (client *Client) GetInternalLinkType(link string) (InternalLinkType, error)
 		err = json.Unmarshal(result.Raw, &internalLinkType)
 		return &internalLinkType, err
 
-	case InternalLinkTypeVoiceChatType:
-		var internalLinkType InternalLinkTypeVoiceChat
+	case InternalLinkTypeUnsupportedProxyType:
+		var internalLinkType InternalLinkTypeUnsupportedProxy
+		err = json.Unmarshal(result.Raw, &internalLinkType)
+		return &internalLinkType, err
+
+	case InternalLinkTypeVideoChatType:
+		var internalLinkType InternalLinkTypeVideoChat
 		err = json.Unmarshal(result.Raw, &internalLinkType)
 		return &internalLinkType, err
 
@@ -4648,7 +4735,7 @@ func (client *Client) SetChatLocation(chatId int64, location *ChatLocation) (*Ok
 
 // SetChatSlowModeDelay Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members rights
 // @param chatId Chat identifier
-// @param slowModeDelay New slow mode delay for the chat; must be one of 0, 10, 30, 60, 300, 900, 3600
+// @param slowModeDelay New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300, 900, 3600
 func (client *Client) SetChatSlowModeDelay(chatId int64, slowModeDelay int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":           "setChatSlowModeDelay",
@@ -4838,7 +4925,7 @@ func (client *Client) AddChatMembers(chatId int64, userIds []int64) (*Ok, error)
 
 }
 
-// SetChatMemberStatus Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if you need to pass some additional parameters
+// SetChatMemberStatus Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters needs to be passed
 // @param chatId Chat identifier
 // @param memberId Member identifier. Chats can be only banned and unbanned in supergroups and channels
 // @param status The new status of the member in the chat
@@ -4986,7 +5073,7 @@ func (client *Client) GetChatMember(chatId int64, memberId MessageSender) (*Chat
 // SearchChatMembers Searches for a specified query in the first name, last name and username of the members of a specified chat. Requires administrator rights in channels
 // @param chatId Chat identifier
 // @param query Query to search for
-// @param limit The maximum number of users to be returned
+// @param limit The maximum number of users to be returned; up to 200
 // @param filter The type of users to search for; pass null to search among all chat members
 func (client *Client) SearchChatMembers(chatId int64, query string, limit int32, filter ChatMembersFilter) (*ChatMembers, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -5579,14 +5666,18 @@ func (client *Client) ReplacePrimaryChatInviteLink(chatId int64) (*ChatInviteLin
 
 // CreateChatInviteLink Creates a new invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat
 // @param chatId Chat identifier
+// @param name Invite link name; 0-32 characters
 // @param expireDate Point in time (Unix timestamp) when the link will expire; pass 0 if never
 // @param memberLimit The maximum number of chat members that can join the chat by the link simultaneously; 0-99999; pass 0 if not limited
-func (client *Client) CreateChatInviteLink(chatId int64, expireDate int32, memberLimit int32) (*ChatInviteLink, error) {
+// @param createsJoinRequest True, if the link only creates join request. If true, member_limit must not be specified
+func (client *Client) CreateChatInviteLink(chatId int64, name string, expireDate int32, memberLimit int32, createsJoinRequest bool) (*ChatInviteLink, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":        "createChatInviteLink",
-		"chat_id":      chatId,
-		"expire_date":  expireDate,
-		"member_limit": memberLimit,
+		"@type":                "createChatInviteLink",
+		"chat_id":              chatId,
+		"name":                 name,
+		"expire_date":          expireDate,
+		"member_limit":         memberLimit,
+		"creates_join_request": createsJoinRequest,
 	})
 
 	if err != nil {
@@ -5606,15 +5697,19 @@ func (client *Client) CreateChatInviteLink(chatId int64, expireDate int32, membe
 // EditChatInviteLink Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
 // @param chatId Chat identifier
 // @param inviteLink Invite link to be edited
+// @param name Invite link name; 0-32 characters
 // @param expireDate Point in time (Unix timestamp) when the link will expire; pass 0 if never
 // @param memberLimit The maximum number of chat members that can join the chat by the link simultaneously; 0-99999; pass 0 if not limited
-func (client *Client) EditChatInviteLink(chatId int64, inviteLink string, expireDate int32, memberLimit int32) (*ChatInviteLink, error) {
+// @param createsJoinRequest True, if the link only creates join request. If true, member_limit must not be specified
+func (client *Client) EditChatInviteLink(chatId int64, inviteLink string, name string, expireDate int32, memberLimit int32, createsJoinRequest bool) (*ChatInviteLink, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":        "editChatInviteLink",
-		"chat_id":      chatId,
-		"invite_link":  inviteLink,
-		"expire_date":  expireDate,
-		"member_limit": memberLimit,
+		"@type":                "editChatInviteLink",
+		"chat_id":              chatId,
+		"invite_link":          inviteLink,
+		"name":                 name,
+		"expire_date":          expireDate,
+		"member_limit":         memberLimit,
+		"creates_join_request": createsJoinRequest,
 	})
 
 	if err != nil {
@@ -5683,7 +5778,7 @@ func (client *Client) GetChatInviteLinkCounts(chatId int64) (*ChatInviteLinkCoun
 // @param isRevoked Pass true if revoked links needs to be returned instead of active or expired
 // @param offsetDate Creation date of an invite link starting after which to return invite links; use 0 to get results from the beginning
 // @param offsetInviteLink Invite link starting after which to return invite links; use empty string to get results from the beginning
-// @param limit The maximum number of invite links to return
+// @param limit The maximum number of invite links to return; up to 100
 func (client *Client) GetChatInviteLinks(chatId int64, creatorUserId int64, isRevoked bool, offsetDate int32, offsetInviteLink string, limit int32) (*ChatInviteLinks, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":              "getChatInviteLinks",
@@ -5713,7 +5808,7 @@ func (client *Client) GetChatInviteLinks(chatId int64, creatorUserId int64, isRe
 // @param chatId Chat identifier
 // @param inviteLink Invite link for which to return chat members
 // @param offsetMember A chat member from which to return next chat members; pass null to get results from the beginning
-// @param limit The maximum number of chat members to return
+// @param limit The maximum number of chat members to return; up to 100
 func (client *Client) GetChatInviteLinkMembers(chatId int64, inviteLink string, offsetMember *ChatInviteLinkMember, limit int32) (*ChatInviteLinkMembers, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":         "getChatInviteLinkMembers",
@@ -5853,9 +5948,87 @@ func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 
 }
 
+// GetChatJoinRequests Returns pending join requests in a chat
+// @param chatId Chat identifier
+// @param inviteLink Invite link for which to return join requests. If empty, all join requests will be returned. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param query A query to search for in the first names, last names and usernames of the users to return
+// @param offsetRequest A chat join request from which to return next requests; pass null to get results from the beginning
+// @param limit The maximum number of chat join requests to return
+func (client *Client) GetChatJoinRequests(chatId int64, inviteLink string, query string, offsetRequest *ChatJoinRequest, limit int32) (*ChatJoinRequests, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":          "getChatJoinRequests",
+		"chat_id":        chatId,
+		"invite_link":    inviteLink,
+		"query":          query,
+		"offset_request": offsetRequest,
+		"limit":          limit,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var chatJoinRequests ChatJoinRequests
+	err = json.Unmarshal(result.Raw, &chatJoinRequests)
+	return &chatJoinRequests, err
+
+}
+
+// ApproveChatJoinRequest Approves pending join request in a chat
+// @param chatId Chat identifier
+// @param userId Identifier of the user, which request will be approved
+func (client *Client) ApproveChatJoinRequest(chatId int64, userId int64) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "approveChatJoinRequest",
+		"chat_id": chatId,
+		"user_id": userId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
+// DeclineChatJoinRequest Declines pending join request in a chat
+// @param chatId Chat identifier
+// @param userId Identifier of the user, which request will be declined
+func (client *Client) DeclineChatJoinRequest(chatId int64, userId int64) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "declineChatJoinRequest",
+		"chat_id": chatId,
+		"user_id": userId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+
+}
+
 // CreateCall Creates a new call
 // @param userId Identifier of the user to be called
-// @param protocol Description of the call protocols supported by the application
+// @param protocol The call protocols supported by the application
 // @param isVideo True, if a video call needs to be created
 func (client *Client) CreateCall(userId int64, protocol *CallProtocol, isVideo bool) (*CallId, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -5881,7 +6054,7 @@ func (client *Client) CreateCall(userId int64, protocol *CallProtocol, isVideo b
 
 // AcceptCall Accepts an incoming call
 // @param callId Call identifier
-// @param protocol Description of the call protocols supported by the application
+// @param protocol The call protocols supported by the application
 func (client *Client) AcceptCall(callId int32, protocol *CallProtocol) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "acceptCall",
@@ -6009,11 +6182,11 @@ func (client *Client) SendCallDebugInformation(callId int32, debugInformation st
 
 }
 
-// GetVoiceChatAvailableParticipants Returns list of participant identifiers, which can be used to join voice chats in a chat
+// GetVideoChatAvailableParticipants Returns list of participant identifiers, which can be used to join video chats in a chat
 // @param chatId Chat identifier
-func (client *Client) GetVoiceChatAvailableParticipants(chatId int64) (*MessageSenders, error) {
+func (client *Client) GetVideoChatAvailableParticipants(chatId int64) (*MessageSenders, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "getVoiceChatAvailableParticipants",
+		"@type":   "getVideoChatAvailableParticipants",
 		"chat_id": chatId,
 	})
 
@@ -6031,12 +6204,12 @@ func (client *Client) GetVoiceChatAvailableParticipants(chatId int64) (*MessageS
 
 }
 
-// SetVoiceChatDefaultParticipant Changes default participant identifier, which can be used to join voice chats in a chat
+// SetVideoChatDefaultParticipant Changes default participant identifier, which can be used to join video chats in a chat
 // @param chatId Chat identifier
-// @param defaultParticipantId Default group call participant identifier to join the voice chats
-func (client *Client) SetVoiceChatDefaultParticipant(chatId int64, defaultParticipantId MessageSender) (*Ok, error) {
+// @param defaultParticipantId Default group call participant identifier to join the video chats
+func (client *Client) SetVideoChatDefaultParticipant(chatId int64, defaultParticipantId MessageSender) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                  "setVoiceChatDefaultParticipant",
+		"@type":                  "setVideoChatDefaultParticipant",
 		"chat_id":                chatId,
 		"default_participant_id": defaultParticipantId,
 	})
@@ -6055,13 +6228,13 @@ func (client *Client) SetVoiceChatDefaultParticipant(chatId int64, defaultPartic
 
 }
 
-// CreateVoiceChat Creates a voice chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires can_manage_voice_chats rights
-// @param chatId Chat identifier, in which the voice chat will be created
+// CreateVideoChat Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires can_manage_video_chats rights
+// @param chatId Chat identifier, in which the video chat will be created
 // @param title Group call title; if empty, chat title will be used
-// @param startDate Point in time (Unix timestamp) when the group call is supposed to be started by an administrator; 0 to start the voice chat immediately. The date must be at least 10 seconds and at most 8 days in the future
-func (client *Client) CreateVoiceChat(chatId int64, title string, startDate int32) (*GroupCallId, error) {
+// @param startDate Point in time (Unix timestamp) when the group call is supposed to be started by an administrator; 0 to start the video chat immediately. The date must be at least 10 seconds and at most 8 days in the future
+func (client *Client) CreateVideoChat(chatId int64, title string, startDate int32) (*GroupCallId, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":      "createVoiceChat",
+		"@type":      "createVideoChat",
 		"chat_id":    chatId,
 		"title":      title,
 		"start_date": startDate,
@@ -6151,7 +6324,7 @@ func (client *Client) ToggleGroupCallEnabledStartNotification(groupCallId int32,
 
 // JoinGroupCall Joins an active group call. Returns join response payload for tgcalls
 // @param groupCallId Group call identifier
-// @param participantId Identifier of a group call participant, which will be used to join the call; pass null to join as self; voice chats only
+// @param participantId Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats only
 // @param audioSourceId Caller audio channel synchronization source identifier; received from tgcalls
 // @param payload Group call join payload; received from tgcalls
 // @param isMuted True, if the user's microphone is muted
@@ -6325,7 +6498,7 @@ func (client *Client) RevokeGroupCallInviteLink(groupCallId int32) (*Ok, error) 
 
 }
 
-// InviteGroupCallParticipants Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for voice chats
+// InviteGroupCallParticipants Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for video chats
 // @param groupCallId Group call identifier
 // @param userIds User identifiers. At most 10 users can be invited simultaneously
 func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []int64) (*Ok, error) {
@@ -6349,7 +6522,7 @@ func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []i
 
 }
 
-// GetGroupCallInviteLink Returns invite link to a voice chat in a public chat
+// GetGroupCallInviteLink Returns invite link to a video chat in a public chat
 // @param groupCallId Group call identifier
 // @param canSelfUnmute Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited user to unmute themselves. Requires groupCall.can_be_managed group call flag
 func (client *Client) GetGroupCallInviteLink(groupCallId int32, canSelfUnmute bool) (*HttpUrl, error) {
@@ -6577,7 +6750,7 @@ func (client *Client) ToggleGroupCallParticipantIsHandRaised(groupCallId int32, 
 
 // LoadGroupCallParticipants Loads more participants of a group call. The loaded participants will be received through updates. Use the field groupCall.loaded_all_participants to check whether all participants has already been loaded
 // @param groupCallId Group call identifier. The group call must be previously received through getGroupCall and must be joined or being joined
-// @param limit The maximum number of participants to load
+// @param limit The maximum number of participants to load; up to 100
 func (client *Client) LoadGroupCallParticipants(groupCallId int32, limit int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":         "loadGroupCallParticipants",
@@ -7044,7 +7217,7 @@ func (client *Client) GetInstalledStickerSets(isMasks bool) (*StickerSets, error
 // GetArchivedStickerSets Returns a list of archived sticker sets
 // @param isMasks Pass true to return mask stickers sets; pass false to return ordinary sticker sets
 // @param offsetStickerSetId Identifier of the sticker set from which to return the result
-// @param limit The maximum number of sticker sets to return
+// @param limit The maximum number of sticker sets to return; up to 100
 func (client *Client) GetArchivedStickerSets(isMasks bool, offsetStickerSetId JSONInt64, limit int32) (*StickerSets, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                 "getArchivedStickerSets",
@@ -7069,7 +7242,7 @@ func (client *Client) GetArchivedStickerSets(isMasks bool, offsetStickerSetId JS
 
 // GetTrendingStickerSets Returns a list of trending sticker sets. For optimal performance, the number of returned sticker sets is chosen by TDLib
 // @param offset The offset from which to return the sticker sets; must be non-negative
-// @param limit The maximum number of sticker sets to be returned; must be non-negative. For optimal performance, the number of returned sticker sets is chosen by TDLib and can be smaller than the specified limit, even if the end of the list has not been reached
+// @param limit The maximum number of sticker sets to be returned; up to 100. For optimal performance, the number of returned sticker sets is chosen by TDLib and can be smaller than the specified limit, even if the end of the list has not been reached
 func (client *Client) GetTrendingStickerSets(offset int32, limit int32) (*StickerSets, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":  "getTrendingStickerSets",
@@ -7478,6 +7651,28 @@ func (client *Client) SearchEmojis(text string, exactMatch bool, inputLanguageCo
 	var emojis Emojis
 	err = json.Unmarshal(result.Raw, &emojis)
 	return &emojis, err
+
+}
+
+// GetAnimatedEmoji Returns an animated emoji corresponding to a given emoji. Returns a 404 error if the emoji has no animated emoji
+// @param emoji The emoji
+func (client *Client) GetAnimatedEmoji(emoji string) (*AnimatedEmoji, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type": "getAnimatedEmoji",
+		"emoji": emoji,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var animatedEmoji AnimatedEmoji
+	err = json.Unmarshal(result.Raw, &animatedEmoji)
+	return &animatedEmoji, err
 
 }
 
@@ -11387,8 +11582,8 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatVoiceChatType:
-		var update UpdateChatVoiceChat
+	case UpdateChatVideoChatType:
+		var update UpdateChatVideoChat
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -11434,6 +11629,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateChatThemeType:
 		var update UpdateChatTheme
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatPendingJoinRequestsType:
+		var update UpdateChatPendingJoinRequests
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -11719,6 +11919,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateChatMemberType:
 		var update UpdateChatMember
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateNewChatJoinRequestType:
+		var update UpdateNewChatJoinRequest
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
