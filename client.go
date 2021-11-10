@@ -2,37 +2,25 @@ package tdlib
 
 //#cgo linux CFLAGS: -I/usr/local/include
 //#cgo darwin CFLAGS: -I/usr/local/include
-//#cgo windows CFLAGS: -IC:/src/tdlib -IC:/src/tdlib/build
-//#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson_static -ltdjson_private -ltdapi -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
-//#cgo darwin LDFLAGS: -L/usr/local/lib -L/usr/local/opt/openssl/lib -ltdjson_static -ltdjson_private -ltdapi -ltdclient -ltdcore -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
-//#cgo windows LDFLAGS: -LC:/src/tdlib/build/Release -ltdjson
+//#cgo windows CFLAGS: -IE:/src/tdlib -IE:/src/tdlib/build
+//#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdapi -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
+//#cgo darwin LDFLAGS: -L/usr/local/lib -L/usr/local/opt/openssl/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdapi -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
+//#cgo windows LDFLAGS: -LE:/src/tdlib/build/Release -ltdjson
 //#include <stdlib.h>
 //#include <td/telegram/td_json_client.h>
 //#include <td/telegram/td_log.h>
 import "C"
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
 	"reflect"
-	"strconv"
-	"strings"
 	"sync"
 	"time"
 	"unsafe"
 )
-
-// UpdateData alias for use in UpdateMsg
-type UpdateData map[string]interface{}
-
-// UpdateMsg is used to unmarshal recieved json strings into
-type UpdateMsg struct {
-	Data UpdateData
-	Raw  []byte
-}
 
 // EventFilterFunc used to filter out unwanted messages in receiver channels
 type EventFilterFunc func(msg *TdMessage) bool
@@ -46,15 +34,13 @@ type EventReceiver struct {
 
 // Client is the Telegram TdLib client
 type Client struct {
-	Client         unsafe.Pointer
-	Config         Config
-	rawUpdates     chan UpdateMsg
-	receivers      []EventReceiver
-	waiters        map[string]chan UpdateMsg
-	msgWaiters     map[int64]chan UpdateMsg
-	receiverLock   *sync.Mutex
-	waitersLock    *sync.RWMutex
-	msgWaitersLock *sync.RWMutex
+	Client       unsafe.Pointer
+	Config       Config
+	rawUpdates   chan UpdateMsg
+	receivers    []EventReceiver
+	waiters      map[string]chan UpdateMsg
+	receiverLock *sync.Mutex
+	waitersLock  *sync.RWMutex
 }
 
 // Config holds tdlibParameters
@@ -77,7 +63,7 @@ type Config struct {
 	IgnoreFileNames        bool   // If set to true, original file names will be ignored. Otherwise, downloaded files will be saved under names as close as possible to the original name.
 }
 
-// NewClient Creates a new instance of TDLib.
+// NewClient Creates a new instance of
 // Has two public fields:
 // Client itself and RawUpdates channel
 func NewClient(config Config) *Client {
@@ -88,10 +74,8 @@ func NewClient(config Config) *Client {
 	client.receivers = make([]EventReceiver, 0, 1)
 	client.receiverLock = &sync.Mutex{}
 	client.waitersLock = &sync.RWMutex{}
-	client.msgWaitersLock = &sync.RWMutex{}
 	client.Config = config
 	client.waiters = make(map[string]chan UpdateMsg)
-	client.msgWaiters = make(map[int64]chan UpdateMsg)
 
 	go func() {
 		for {
@@ -102,6 +86,7 @@ func NewClient(config Config) *Client {
 
 			// does new update has @extra field?
 			if extra, hasExtra := updateData["@extra"].(string); hasExtra {
+
 				client.waitersLock.RLock()
 				waiter, found := client.waiters[extra]
 				client.waitersLock.RUnlock()
@@ -117,19 +102,6 @@ func NewClient(config Config) *Client {
 			} else {
 				// does new updates has @type field?
 				if msgType, hasType := updateData["@type"]; hasType {
-					if msgType == "updateMessageSendSucceeded" {
-						client.msgWaitersLock.RLock()
-						msgWaiter, found2 := client.msgWaiters[int64(updateData["old_message_id"].(float64))]
-						client.msgWaitersLock.RUnlock()
-
-						if found2 {
-							// found? send it to waiter channel
-							msgWaiter <- UpdateMsg{Data: updateData, Raw: updateBytes}
-
-							// trying to prevent memory leak
-							close(msgWaiter)
-						}
-					}
 
 					if client.rawUpdates != nil {
 						// if rawUpdates is initialized, send the update in rawUpdates channel
@@ -139,15 +111,15 @@ func NewClient(config Config) *Client {
 					client.receiverLock.Lock()
 					for _, receiver := range client.receivers {
 						if msgType == receiver.Instance.MessageType() {
-							var newMsg TdMessage
-							newMsg = reflect.New(reflect.ValueOf(receiver.Instance).Elem().Type()).Interface().(TdMessage)
+							newMsg := reflect.New(reflect.ValueOf(receiver.Instance).Elem().Type()).Interface().(TdMessage)
 
 							err := json.Unmarshal(updateBytes, &newMsg)
 							if err != nil {
 								fmt.Printf("Error unmarhaling to type %v", err)
-							}
-							if receiver.FilterFunc(&newMsg) {
-								receiver.Chan <- newMsg
+							} else {
+								if receiver.FilterFunc(&newMsg) {
+									receiver.Chan <- newMsg
+								}
 							}
 						}
 					}
@@ -167,6 +139,8 @@ func (client *Client) GetRawUpdatesChannel(capacity int) chan UpdateMsg {
 }
 
 // AddEventReceiver adds a new receiver to be subscribed in receiver channels
+// @param msgInstance what kind of message do you want to receive?
+// @param
 func (client *Client) AddEventReceiver(msgInstance TdMessage, filterFunc EventFilterFunc, channelCapacity int) EventReceiver {
 	receiver := EventReceiver{
 		Instance:   msgInstance,
@@ -251,7 +225,7 @@ func SetFilePath(path string) {
 	C.free(unsafe.Pointer(query))
 }
 
-// SetLogVerbosityLevel Sets the verbosity level of the internal logging of TDLib.
+// SetLogVerbosityLevel Sets the verbosity level of the internal logging of
 // By default the TDLib uses a verbosity level of 5 for logging.
 func SetLogVerbosityLevel(level int) {
 	bytes, _ := json.Marshal(UpdateData{
@@ -306,40 +280,6 @@ func (client *Client) SendAndCatch(jsonQuery interface{}) (UpdateMsg, error) {
 		client.waitersLock.Lock()
 		delete(client.waiters, randomString)
 		client.waitersLock.Unlock()
-
-		if update["@type"] == "sendMessage" {
-			var messageDummy Message
-			json.Unmarshal(response.Raw, &messageDummy)
-
-			if messageDummy.Content != nil {
-				if messageDummy.Content.GetMessageContentEnum() == "messageText" || messageDummy.Content.GetMessageContentEnum() == "messageDice" {
-					msgWaiter := make(chan UpdateMsg, 1)
-					client.msgWaitersLock.Lock()
-					client.msgWaiters[messageDummy.Id] = msgWaiter
-					client.msgWaitersLock.Unlock()
-
-					select {
-					case updateResp := <-msgWaiter:
-						var successMsg UpdateMessageSendSucceeded
-						json.Unmarshal(updateResp.Raw, &successMsg)
-
-						response.Data = updateResp.Data["message"].(map[string]interface{})
-						if str, err := json.Marshal(updateResp.Data["message"].(map[string]interface{})); err == nil {
-							response.Raw = []byte(str)
-						} else {
-							response.Raw = bytes.Replace(response.Raw, []byte("{\"@type\":\"messageSendingStatePending\"}"), []byte("{\"@type\":\"updateMessageSendSucceeded\"}"), 1)
-							response.Raw = bytes.Replace(response.Raw, []byte(strconv.FormatInt(messageDummy.Id, 10)), []byte(strconv.FormatInt(successMsg.Message.Id, 10)), 1)
-						}
-
-						return response, nil
-					case <-time.After(1 * time.Second):
-						client.msgWaitersLock.Lock()
-						delete(client.msgWaiters, messageDummy.Id)
-						client.msgWaitersLock.Unlock()
-					}
-				}
-			}
-		}
 
 		return response, nil
 		// or timeout
@@ -399,7 +339,8 @@ func (client *Client) sendTdLibParams() {
 
 // SendPhoneNumber sends phone number to tdlib
 func (client *Client) SendPhoneNumber(phoneNumber string) (AuthorizationState, error) {
-	_, err := client.SetAuthenticationPhoneNumber(phoneNumber, NewPhoneNumberAuthenticationSettings(false, true, false))
+	phoneNumberConfig := PhoneNumberAuthenticationSettings{AllowFlashCall: false, IsCurrentPhoneNumber: false, AllowSmsRetrieverApi: false}
+	_, err := client.SetAuthenticationPhoneNumber(phoneNumber, &phoneNumberConfig)
 
 	if err != nil {
 		return nil, err
@@ -431,55 +372,4 @@ func (client *Client) SendAuthPassword(password string) (AuthorizationState, err
 
 	authState, err := client.GetAuthorizationState()
 	return authState, err
-}
-
-func IsCommmand(text string) bool {
-	if text != "" {
-		if text[0] == '/' {
-			return true
-		}
-	}
-	return false
-}
-
-func CheckCommand(text string, entities []TextEntity) string {
-	if IsCommmand(text) {
-		// Check text entities and make bot happy!
-		if len(entities) >= 1 {
-			// Get first command
-			if entities[0].Type.GetTextEntityTypeEnum() == "textEntityTypeBotCommand" {
-				// e.g.: { "text": "/hello@world_bot", "textEntity": { offset: 0, length: 16 } }
-				// Result: "/hello"
-				if i := strings.Index(text[:entities[0].Length], "@"); i != -1 {
-					return text[:i]
-				}
-				return text[:entities[0].Length]
-			}
-		} else {
-			// Since userbot do not have bot command entities in Private Chat, so make userbot happy too!
-			// e.g.: ["/hello@world_bot", "/hello@", "/hello@123"]
-			// Result: "/hello"
-			if i := strings.Index(text, "@"); i != -1 {
-				return text[:i]
-			}
-			// e.g. ["/hello 123", "/hell o 123"]
-			// Result: "/hello", "/hell"
-			if i := strings.Index(text, " "); i != -1 {
-				return text[:i]
-			}
-			return text
-		}
-	}
-	return ""
-}
-
-func CommandArgument(text string) string {
-	if IsCommmand(text) {
-		// e.g. ["/hello 123", "/hell o 123"]
-		// Result: "123", "o 123"
-		if i := strings.Index(text, " "); i != -1 {
-			return text[i+1:]
-		}
-	}
-	return ""
 }
