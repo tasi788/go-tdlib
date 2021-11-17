@@ -47,7 +47,7 @@ func (client *Client) GetPhoneNumberInfo(phoneNumberPrefix string) (*PhoneNumber
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var phoneNumberInfo PhoneNumberInfo
@@ -70,7 +70,7 @@ func (client *Client) GetPhoneNumberInfoSync(languageCode string, phoneNumberPre
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var phoneNumberInfo PhoneNumberInfo

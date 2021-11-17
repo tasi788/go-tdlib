@@ -45,7 +45,7 @@ func (client *Client) ReadFilePart(fileId int32, offset int32, count int32) (*Fi
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var filePart FilePart
@@ -74,7 +74,7 @@ func (client *Client) GetGroupCallStreamSegment(groupCallId int32, timeOffset in
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var filePart FilePart

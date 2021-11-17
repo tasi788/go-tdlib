@@ -83,7 +83,7 @@ func (client *Client) GetChatMember(chatId int64, memberId MessageSender) (*Chat
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatMember ChatMember

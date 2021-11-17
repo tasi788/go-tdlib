@@ -96,7 +96,7 @@ func (client *Client) AddProxy(server string, port int32, enable bool, typeParam
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var proxy Proxy
@@ -125,7 +125,7 @@ func (client *Client) EditProxy(proxyId int32, server string, port int32, enable
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var proxyDummy Proxy

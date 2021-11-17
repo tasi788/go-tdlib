@@ -323,7 +323,7 @@ func (client *Client) GetChatStatistics(chatId int64, isDark bool) (ChatStatisti
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch ChatStatisticsEnum(result.Data["@type"].(string)) {

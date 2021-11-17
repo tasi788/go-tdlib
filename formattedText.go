@@ -46,7 +46,7 @@ func (client *Client) ParseTextEntities(text string, parseMode TextParseMode) (*
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var formattedText FormattedText
@@ -67,7 +67,7 @@ func (client *Client) ParseMarkdown(text *FormattedText) (*FormattedText, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var formattedText FormattedText
@@ -88,7 +88,7 @@ func (client *Client) GetMarkdownText(text *FormattedText) (*FormattedText, erro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var formattedText FormattedText

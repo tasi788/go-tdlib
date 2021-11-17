@@ -54,7 +54,7 @@ func (client *Client) GetPasswordState() (*PasswordState, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState
@@ -83,7 +83,7 @@ func (client *Client) SetPassword(oldPassword string, newPassword string, newHin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState
@@ -106,7 +106,7 @@ func (client *Client) SetRecoveryEmailAddress(password string, newRecoveryEmailA
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState
@@ -127,7 +127,7 @@ func (client *Client) CheckRecoveryEmailAddressCode(code string) (*PasswordState
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState
@@ -146,7 +146,7 @@ func (client *Client) ResendRecoveryEmailAddressCode() (*PasswordState, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState
@@ -171,7 +171,7 @@ func (client *Client) RecoverPassword(recoveryCode string, newPassword string, n
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var passwordState PasswordState

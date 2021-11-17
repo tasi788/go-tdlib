@@ -54,7 +54,7 @@ func (client *Client) GetChatInviteLinks(chatId int64, creatorUserId int64, isRe
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLinks ChatInviteLinks
@@ -77,7 +77,7 @@ func (client *Client) RevokeChatInviteLink(chatId int64, inviteLink string) (*Ch
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLinks ChatInviteLinks

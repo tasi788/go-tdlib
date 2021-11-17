@@ -44,7 +44,7 @@ func (client *Client) GetVideoChatAvailableParticipants(chatId int64) (*MessageS
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageSenders MessageSenders
@@ -67,7 +67,7 @@ func (client *Client) GetBlockedMessageSenders(offset int32, limit int32) (*Mess
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageSenders MessageSenders

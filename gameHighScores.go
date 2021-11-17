@@ -45,7 +45,7 @@ func (client *Client) GetGameHighScores(chatId int64, messageId int64, userId in
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var gameHighScores GameHighScores
@@ -68,7 +68,7 @@ func (client *Client) GetInlineGameHighScores(inlineMessageId string, userId int
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var gameHighScores GameHighScores

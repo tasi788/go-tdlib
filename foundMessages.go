@@ -55,7 +55,7 @@ func (client *Client) SearchSecretMessages(chatId int64, query string, offset st
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var foundMessages FoundMessages
@@ -82,7 +82,7 @@ func (client *Client) GetMessagePublicForwards(chatId int64, messageId int64, of
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var foundMessages FoundMessages

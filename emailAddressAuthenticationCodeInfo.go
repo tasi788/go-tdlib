@@ -42,7 +42,7 @@ func (client *Client) RequestPasswordRecovery() (*EmailAddressAuthenticationCode
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var emailAddressAuthenticationCodeInfo EmailAddressAuthenticationCodeInfo
@@ -63,7 +63,7 @@ func (client *Client) SendEmailAddressVerificationCode(emailAddress string) (*Em
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var emailAddressAuthenticationCodeInfo EmailAddressAuthenticationCodeInfo
@@ -82,7 +82,7 @@ func (client *Client) ResendEmailAddressVerificationCode() (*EmailAddressAuthent
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var emailAddressAuthenticationCodeInfo EmailAddressAuthenticationCodeInfo

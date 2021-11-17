@@ -41,7 +41,7 @@ func (client *Client) GetStickerEmojis(sticker InputFile) (*Emojis, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var emojis Emojis
@@ -66,7 +66,7 @@ func (client *Client) SearchEmojis(text string, exactMatch bool, inputLanguageCo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var emojis Emojis

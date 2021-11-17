@@ -276,7 +276,7 @@ func (client *Client) GetMessage(chatId int64, messageId int64) (*Message, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -299,7 +299,7 @@ func (client *Client) GetMessageLocally(chatId int64, messageId int64) (*Message
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -322,7 +322,7 @@ func (client *Client) GetRepliedMessage(chatId int64, messageId int64) (*Message
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -343,7 +343,7 @@ func (client *Client) GetChatPinnedMessage(chatId int64) (*Message, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var message Message
@@ -368,7 +368,7 @@ func (client *Client) GetCallbackQueryMessage(chatId int64, messageId int64, cal
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -391,7 +391,7 @@ func (client *Client) GetChatMessageByDate(chatId int64, date int32) (*Message, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var message Message
@@ -422,7 +422,7 @@ func (client *Client) SendMessage(chatId int64, messageThreadId int64, replyToMe
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -447,7 +447,7 @@ func (client *Client) SendBotStartMessage(botUserId int64, chatId int64, paramet
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var message Message
@@ -480,7 +480,7 @@ func (client *Client) SendInlineQueryResultMessage(chatId int64, messageThreadId
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -509,7 +509,7 @@ func (client *Client) AddLocalMessage(chatId int64, sender MessageSender, replyT
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -536,7 +536,7 @@ func (client *Client) EditMessageText(chatId int64, messageId int64, replyMarkup
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -567,7 +567,7 @@ func (client *Client) EditMessageLiveLocation(chatId int64, messageId int64, rep
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -594,7 +594,7 @@ func (client *Client) EditMessageMedia(chatId int64, messageId int64, replyMarku
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -621,7 +621,7 @@ func (client *Client) EditMessageCaption(chatId int64, messageId int64, replyMar
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -646,7 +646,7 @@ func (client *Client) EditMessageReplyMarkup(chatId int64, messageId int64, repl
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message
@@ -677,7 +677,7 @@ func (client *Client) SetGameScore(chatId int64, messageId int64, editMessage bo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messageDummy Message

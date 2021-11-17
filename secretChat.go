@@ -89,7 +89,7 @@ func (client *Client) GetSecretChat(secretChatId int32) (*SecretChat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var secretChatDummy SecretChat

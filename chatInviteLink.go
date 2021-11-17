@@ -74,7 +74,7 @@ func (client *Client) ReplacePrimaryChatInviteLink(chatId int64) (*ChatInviteLin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLink ChatInviteLink
@@ -103,7 +103,7 @@ func (client *Client) CreateChatInviteLink(chatId int64, name string, expireDate
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLink ChatInviteLink
@@ -134,7 +134,7 @@ func (client *Client) EditChatInviteLink(chatId int64, inviteLink string, name s
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLink ChatInviteLink
@@ -157,7 +157,7 @@ func (client *Client) GetChatInviteLink(chatId int64, inviteLink string) (*ChatI
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatInviteLink ChatInviteLink

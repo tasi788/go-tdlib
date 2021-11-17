@@ -43,7 +43,7 @@ func (client *Client) RegisterDevice(deviceToken DeviceToken, otherUserIds []int
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var pushReceiverId PushReceiverId
@@ -64,7 +64,7 @@ func (client *Client) GetPushReceiverId(payload string) (*PushReceiverId, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var pushReceiverId PushReceiverId

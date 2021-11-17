@@ -47,7 +47,7 @@ func (client *Client) GetStorageStatistics(chatLimit int32) (*StorageStatistics,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var storageStatistics StorageStatistics
@@ -84,7 +84,7 @@ func (client *Client) OptimizeStorage(size int64, ttl int32, count int32, immuni
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var storageStatistics StorageStatistics

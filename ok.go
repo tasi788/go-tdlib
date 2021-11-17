@@ -38,7 +38,7 @@ func (client *Client) SetTdlibParameters(parameters *TdlibParameters) (*Ok, erro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -59,7 +59,7 @@ func (client *Client) CheckDatabaseEncryptionKey(encryptionKey []byte) (*Ok, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -82,7 +82,7 @@ func (client *Client) SetAuthenticationPhoneNumber(phoneNumber string, settings 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -101,7 +101,7 @@ func (client *Client) ResendAuthenticationCode() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -122,7 +122,7 @@ func (client *Client) CheckAuthenticationCode(code string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -143,7 +143,7 @@ func (client *Client) RequestQrCodeAuthentication(otherUserIds []int64) (*Ok, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -166,7 +166,7 @@ func (client *Client) RegisterUser(firstName string, lastName string) (*Ok, erro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -187,7 +187,7 @@ func (client *Client) CheckAuthenticationPassword(password string) (*Ok, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -206,7 +206,7 @@ func (client *Client) RequestAuthenticationPasswordRecovery() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -227,7 +227,7 @@ func (client *Client) CheckAuthenticationPasswordRecoveryCode(recoveryCode strin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -252,7 +252,7 @@ func (client *Client) RecoverAuthenticationPassword(recoveryCode string, newPass
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -273,7 +273,7 @@ func (client *Client) CheckAuthenticationBotToken(token string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -292,7 +292,7 @@ func (client *Client) LogOut() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -311,7 +311,7 @@ func (client *Client) Close() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -330,7 +330,7 @@ func (client *Client) Destroy() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -351,7 +351,7 @@ func (client *Client) SetDatabaseEncryptionKey(newEncryptionKey []byte) (*Ok, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -372,7 +372,7 @@ func (client *Client) CheckPasswordRecoveryCode(recoveryCode string) (*Ok, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -391,7 +391,7 @@ func (client *Client) CancelPasswordReset() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -414,7 +414,7 @@ func (client *Client) LoadChats(chatList ChatList, limit int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -437,7 +437,7 @@ func (client *Client) RemoveTopChat(category TopChatCategory, chatId int64) (*Ok
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -458,7 +458,7 @@ func (client *Client) AddRecentlyFoundChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -479,7 +479,7 @@ func (client *Client) RemoveRecentlyFoundChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -498,7 +498,7 @@ func (client *Client) ClearRecentlyFoundChats() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -519,7 +519,7 @@ func (client *Client) CheckCreatedPublicChatsLimit(typeParam PublicChatType) (*O
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -544,7 +544,7 @@ func (client *Client) DeleteChatHistory(chatId int64, removeFromChatList bool, r
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -565,7 +565,7 @@ func (client *Client) DeleteChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -586,7 +586,7 @@ func (client *Client) DeleteAllCallMessages(revoke bool) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -609,7 +609,7 @@ func (client *Client) ViewSponsoredMessage(chatId int64, sponsoredMessageId int3
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -632,7 +632,7 @@ func (client *Client) RemoveNotification(notificationGroupId int32, notification
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -655,7 +655,7 @@ func (client *Client) RemoveNotificationGroup(notificationGroupId int32, maxNoti
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -676,7 +676,7 @@ func (client *Client) SendChatScreenshotTakenNotification(chatId int64) (*Ok, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -701,7 +701,7 @@ func (client *Client) DeleteMessages(chatId int64, messageIds []int64, revoke bo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -724,7 +724,7 @@ func (client *Client) DeleteChatMessagesFromUser(chatId int64, userId int64) (*O
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -751,7 +751,7 @@ func (client *Client) DeleteChatMessagesByDate(chatId int64, minDate int32, maxD
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -776,7 +776,7 @@ func (client *Client) EditInlineMessageText(inlineMessageId string, replyMarkup 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -805,7 +805,7 @@ func (client *Client) EditInlineMessageLiveLocation(inlineMessageId string, repl
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -830,7 +830,7 @@ func (client *Client) EditInlineMessageMedia(inlineMessageId string, replyMarkup
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -855,7 +855,7 @@ func (client *Client) EditInlineMessageCaption(inlineMessageId string, replyMark
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -878,7 +878,7 @@ func (client *Client) EditInlineMessageReplyMarkup(inlineMessageId string, reply
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -903,7 +903,7 @@ func (client *Client) EditMessageSchedulingState(chatId int64, messageId int64, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -928,7 +928,7 @@ func (client *Client) SetPollAnswer(chatId int64, messageId int64, optionIds []i
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -953,7 +953,7 @@ func (client *Client) StopPoll(chatId int64, messageId int64, replyMarkup ReplyM
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -974,7 +974,7 @@ func (client *Client) HideSuggestedAction(action SuggestedAction) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1007,7 +1007,7 @@ func (client *Client) AnswerInlineQuery(inlineQueryId JSONInt64, isPersonal bool
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1036,7 +1036,7 @@ func (client *Client) AnswerCallbackQuery(callbackQueryId JSONInt64, text string
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1061,7 +1061,7 @@ func (client *Client) AnswerShippingQuery(shippingQueryId JSONInt64, shippingOpt
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1084,7 +1084,7 @@ func (client *Client) AnswerPreCheckoutQuery(preCheckoutQueryId JSONInt64, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1113,7 +1113,7 @@ func (client *Client) SetInlineGameScore(inlineMessageId string, editMessage boo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1136,7 +1136,7 @@ func (client *Client) DeleteChatReplyMarkup(chatId int64, messageId int64) (*Ok,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1161,7 +1161,7 @@ func (client *Client) SendChatAction(chatId int64, messageThreadId int64, action
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1182,7 +1182,7 @@ func (client *Client) OpenChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1203,7 +1203,7 @@ func (client *Client) CloseChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1230,7 +1230,7 @@ func (client *Client) ViewMessages(chatId int64, messageThreadId int64, messageI
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1253,7 +1253,7 @@ func (client *Client) OpenMessageContent(chatId int64, messageId int64) (*Ok, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1274,7 +1274,7 @@ func (client *Client) ReadAllChatMentions(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1297,7 +1297,7 @@ func (client *Client) AddChatToList(chatId int64, chatList ChatList) (*Ok, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1318,7 +1318,7 @@ func (client *Client) DeleteChatFilter(chatFilterId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1339,7 +1339,7 @@ func (client *Client) ReorderChatFilters(chatFilterIds []int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1362,7 +1362,7 @@ func (client *Client) SetChatTitle(chatId int64, title string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1385,7 +1385,7 @@ func (client *Client) SetChatPhoto(chatId int64, photo InputChatPhoto) (*Ok, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1408,7 +1408,7 @@ func (client *Client) SetChatMessageTtlSetting(chatId int64, ttl int32) (*Ok, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1431,7 +1431,7 @@ func (client *Client) SetChatPermissions(chatId int64, permissions *ChatPermissi
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1454,7 +1454,7 @@ func (client *Client) SetChatTheme(chatId int64, themeName string) (*Ok, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1479,7 +1479,7 @@ func (client *Client) SetChatDraftMessage(chatId int64, messageThreadId int64, d
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1502,7 +1502,7 @@ func (client *Client) SetChatNotificationSettings(chatId int64, notificationSett
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1525,7 +1525,7 @@ func (client *Client) ToggleChatIsMarkedAsUnread(chatId int64, isMarkedAsUnread 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1548,7 +1548,7 @@ func (client *Client) ToggleChatDefaultDisableNotification(chatId int64, default
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1571,7 +1571,7 @@ func (client *Client) SetChatClientData(chatId int64, clientData string) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1594,7 +1594,7 @@ func (client *Client) SetChatDescription(chatId int64, description string) (*Ok,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1617,7 +1617,7 @@ func (client *Client) SetChatDiscussionGroup(chatId int64, discussionChatId int6
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1640,7 +1640,7 @@ func (client *Client) SetChatLocation(chatId int64, location *ChatLocation) (*Ok
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1663,7 +1663,7 @@ func (client *Client) SetChatSlowModeDelay(chatId int64, slowModeDelay int32) (*
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1690,7 +1690,7 @@ func (client *Client) PinChatMessage(chatId int64, messageId int64, disableNotif
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1713,7 +1713,7 @@ func (client *Client) UnpinChatMessage(chatId int64, messageId int64) (*Ok, erro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1734,7 +1734,7 @@ func (client *Client) UnpinAllChatMessages(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1755,7 +1755,7 @@ func (client *Client) JoinChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1776,7 +1776,7 @@ func (client *Client) LeaveChat(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1801,7 +1801,7 @@ func (client *Client) AddChatMember(chatId int64, userId int64, forwardLimit int
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1824,7 +1824,7 @@ func (client *Client) AddChatMembers(chatId int64, userIds []int64) (*Ok, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1849,7 +1849,7 @@ func (client *Client) SetChatMemberStatus(chatId int64, memberId MessageSender, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1876,7 +1876,7 @@ func (client *Client) BanChatMember(chatId int64, memberId MessageSender, banned
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var okDummy Ok
@@ -1901,7 +1901,7 @@ func (client *Client) TransferChatOwnership(chatId int64, userId int64, password
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1922,7 +1922,7 @@ func (client *Client) ClearAllDraftMessages(excludeSecretChats bool) (*Ok, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1945,7 +1945,7 @@ func (client *Client) SetScopeNotificationSettings(scope NotificationSettingsSco
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1964,7 +1964,7 @@ func (client *Client) ResetAllNotificationSettings() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -1989,7 +1989,7 @@ func (client *Client) ToggleChatIsPinned(chatList ChatList, chatId int64, isPinn
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2012,7 +2012,7 @@ func (client *Client) SetPinnedChats(chatList ChatList, chatIds []int64) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2035,7 +2035,7 @@ func (client *Client) CancelDownloadFile(fileId int32, onlyIfPending bool) (*Ok,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2056,7 +2056,7 @@ func (client *Client) CancelUploadFile(fileId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2081,7 +2081,7 @@ func (client *Client) WriteGeneratedFilePart(generationId JSONInt64, offset int3
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2106,7 +2106,7 @@ func (client *Client) SetFileGenerationProgress(generationId JSONInt64, expected
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2129,7 +2129,7 @@ func (client *Client) FinishFileGeneration(generationId JSONInt64, error *Error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2150,7 +2150,7 @@ func (client *Client) DeleteFile(fileId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2175,7 +2175,7 @@ func (client *Client) ImportMessages(chatId int64, messageFile InputFile, attach
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2198,7 +2198,7 @@ func (client *Client) DeleteRevokedChatInviteLink(chatId int64, inviteLink strin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2221,7 +2221,7 @@ func (client *Client) DeleteAllRevokedChatInviteLinks(chatId int64, creatorUserI
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2244,7 +2244,7 @@ func (client *Client) ApproveChatJoinRequest(chatId int64, userId int64) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2267,7 +2267,7 @@ func (client *Client) DeclineChatJoinRequest(chatId int64, userId int64) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2290,7 +2290,7 @@ func (client *Client) AcceptCall(callId int32, protocol *CallProtocol) (*Ok, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2313,7 +2313,7 @@ func (client *Client) SendCallSignalingData(callId int32, data []byte) (*Ok, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2342,7 +2342,7 @@ func (client *Client) DiscardCall(callId int32, isDisconnected bool, duration in
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2369,7 +2369,7 @@ func (client *Client) SendCallRating(callId int32, rating int32, comment string,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2392,7 +2392,7 @@ func (client *Client) SendCallDebugInformation(callId int32, debugInformation st
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2415,7 +2415,7 @@ func (client *Client) SetVideoChatDefaultParticipant(chatId int64, defaultPartic
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2436,7 +2436,7 @@ func (client *Client) StartScheduledGroupCall(groupCallId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2459,7 +2459,7 @@ func (client *Client) ToggleGroupCallEnabledStartNotification(groupCallId int32,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2482,7 +2482,7 @@ func (client *Client) ToggleGroupCallScreenSharingIsPaused(groupCallId int32, is
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2503,7 +2503,7 @@ func (client *Client) EndGroupCallScreenSharing(groupCallId int32) (*Ok, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2526,7 +2526,7 @@ func (client *Client) SetGroupCallTitle(groupCallId int32, title string) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2549,7 +2549,7 @@ func (client *Client) ToggleGroupCallMuteNewParticipants(groupCallId int32, mute
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2570,7 +2570,7 @@ func (client *Client) RevokeGroupCallInviteLink(groupCallId int32) (*Ok, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2593,7 +2593,7 @@ func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []i
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2620,7 +2620,7 @@ func (client *Client) StartGroupCallRecording(groupCallId int32, title string, r
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2641,7 +2641,7 @@ func (client *Client) EndGroupCallRecording(groupCallId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2664,7 +2664,7 @@ func (client *Client) ToggleGroupCallIsMyVideoPaused(groupCallId int32, isMyVide
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2687,7 +2687,7 @@ func (client *Client) ToggleGroupCallIsMyVideoEnabled(groupCallId int32, isMyVid
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2712,7 +2712,7 @@ func (client *Client) SetGroupCallParticipantIsSpeaking(groupCallId int32, audio
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2737,7 +2737,7 @@ func (client *Client) ToggleGroupCallParticipantIsMuted(groupCallId int32, parti
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2762,7 +2762,7 @@ func (client *Client) SetGroupCallParticipantVolumeLevel(groupCallId int32, part
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2787,7 +2787,7 @@ func (client *Client) ToggleGroupCallParticipantIsHandRaised(groupCallId int32, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2810,7 +2810,7 @@ func (client *Client) LoadGroupCallParticipants(groupCallId int32, limit int32) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2831,7 +2831,7 @@ func (client *Client) LeaveGroupCall(groupCallId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2852,7 +2852,7 @@ func (client *Client) DiscardGroupCall(groupCallId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2875,7 +2875,7 @@ func (client *Client) ToggleMessageSenderIsBlocked(sender MessageSender, isBlock
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2902,7 +2902,7 @@ func (client *Client) BlockMessageSenderFromReplies(messageId int64, deleteMessa
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2925,7 +2925,7 @@ func (client *Client) AddContact(contact *Contact, sharePhoneNumber bool) (*Ok, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2946,7 +2946,7 @@ func (client *Client) RemoveContacts(userIds []int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2965,7 +2965,7 @@ func (client *Client) ClearImportedContacts() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -2986,7 +2986,7 @@ func (client *Client) SharePhoneNumber(userId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3011,7 +3011,7 @@ func (client *Client) ChangeStickerSet(setId JSONInt64, isInstalled bool, isArch
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3032,7 +3032,7 @@ func (client *Client) ViewTrendingStickerSets(stickerSetIds []JSONInt64) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3055,7 +3055,7 @@ func (client *Client) ReorderInstalledStickerSets(isMasks bool, stickerSetIds []
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3078,7 +3078,7 @@ func (client *Client) RemoveRecentSticker(isAttached bool, sticker InputFile) (*
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3099,7 +3099,7 @@ func (client *Client) ClearRecentStickers(isAttached bool) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3120,7 +3120,7 @@ func (client *Client) AddFavoriteSticker(sticker InputFile) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3141,7 +3141,7 @@ func (client *Client) RemoveFavoriteSticker(sticker InputFile) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3162,7 +3162,7 @@ func (client *Client) AddSavedAnimation(animation InputFile) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3183,7 +3183,7 @@ func (client *Client) RemoveSavedAnimation(animation InputFile) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3204,7 +3204,7 @@ func (client *Client) RemoveRecentHashtag(hashtag string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3225,7 +3225,7 @@ func (client *Client) SetProfilePhoto(photo InputChatPhoto) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3246,7 +3246,7 @@ func (client *Client) DeleteProfilePhoto(profilePhotoId JSONInt64) (*Ok, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3269,7 +3269,7 @@ func (client *Client) SetName(firstName string, lastName string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3290,7 +3290,7 @@ func (client *Client) SetBio(bio string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3311,7 +3311,7 @@ func (client *Client) SetUsername(username string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3332,7 +3332,7 @@ func (client *Client) SetLocation(location *Location) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3353,7 +3353,7 @@ func (client *Client) CheckChangePhoneNumberCode(code string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3378,7 +3378,7 @@ func (client *Client) SetCommands(scope BotCommandScope, languageCode string, co
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3401,7 +3401,7 @@ func (client *Client) DeleteCommands(scope BotCommandScope, languageCode string)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3422,7 +3422,7 @@ func (client *Client) TerminateSession(sessionId JSONInt64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3441,7 +3441,7 @@ func (client *Client) TerminateAllOtherSessions() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3462,7 +3462,7 @@ func (client *Client) DisconnectWebsite(websiteId JSONInt64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3481,7 +3481,7 @@ func (client *Client) DisconnectAllWebsites() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3504,7 +3504,7 @@ func (client *Client) SetSupergroupUsername(supergroupId int64, username string)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3527,7 +3527,7 @@ func (client *Client) SetSupergroupStickerSet(supergroupId int64, stickerSetId J
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3550,7 +3550,7 @@ func (client *Client) ToggleSupergroupSignMessages(supergroupId int64, signMessa
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3573,7 +3573,7 @@ func (client *Client) ToggleSupergroupIsAllHistoryAvailable(supergroupId int64, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3594,7 +3594,7 @@ func (client *Client) ToggleSupergroupIsBroadcastGroup(supergroupId int64) (*Ok,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3619,7 +3619,7 @@ func (client *Client) ReportSupergroupSpam(supergroupId int64, userId int64, mes
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3640,7 +3640,7 @@ func (client *Client) CloseSecretChat(secretChatId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3659,7 +3659,7 @@ func (client *Client) DeleteSavedOrderInfo() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3678,7 +3678,7 @@ func (client *Client) DeleteSavedCredentials() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3699,7 +3699,7 @@ func (client *Client) RemoveBackground(backgroundId JSONInt64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3718,7 +3718,7 @@ func (client *Client) ResetBackgrounds() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3739,7 +3739,7 @@ func (client *Client) SynchronizeLanguagePack(languagePackId string) (*Ok, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3760,7 +3760,7 @@ func (client *Client) AddCustomServerLanguagePack(languagePackId string) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3783,7 +3783,7 @@ func (client *Client) SetCustomLanguagePack(info *LanguagePackInfo, strings []La
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3804,7 +3804,7 @@ func (client *Client) EditCustomLanguagePackInfo(info *LanguagePackInfo) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3827,7 +3827,7 @@ func (client *Client) SetCustomLanguagePackString(languagePackId string, newStri
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3848,7 +3848,7 @@ func (client *Client) DeleteLanguagePack(languagePackId string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3869,7 +3869,7 @@ func (client *Client) ProcessPushNotification(payload string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3892,7 +3892,7 @@ func (client *Client) SetUserPrivacySettingRules(setting UserPrivacySetting, rul
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3915,7 +3915,7 @@ func (client *Client) SetOption(name string, value OptionValue) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3936,7 +3936,7 @@ func (client *Client) SetAccountTtl(ttl *AccountTtl) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3957,7 +3957,7 @@ func (client *Client) DeleteAccount(reason string) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -3978,7 +3978,7 @@ func (client *Client) RemoveChatActionBar(chatId int64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4005,7 +4005,7 @@ func (client *Client) ReportChat(chatId int64, messageIds []int64, reason ChatRe
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4032,7 +4032,7 @@ func (client *Client) ReportChatPhoto(chatId int64, fileId int32, reason ChatRep
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4053,7 +4053,7 @@ func (client *Client) SetNetworkType(typeParam NetworkType) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4074,7 +4074,7 @@ func (client *Client) AddNetworkStatistics(entry NetworkStatisticsEntry) (*Ok, e
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4093,7 +4093,7 @@ func (client *Client) ResetNetworkStatistics() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4116,7 +4116,7 @@ func (client *Client) SetAutoDownloadSettings(settings *AutoDownloadSettings, ty
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4137,7 +4137,7 @@ func (client *Client) DeletePassportElement(typeParam PassportElementType) (*Ok,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4160,7 +4160,7 @@ func (client *Client) SetPassportElementErrors(userId int64, errors []InputPassp
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4181,7 +4181,7 @@ func (client *Client) CheckPhoneNumberVerificationCode(code string) (*Ok, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4202,7 +4202,7 @@ func (client *Client) CheckEmailAddressVerificationCode(code string) (*Ok, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4225,7 +4225,7 @@ func (client *Client) SendPassportAuthorizationForm(autorizationFormId int32, ty
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4246,7 +4246,7 @@ func (client *Client) CheckPhoneNumberConfirmationCode(code string) (*Ok, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4269,7 +4269,7 @@ func (client *Client) SetBotUpdatesStatus(pendingUpdateCount int32, errorMessage
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4292,7 +4292,7 @@ func (client *Client) SetStickerPositionInSet(sticker InputFile, position int32)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4313,7 +4313,7 @@ func (client *Client) RemoveStickerFromSet(sticker InputFile) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4334,7 +4334,7 @@ func (client *Client) AcceptTermsOfService(termsOfServiceId string) (*Ok, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4357,7 +4357,7 @@ func (client *Client) AnswerCustomQuery(customQueryId JSONInt64, data string) (*
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4378,7 +4378,7 @@ func (client *Client) SetAlarm(seconds float64) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4403,7 +4403,7 @@ func (client *Client) SaveApplicationLogEvent(typeParam string, chatId int64, da
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4424,7 +4424,7 @@ func (client *Client) EnableProxy(proxyId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4443,7 +4443,7 @@ func (client *Client) DisableProxy() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4464,7 +4464,7 @@ func (client *Client) RemoveProxy(proxyId int32) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4485,7 +4485,7 @@ func (client *Client) SetLogStream(logStream LogStream) (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4506,7 +4506,7 @@ func (client *Client) SetLogVerbosityLevel(newVerbosityLevel int32) (*Ok, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4529,7 +4529,7 @@ func (client *Client) SetLogTagVerbosityLevel(tag string, newVerbosityLevel int3
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4552,7 +4552,7 @@ func (client *Client) AddLogMessage(verbosityLevel int32, text string) (*Ok, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4571,7 +4571,7 @@ func (client *Client) TestCallEmpty() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4590,7 +4590,7 @@ func (client *Client) TestNetwork() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4619,7 +4619,7 @@ func (client *Client) TestProxy(server string, port int32, typeParam ProxyType, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok
@@ -4638,7 +4638,7 @@ func (client *Client) TestGetDifference() (*Ok, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var ok Ok

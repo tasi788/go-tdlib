@@ -43,7 +43,7 @@ func (client *Client) GetStickers(emoji string, limit int32) (*Stickers, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickers Stickers
@@ -66,7 +66,7 @@ func (client *Client) SearchStickers(emoji string, limit int32) (*Stickers, erro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickers Stickers
@@ -87,7 +87,7 @@ func (client *Client) GetRecentStickers(isAttached bool) (*Stickers, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickers Stickers
@@ -110,7 +110,7 @@ func (client *Client) AddRecentSticker(isAttached bool, sticker InputFile) (*Sti
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickers Stickers
@@ -129,7 +129,7 @@ func (client *Client) GetFavoriteStickers() (*Stickers, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickers Stickers

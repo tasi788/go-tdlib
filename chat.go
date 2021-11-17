@@ -195,7 +195,7 @@ func (client *Client) GetChat(chatId int64) (*Chat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatDummy Chat
@@ -216,7 +216,7 @@ func (client *Client) SearchPublicChat(username string) (*Chat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -239,7 +239,7 @@ func (client *Client) CreatePrivateChat(userId int64, force bool) (*Chat, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -262,7 +262,7 @@ func (client *Client) CreateBasicGroupChat(basicGroupId int64, force bool) (*Cha
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -285,7 +285,7 @@ func (client *Client) CreateSupergroupChat(supergroupId int64, force bool) (*Cha
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -306,7 +306,7 @@ func (client *Client) CreateSecretChat(secretChatId int32) (*Chat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatDummy Chat
@@ -329,7 +329,7 @@ func (client *Client) CreateNewBasicGroupChat(userIds []int64, title string) (*C
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -358,7 +358,7 @@ func (client *Client) CreateNewSupergroupChat(title string, isChannel bool, desc
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -379,7 +379,7 @@ func (client *Client) CreateNewSecretChat(userId int64) (*Chat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat
@@ -400,7 +400,7 @@ func (client *Client) UpgradeBasicGroupChatToSupergroupChat(chatId int64) (*Chat
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatDummy Chat
@@ -421,7 +421,7 @@ func (client *Client) JoinChatByInviteLink(inviteLink string) (*Chat, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chat Chat

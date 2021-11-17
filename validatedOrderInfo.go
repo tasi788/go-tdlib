@@ -50,7 +50,7 @@ func (client *Client) ValidateOrderInfo(chatId int64, messageId int64, orderInfo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var validatedOrderInfo ValidatedOrderInfo

@@ -82,7 +82,7 @@ func (client *Client) ChangePhoneNumber(phoneNumber string, settings *PhoneNumbe
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo
@@ -101,7 +101,7 @@ func (client *Client) ResendChangePhoneNumberCode() (*AuthenticationCodeInfo, er
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo
@@ -124,7 +124,7 @@ func (client *Client) SendPhoneNumberVerificationCode(phoneNumber string, settin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo
@@ -143,7 +143,7 @@ func (client *Client) ResendPhoneNumberVerificationCode() (*AuthenticationCodeIn
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo
@@ -168,7 +168,7 @@ func (client *Client) SendPhoneNumberConfirmationCode(hash string, phoneNumber s
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo
@@ -187,7 +187,7 @@ func (client *Client) ResendPhoneNumberConfirmationCode() (*AuthenticationCodeIn
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var authenticationCodeInfo AuthenticationCodeInfo

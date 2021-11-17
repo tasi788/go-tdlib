@@ -61,7 +61,7 @@ func (client *Client) GetInlineQueryResults(botUserId int64, chatId int64, userL
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var inlineQueryResults InlineQueryResults

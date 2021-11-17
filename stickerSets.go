@@ -44,7 +44,7 @@ func (client *Client) GetInstalledStickerSets(isMasks bool) (*StickerSets, error
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets
@@ -69,7 +69,7 @@ func (client *Client) GetArchivedStickerSets(isMasks bool, offsetStickerSetId JS
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets
@@ -92,7 +92,7 @@ func (client *Client) GetTrendingStickerSets(offset int32, limit int32) (*Sticke
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets
@@ -113,7 +113,7 @@ func (client *Client) GetAttachedStickerSets(fileId int32) (*StickerSets, error)
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets
@@ -138,7 +138,7 @@ func (client *Client) SearchInstalledStickerSets(isMasks bool, query string, lim
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets
@@ -159,7 +159,7 @@ func (client *Client) SearchStickerSets(query string) (*StickerSets, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSets StickerSets

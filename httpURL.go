@@ -47,7 +47,7 @@ func (client *Client) GetLoginUrl(chatId int64, messageId int64, buttonId int64,
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -70,7 +70,7 @@ func (client *Client) GetExternalLink(link string, allowWriteAccess bool) (*Http
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -93,7 +93,7 @@ func (client *Client) GetGroupCallInviteLink(groupCallId int32, canSelfUnmute bo
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -114,7 +114,7 @@ func (client *Client) GetEmojiSuggestionsUrl(languageCode string) (*HttpUrl, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -137,7 +137,7 @@ func (client *Client) GetBackgroundUrl(name string, typeParam BackgroundType) (*
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -156,7 +156,7 @@ func (client *Client) GetApplicationDownloadLink() (*HttpUrl, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl
@@ -177,7 +177,7 @@ func (client *Client) GetProxyLink(proxyId int32) (*HttpUrl, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var httpUrl HttpUrl

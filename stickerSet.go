@@ -77,7 +77,7 @@ func (client *Client) GetStickerSet(setId JSONInt64) (*StickerSet, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSet StickerSet
@@ -98,7 +98,7 @@ func (client *Client) SearchStickerSet(name string) (*StickerSet, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSet StickerSet
@@ -129,7 +129,7 @@ func (client *Client) CreateNewStickerSet(userId int64, title string, name strin
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSet StickerSet
@@ -154,7 +154,7 @@ func (client *Client) AddStickerToSet(userId int64, name string, sticker InputSt
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSet StickerSet
@@ -179,7 +179,7 @@ func (client *Client) SetStickerSetThumbnail(userId int64, name string, thumbnai
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var stickerSet StickerSet

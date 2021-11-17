@@ -131,7 +131,7 @@ func (client *Client) GetLoginUrlInfo(chatId int64, messageId int64, buttonId in
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch LoginUrlInfoEnum(result.Data["@type"].(string)) {
@@ -164,7 +164,7 @@ func (client *Client) GetExternalLinkInfo(link string) (LoginUrlInfo, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch LoginUrlInfoEnum(result.Data["@type"].(string)) {

@@ -47,7 +47,7 @@ func (client *Client) CreateChatFilter(filter *ChatFilter) (*ChatFilterInfo, err
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatFilterInfo ChatFilterInfo
@@ -70,7 +70,7 @@ func (client *Client) EditChatFilter(chatFilterId int32, filter *ChatFilter) (*C
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var chatFilterInfo ChatFilterInfo

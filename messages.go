@@ -46,7 +46,7 @@ func (client *Client) GetMessages(chatId int64, messageIds []int64) (*Messages, 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -75,7 +75,7 @@ func (client *Client) GetChatHistory(chatId int64, fromMessageId int64, offset i
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -104,7 +104,7 @@ func (client *Client) GetMessageThreadHistory(chatId int64, messageId int64, fro
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -139,7 +139,7 @@ func (client *Client) SearchChatMessages(chatId int64, query string, sender Mess
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -176,7 +176,7 @@ func (client *Client) SearchMessages(chatList ChatList, query string, offsetDate
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -201,7 +201,7 @@ func (client *Client) SearchCallMessages(fromMessageId int64, limit int32, onlyM
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -224,7 +224,7 @@ func (client *Client) SearchChatRecentLocationMessages(chatId int64, limit int32
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -243,7 +243,7 @@ func (client *Client) GetActiveLiveLocationMessages() (*Messages, error) {
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -264,7 +264,7 @@ func (client *Client) GetChatScheduledMessages(chatId int64) (*Messages, error) 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -293,7 +293,7 @@ func (client *Client) SendMessageAlbum(chatId int64, messageThreadId int64, repl
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -326,7 +326,7 @@ func (client *Client) ForwardMessages(chatId int64, fromChatId int64, messageIds
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages
@@ -349,7 +349,7 @@ func (client *Client) ResendMessages(chatId int64, messageIds []int64) (*Message
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var messages Messages

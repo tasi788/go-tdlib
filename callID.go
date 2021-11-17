@@ -45,7 +45,7 @@ func (client *Client) CreateCall(userId int64, protocol *CallProtocol, isVideo b
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	var callId CallId

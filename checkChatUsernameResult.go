@@ -204,7 +204,7 @@ func (client *Client) CheckChatUsername(chatId int64, username string) (CheckCha
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch CheckChatUsernameResultEnum(result.Data["@type"].(string)) {

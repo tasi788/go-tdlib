@@ -491,7 +491,7 @@ func (client *Client) GetPassportElement(typeParam PassportElementType, password
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch PassportElementEnum(result.Data["@type"].(string)) {
@@ -581,7 +581,7 @@ func (client *Client) SetPassportElement(element InputPassportElement, password 
 	}
 
 	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %d msg: %s", result.Data["code"], result.Data["message"])
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
 	}
 
 	switch PassportElementEnum(result.Data["@type"].(string)) {
