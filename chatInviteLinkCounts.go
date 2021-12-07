@@ -8,7 +8,7 @@ import (
 // ChatInviteLinkCounts Contains a list of chat invite link counts
 type ChatInviteLinkCounts struct {
 	tdCommon
-	InviteLinkCounts []ChatInviteLinkCount `json:"invite_link_counts"` // List of invite linkcounts
+	InviteLinkCounts []ChatInviteLinkCount `json:"invite_link_counts"` // List of invite link counts
 }
 
 // MessageType return the string telegram-type of ChatInviteLinkCounts
@@ -18,7 +18,7 @@ func (chatInviteLinkCounts *ChatInviteLinkCounts) MessageType() string {
 
 // NewChatInviteLinkCounts creates a new ChatInviteLinkCounts
 //
-// @param inviteLinkCounts List of invite linkcounts
+// @param inviteLinkCounts List of invite link counts
 func NewChatInviteLinkCounts(inviteLinkCounts []ChatInviteLinkCount) *ChatInviteLinkCounts {
 	chatInviteLinkCountsTemp := ChatInviteLinkCounts{
 		tdCommon:         tdCommon{Type: "chatInviteLinkCounts"},

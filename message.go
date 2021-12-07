@@ -9,7 +9,7 @@ import (
 type Message struct {
 	tdCommon
 	Id                        int64                   `json:"id"`                            // Message identifier; unique for the chat to which the message belongs
-	Sender                    MessageSender           `json:"sender"`                        // The sender of the message
+	SenderId                  MessageSender           `json:"sender_id"`                     // Identifier of the sender of the message
 	ChatId                    int64                   `json:"chat_id"`                       // Chat identifier
 	SendingState              MessageSendingState     `json:"sending_state"`                 // The sending state of the message; may be null
 	SchedulingState           MessageSchedulingState  `json:"scheduling_state"`              // The scheduling state of the message; may be null
@@ -17,6 +17,7 @@ type Message struct {
 	IsPinned                  bool                    `json:"is_pinned"`                     // True, if the message is pinned
 	CanBeEdited               bool                    `json:"can_be_edited"`                 // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 	CanBeForwarded            bool                    `json:"can_be_forwarded"`              // True, if the message can be forwarded
+	CanBeSaved                bool                    `json:"can_be_saved"`                  // True, if content of the message can be saved locally or copied
 	CanBeDeletedOnlyForSelf   bool                    `json:"can_be_deleted_only_for_self"`  // True, if the message can be deleted only for the current user while other users will continue to see it
 	CanBeDeletedForAllUsers   bool                    `json:"can_be_deleted_for_all_users"`  // True, if the message can be deleted for all users
 	CanGetStatistics          bool                    `json:"can_get_statistics"`            // True, if the message statistics are available
@@ -51,7 +52,7 @@ func (message *Message) MessageType() string {
 // NewMessage creates a new Message
 //
 // @param id Message identifier; unique for the chat to which the message belongs
-// @param sender The sender of the message
+// @param senderId Identifier of the sender of the message
 // @param chatId Chat identifier
 // @param sendingState The sending state of the message; may be null
 // @param schedulingState The scheduling state of the message; may be null
@@ -59,6 +60,7 @@ func (message *Message) MessageType() string {
 // @param isPinned True, if the message is pinned
 // @param canBeEdited True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 // @param canBeForwarded True, if the message can be forwarded
+// @param canBeSaved True, if content of the message can be saved locally or copied
 // @param canBeDeletedOnlyForSelf True, if the message can be deleted only for the current user while other users will continue to see it
 // @param canBeDeletedForAllUsers True, if the message can be deleted for all users
 // @param canGetStatistics True, if the message statistics are available
@@ -83,11 +85,11 @@ func (message *Message) MessageType() string {
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this message must be restricted
 // @param content Content of the message
 // @param replyMarkup Reply markup for the message; may be null
-func NewMessage(id int64, sender MessageSender, chatId int64, sendingState MessageSendingState, schedulingState MessageSchedulingState, isOutgoing bool, isPinned bool, canBeEdited bool, canBeForwarded bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canGetStatistics bool, canGetMessageThread bool, canGetViewers bool, canGetMediaTimestampLinks bool, hasTimestampedMedia bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, interactionInfo *MessageInteractionInfo, replyInChatId int64, replyToMessageId int64, messageThreadId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int64, authorSignature string, mediaAlbumId JSONInt64, restrictionReason string, content MessageContent, replyMarkup ReplyMarkup) *Message {
+func NewMessage(id int64, senderId MessageSender, chatId int64, sendingState MessageSendingState, schedulingState MessageSchedulingState, isOutgoing bool, isPinned bool, canBeEdited bool, canBeForwarded bool, canBeSaved bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canGetStatistics bool, canGetMessageThread bool, canGetViewers bool, canGetMediaTimestampLinks bool, hasTimestampedMedia bool, isChannelPost bool, containsUnreadMention bool, date int32, editDate int32, forwardInfo *MessageForwardInfo, interactionInfo *MessageInteractionInfo, replyInChatId int64, replyToMessageId int64, messageThreadId int64, ttl int32, ttlExpiresIn float64, viaBotUserId int64, authorSignature string, mediaAlbumId JSONInt64, restrictionReason string, content MessageContent, replyMarkup ReplyMarkup) *Message {
 	messageTemp := Message{
 		tdCommon:                  tdCommon{Type: "message"},
 		Id:                        id,
-		Sender:                    sender,
+		SenderId:                  senderId,
 		ChatId:                    chatId,
 		SendingState:              sendingState,
 		SchedulingState:           schedulingState,
@@ -95,6 +97,7 @@ func NewMessage(id int64, sender MessageSender, chatId int64, sendingState Messa
 		IsPinned:                  isPinned,
 		CanBeEdited:               canBeEdited,
 		CanBeForwarded:            canBeForwarded,
+		CanBeSaved:                canBeSaved,
 		CanBeDeletedOnlyForSelf:   canBeDeletedOnlyForSelf,
 		CanBeDeletedForAllUsers:   canBeDeletedForAllUsers,
 		CanGetStatistics:          canGetStatistics,
@@ -139,6 +142,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 		IsPinned                  bool                `json:"is_pinned"`                     // True, if the message is pinned
 		CanBeEdited               bool                `json:"can_be_edited"`                 // True, if the message can be edited. For live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this message by the application
 		CanBeForwarded            bool                `json:"can_be_forwarded"`              // True, if the message can be forwarded
+		CanBeSaved                bool                `json:"can_be_saved"`                  // True, if content of the message can be saved locally or copied
 		CanBeDeletedOnlyForSelf   bool                `json:"can_be_deleted_only_for_self"`  // True, if the message can be deleted only for the current user while other users will continue to see it
 		CanBeDeletedForAllUsers   bool                `json:"can_be_deleted_for_all_users"`  // True, if the message can be deleted for all users
 		CanGetStatistics          bool                `json:"can_get_statistics"`            // True, if the message statistics are available
@@ -174,6 +178,7 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	message.IsPinned = tempObj.IsPinned
 	message.CanBeEdited = tempObj.CanBeEdited
 	message.CanBeForwarded = tempObj.CanBeForwarded
+	message.CanBeSaved = tempObj.CanBeSaved
 	message.CanBeDeletedOnlyForSelf = tempObj.CanBeDeletedOnlyForSelf
 	message.CanBeDeletedForAllUsers = tempObj.CanBeDeletedForAllUsers
 	message.CanGetStatistics = tempObj.CanGetStatistics
@@ -196,8 +201,8 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 	message.MediaAlbumId = tempObj.MediaAlbumId
 	message.RestrictionReason = tempObj.RestrictionReason
 
-	fieldSender, _ := unmarshalMessageSender(objMap["sender"])
-	message.Sender = fieldSender
+	fieldSenderId, _ := unmarshalMessageSender(objMap["sender_id"])
+	message.SenderId = fieldSenderId
 
 	// FYI: Arman92/go-tl-parser can't parse TDLib 1.7 new type `interaction_info`
 	// and that go-tl-parser is HARD TO MAINTENANCE!!!
@@ -234,11 +239,11 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 			switch reply.Type {
 			case "messageSenderUser":
 				{
-					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderUser(reply.UserID))
+					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderUser(reply.UserID))
 				}
 			case "messageSenderChat":
 				{
-					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderChat(reply.ChatID))
+					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderChat(reply.ChatID))
 				}
 			default:
 				return fmt.Errorf("Error unmarshaling, unknown messageSender type:" + reply.Type)
@@ -309,7 +314,7 @@ func (client *Client) GetMessageLocally(chatId int64, messageId int64) (*Message
 
 // GetRepliedMessage Returns information about a message that is replied by a given message. Also returns the pinned message, the game message, and the invoice message for messages of the types messagePinMessage, messageGameScore, and messagePaymentSuccessful respectively
 // @param chatId Identifier of the chat the message belongs to
-// @param messageId Identifier of the message reply to which to get
+// @param messageId Identifier of the reply message
 func (client *Client) GetRepliedMessage(chatId int64, messageId int64) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":      "getRepliedMessage",
@@ -490,15 +495,15 @@ func (client *Client) SendInlineQueryResultMessage(chatId int64, messageThreadId
 
 // AddLocalMessage Adds a local message to a chat. The message is persistent across application restarts only if the message database is used. Returns the added message
 // @param chatId Target chat
-// @param sender The sender of the message
+// @param senderId Identifier of the sender of the message
 // @param replyToMessageId Identifier of the message to reply to or 0
 // @param disableNotification Pass true to disable notification for the message
 // @param inputMessageContent The content of the message to be added
-func (client *Client) AddLocalMessage(chatId int64, sender MessageSender, replyToMessageId int64, disableNotification bool, inputMessageContent InputMessageContent) (*Message, error) {
+func (client *Client) AddLocalMessage(chatId int64, senderId MessageSender, replyToMessageId int64, disableNotification bool, inputMessageContent InputMessageContent) (*Message, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                 "addLocalMessage",
 		"chat_id":               chatId,
-		"sender":                sender,
+		"sender_id":             senderId,
 		"reply_to_message_id":   replyToMessageId,
 		"disable_notification":  disableNotification,
 		"input_message_content": inputMessageContent,

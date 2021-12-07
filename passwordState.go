@@ -115,7 +115,7 @@ func (client *Client) SetRecoveryEmailAddress(password string, newRecoveryEmailA
 }
 
 // CheckRecoveryEmailAddressCode Checks the 2-step verification recovery email address verification code
-// @param code Verification code
+// @param code Verification code to check
 func (client *Client) CheckRecoveryEmailAddressCode(code string) (*PasswordState, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkRecoveryEmailAddressCode",

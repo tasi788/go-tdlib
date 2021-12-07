@@ -31,6 +31,27 @@ func NewMessageSenders(totalCount int32, senders []MessageSender) *MessageSender
 	return &messageSendersTemp
 }
 
+// GetChatAvailableMessageSenders Returns list of message sender identifiers, which can be used to send messages in a chat
+// @param chatId Chat identifier
+func (client *Client) GetChatAvailableMessageSenders(chatId int64) (*MessageSenders, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":   "getChatAvailableMessageSenders",
+		"chat_id": chatId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var messageSenders MessageSenders
+	err = json.Unmarshal(result.Raw, &messageSenders)
+	return &messageSenders, err
+}
+
 // GetVideoChatAvailableParticipants Returns list of participant identifiers, which can be used to join video chats in a chat
 // @param chatId Chat identifier
 func (client *Client) GetVideoChatAvailableParticipants(chatId int64) (*MessageSenders, error) {

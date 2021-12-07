@@ -11,6 +11,8 @@ type Session struct {
 	Id                    JSONInt64 `json:"id"`                      // Session identifier
 	IsCurrent             bool      `json:"is_current"`              // True, if this session is the current session
 	IsPasswordPending     bool      `json:"is_password_pending"`     // True, if a password is needed to complete authorization of the session
+	CanAcceptSecretChats  bool      `json:"can_accept_secret_chats"` // True, if incoming secret chats can be accepted by the session
+	CanAcceptCalls        bool      `json:"can_accept_calls"`        // True, if incoming calls can be accepted by the session
 	ApiId                 int32     `json:"api_id"`                  // Telegram API identifier, as provided by the application
 	ApplicationName       string    `json:"application_name"`        // Name of the application, as provided by the application
 	ApplicationVersion    string    `json:"application_version"`     // The version of the application, as provided by the application
@@ -35,6 +37,8 @@ func (session *Session) MessageType() string {
 // @param id Session identifier
 // @param isCurrent True, if this session is the current session
 // @param isPasswordPending True, if a password is needed to complete authorization of the session
+// @param canAcceptSecretChats True, if incoming secret chats can be accepted by the session
+// @param canAcceptCalls True, if incoming calls can be accepted by the session
 // @param apiId Telegram API identifier, as provided by the application
 // @param applicationName Name of the application, as provided by the application
 // @param applicationVersion The version of the application, as provided by the application
@@ -47,12 +51,14 @@ func (session *Session) MessageType() string {
 // @param ip IP address from which the session was created, in human-readable format
 // @param country A two-letter country code for the country from which the session was created, based on the IP address
 // @param region Region code from which the session was created, based on the IP address
-func NewSession(id JSONInt64, isCurrent bool, isPasswordPending bool, apiId int32, applicationName string, applicationVersion string, isOfficialApplication bool, deviceModel string, platform string, systemVersion string, logInDate int32, lastActiveDate int32, ip string, country string, region string) *Session {
+func NewSession(id JSONInt64, isCurrent bool, isPasswordPending bool, canAcceptSecretChats bool, canAcceptCalls bool, apiId int32, applicationName string, applicationVersion string, isOfficialApplication bool, deviceModel string, platform string, systemVersion string, logInDate int32, lastActiveDate int32, ip string, country string, region string) *Session {
 	sessionTemp := Session{
 		tdCommon:              tdCommon{Type: "session"},
 		Id:                    id,
 		IsCurrent:             isCurrent,
 		IsPasswordPending:     isPasswordPending,
+		CanAcceptSecretChats:  canAcceptSecretChats,
+		CanAcceptCalls:        canAcceptCalls,
 		ApiId:                 apiId,
 		ApplicationName:       applicationName,
 		ApplicationVersion:    applicationVersion,

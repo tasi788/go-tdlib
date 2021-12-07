@@ -8,7 +8,8 @@ import (
 // Sessions Contains a list of sessions
 type Sessions struct {
 	tdCommon
-	Sessions []Session `json:"sessions"` // List of sessions
+	Sessions               []Session `json:"sessions"`                  // List of sessions
+	InactiveSessionTtlDays int32     `json:"inactive_session_ttl_days"` // Number of days of inactivity before sessions will automatically be terminated; 1-366 days
 }
 
 // MessageType return the string telegram-type of Sessions
@@ -19,10 +20,12 @@ func (sessions *Sessions) MessageType() string {
 // NewSessions creates a new Sessions
 //
 // @param sessions List of sessions
-func NewSessions(sessions []Session) *Sessions {
+// @param inactiveSessionTtlDays Number of days of inactivity before sessions will automatically be terminated; 1-366 days
+func NewSessions(sessions []Session, inactiveSessionTtlDays int32) *Sessions {
 	sessionsTemp := Sessions{
-		tdCommon: tdCommon{Type: "sessions"},
-		Sessions: sessions,
+		tdCommon:               tdCommon{Type: "sessions"},
+		Sessions:               sessions,
+		InactiveSessionTtlDays: inactiveSessionTtlDays,
 	}
 
 	return &sessionsTemp

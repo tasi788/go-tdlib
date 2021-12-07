@@ -15,7 +15,7 @@ type Poll struct {
 	IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
 	Type               PollType     `json:"type"`                  // Type of the poll
 	OpenPeriod         int32        `json:"open_period"`           // Amount of time the poll will be active after creation, in seconds
-	CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will be automatically closed
+	CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will automatically be closed
 	IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
 }
 
@@ -34,7 +34,7 @@ func (poll *Poll) MessageType() string {
 // @param isAnonymous True, if the poll is anonymous
 // @param typeParam Type of the poll
 // @param openPeriod Amount of time the poll will be active after creation, in seconds
-// @param closeDate Point in time (Unix timestamp) when the poll will be automatically closed
+// @param closeDate Point in time (Unix timestamp) when the poll will automatically be closed
 // @param isClosed True, if the poll is closed
 func NewPoll(id JSONInt64, question string, options []PollOption, totalVoterCount int32, recentVoterUserIds []int64, isAnonymous bool, typeParam PollType, openPeriod int32, closeDate int32, isClosed bool) *Poll {
 	pollTemp := Poll{
@@ -70,7 +70,7 @@ func (poll *Poll) UnmarshalJSON(b []byte) error {
 		RecentVoterUserIds []int64      `json:"recent_voter_user_ids"` // User identifiers of recent voters, if the poll is non-anonymous
 		IsAnonymous        bool         `json:"is_anonymous"`          // True, if the poll is anonymous
 		OpenPeriod         int32        `json:"open_period"`           // Amount of time the poll will be active after creation, in seconds
-		CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will be automatically closed
+		CloseDate          int32        `json:"close_date"`            // Point in time (Unix timestamp) when the poll will automatically be closed
 		IsClosed           bool         `json:"is_closed"`             // True, if the poll is closed
 	}{}
 	err = json.Unmarshal(b, &tempObj)

@@ -33,6 +33,8 @@ const (
 	UpdateChatPermissionsType                UpdateEnum = "updateChatPermissions"
 	UpdateChatLastMessageType                UpdateEnum = "updateChatLastMessage"
 	UpdateChatPositionType                   UpdateEnum = "updateChatPosition"
+	UpdateChatDefaultMessageSenderIdType     UpdateEnum = "updateChatDefaultMessageSenderId"
+	UpdateChatHasProtectedContentType        UpdateEnum = "updateChatHasProtectedContent"
 	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
 	UpdateChatIsBlockedType                  UpdateEnum = "updateChatIsBlocked"
 	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
@@ -56,7 +58,7 @@ const (
 	UpdateActiveNotificationsType            UpdateEnum = "updateActiveNotifications"
 	UpdateHavePendingNotificationsType       UpdateEnum = "updateHavePendingNotifications"
 	UpdateDeleteMessagesType                 UpdateEnum = "updateDeleteMessages"
-	UpdateUserChatActionType                 UpdateEnum = "updateUserChatAction"
+	UpdateChatActionType                     UpdateEnum = "updateChatAction"
 	UpdateUserStatusType                     UpdateEnum = "updateUserStatus"
 	UpdateUserType                           UpdateEnum = "updateUser"
 	UpdateBasicGroupType                     UpdateEnum = "updateBasicGroup"
@@ -209,6 +211,16 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatPosition)
 		return &updateChatPosition, err
 
+	case UpdateChatDefaultMessageSenderIdType:
+		var updateChatDefaultMessageSenderId UpdateChatDefaultMessageSenderId
+		err := json.Unmarshal(*rawMsg, &updateChatDefaultMessageSenderId)
+		return &updateChatDefaultMessageSenderId, err
+
+	case UpdateChatHasProtectedContentType:
+		var updateChatHasProtectedContent UpdateChatHasProtectedContent
+		err := json.Unmarshal(*rawMsg, &updateChatHasProtectedContent)
+		return &updateChatHasProtectedContent, err
+
 	case UpdateChatIsMarkedAsUnreadType:
 		var updateChatIsMarkedAsUnread UpdateChatIsMarkedAsUnread
 		err := json.Unmarshal(*rawMsg, &updateChatIsMarkedAsUnread)
@@ -324,10 +336,10 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateDeleteMessages)
 		return &updateDeleteMessages, err
 
-	case UpdateUserChatActionType:
-		var updateUserChatAction UpdateUserChatAction
-		err := json.Unmarshal(*rawMsg, &updateUserChatAction)
-		return &updateUserChatAction, err
+	case UpdateChatActionType:
+		var updateChatAction UpdateChatAction
+		err := json.Unmarshal(*rawMsg, &updateChatAction)
+		return &updateChatAction, err
 
 	case UpdateUserStatusType:
 		var updateUserStatus UpdateUserStatus
@@ -1231,6 +1243,94 @@ func (updateChatPosition *UpdateChatPosition) GetUpdateEnum() UpdateEnum {
 	return UpdateChatPositionType
 }
 
+// UpdateChatDefaultMessageSenderId The default message sender that is chosen to send messages in a chat has changed
+type UpdateChatDefaultMessageSenderId struct {
+	tdCommon
+	ChatId                 int64         `json:"chat_id"`                   // Chat identifier
+	DefaultMessageSenderId MessageSender `json:"default_message_sender_id"` // New value of default_message_sender_id; may be null if the user can't change message sender
+}
+
+// MessageType return the string telegram-type of UpdateChatDefaultMessageSenderId
+func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) MessageType() string {
+	return "updateChatDefaultMessageSenderId"
+}
+
+// NewUpdateChatDefaultMessageSenderId creates a new UpdateChatDefaultMessageSenderId
+//
+// @param chatId Chat identifier
+// @param defaultMessageSenderId New value of default_message_sender_id; may be null if the user can't change message sender
+func NewUpdateChatDefaultMessageSenderId(chatId int64, defaultMessageSenderId MessageSender) *UpdateChatDefaultMessageSenderId {
+	updateChatDefaultMessageSenderIdTemp := UpdateChatDefaultMessageSenderId{
+		tdCommon:               tdCommon{Type: "updateChatDefaultMessageSenderId"},
+		ChatId:                 chatId,
+		DefaultMessageSenderId: defaultMessageSenderId,
+	}
+
+	return &updateChatDefaultMessageSenderIdTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		ChatId int64 `json:"chat_id"` // Chat identifier
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateChatDefaultMessageSenderId.tdCommon = tempObj.tdCommon
+	updateChatDefaultMessageSenderId.ChatId = tempObj.ChatId
+
+	fieldDefaultMessageSenderId, _ := unmarshalMessageSender(objMap["default_message_sender_id"])
+	updateChatDefaultMessageSenderId.DefaultMessageSenderId = fieldDefaultMessageSenderId
+
+	return nil
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) GetUpdateEnum() UpdateEnum {
+	return UpdateChatDefaultMessageSenderIdType
+}
+
+// UpdateChatHasProtectedContent A chat content was allowed or restricted for saving
+type UpdateChatHasProtectedContent struct {
+	tdCommon
+	ChatId              int64 `json:"chat_id"`               // Chat identifier
+	HasProtectedContent bool  `json:"has_protected_content"` // New value of has_protected_content
+}
+
+// MessageType return the string telegram-type of UpdateChatHasProtectedContent
+func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) MessageType() string {
+	return "updateChatHasProtectedContent"
+}
+
+// NewUpdateChatHasProtectedContent creates a new UpdateChatHasProtectedContent
+//
+// @param chatId Chat identifier
+// @param hasProtectedContent New value of has_protected_content
+func NewUpdateChatHasProtectedContent(chatId int64, hasProtectedContent bool) *UpdateChatHasProtectedContent {
+	updateChatHasProtectedContentTemp := UpdateChatHasProtectedContent{
+		tdCommon:            tdCommon{Type: "updateChatHasProtectedContent"},
+		ChatId:              chatId,
+		HasProtectedContent: hasProtectedContent,
+	}
+
+	return &updateChatHasProtectedContentTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) GetUpdateEnum() UpdateEnum {
+	return UpdateChatHasProtectedContentType
+}
+
 // UpdateChatIsMarkedAsUnread A chat was marked as unread or was read
 type UpdateChatIsMarkedAsUnread struct {
 	tdCommon
@@ -1386,7 +1486,7 @@ func (updateChatDefaultDisableNotification *UpdateChatDefaultDisableNotification
 	return UpdateChatDefaultDisableNotificationType
 }
 
-// UpdateChatReadInbox Incoming messages were read or number of unread messages has been changed
+// UpdateChatReadInbox Incoming messages were read or the number of unread messages has been changed
 type UpdateChatReadInbox struct {
 	tdCommon
 	ChatId                 int64 `json:"chat_id"`                    // Chat identifier
@@ -2056,40 +2156,40 @@ func (updateDeleteMessages *UpdateDeleteMessages) GetUpdateEnum() UpdateEnum {
 	return UpdateDeleteMessagesType
 }
 
-// UpdateUserChatAction User activity in the chat has changed
-type UpdateUserChatAction struct {
+// UpdateChatAction A message sender activity in the chat has changed
+type UpdateChatAction struct {
 	tdCommon
-	ChatId          int64      `json:"chat_id"`           // Chat identifier
-	MessageThreadId int64      `json:"message_thread_id"` // If not 0, a message thread identifier in which the action was performed
-	UserId          int64      `json:"user_id"`           // Identifier of a user performing an action
-	Action          ChatAction `json:"action"`            // The action description
+	ChatId          int64         `json:"chat_id"`           // Chat identifier
+	MessageThreadId int64         `json:"message_thread_id"` // If not 0, a message thread identifier in which the action was performed
+	SenderId        MessageSender `json:"sender_id"`         // Identifier of a message sender performing the action
+	Action          ChatAction    `json:"action"`            // The action
 }
 
-// MessageType return the string telegram-type of UpdateUserChatAction
-func (updateUserChatAction *UpdateUserChatAction) MessageType() string {
-	return "updateUserChatAction"
+// MessageType return the string telegram-type of UpdateChatAction
+func (updateChatAction *UpdateChatAction) MessageType() string {
+	return "updateChatAction"
 }
 
-// NewUpdateUserChatAction creates a new UpdateUserChatAction
+// NewUpdateChatAction creates a new UpdateChatAction
 //
 // @param chatId Chat identifier
 // @param messageThreadId If not 0, a message thread identifier in which the action was performed
-// @param userId Identifier of a user performing an action
-// @param action The action description
-func NewUpdateUserChatAction(chatId int64, messageThreadId int64, userId int64, action ChatAction) *UpdateUserChatAction {
-	updateUserChatActionTemp := UpdateUserChatAction{
-		tdCommon:        tdCommon{Type: "updateUserChatAction"},
+// @param senderId Identifier of a message sender performing the action
+// @param action The action
+func NewUpdateChatAction(chatId int64, messageThreadId int64, senderId MessageSender, action ChatAction) *UpdateChatAction {
+	updateChatActionTemp := UpdateChatAction{
+		tdCommon:        tdCommon{Type: "updateChatAction"},
 		ChatId:          chatId,
 		MessageThreadId: messageThreadId,
-		UserId:          userId,
+		SenderId:        senderId,
 		Action:          action,
 	}
 
-	return &updateUserChatActionTemp
+	return &updateChatActionTemp
 }
 
 // UnmarshalJSON unmarshal to json
-func (updateUserChatAction *UpdateUserChatAction) UnmarshalJSON(b []byte) error {
+func (updateChatAction *UpdateChatAction) UnmarshalJSON(b []byte) error {
 	var objMap map[string]*json.RawMessage
 	err := json.Unmarshal(b, &objMap)
 	if err != nil {
@@ -2099,7 +2199,6 @@ func (updateUserChatAction *UpdateUserChatAction) UnmarshalJSON(b []byte) error 
 		tdCommon
 		ChatId          int64 `json:"chat_id"`           // Chat identifier
 		MessageThreadId int64 `json:"message_thread_id"` // If not 0, a message thread identifier in which the action was performed
-		UserId          int64 `json:"user_id"`           // Identifier of a user performing an action
 
 	}{}
 	err = json.Unmarshal(b, &tempObj)
@@ -2107,20 +2206,22 @@ func (updateUserChatAction *UpdateUserChatAction) UnmarshalJSON(b []byte) error 
 		return err
 	}
 
-	updateUserChatAction.tdCommon = tempObj.tdCommon
-	updateUserChatAction.ChatId = tempObj.ChatId
-	updateUserChatAction.MessageThreadId = tempObj.MessageThreadId
-	updateUserChatAction.UserId = tempObj.UserId
+	updateChatAction.tdCommon = tempObj.tdCommon
+	updateChatAction.ChatId = tempObj.ChatId
+	updateChatAction.MessageThreadId = tempObj.MessageThreadId
+
+	fieldSenderId, _ := unmarshalMessageSender(objMap["sender_id"])
+	updateChatAction.SenderId = fieldSenderId
 
 	fieldAction, _ := unmarshalChatAction(objMap["action"])
-	updateUserChatAction.Action = fieldAction
+	updateChatAction.Action = fieldAction
 
 	return nil
 }
 
 // GetUpdateEnum return the enum type of this object
-func (updateUserChatAction *UpdateUserChatAction) GetUpdateEnum() UpdateEnum {
-	return UpdateUserChatActionType
+func (updateChatAction *UpdateChatAction) GetUpdateEnum() UpdateEnum {
+	return UpdateChatActionType
 }
 
 // UpdateUserStatus The user went online or offline
@@ -2292,7 +2393,7 @@ func (updateSecretChat *UpdateSecretChat) GetUpdateEnum() UpdateEnum {
 	return UpdateSecretChatType
 }
 
-// UpdateUserFullInfo Some data from userFullInfo has been changed
+// UpdateUserFullInfo Some data in userFullInfo has been changed
 type UpdateUserFullInfo struct {
 	tdCommon
 	UserId       int64         `json:"user_id"`        // User identifier
@@ -2323,7 +2424,7 @@ func (updateUserFullInfo *UpdateUserFullInfo) GetUpdateEnum() UpdateEnum {
 	return UpdateUserFullInfoType
 }
 
-// UpdateBasicGroupFullInfo Some data from basicGroupFullInfo has been changed
+// UpdateBasicGroupFullInfo Some data in basicGroupFullInfo has been changed
 type UpdateBasicGroupFullInfo struct {
 	tdCommon
 	BasicGroupId       int64               `json:"basic_group_id"`        // Identifier of a basic group
@@ -2354,7 +2455,7 @@ func (updateBasicGroupFullInfo *UpdateBasicGroupFullInfo) GetUpdateEnum() Update
 	return UpdateBasicGroupFullInfoType
 }
 
-// UpdateSupergroupFullInfo Some data from supergroupFullInfo has been changed
+// UpdateSupergroupFullInfo Some data in supergroupFullInfo has been changed
 type UpdateSupergroupFullInfo struct {
 	tdCommon
 	SupergroupId       int64               `json:"supergroup_id"`        // Identifier of the supergroup or channel
@@ -2385,7 +2486,7 @@ func (updateSupergroupFullInfo *UpdateSupergroupFullInfo) GetUpdateEnum() Update
 	return UpdateSupergroupFullInfoType
 }
 
-// UpdateServiceNotification Service notification from the server. Upon receiving this the application must show a popup with the content of the notification
+// UpdateServiceNotification A service notification from the server was received. Upon receiving this the application must show a popup with the content of the notification
 type UpdateServiceNotification struct {
 	tdCommon
 	Type    string         `json:"type"`    // Notification type. If type begins with "AUTH_KEY_DROP_", then two buttons "Cancel" and "Log out" must be shown under notification; if user presses the second, all local data must be destroyed using Destroy method
@@ -4059,6 +4160,16 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
+	case UpdateChatDefaultMessageSenderIdType:
+		var update UpdateChatDefaultMessageSenderId
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatHasProtectedContentType:
+		var update UpdateChatHasProtectedContent
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
 	case UpdateChatIsMarkedAsUnreadType:
 		var update UpdateChatIsMarkedAsUnread
 		err = json.Unmarshal(result.Raw, &update)
@@ -4174,8 +4285,8 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateUserChatActionType:
-		var update UpdateUserChatAction
+	case UpdateChatActionType:
+		var update UpdateChatAction
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 

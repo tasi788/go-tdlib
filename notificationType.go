@@ -143,7 +143,7 @@ func (notificationTypeNewCall *NotificationTypeNewCall) GetNotificationTypeEnum(
 type NotificationTypeNewPushMessage struct {
 	tdCommon
 	MessageId  int64              `json:"message_id"`  // The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-	Sender     MessageSender      `json:"sender"`      // The sender of the message. Corresponding user or chat may be inaccessible
+	SenderId   MessageSender      `json:"sender_id"`   // Identifier of the sender of the message. Corresponding user or chat may be inaccessible
 	SenderName string             `json:"sender_name"` // Name of the sender
 	IsOutgoing bool               `json:"is_outgoing"` // True, if the message is outgoing
 	Content    PushMessageContent `json:"content"`     // Push message content
@@ -157,15 +157,15 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) MessageTyp
 // NewNotificationTypeNewPushMessage creates a new NotificationTypeNewPushMessage
 //
 // @param messageId The message identifier. The message will not be available in the chat history, but the ID can be used in viewMessages, or as reply_to_message_id
-// @param sender The sender of the message. Corresponding user or chat may be inaccessible
+// @param senderId Identifier of the sender of the message. Corresponding user or chat may be inaccessible
 // @param senderName Name of the sender
 // @param isOutgoing True, if the message is outgoing
 // @param content Push message content
-func NewNotificationTypeNewPushMessage(messageId int64, sender MessageSender, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
+func NewNotificationTypeNewPushMessage(messageId int64, senderId MessageSender, senderName string, isOutgoing bool, content PushMessageContent) *NotificationTypeNewPushMessage {
 	notificationTypeNewPushMessageTemp := NotificationTypeNewPushMessage{
 		tdCommon:   tdCommon{Type: "notificationTypeNewPushMessage"},
 		MessageId:  messageId,
-		Sender:     sender,
+		SenderId:   senderId,
 		SenderName: senderName,
 		IsOutgoing: isOutgoing,
 		Content:    content,
@@ -198,8 +198,8 @@ func (notificationTypeNewPushMessage *NotificationTypeNewPushMessage) UnmarshalJ
 	notificationTypeNewPushMessage.SenderName = tempObj.SenderName
 	notificationTypeNewPushMessage.IsOutgoing = tempObj.IsOutgoing
 
-	fieldSender, _ := unmarshalMessageSender(objMap["sender"])
-	notificationTypeNewPushMessage.Sender = fieldSender
+	fieldSenderId, _ := unmarshalMessageSender(objMap["sender_id"])
+	notificationTypeNewPushMessage.SenderId = fieldSenderId
 
 	fieldContent, _ := unmarshalPushMessageContent(objMap["content"])
 	notificationTypeNewPushMessage.Content = fieldContent

@@ -20,6 +20,7 @@ const (
 	SuggestedActionCheckPhoneNumberType             SuggestedActionEnum = "suggestedActionCheckPhoneNumber"
 	SuggestedActionSeeTicksHintType                 SuggestedActionEnum = "suggestedActionSeeTicksHint"
 	SuggestedActionConvertToBroadcastGroupType      SuggestedActionEnum = "suggestedActionConvertToBroadcastGroup"
+	SuggestedActionSetPasswordType                  SuggestedActionEnum = "suggestedActionSetPassword"
 )
 
 func unmarshalSuggestedAction(rawMsg *json.RawMessage) (SuggestedAction, error) {
@@ -58,6 +59,11 @@ func unmarshalSuggestedAction(rawMsg *json.RawMessage) (SuggestedAction, error) 
 		var suggestedActionConvertToBroadcastGroup SuggestedActionConvertToBroadcastGroup
 		err := json.Unmarshal(*rawMsg, &suggestedActionConvertToBroadcastGroup)
 		return &suggestedActionConvertToBroadcastGroup, err
+
+	case SuggestedActionSetPasswordType:
+		var suggestedActionSetPassword SuggestedActionSetPassword
+		err := json.Unmarshal(*rawMsg, &suggestedActionSetPassword)
+		return &suggestedActionSetPassword, err
 
 	default:
 		return nil, fmt.Errorf("Error UnMarshaling, unknown type:" + objMap["@type"].(string))
@@ -190,4 +196,32 @@ func NewSuggestedActionConvertToBroadcastGroup(supergroupId int64) *SuggestedAct
 // GetSuggestedActionEnum return the enum type of this object
 func (suggestedActionConvertToBroadcastGroup *SuggestedActionConvertToBroadcastGroup) GetSuggestedActionEnum() SuggestedActionEnum {
 	return SuggestedActionConvertToBroadcastGroupType
+}
+
+// SuggestedActionSetPassword Suggests the user to set a 2-step verification password to be able to log in again
+type SuggestedActionSetPassword struct {
+	tdCommon
+	AuthorizationDelay int32 `json:"authorization_delay"` // The number of days to pass between consecutive authorizations if the user declines to set password
+}
+
+// MessageType return the string telegram-type of SuggestedActionSetPassword
+func (suggestedActionSetPassword *SuggestedActionSetPassword) MessageType() string {
+	return "suggestedActionSetPassword"
+}
+
+// NewSuggestedActionSetPassword creates a new SuggestedActionSetPassword
+//
+// @param authorizationDelay The number of days to pass between consecutive authorizations if the user declines to set password
+func NewSuggestedActionSetPassword(authorizationDelay int32) *SuggestedActionSetPassword {
+	suggestedActionSetPasswordTemp := SuggestedActionSetPassword{
+		tdCommon:           tdCommon{Type: "suggestedActionSetPassword"},
+		AuthorizationDelay: authorizationDelay,
+	}
+
+	return &suggestedActionSetPasswordTemp
+}
+
+// GetSuggestedActionEnum return the enum type of this object
+func (suggestedActionSetPassword *SuggestedActionSetPassword) GetSuggestedActionEnum() SuggestedActionEnum {
+	return SuggestedActionSetPasswordType
 }

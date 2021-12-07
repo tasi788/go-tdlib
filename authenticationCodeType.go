@@ -19,6 +19,7 @@ const (
 	AuthenticationCodeTypeSmsType             AuthenticationCodeTypeEnum = "authenticationCodeTypeSms"
 	AuthenticationCodeTypeCallType            AuthenticationCodeTypeEnum = "authenticationCodeTypeCall"
 	AuthenticationCodeTypeFlashCallType       AuthenticationCodeTypeEnum = "authenticationCodeTypeFlashCall"
+	AuthenticationCodeTypeMissedCallType      AuthenticationCodeTypeEnum = "authenticationCodeTypeMissedCall"
 )
 
 func unmarshalAuthenticationCodeType(rawMsg *json.RawMessage) (AuthenticationCodeType, error) {
@@ -52,6 +53,11 @@ func unmarshalAuthenticationCodeType(rawMsg *json.RawMessage) (AuthenticationCod
 		var authenticationCodeTypeFlashCall AuthenticationCodeTypeFlashCall
 		err := json.Unmarshal(*rawMsg, &authenticationCodeTypeFlashCall)
 		return &authenticationCodeTypeFlashCall, err
+
+	case AuthenticationCodeTypeMissedCallType:
+		var authenticationCodeTypeMissedCall AuthenticationCodeTypeMissedCall
+		err := json.Unmarshal(*rawMsg, &authenticationCodeTypeMissedCall)
+		return &authenticationCodeTypeMissedCall, err
 
 	default:
 		return nil, fmt.Errorf("Error UnMarshaling, unknown type:" + objMap["@type"].(string))
@@ -142,7 +148,7 @@ func (authenticationCodeTypeCall *AuthenticationCodeTypeCall) GetAuthenticationC
 	return AuthenticationCodeTypeCallType
 }
 
-// AuthenticationCodeTypeFlashCall An authentication code is delivered by an immediately canceled call to the specified phone number. The number from which the call was made is the code
+// AuthenticationCodeTypeFlashCall An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number from which the call was made is the code that should be entered automatically
 type AuthenticationCodeTypeFlashCall struct {
 	tdCommon
 	Pattern string `json:"pattern"` // Pattern of the phone number from which the call will be made
@@ -168,4 +174,35 @@ func NewAuthenticationCodeTypeFlashCall(pattern string) *AuthenticationCodeTypeF
 // GetAuthenticationCodeTypeEnum return the enum type of this object
 func (authenticationCodeTypeFlashCall *AuthenticationCodeTypeFlashCall) GetAuthenticationCodeTypeEnum() AuthenticationCodeTypeEnum {
 	return AuthenticationCodeTypeFlashCallType
+}
+
+// AuthenticationCodeTypeMissedCall An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number from which the call was made is the code that should be entered manually by the user
+type AuthenticationCodeTypeMissedCall struct {
+	tdCommon
+	PhoneNumberPrefix string `json:"phone_number_prefix"` // Prefix of the phone number from which the call will be made
+	Length            int32  `json:"length"`              // Number of digits in the code, excluding the prefix
+}
+
+// MessageType return the string telegram-type of AuthenticationCodeTypeMissedCall
+func (authenticationCodeTypeMissedCall *AuthenticationCodeTypeMissedCall) MessageType() string {
+	return "authenticationCodeTypeMissedCall"
+}
+
+// NewAuthenticationCodeTypeMissedCall creates a new AuthenticationCodeTypeMissedCall
+//
+// @param phoneNumberPrefix Prefix of the phone number from which the call will be made
+// @param length Number of digits in the code, excluding the prefix
+func NewAuthenticationCodeTypeMissedCall(phoneNumberPrefix string, length int32) *AuthenticationCodeTypeMissedCall {
+	authenticationCodeTypeMissedCallTemp := AuthenticationCodeTypeMissedCall{
+		tdCommon:          tdCommon{Type: "authenticationCodeTypeMissedCall"},
+		PhoneNumberPrefix: phoneNumberPrefix,
+		Length:            length,
+	}
+
+	return &authenticationCodeTypeMissedCallTemp
+}
+
+// GetAuthenticationCodeTypeEnum return the enum type of this object
+func (authenticationCodeTypeMissedCall *AuthenticationCodeTypeMissedCall) GetAuthenticationCodeTypeEnum() AuthenticationCodeTypeEnum {
+	return AuthenticationCodeTypeMissedCallType
 }

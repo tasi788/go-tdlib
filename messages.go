@@ -115,18 +115,18 @@ func (client *Client) GetMessageThreadHistory(chatId int64, messageId int64, fro
 // SearchChatMessages Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
 // @param chatId Identifier of the chat in which to search messages
 // @param query Query to search for
-// @param sender Sender of messages to search for; pass null to search for messages from any sender. Not supported in secret chats
+// @param senderId Identifier of the sender of messages to search for; pass null to search for messages from any sender. Not supported in secret chats
 // @param fromMessageId Identifier of the message starting from which history must be fetched; use 0 to get results from the last message
 // @param offset Specify 0 to get results from exactly the from_message_id or a negative offset to get the specified message and some newer messages
 // @param limit The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
 // @param filter Additional filter for messages to search; pass null to search for all messages
 // @param messageThreadId If not 0, only messages in the specified thread will be returned; supergroups only
-func (client *Client) SearchChatMessages(chatId int64, query string, sender MessageSender, fromMessageId int64, offset int32, limit int32, filter SearchMessagesFilter, messageThreadId int64) (*Messages, error) {
+func (client *Client) SearchChatMessages(chatId int64, query string, senderId MessageSender, fromMessageId int64, offset int32, limit int32, filter SearchMessagesFilter, messageThreadId int64) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":             "searchChatMessages",
 		"chat_id":           chatId,
 		"query":             query,
-		"sender":            sender,
+		"sender_id":         senderId,
 		"from_message_id":   fromMessageId,
 		"offset":            offset,
 		"limit":             limit,

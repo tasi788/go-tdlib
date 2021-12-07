@@ -1829,9 +1829,9 @@ func (messagePassportDataReceived *MessagePassportDataReceived) GetMessageConten
 // MessageProximityAlertTriggered A user in the chat came within proximity alert range
 type MessageProximityAlertTriggered struct {
 	tdCommon
-	Traveler MessageSender `json:"traveler"` // The user or chat, which triggered the proximity alert
-	Watcher  MessageSender `json:"watcher"`  // The user or chat, which subscribed for the proximity alert
-	Distance int32         `json:"distance"` // The distance between the users
+	TravelerId MessageSender `json:"traveler_id"` // The identifier of a user or chat that triggered the proximity alert
+	WatcherId  MessageSender `json:"watcher_id"`  // The identifier of a user or chat that subscribed for the proximity alert
+	Distance   int32         `json:"distance"`    // The distance between the users
 }
 
 // MessageType return the string telegram-type of MessageProximityAlertTriggered
@@ -1841,15 +1841,15 @@ func (messageProximityAlertTriggered *MessageProximityAlertTriggered) MessageTyp
 
 // NewMessageProximityAlertTriggered creates a new MessageProximityAlertTriggered
 //
-// @param traveler The user or chat, which triggered the proximity alert
-// @param watcher The user or chat, which subscribed for the proximity alert
+// @param travelerId The identifier of a user or chat that triggered the proximity alert
+// @param watcherId The identifier of a user or chat that subscribed for the proximity alert
 // @param distance The distance between the users
-func NewMessageProximityAlertTriggered(traveler MessageSender, watcher MessageSender, distance int32) *MessageProximityAlertTriggered {
+func NewMessageProximityAlertTriggered(travelerId MessageSender, watcherId MessageSender, distance int32) *MessageProximityAlertTriggered {
 	messageProximityAlertTriggeredTemp := MessageProximityAlertTriggered{
-		tdCommon: tdCommon{Type: "messageProximityAlertTriggered"},
-		Traveler: traveler,
-		Watcher:  watcher,
-		Distance: distance,
+		tdCommon:   tdCommon{Type: "messageProximityAlertTriggered"},
+		TravelerId: travelerId,
+		WatcherId:  watcherId,
+		Distance:   distance,
 	}
 
 	return &messageProximityAlertTriggeredTemp
@@ -1874,11 +1874,11 @@ func (messageProximityAlertTriggered *MessageProximityAlertTriggered) UnmarshalJ
 	messageProximityAlertTriggered.tdCommon = tempObj.tdCommon
 	messageProximityAlertTriggered.Distance = tempObj.Distance
 
-	fieldTraveler, _ := unmarshalMessageSender(objMap["traveler"])
-	messageProximityAlertTriggered.Traveler = fieldTraveler
+	fieldTravelerId, _ := unmarshalMessageSender(objMap["traveler_id"])
+	messageProximityAlertTriggered.TravelerId = fieldTravelerId
 
-	fieldWatcher, _ := unmarshalMessageSender(objMap["watcher"])
-	messageProximityAlertTriggered.Watcher = fieldWatcher
+	fieldWatcherId, _ := unmarshalMessageSender(objMap["watcher_id"])
+	messageProximityAlertTriggered.WatcherId = fieldWatcherId
 
 	return nil
 }

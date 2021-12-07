@@ -8,9 +8,9 @@ import (
 // AnimatedEmoji Describes an animated representation of an emoji
 type AnimatedEmoji struct {
 	tdCommon
-	Sticker           *Sticker           `json:"sticker"`            // Animated sticker for the emoji
-	ColorReplacements []ColorReplacement `json:"color_replacements"` // List of colors to be replaced while the sticker is rendered
-	Sound             *File              `json:"sound"`              // File containing the sound to be played when the animated emoji is clicked if any; may be null. The sound is encoded with the Opus codec, and stored inside an OGG container
+	Sticker         *Sticker `json:"sticker"`          // Animated sticker for the emoji
+	FitzpatrickType int32    `json:"fitzpatrick_type"` // Emoji modifier fitzpatrick type; 0-6; 0 if none
+	Sound           *File    `json:"sound"`            // File containing the sound to be played when the animated emoji is clicked if any; may be null. The sound is encoded with the Opus codec, and stored inside an OGG container
 }
 
 // MessageType return the string telegram-type of AnimatedEmoji
@@ -21,14 +21,14 @@ func (animatedEmoji *AnimatedEmoji) MessageType() string {
 // NewAnimatedEmoji creates a new AnimatedEmoji
 //
 // @param sticker Animated sticker for the emoji
-// @param colorReplacements List of colors to be replaced while the sticker is rendered
+// @param fitzpatrickType Emoji modifier fitzpatrick type; 0-6; 0 if none
 // @param sound File containing the sound to be played when the animated emoji is clicked if any; may be null. The sound is encoded with the Opus codec, and stored inside an OGG container
-func NewAnimatedEmoji(sticker *Sticker, colorReplacements []ColorReplacement, sound *File) *AnimatedEmoji {
+func NewAnimatedEmoji(sticker *Sticker, fitzpatrickType int32, sound *File) *AnimatedEmoji {
 	animatedEmojiTemp := AnimatedEmoji{
-		tdCommon:          tdCommon{Type: "animatedEmoji"},
-		Sticker:           sticker,
-		ColorReplacements: colorReplacements,
-		Sound:             sound,
+		tdCommon:        tdCommon{Type: "animatedEmoji"},
+		Sticker:         sticker,
+		FitzpatrickType: fitzpatrickType,
+		Sound:           sound,
 	}
 
 	return &animatedEmojiTemp

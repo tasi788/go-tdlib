@@ -22,6 +22,7 @@ const (
 	InlineKeyboardButtonTypeCallbackGameType         InlineKeyboardButtonTypeEnum = "inlineKeyboardButtonTypeCallbackGame"
 	InlineKeyboardButtonTypeSwitchInlineType         InlineKeyboardButtonTypeEnum = "inlineKeyboardButtonTypeSwitchInline"
 	InlineKeyboardButtonTypeBuyType                  InlineKeyboardButtonTypeEnum = "inlineKeyboardButtonTypeBuy"
+	InlineKeyboardButtonTypeUserType                 InlineKeyboardButtonTypeEnum = "inlineKeyboardButtonTypeUser"
 )
 
 func unmarshalInlineKeyboardButtonType(rawMsg *json.RawMessage) (InlineKeyboardButtonType, error) {
@@ -70,6 +71,11 @@ func unmarshalInlineKeyboardButtonType(rawMsg *json.RawMessage) (InlineKeyboardB
 		var inlineKeyboardButtonTypeBuy InlineKeyboardButtonTypeBuy
 		err := json.Unmarshal(*rawMsg, &inlineKeyboardButtonTypeBuy)
 		return &inlineKeyboardButtonTypeBuy, err
+
+	case InlineKeyboardButtonTypeUserType:
+		var inlineKeyboardButtonTypeUser InlineKeyboardButtonTypeUser
+		err := json.Unmarshal(*rawMsg, &inlineKeyboardButtonTypeUser)
+		return &inlineKeyboardButtonTypeUser, err
 
 	default:
 		return nil, fmt.Errorf("Error UnMarshaling, unknown type:" + objMap["@type"].(string))
@@ -273,4 +279,32 @@ func NewInlineKeyboardButtonTypeBuy() *InlineKeyboardButtonTypeBuy {
 // GetInlineKeyboardButtonTypeEnum return the enum type of this object
 func (inlineKeyboardButtonTypeBuy *InlineKeyboardButtonTypeBuy) GetInlineKeyboardButtonTypeEnum() InlineKeyboardButtonTypeEnum {
 	return InlineKeyboardButtonTypeBuyType
+}
+
+// InlineKeyboardButtonTypeUser A button to open a chat with a user
+type InlineKeyboardButtonTypeUser struct {
+	tdCommon
+	UserId int64 `json:"user_id"` // User identifier
+}
+
+// MessageType return the string telegram-type of InlineKeyboardButtonTypeUser
+func (inlineKeyboardButtonTypeUser *InlineKeyboardButtonTypeUser) MessageType() string {
+	return "inlineKeyboardButtonTypeUser"
+}
+
+// NewInlineKeyboardButtonTypeUser creates a new InlineKeyboardButtonTypeUser
+//
+// @param userId User identifier
+func NewInlineKeyboardButtonTypeUser(userId int64) *InlineKeyboardButtonTypeUser {
+	inlineKeyboardButtonTypeUserTemp := InlineKeyboardButtonTypeUser{
+		tdCommon: tdCommon{Type: "inlineKeyboardButtonTypeUser"},
+		UserId:   userId,
+	}
+
+	return &inlineKeyboardButtonTypeUserTemp
+}
+
+// GetInlineKeyboardButtonTypeEnum return the enum type of this object
+func (inlineKeyboardButtonTypeUser *InlineKeyboardButtonTypeUser) GetInlineKeyboardButtonTypeEnum() InlineKeyboardButtonTypeEnum {
+	return InlineKeyboardButtonTypeUserType
 }

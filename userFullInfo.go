@@ -13,6 +13,7 @@ type UserFullInfo struct {
 	CanBeCalled                     bool         `json:"can_be_called"`                       // True, if the user can be called
 	SupportsVideoCalls              bool         `json:"supports_video_calls"`                // True, if a video call can be created with the user
 	HasPrivateCalls                 bool         `json:"has_private_calls"`                   // True, if the user can't be called due to their privacy settings
+	HasPrivateForwards              bool         `json:"has_private_forwards"`                // True, if the user can't be linked in forwarded messages due to their privacy settings
 	NeedPhoneNumberPrivacyException bool         `json:"need_phone_number_privacy_exception"` // True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
 	Bio                             string       `json:"bio"`                                 // A short user bio
 	ShareText                       string       `json:"share_text"`                          // For bots, the text that is shown on the bot's profile page and is sent together with the link when users share the bot
@@ -33,13 +34,14 @@ func (userFullInfo *UserFullInfo) MessageType() string {
 // @param canBeCalled True, if the user can be called
 // @param supportsVideoCalls True, if a video call can be created with the user
 // @param hasPrivateCalls True, if the user can't be called due to their privacy settings
+// @param hasPrivateForwards True, if the user can't be linked in forwarded messages due to their privacy settings
 // @param needPhoneNumberPrivacyException True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used
 // @param bio A short user bio
 // @param shareText For bots, the text that is shown on the bot's profile page and is sent together with the link when users share the bot
 // @param description For bots, the text shown in the chat with the bot if the chat is empty
 // @param groupInCommonCount Number of group chats where both the other user and the current user are a member; 0 for the current user
 // @param commands For bots, list of the bot commands
-func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, supportsVideoCalls bool, hasPrivateCalls bool, needPhoneNumberPrivacyException bool, bio string, shareText string, description string, groupInCommonCount int32, commands []BotCommand) *UserFullInfo {
+func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, supportsVideoCalls bool, hasPrivateCalls bool, hasPrivateForwards bool, needPhoneNumberPrivacyException bool, bio string, shareText string, description string, groupInCommonCount int32, commands []BotCommand) *UserFullInfo {
 	userFullInfoTemp := UserFullInfo{
 		tdCommon:                        tdCommon{Type: "userFullInfo"},
 		Photo:                           photo,
@@ -47,6 +49,7 @@ func NewUserFullInfo(photo *ChatPhoto, isBlocked bool, canBeCalled bool, support
 		CanBeCalled:                     canBeCalled,
 		SupportsVideoCalls:              supportsVideoCalls,
 		HasPrivateCalls:                 hasPrivateCalls,
+		HasPrivateForwards:              hasPrivateForwards,
 		NeedPhoneNumberPrivacyException: needPhoneNumberPrivacyException,
 		Bio:                             bio,
 		ShareText:                       shareText,

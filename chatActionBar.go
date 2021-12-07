@@ -21,6 +21,7 @@ const (
 	ChatActionBarReportAddBlockType          ChatActionBarEnum = "chatActionBarReportAddBlock"
 	ChatActionBarAddContactType              ChatActionBarEnum = "chatActionBarAddContact"
 	ChatActionBarSharePhoneNumberType        ChatActionBarEnum = "chatActionBarSharePhoneNumber"
+	ChatActionBarJoinRequestType             ChatActionBarEnum = "chatActionBarJoinRequest"
 )
 
 func unmarshalChatActionBar(rawMsg *json.RawMessage) (ChatActionBar, error) {
@@ -64,6 +65,11 @@ func unmarshalChatActionBar(rawMsg *json.RawMessage) (ChatActionBar, error) {
 		var chatActionBarSharePhoneNumber ChatActionBarSharePhoneNumber
 		err := json.Unmarshal(*rawMsg, &chatActionBarSharePhoneNumber)
 		return &chatActionBarSharePhoneNumber, err
+
+	case ChatActionBarJoinRequestType:
+		var chatActionBarJoinRequest ChatActionBarJoinRequest
+		err := json.Unmarshal(*rawMsg, &chatActionBarJoinRequest)
+		return &chatActionBarJoinRequest, err
 
 	default:
 		return nil, fmt.Errorf("Error UnMarshaling, unknown type:" + objMap["@type"].(string))
@@ -123,7 +129,7 @@ func (chatActionBarReportUnrelatedLocation *ChatActionBarReportUnrelatedLocation
 	return ChatActionBarReportUnrelatedLocationType
 }
 
-// ChatActionBarInviteMembers The chat is a recently created group chat, to which new members can be invited
+// ChatActionBarInviteMembers The chat is a recently created group chat to which new members can be invited
 type ChatActionBarInviteMembers struct {
 	tdCommon
 }
@@ -227,4 +233,38 @@ func NewChatActionBarSharePhoneNumber() *ChatActionBarSharePhoneNumber {
 // GetChatActionBarEnum return the enum type of this object
 func (chatActionBarSharePhoneNumber *ChatActionBarSharePhoneNumber) GetChatActionBarEnum() ChatActionBarEnum {
 	return ChatActionBarSharePhoneNumberType
+}
+
+// ChatActionBarJoinRequest The chat is a private chat with an administrator of a chat to which the user sent join request
+type ChatActionBarJoinRequest struct {
+	tdCommon
+	Title       string `json:"title"`        // Title of the chat to which the join request was sent
+	IsChannel   bool   `json:"is_channel"`   // True, if the join request was sent to a channel chat
+	RequestDate int32  `json:"request_date"` // Point in time (Unix timestamp) when the join request was sent
+}
+
+// MessageType return the string telegram-type of ChatActionBarJoinRequest
+func (chatActionBarJoinRequest *ChatActionBarJoinRequest) MessageType() string {
+	return "chatActionBarJoinRequest"
+}
+
+// NewChatActionBarJoinRequest creates a new ChatActionBarJoinRequest
+//
+// @param title Title of the chat to which the join request was sent
+// @param isChannel True, if the join request was sent to a channel chat
+// @param requestDate Point in time (Unix timestamp) when the join request was sent
+func NewChatActionBarJoinRequest(title string, isChannel bool, requestDate int32) *ChatActionBarJoinRequest {
+	chatActionBarJoinRequestTemp := ChatActionBarJoinRequest{
+		tdCommon:    tdCommon{Type: "chatActionBarJoinRequest"},
+		Title:       title,
+		IsChannel:   isChannel,
+		RequestDate: requestDate,
+	}
+
+	return &chatActionBarJoinRequestTemp
+}
+
+// GetChatActionBarEnum return the enum type of this object
+func (chatActionBarJoinRequest *ChatActionBarJoinRequest) GetChatActionBarEnum() ChatActionBarEnum {
+	return ChatActionBarJoinRequestType
 }

@@ -37,6 +37,7 @@ const (
 	ChatEventSlowModeDelayChangedType                   ChatEventActionEnum = "chatEventSlowModeDelayChanged"
 	ChatEventMessageTtlSettingChangedType               ChatEventActionEnum = "chatEventMessageTtlSettingChanged"
 	ChatEventSignMessagesToggledType                    ChatEventActionEnum = "chatEventSignMessagesToggled"
+	ChatEventHasProtectedContentToggledType             ChatEventActionEnum = "chatEventHasProtectedContentToggled"
 	ChatEventStickerSetChangedType                      ChatEventActionEnum = "chatEventStickerSetChanged"
 	ChatEventLocationChangedType                        ChatEventActionEnum = "chatEventLocationChanged"
 	ChatEventIsAllHistoryAvailableToggledType           ChatEventActionEnum = "chatEventIsAllHistoryAvailableToggled"
@@ -171,6 +172,11 @@ func unmarshalChatEventAction(rawMsg *json.RawMessage) (ChatEventAction, error) 
 		var chatEventSignMessagesToggled ChatEventSignMessagesToggled
 		err := json.Unmarshal(*rawMsg, &chatEventSignMessagesToggled)
 		return &chatEventSignMessagesToggled, err
+
+	case ChatEventHasProtectedContentToggledType:
+		var chatEventHasProtectedContentToggled ChatEventHasProtectedContentToggled
+		err := json.Unmarshal(*rawMsg, &chatEventHasProtectedContentToggled)
+		return &chatEventHasProtectedContentToggled, err
 
 	case ChatEventStickerSetChangedType:
 		var chatEventStickerSetChanged ChatEventStickerSetChanged
@@ -969,6 +975,34 @@ func NewChatEventSignMessagesToggled(signMessages bool) *ChatEventSignMessagesTo
 // GetChatEventActionEnum return the enum type of this object
 func (chatEventSignMessagesToggled *ChatEventSignMessagesToggled) GetChatEventActionEnum() ChatEventActionEnum {
 	return ChatEventSignMessagesToggledType
+}
+
+// ChatEventHasProtectedContentToggled The has_protected_content setting of a channel was toggled
+type ChatEventHasProtectedContentToggled struct {
+	tdCommon
+	HasProtectedContent bool `json:"has_protected_content"` // New value of has_protected_content
+}
+
+// MessageType return the string telegram-type of ChatEventHasProtectedContentToggled
+func (chatEventHasProtectedContentToggled *ChatEventHasProtectedContentToggled) MessageType() string {
+	return "chatEventHasProtectedContentToggled"
+}
+
+// NewChatEventHasProtectedContentToggled creates a new ChatEventHasProtectedContentToggled
+//
+// @param hasProtectedContent New value of has_protected_content
+func NewChatEventHasProtectedContentToggled(hasProtectedContent bool) *ChatEventHasProtectedContentToggled {
+	chatEventHasProtectedContentToggledTemp := ChatEventHasProtectedContentToggled{
+		tdCommon:            tdCommon{Type: "chatEventHasProtectedContentToggled"},
+		HasProtectedContent: hasProtectedContent,
+	}
+
+	return &chatEventHasProtectedContentToggledTemp
+}
+
+// GetChatEventActionEnum return the enum type of this object
+func (chatEventHasProtectedContentToggled *ChatEventHasProtectedContentToggled) GetChatEventActionEnum() ChatEventActionEnum {
+	return ChatEventHasProtectedContentToggledType
 }
 
 // ChatEventStickerSetChanged The supergroup sticker set was changed

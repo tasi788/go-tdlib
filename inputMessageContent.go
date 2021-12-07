@@ -989,7 +989,7 @@ type InputMessagePoll struct {
 	IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
 	Type        PollType `json:"type"`         // Type of the poll
 	OpenPeriod  int32    `json:"open_period"`  // Amount of time the poll will be active after creation, in seconds; for bots only
-	CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
+	CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will automatically be closed; for bots only
 	IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
 }
 
@@ -1005,7 +1005,7 @@ func (inputMessagePoll *InputMessagePoll) MessageType() string {
 // @param isAnonymous True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
 // @param typeParam Type of the poll
 // @param openPeriod Amount of time the poll will be active after creation, in seconds; for bots only
-// @param closeDate Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
+// @param closeDate Point in time (Unix timestamp) when the poll will automatically be closed; for bots only
 // @param isClosed True, if the poll needs to be sent already closed; for bots only
 func NewInputMessagePoll(question string, options []string, isAnonymous bool, typeParam PollType, openPeriod int32, closeDate int32, isClosed bool) *InputMessagePoll {
 	inputMessagePollTemp := InputMessagePoll{
@@ -1035,7 +1035,7 @@ func (inputMessagePoll *InputMessagePoll) UnmarshalJSON(b []byte) error {
 		Options     []string `json:"options"`      // List of poll answer options, 2-10 strings 1-100 characters each
 		IsAnonymous bool     `json:"is_anonymous"` // True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels
 		OpenPeriod  int32    `json:"open_period"`  // Amount of time the poll will be active after creation, in seconds; for bots only
-		CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will be automatically closed; for bots only
+		CloseDate   int32    `json:"close_date"`   // Point in time (Unix timestamp) when the poll will automatically be closed; for bots only
 		IsClosed    bool     `json:"is_closed"`    // True, if the poll needs to be sent already closed; for bots only
 	}{}
 	err = json.Unmarshal(b, &tempObj)

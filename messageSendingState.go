@@ -74,10 +74,11 @@ func (messageSendingStatePending *MessageSendingStatePending) GetMessageSendingS
 // MessageSendingStateFailed The message failed to be sent
 type MessageSendingStateFailed struct {
 	tdCommon
-	ErrorCode    int32   `json:"error_code"`    // An error code; 0 if unknown
-	ErrorMessage string  `json:"error_message"` // Error message
-	CanRetry     bool    `json:"can_retry"`     // True, if the message can be re-sent
-	RetryAfter   float64 `json:"retry_after"`   // Time left before the message can be re-sent, in seconds. No update is sent when this field changes
+	ErrorCode         int32   `json:"error_code"`          // An error code; 0 if unknown
+	ErrorMessage      string  `json:"error_message"`       // Error message
+	CanRetry          bool    `json:"can_retry"`           // True, if the message can be re-sent
+	NeedAnotherSender bool    `json:"need_another_sender"` // True, if the message can be re-sent only on behalf of a different sender
+	RetryAfter        float64 `json:"retry_after"`         // Time left before the message can be re-sent, in seconds. No update is sent when this field changes
 }
 
 // MessageType return the string telegram-type of MessageSendingStateFailed
@@ -90,14 +91,16 @@ func (messageSendingStateFailed *MessageSendingStateFailed) MessageType() string
 // @param errorCode An error code; 0 if unknown
 // @param errorMessage Error message
 // @param canRetry True, if the message can be re-sent
+// @param needAnotherSender True, if the message can be re-sent only on behalf of a different sender
 // @param retryAfter Time left before the message can be re-sent, in seconds. No update is sent when this field changes
-func NewMessageSendingStateFailed(errorCode int32, errorMessage string, canRetry bool, retryAfter float64) *MessageSendingStateFailed {
+func NewMessageSendingStateFailed(errorCode int32, errorMessage string, canRetry bool, needAnotherSender bool, retryAfter float64) *MessageSendingStateFailed {
 	messageSendingStateFailedTemp := MessageSendingStateFailed{
-		tdCommon:     tdCommon{Type: "messageSendingStateFailed"},
-		ErrorCode:    errorCode,
-		ErrorMessage: errorMessage,
-		CanRetry:     canRetry,
-		RetryAfter:   retryAfter,
+		tdCommon:          tdCommon{Type: "messageSendingStateFailed"},
+		ErrorCode:         errorCode,
+		ErrorMessage:      errorMessage,
+		CanRetry:          canRetry,
+		NeedAnotherSender: needAnotherSender,
+		RetryAfter:        retryAfter,
 	}
 
 	return &messageSendingStateFailedTemp

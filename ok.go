@@ -110,7 +110,7 @@ func (client *Client) ResendAuthenticationCode() (*Ok, error) {
 }
 
 // CheckAuthenticationCode Checks the authentication code. Works only when the current authorization state is authorizationStateWaitCode
-// @param code The verification code received via SMS, Telegram message, phone call, or flash call
+// @param code Authentication code to check
 func (client *Client) CheckAuthenticationCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkAuthenticationCode",
@@ -399,7 +399,7 @@ func (client *Client) CancelPasswordReset() (*Ok, error) {
 	return &ok, err
 }
 
-// LoadChats Loads more chats from a chat list. The loaded chats and their positions in the chat list will be sent through updates. Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats has been loaded
+// LoadChats Loads more chats from a chat list. The loaded chats and their positions in the chat list will be sent through updates. Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats have been loaded
 // @param chatList The chat list in which to load chats; pass null to load chats from the main chat list
 // @param limit The maximum number of chats to be loaded. For optimal performance, the number of loaded chats is chosen by TDLib and can be smaller than the specified limit, even if the end of the list is not reached
 func (client *Client) LoadChats(chatList ChatList, limit int32) (*Ok, error) {
@@ -663,6 +663,29 @@ func (client *Client) RemoveNotificationGroup(notificationGroupId int32, maxNoti
 	return &ok, err
 }
 
+// SetChatDefaultMessageSender Changes default message sender that is chosen in a chat
+// @param chatId Chat identifier
+// @param defaultMessageSenderId New default message sender in the chat
+func (client *Client) SetChatDefaultMessageSender(chatId int64, defaultMessageSenderId MessageSender) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":                     "setChatDefaultMessageSender",
+		"chat_id":                   chatId,
+		"default_message_sender_id": defaultMessageSenderId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+}
+
 // SendChatScreenshotTakenNotification Sends a notification about a screenshot taken in a chat. Supported only in private and secret chats
 // @param chatId Chat identifier
 func (client *Client) SendChatScreenshotTakenNotification(chatId int64) (*Ok, error) {
@@ -709,14 +732,14 @@ func (client *Client) DeleteMessages(chatId int64, messageIds []int64, revoke bo
 	return &okDummy, err
 }
 
-// DeleteChatMessagesFromUser Deletes all messages sent by the specified user to a chat. Supported only for supergroups; requires can_delete_messages administrator privileges
+// DeleteChatMessagesBySender Deletes all messages sent by the specified message sender in a chat. Supported only for supergroups; requires can_delete_messages administrator privileges
 // @param chatId Chat identifier
-// @param userId User identifier
-func (client *Client) DeleteChatMessagesFromUser(chatId int64, userId int64) (*Ok, error) {
+// @param senderId Identifier of the sender of messages to delete
+func (client *Client) DeleteChatMessagesBySender(chatId int64, senderId MessageSender) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "deleteChatMessagesFromUser",
-		"chat_id": chatId,
-		"user_id": userId,
+		"@type":     "deleteChatMessagesBySender",
+		"chat_id":   chatId,
+		"sender_id": senderId,
 	})
 
 	if err != nil {
@@ -1510,6 +1533,29 @@ func (client *Client) SetChatNotificationSettings(chatId int64, notificationSett
 	return &ok, err
 }
 
+// ToggleChatHasProtectedContent Changes the ability of users to save, forward, or copy chat content. Supported only for basic groups, supergroups and channels. Requires owner privileges
+// @param chatId Chat identifier
+// @param hasProtectedContent True, if chat content can't be saved locally, forwarded, or copied
+func (client *Client) ToggleChatHasProtectedContent(chatId int64, hasProtectedContent bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":                 "toggleChatHasProtectedContent",
+		"chat_id":               chatId,
+		"has_protected_content": hasProtectedContent,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+}
+
 // ToggleChatIsMarkedAsUnread Changes the marked as unread state of a chat
 // @param chatId Chat identifier
 // @param isMarkedAsUnread New value of is_marked_as_unread
@@ -2229,14 +2275,16 @@ func (client *Client) DeleteAllRevokedChatInviteLinks(chatId int64, creatorUserI
 	return &ok, err
 }
 
-// ApproveChatJoinRequest Approves pending join request in a chat
+// ProcessChatJoinRequest Handles a pending join request in a chat
 // @param chatId Chat identifier
-// @param userId Identifier of the user, which request will be approved
-func (client *Client) ApproveChatJoinRequest(chatId int64, userId int64) (*Ok, error) {
+// @param userId Identifier of the user that sent the request
+// @param approve True, if the request is approved. Otherwise the request is declived
+func (client *Client) ProcessChatJoinRequest(chatId int64, userId int64, approve bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "approveChatJoinRequest",
+		"@type":   "processChatJoinRequest",
 		"chat_id": chatId,
 		"user_id": userId,
+		"approve": approve,
 	})
 
 	if err != nil {
@@ -2252,14 +2300,16 @@ func (client *Client) ApproveChatJoinRequest(chatId int64, userId int64) (*Ok, e
 	return &ok, err
 }
 
-// DeclineChatJoinRequest Declines pending join request in a chat
+// ProcessChatJoinRequests Handles all pending join requests for a given link in a chat
 // @param chatId Chat identifier
-// @param userId Identifier of the user, which request will be declined
-func (client *Client) DeclineChatJoinRequest(chatId int64, userId int64) (*Ok, error) {
+// @param inviteLink Invite link for which to process join requests. If empty, all join requests will be processed. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// @param approve True, if the requests are approved. Otherwise the requests are declived
+func (client *Client) ProcessChatJoinRequests(chatId int64, inviteLink string, approve bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "declineChatJoinRequest",
-		"chat_id": chatId,
-		"user_id": userId,
+		"@type":       "processChatJoinRequests",
+		"chat_id":     chatId,
+		"invite_link": inviteLink,
+		"approve":     approve,
 	})
 
 	if err != nil {
@@ -2795,7 +2845,7 @@ func (client *Client) ToggleGroupCallParticipantIsHandRaised(groupCallId int32, 
 	return &ok, err
 }
 
-// LoadGroupCallParticipants Loads more participants of a group call. The loaded participants will be received through updates. Use the field groupCall.loaded_all_participants to check whether all participants has already been loaded
+// LoadGroupCallParticipants Loads more participants of a group call. The loaded participants will be received through updates. Use the field groupCall.loaded_all_participants to check whether all participants have already been loaded
 // @param groupCallId Group call identifier. The group call must be previously received through getGroupCall and must be joined or being joined
 // @param limit The maximum number of participants to load; up to 100
 func (client *Client) LoadGroupCallParticipants(groupCallId int32, limit int32) (*Ok, error) {
@@ -2861,12 +2911,12 @@ func (client *Client) DiscardGroupCall(groupCallId int32) (*Ok, error) {
 }
 
 // ToggleMessageSenderIsBlocked Changes the block state of a message sender. Currently, only users and supergroup chats can be blocked
-// @param sender Message Sender
+// @param senderId Identifier of a message sender to block/unblock
 // @param isBlocked New value of is_blocked
-func (client *Client) ToggleMessageSenderIsBlocked(sender MessageSender, isBlocked bool) (*Ok, error) {
+func (client *Client) ToggleMessageSenderIsBlocked(senderId MessageSender, isBlocked bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":      "toggleMessageSenderIsBlocked",
-		"sender":     sender,
+		"sender_id":  senderId,
 		"is_blocked": isBlocked,
 	})
 
@@ -3341,7 +3391,7 @@ func (client *Client) SetLocation(location *Location) (*Ok, error) {
 }
 
 // CheckChangePhoneNumberCode Checks the authentication code sent to confirm a new phone number of the user
-// @param code Verification code received by SMS, phone call or flash call
+// @param code Authentication code to check
 func (client *Client) CheckChangePhoneNumberCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkChangePhoneNumberCode",
@@ -3449,6 +3499,73 @@ func (client *Client) TerminateAllOtherSessions() (*Ok, error) {
 	return &ok, err
 }
 
+// ToggleSessionCanAcceptCalls Toggles whether a session can accept incoming calls
+// @param sessionId Session identifier
+// @param canAcceptCalls True, if incoming calls can be accepted by the session
+func (client *Client) ToggleSessionCanAcceptCalls(sessionId JSONInt64, canAcceptCalls bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":            "toggleSessionCanAcceptCalls",
+		"session_id":       sessionId,
+		"can_accept_calls": canAcceptCalls,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+}
+
+// ToggleSessionCanAcceptSecretChats Toggles whether a session can accept incoming secret chats
+// @param sessionId Session identifier
+// @param canAcceptSecretChats True, if incoming secret chats can be accepted by the session
+func (client *Client) ToggleSessionCanAcceptSecretChats(sessionId JSONInt64, canAcceptSecretChats bool) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":                   "toggleSessionCanAcceptSecretChats",
+		"session_id":              sessionId,
+		"can_accept_secret_chats": canAcceptSecretChats,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+}
+
+// SetInactiveSessionTtl Changes the period of inactivity after which sessions will automatically be terminated
+// @param inactiveSessionTtlDays New number of days of inactivity before sessions will be automatically terminated; 1-366 days
+func (client *Client) SetInactiveSessionTtl(inactiveSessionTtlDays int32) (*Ok, error) {
+	result, err := client.SendAndCatch(UpdateData{
+		"@type":                     "setInactiveSessionTtl",
+		"inactive_session_ttl_days": inactiveSessionTtlDays,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if result.Data["@type"].(string) == "error" {
+		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
+	}
+
+	var ok Ok
+	err = json.Unmarshal(result.Raw, &ok)
+	return &ok, err
+}
+
 // DisconnectWebsite Disconnects website from the current user's Telegram account
 // @param websiteId Website identifier
 func (client *Client) DisconnectWebsite(websiteId JSONInt64) (*Ok, error) {
@@ -3535,7 +3652,7 @@ func (client *Client) SetSupergroupStickerSet(supergroupId int64, stickerSetId J
 	return &ok, err
 }
 
-// ToggleSupergroupSignMessages Toggles sender signatures messages sent in a channel; requires can_change_info administrator right
+// ToggleSupergroupSignMessages Toggles whether sender signature is added to sent messages in a channel; requires can_change_info administrator right
 // @param supergroupId Identifier of the channel
 // @param signMessages New value of sign_messages
 func (client *Client) ToggleSupergroupSignMessages(supergroupId int64, signMessages bool) (*Ok, error) {
@@ -3602,15 +3719,13 @@ func (client *Client) ToggleSupergroupIsBroadcastGroup(supergroupId int64) (*Ok,
 	return &ok, err
 }
 
-// ReportSupergroupSpam Reports some messages from a user in a supergroup as spam; requires administrator rights in the supergroup
+// ReportSupergroupSpam Reports some messages from a message sender in a supergroup as spam; requires administrator rights in the supergroup
 // @param supergroupId Supergroup identifier
-// @param userId User identifier
-// @param messageIds Identifiers of messages sent in the supergroup by the user. This list must be non-empty
-func (client *Client) ReportSupergroupSpam(supergroupId int64, userId int64, messageIds []int64) (*Ok, error) {
+// @param messageIds Identifiers of messages sent in the supergroup. All messages must be sent by the same sender. This list must be non-empty
+func (client *Client) ReportSupergroupSpam(supergroupId int64, messageIds []int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":         "reportSupergroupSpam",
 		"supergroup_id": supergroupId,
-		"user_id":       userId,
 		"message_ids":   messageIds,
 	})
 
@@ -4169,7 +4284,7 @@ func (client *Client) SetPassportElementErrors(userId int64, errors []InputPassp
 }
 
 // CheckPhoneNumberVerificationCode Checks the phone number verification code for Telegram Passport
-// @param code Verification code
+// @param code Verification code to check
 func (client *Client) CheckPhoneNumberVerificationCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkPhoneNumberVerificationCode",
@@ -4190,7 +4305,7 @@ func (client *Client) CheckPhoneNumberVerificationCode(code string) (*Ok, error)
 }
 
 // CheckEmailAddressVerificationCode Checks the email address verification code for Telegram Passport
-// @param code Verification code
+// @param code Verification code to check
 func (client *Client) CheckEmailAddressVerificationCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkEmailAddressVerificationCode",
@@ -4234,7 +4349,7 @@ func (client *Client) SendPassportAuthorizationForm(autorizationFormId int32, ty
 }
 
 // CheckPhoneNumberConfirmationCode Checks phone number confirmation code
-// @param code The phone number confirmation code
+// @param code Confirmation code to check
 func (client *Client) CheckPhoneNumberConfirmationCode(code string) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type": "checkPhoneNumberConfirmationCode",

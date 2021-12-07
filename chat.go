@@ -15,6 +15,8 @@ type Chat struct {
 	Permissions                *ChatPermissions          `json:"permissions"`                  // Actions that non-administrator chat members are allowed to take in the chat
 	LastMessage                *Message                  `json:"last_message"`                 // Last message in the chat; may be null
 	Positions                  []ChatPosition            `json:"positions"`                    // Positions of the chat in chat lists
+	DefaultMessageSenderId     MessageSender             `json:"default_message_sender_id"`    // Default identifier of a user or chat that is chosen to send messages in the chat; may be null if the user can't change message sender
+	HasProtectedContent        bool                      `json:"has_protected_content"`        // True, if chat content can't be saved locally, forwarded, or copied
 	IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
 	IsBlocked                  bool                      `json:"is_blocked"`                   // True, if the chat is blocked by the current user and private messages from the chat can't be received
 	HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
@@ -51,6 +53,8 @@ func (chat *Chat) MessageType() string {
 // @param permissions Actions that non-administrator chat members are allowed to take in the chat
 // @param lastMessage Last message in the chat; may be null
 // @param positions Positions of the chat in chat lists
+// @param defaultMessageSenderId Default identifier of a user or chat that is chosen to send messages in the chat; may be null if the user can't change message sender
+// @param hasProtectedContent True, if chat content can't be saved locally, forwarded, or copied
 // @param isMarkedAsUnread True, if the chat is marked as unread
 // @param isBlocked True, if the chat is blocked by the current user and private messages from the chat can't be received
 // @param hasScheduledMessages True, if the chat has scheduled messages
@@ -71,7 +75,7 @@ func (chat *Chat) MessageType() string {
 // @param replyMarkupMessageId Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the chat
 // @param draftMessage A draft of a message in the chat; may be null
 // @param clientData Application-specific data associated with the chat. (For example, the chat scroll position or local chat notification settings can be stored here.) Persistent if the message database is used
-func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, messageTtlSetting int32, themeName string, actionBar ChatActionBar, videoChat *VideoChat, pendingJoinRequests *ChatJoinRequestsInfo, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
+func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, permissions *ChatPermissions, lastMessage *Message, positions []ChatPosition, defaultMessageSenderId MessageSender, hasProtectedContent bool, isMarkedAsUnread bool, isBlocked bool, hasScheduledMessages bool, canBeDeletedOnlyForSelf bool, canBeDeletedForAllUsers bool, canBeReported bool, defaultDisableNotification bool, unreadCount int32, lastReadInboxMessageId int64, lastReadOutboxMessageId int64, unreadMentionCount int32, notificationSettings *ChatNotificationSettings, messageTtlSetting int32, themeName string, actionBar ChatActionBar, videoChat *VideoChat, pendingJoinRequests *ChatJoinRequestsInfo, replyMarkupMessageId int64, draftMessage *DraftMessage, clientData string) *Chat {
 	chatTemp := Chat{
 		tdCommon:                   tdCommon{Type: "chat"},
 		Id:                         id,
@@ -81,6 +85,8 @@ func NewChat(id int64, typeParam ChatType, title string, photo *ChatPhotoInfo, p
 		Permissions:                permissions,
 		LastMessage:                lastMessage,
 		Positions:                  positions,
+		DefaultMessageSenderId:     defaultMessageSenderId,
+		HasProtectedContent:        hasProtectedContent,
 		IsMarkedAsUnread:           isMarkedAsUnread,
 		IsBlocked:                  isBlocked,
 		HasScheduledMessages:       hasScheduledMessages,
@@ -121,6 +127,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 		Permissions                *ChatPermissions          `json:"permissions"`                  // Actions that non-administrator chat members are allowed to take in the chat
 		LastMessage                *Message                  `json:"last_message"`                 // Last message in the chat; may be null
 		Positions                  []ChatPosition            `json:"positions"`                    // Positions of the chat in chat lists
+		HasProtectedContent        bool                      `json:"has_protected_content"`        // True, if chat content can't be saved locally, forwarded, or copied
 		IsMarkedAsUnread           bool                      `json:"is_marked_as_unread"`          // True, if the chat is marked as unread
 		IsBlocked                  bool                      `json:"is_blocked"`                   // True, if the chat is blocked by the current user and private messages from the chat can't be received
 		HasScheduledMessages       bool                      `json:"has_scheduled_messages"`       // True, if the chat has scheduled messages
@@ -153,6 +160,7 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 	chat.Permissions = tempObj.Permissions
 	chat.LastMessage = tempObj.LastMessage
 	chat.Positions = tempObj.Positions
+	chat.HasProtectedContent = tempObj.HasProtectedContent
 	chat.IsMarkedAsUnread = tempObj.IsMarkedAsUnread
 	chat.IsBlocked = tempObj.IsBlocked
 	chat.HasScheduledMessages = tempObj.HasScheduledMessages
@@ -175,6 +183,9 @@ func (chat *Chat) UnmarshalJSON(b []byte) error {
 
 	fieldType, _ := unmarshalChatType(objMap["type"])
 	chat.Type = fieldType
+
+	fieldDefaultMessageSenderId, _ := unmarshalMessageSender(objMap["default_message_sender_id"])
+	chat.DefaultMessageSenderId = fieldDefaultMessageSenderId
 
 	fieldActionBar, _ := unmarshalChatActionBar(objMap["action_bar"])
 	chat.ActionBar = fieldActionBar
