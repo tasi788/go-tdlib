@@ -530,7 +530,7 @@ func (client *Client) CheckCreatedPublicChatsLimit(typeParam PublicChatType) (*O
 // DeleteChatHistory Deletes all messages in the chat. Use chat.can_be_deleted_only_for_self and chat.can_be_deleted_for_all_users fields to find whether and how the method can be applied to the chat
 // @param chatId Chat identifier
 // @param removeFromChatList Pass true if the chat needs to be removed from the chat list
-// @param revoke Pass true to try to delete chat history for all users
+// @param revoke Pass true to delete chat history for all users
 func (client *Client) DeleteChatHistory(chatId int64, removeFromChatList bool, revoke bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":                 "deleteChatHistory",
@@ -594,29 +594,6 @@ func (client *Client) DeleteAllCallMessages(revoke bool) (*Ok, error) {
 	return &okDummy, err
 }
 
-// ViewSponsoredMessage Informs TDLib that a sponsored message was viewed by the user
-// @param chatId Identifier of the chat with the sponsored message
-// @param sponsoredMessageId The identifier of the sponsored message being viewed
-func (client *Client) ViewSponsoredMessage(chatId int64, sponsoredMessageId int32) (*Ok, error) {
-	result, err := client.SendAndCatch(UpdateData{
-		"@type":                "viewSponsoredMessage",
-		"chat_id":              chatId,
-		"sponsored_message_id": sponsoredMessageId,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	if result.Data["@type"].(string) == "error" {
-		return nil, fmt.Errorf("error! code: %v msg: %s", result.Data["code"], result.Data["message"])
-	}
-
-	var ok Ok
-	err = json.Unmarshal(result.Raw, &ok)
-	return &ok, err
-}
-
 // RemoveNotification Removes an active notification from notification list. Needs to be called only if the notification is removed by the current user
 // @param notificationGroupId Identifier of notification group to which the notification belongs
 // @param notificationId Identifier of removed notification
@@ -663,14 +640,14 @@ func (client *Client) RemoveNotificationGroup(notificationGroupId int32, maxNoti
 	return &ok, err
 }
 
-// SetChatDefaultMessageSender Changes default message sender that is chosen in a chat
+// SetChatMessageSender Selects a message sender to send messages in a chat
 // @param chatId Chat identifier
-// @param defaultMessageSenderId New default message sender in the chat
-func (client *Client) SetChatDefaultMessageSender(chatId int64, defaultMessageSenderId MessageSender) (*Ok, error) {
+// @param messageSenderId New message sender for the chat
+func (client *Client) SetChatMessageSender(chatId int64, messageSenderId MessageSender) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":                     "setChatDefaultMessageSender",
-		"chat_id":                   chatId,
-		"default_message_sender_id": defaultMessageSenderId,
+		"@type":             "setChatMessageSender",
+		"chat_id":           chatId,
+		"message_sender_id": messageSenderId,
 	})
 
 	if err != nil {
@@ -710,7 +687,7 @@ func (client *Client) SendChatScreenshotTakenNotification(chatId int64) (*Ok, er
 // DeleteMessages Deletes messages
 // @param chatId Chat identifier
 // @param messageIds Identifiers of the messages to be deleted
-// @param revoke Pass true to try to delete messages for all chat members. Always true for supergroups, channels and secret chats
+// @param revoke Pass true to delete messages for all chat members. Always true for supergroups, channels and secret chats
 func (client *Client) DeleteMessages(chatId int64, messageIds []int64, revoke bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":       "deleteMessages",
@@ -759,7 +736,7 @@ func (client *Client) DeleteChatMessagesBySender(chatId int64, senderId MessageS
 // @param chatId Chat identifier
 // @param minDate The minimum date of the messages to delete
 // @param maxDate The maximum date of the messages to delete
-// @param revoke Pass true to try to delete chat messages for all users; private chats only
+// @param revoke Pass true to delete chat messages for all users; private chats only
 func (client *Client) DeleteChatMessagesByDate(chatId int64, minDate int32, maxDate int32, revoke bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":    "deleteChatMessagesByDate",
@@ -1234,7 +1211,7 @@ func (client *Client) CloseChat(chatId int64) (*Ok, error) {
 	return &ok, err
 }
 
-// ViewMessages Informs TDLib that messages are being viewed by the user. Many useful activities depend on whether the messages are currently being viewed or not (e.g., marking messages as read, incrementing a view counter, updating a view counter, removing deleted messages in supergroups and channels)
+// ViewMessages Informs TDLib that messages are being viewed by the user. Sponsored messages must be marked as viewed only when the entire text of the message is shown on the screen (excluding the button). Many useful activities depend on whether the messages are currently being viewed or not (e.g., marking messages as read, incrementing a view counter, updating a view counter, removing deleted messages in supergroups and channels)
 // @param chatId Chat identifier
 // @param messageThreadId If not 0, a message thread identifier in which the messages are being viewed
 // @param messageIds The identifiers of the messages being viewed
@@ -1416,12 +1393,12 @@ func (client *Client) SetChatPhoto(chatId int64, photo InputChatPhoto) (*Ok, err
 	return &ok, err
 }
 
-// SetChatMessageTtlSetting Changes the message TTL setting (sets a new self-destruct timer) in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and channels Message TTL setting of a chat with the current user (Saved Messages) and the chat 777000 (Telegram) can't be changed
+// SetChatMessageTtl Changes the message TTL in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and channels Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram)
 // @param chatId Chat identifier
 // @param ttl New TTL value, in seconds; must be one of 0, 86400, 7 * 86400, or 31 * 86400 unless the chat is secret
-func (client *Client) SetChatMessageTtlSetting(chatId int64, ttl int32) (*Ok, error) {
+func (client *Client) SetChatMessageTtl(chatId int64, ttl int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":   "setChatMessageTtlSetting",
+		"@type":   "setChatMessageTtl",
 		"chat_id": chatId,
 		"ttl":     ttl,
 	})
@@ -1855,7 +1832,7 @@ func (client *Client) AddChatMember(chatId int64, userId int64, forwardLimit int
 	return &ok, err
 }
 
-// AddChatMembers Adds multiple new members to a chat. Currently this method is only available for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more than 200 members
+// AddChatMembers Adds multiple new members to a chat. Currently, this method is only available for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more than 200 members
 // @param chatId Chat identifier
 // @param userIds Identifiers of the users to be added to the chat. The maximum number of added users is 20 for supergroups and 100 for channels
 func (client *Client) AddChatMembers(chatId int64, userIds []int64) (*Ok, error) {
@@ -1906,7 +1883,7 @@ func (client *Client) SetChatMemberStatus(chatId int64, memberId MessageSender, 
 // BanChatMember Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first
 // @param chatId Chat identifier
 // @param memberId Member identifier
-// @param bannedUntilDate Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups
+// @param bannedUntilDate Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups and if a chat is banned
 // @param revokeMessages Pass true to delete all messages in the chat for the user that is being removed. Always true for supergroups and channels
 func (client *Client) BanChatMember(chatId int64, memberId MessageSender, bannedUntilDate int32, revokeMessages bool) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
@@ -2450,7 +2427,7 @@ func (client *Client) SendCallDebugInformation(callId int32, debugInformation st
 	return &ok, err
 }
 
-// SetVideoChatDefaultParticipant Changes default participant identifier, which can be used to join video chats in a chat
+// SetVideoChatDefaultParticipant Changes default participant identifier, on whose behalf a video chat in the chat will be joined
 // @param chatId Chat identifier
 // @param defaultParticipantId Default group call participant identifier to join the video chats
 func (client *Client) SetVideoChatDefaultParticipant(chatId int64, defaultParticipantId MessageSender) (*Ok, error) {
@@ -2607,12 +2584,14 @@ func (client *Client) ToggleGroupCallMuteNewParticipants(groupCallId int32, mute
 	return &ok, err
 }
 
-// RevokeGroupCallInviteLink Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag
+// InviteGroupCallParticipants Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for video chats
 // @param groupCallId Group call identifier
-func (client *Client) RevokeGroupCallInviteLink(groupCallId int32) (*Ok, error) {
+// @param userIds User identifiers. At most 10 users can be invited simultaneously
+func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":         "revokeGroupCallInviteLink",
+		"@type":         "inviteGroupCallParticipants",
 		"group_call_id": groupCallId,
+		"user_ids":      userIds,
 	})
 
 	if err != nil {
@@ -2628,14 +2607,12 @@ func (client *Client) RevokeGroupCallInviteLink(groupCallId int32) (*Ok, error) 
 	return &ok, err
 }
 
-// InviteGroupCallParticipants Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for video chats
+// RevokeGroupCallInviteLink Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag
 // @param groupCallId Group call identifier
-// @param userIds User identifiers. At most 10 users can be invited simultaneously
-func (client *Client) InviteGroupCallParticipants(groupCallId int32, userIds []int64) (*Ok, error) {
+func (client *Client) RevokeGroupCallInviteLink(groupCallId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":         "inviteGroupCallParticipants",
+		"@type":         "revokeGroupCallInviteLink",
 		"group_call_id": groupCallId,
-		"user_ids":      userIds,
 	})
 
 	if err != nil {
@@ -2889,11 +2866,11 @@ func (client *Client) LeaveGroupCall(groupCallId int32) (*Ok, error) {
 	return &ok, err
 }
 
-// DiscardGroupCall Discards a group call. Requires groupCall.can_be_managed
+// EndGroupCall Ends a group call. Requires groupCall.can_be_managed
 // @param groupCallId Group call identifier
-func (client *Client) DiscardGroupCall(groupCallId int32) (*Ok, error) {
+func (client *Client) EndGroupCall(groupCallId int32) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
-		"@type":         "discardGroupCall",
+		"@type":         "endGroupCall",
 		"group_call_id": groupCallId,
 	})
 
@@ -3719,9 +3696,9 @@ func (client *Client) ToggleSupergroupIsBroadcastGroup(supergroupId int64) (*Ok,
 	return &ok, err
 }
 
-// ReportSupergroupSpam Reports some messages from a message sender in a supergroup as spam; requires administrator rights in the supergroup
+// ReportSupergroupSpam Reports messages in a supergroup as spam; requires administrator rights in the supergroup
 // @param supergroupId Supergroup identifier
-// @param messageIds Identifiers of messages sent in the supergroup. All messages must be sent by the same sender. This list must be non-empty
+// @param messageIds Identifiers of messages to report
 func (client *Client) ReportSupergroupSpam(supergroupId int64, messageIds []int64) (*Ok, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":         "reportSupergroupSpam",
@@ -4101,7 +4078,7 @@ func (client *Client) RemoveChatActionBar(chatId int64) (*Ok, error) {
 	return &ok, err
 }
 
-// ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if this is a private chat with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
+// ReportChat Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if chat.can_be_reported
 // @param chatId Chat identifier
 // @param messageIds Identifiers of reported messages, if any
 // @param reason The reason for reporting the chat
@@ -4128,7 +4105,7 @@ func (client *Client) ReportChat(chatId int64, messageIds []int64, reason ChatRe
 	return &ok, err
 }
 
-// ReportChatPhoto Reports a chat photo to the Telegram moderators. A chat photo can be reported only if this is a private chat with a bot, a private chat with a user sharing their location, a supergroup, or a channel, since other chats can't be checked by moderators
+// ReportChatPhoto Reports a chat photo to the Telegram moderators. A chat photo can be reported only if chat.can_be_reported
 // @param chatId Chat identifier
 // @param fileId Identifier of the photo to report. Only full photos from chatPhoto can be reported
 // @param reason The reason for reporting the chat photo

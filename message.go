@@ -239,11 +239,11 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 			switch reply.Type {
 			case "messageSenderUser":
 				{
-					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderUser(reply.UserID))
+					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderUser(reply.UserID))
 				}
 			case "messageSenderChat":
 				{
-					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderChat(reply.ChatID))
+					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderChat(reply.ChatID))
 				}
 			default:
 				return fmt.Errorf("Error unmarshaling, unknown messageSender type:" + reply.Type)

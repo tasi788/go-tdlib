@@ -52,7 +52,7 @@ func (client *Client) GetChatAvailableMessageSenders(chatId int64) (*MessageSend
 	return &messageSenders, err
 }
 
-// GetVideoChatAvailableParticipants Returns list of participant identifiers, which can be used to join video chats in a chat
+// GetVideoChatAvailableParticipants Returns list of participant identifiers, on whose behalf a video chat in the chat can be joined
 // @param chatId Chat identifier
 func (client *Client) GetVideoChatAvailableParticipants(chatId int64) (*MessageSenders, error) {
 	result, err := client.SendAndCatch(UpdateData{

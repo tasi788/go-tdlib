@@ -1,6 +1,6 @@
 package tdlib
 
-// ChatInviteLinkMember Describes a chat member joined a chat by an invite link
+// ChatInviteLinkMember Describes a chat member joined a chat via an invite link
 type ChatInviteLinkMember struct {
 	tdCommon
 	UserId         int64 `json:"user_id"`          // User identifier

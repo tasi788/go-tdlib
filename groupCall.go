@@ -18,7 +18,7 @@ type GroupCall struct {
 	CanBeManaged                 bool                     `json:"can_be_managed"`                   // True, if the current user can manage the group call
 	ParticipantCount             int32                    `json:"participant_count"`                // Number of participants in the group call
 	LoadedAllParticipants        bool                     `json:"loaded_all_participants"`          // True, if all group call participants are loaded
-	RecentSpeakers               []GroupCallRecentSpeaker `json:"recent_speakers"`                  // Recently speaking users in the group call
+	RecentSpeakers               []GroupCallRecentSpeaker `json:"recent_speakers"`                  // At most 3 recently speaking users in the group call
 	IsMyVideoEnabled             bool                     `json:"is_my_video_enabled"`              // True, if the current user's video is enabled
 	IsMyVideoPaused              bool                     `json:"is_my_video_paused"`               // True, if the current user's video is paused
 	CanEnableVideo               bool                     `json:"can_enable_video"`                 // True, if the current user can broadcast video or share screen
@@ -46,7 +46,7 @@ func (groupCall *GroupCall) MessageType() string {
 // @param canBeManaged True, if the current user can manage the group call
 // @param participantCount Number of participants in the group call
 // @param loadedAllParticipants True, if all group call participants are loaded
-// @param recentSpeakers Recently speaking users in the group call
+// @param recentSpeakers At most 3 recently speaking users in the group call
 // @param isMyVideoEnabled True, if the current user's video is enabled
 // @param isMyVideoPaused True, if the current user's video is paused
 // @param canEnableVideo True, if the current user can broadcast video or share screen

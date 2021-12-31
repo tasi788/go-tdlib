@@ -9,7 +9,7 @@ import (
 type ChatFilter struct {
 	tdCommon
 	Title              string  `json:"title"`                // The title of the filter; 1-12 characters without line feeds
-	IconName           string  `json:"icon_name"`            // The icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work". If empty, use getChatFilterDefaultIconName to get default icon name for the filter
+	IconName           string  `json:"icon_name"`            // The chosen icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work". If empty, use getChatFilterDefaultIconName to get default icon name for the filter
 	PinnedChatIds      []int64 `json:"pinned_chat_ids"`      // The chat identifiers of pinned chats in the filtered chat list
 	IncludedChatIds    []int64 `json:"included_chat_ids"`    // The chat identifiers of always included chats in the filtered chat list
 	ExcludedChatIds    []int64 `json:"excluded_chat_ids"`    // The chat identifiers of always excluded chats in the filtered chat list
@@ -31,7 +31,7 @@ func (chatFilter *ChatFilter) MessageType() string {
 // NewChatFilter creates a new ChatFilter
 //
 // @param title The title of the filter; 1-12 characters without line feeds
-// @param iconName The icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work". If empty, use getChatFilterDefaultIconName to get default icon name for the filter
+// @param iconName The chosen icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work". If empty, use getChatFilterDefaultIconName to get default icon name for the filter
 // @param pinnedChatIds The chat identifiers of pinned chats in the filtered chat list
 // @param includedChatIds The chat identifiers of always included chats in the filtered chat list
 // @param excludedChatIds The chat identifiers of always excluded chats in the filtered chat list

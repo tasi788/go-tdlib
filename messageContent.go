@@ -1323,7 +1323,7 @@ func (messageChatAddMembers *MessageChatAddMembers) GetMessageContentEnum() Mess
 	return MessageChatAddMembersType
 }
 
-// MessageChatJoinByLink A new member joined the chat by invite link
+// MessageChatJoinByLink A new member joined the chat via an invite link
 type MessageChatJoinByLink struct {
 	tdCommon
 }
@@ -1544,7 +1544,7 @@ func (messageChatSetTheme *MessageChatSetTheme) GetMessageContentEnum() MessageC
 // MessageChatSetTtl The TTL (Time To Live) setting for messages in the chat has been changed
 type MessageChatSetTtl struct {
 	tdCommon
-	Ttl int32 `json:"ttl"` // New message TTL setting
+	Ttl int32 `json:"ttl"` // New message TTL
 }
 
 // MessageType return the string telegram-type of MessageChatSetTtl
@@ -1554,7 +1554,7 @@ func (messageChatSetTtl *MessageChatSetTtl) MessageType() string {
 
 // NewMessageChatSetTtl creates a new MessageChatSetTtl
 //
-// @param ttl New message TTL setting
+// @param ttl New message TTL
 func NewMessageChatSetTtl(ttl int32) *MessageChatSetTtl {
 	messageChatSetTtlTemp := MessageChatSetTtl{
 		tdCommon: tdCommon{Type: "messageChatSetTtl"},

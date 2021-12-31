@@ -308,7 +308,7 @@ func (chatStatisticsChannel *ChatStatisticsChannel) GetChatStatisticsEnum() Chat
 	return ChatStatisticsChannelType
 }
 
-// GetChatStatistics Returns detailed statistics about a chat. Currently this method can be used only for supergroups and channels. Can be used only if supergroupFullInfo.can_get_statistics == true
+// GetChatStatistics Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be used only if supergroupFullInfo.can_get_statistics == true
 // @param chatId Chat identifier
 // @param isDark Pass true if a dark theme is used by the application
 func (client *Client) GetChatStatistics(chatId int64, isDark bool) (ChatStatistics, error) {

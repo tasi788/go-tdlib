@@ -25,8 +25,6 @@ const (
 	SearchMessagesFilterPhotoAndVideoType     SearchMessagesFilterEnum = "searchMessagesFilterPhotoAndVideo"
 	SearchMessagesFilterUrlType               SearchMessagesFilterEnum = "searchMessagesFilterUrl"
 	SearchMessagesFilterChatPhotoType         SearchMessagesFilterEnum = "searchMessagesFilterChatPhoto"
-	SearchMessagesFilterCallType              SearchMessagesFilterEnum = "searchMessagesFilterCall"
-	SearchMessagesFilterMissedCallType        SearchMessagesFilterEnum = "searchMessagesFilterMissedCall"
 	SearchMessagesFilterVideoNoteType         SearchMessagesFilterEnum = "searchMessagesFilterVideoNote"
 	SearchMessagesFilterVoiceAndVideoNoteType SearchMessagesFilterEnum = "searchMessagesFilterVoiceAndVideoNote"
 	SearchMessagesFilterMentionType           SearchMessagesFilterEnum = "searchMessagesFilterMention"
@@ -96,16 +94,6 @@ func unmarshalSearchMessagesFilter(rawMsg *json.RawMessage) (SearchMessagesFilte
 		var searchMessagesFilterChatPhoto SearchMessagesFilterChatPhoto
 		err := json.Unmarshal(*rawMsg, &searchMessagesFilterChatPhoto)
 		return &searchMessagesFilterChatPhoto, err
-
-	case SearchMessagesFilterCallType:
-		var searchMessagesFilterCall SearchMessagesFilterCall
-		err := json.Unmarshal(*rawMsg, &searchMessagesFilterCall)
-		return &searchMessagesFilterCall, err
-
-	case SearchMessagesFilterMissedCallType:
-		var searchMessagesFilterMissedCall SearchMessagesFilterMissedCall
-		err := json.Unmarshal(*rawMsg, &searchMessagesFilterMissedCall)
-		return &searchMessagesFilterMissedCall, err
 
 	case SearchMessagesFilterVideoNoteType:
 		var searchMessagesFilterVideoNote SearchMessagesFilterVideoNote
@@ -390,56 +378,6 @@ func NewSearchMessagesFilterChatPhoto() *SearchMessagesFilterChatPhoto {
 // GetSearchMessagesFilterEnum return the enum type of this object
 func (searchMessagesFilterChatPhoto *SearchMessagesFilterChatPhoto) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
 	return SearchMessagesFilterChatPhotoType
-}
-
-// SearchMessagesFilterCall Returns only call messages
-type SearchMessagesFilterCall struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of SearchMessagesFilterCall
-func (searchMessagesFilterCall *SearchMessagesFilterCall) MessageType() string {
-	return "searchMessagesFilterCall"
-}
-
-// NewSearchMessagesFilterCall creates a new SearchMessagesFilterCall
-//
-func NewSearchMessagesFilterCall() *SearchMessagesFilterCall {
-	searchMessagesFilterCallTemp := SearchMessagesFilterCall{
-		tdCommon: tdCommon{Type: "searchMessagesFilterCall"},
-	}
-
-	return &searchMessagesFilterCallTemp
-}
-
-// GetSearchMessagesFilterEnum return the enum type of this object
-func (searchMessagesFilterCall *SearchMessagesFilterCall) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
-	return SearchMessagesFilterCallType
-}
-
-// SearchMessagesFilterMissedCall Returns only incoming call messages with missed/declined discard reasons
-type SearchMessagesFilterMissedCall struct {
-	tdCommon
-}
-
-// MessageType return the string telegram-type of SearchMessagesFilterMissedCall
-func (searchMessagesFilterMissedCall *SearchMessagesFilterMissedCall) MessageType() string {
-	return "searchMessagesFilterMissedCall"
-}
-
-// NewSearchMessagesFilterMissedCall creates a new SearchMessagesFilterMissedCall
-//
-func NewSearchMessagesFilterMissedCall() *SearchMessagesFilterMissedCall {
-	searchMessagesFilterMissedCallTemp := SearchMessagesFilterMissedCall{
-		tdCommon: tdCommon{Type: "searchMessagesFilterMissedCall"},
-	}
-
-	return &searchMessagesFilterMissedCallTemp
-}
-
-// GetSearchMessagesFilterEnum return the enum type of this object
-func (searchMessagesFilterMissedCall *SearchMessagesFilterMissedCall) GetSearchMessagesFilterEnum() SearchMessagesFilterEnum {
-	return SearchMessagesFilterMissedCallType
 }
 
 // SearchMessagesFilterVideoNote Returns only video note messages

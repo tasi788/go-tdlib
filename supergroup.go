@@ -13,13 +13,13 @@ type Supergroup struct {
 	Username          string           `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 	Date              int32            `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 	Status            ChatMemberStatus `json:"status"`               // Status of the current user in the supergroup or channel; custom title will be always empty
-	MemberCount       int32            `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
+	MemberCount       int32            `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 	HasLinkedChat     bool             `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 	HasLocation       bool             `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 	SignMessages      bool             `json:"sign_messages"`        // True, if messages sent to the channel need to contain information about the sender. This field is only applicable to channels
 	IsSlowModeEnabled bool             `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
 	IsChannel         bool             `json:"is_channel"`           // True, if the supergroup is a channel
-	IsBroadcastGroup  bool             `json:"is_broadcast_group"`   // True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on number of members
+	IsBroadcastGroup  bool             `json:"is_broadcast_group"`   // True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on the number of members
 	IsVerified        bool             `json:"is_verified"`          // True, if the supergroup or channel is verified
 	RestrictionReason string           `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 	IsScam            bool             `json:"is_scam"`              // True, if many users reported this supergroup or channel as a scam
@@ -38,13 +38,13 @@ func (supergroup *Supergroup) MessageType() string {
 // @param username Username of the supergroup or channel; empty for private supergroups or channels
 // @param date Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
 // @param status Status of the current user in the supergroup or channel; custom title will be always empty
-// @param memberCount Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
+// @param memberCount Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 // @param hasLinkedChat True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 // @param hasLocation True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 // @param signMessages True, if messages sent to the channel need to contain information about the sender. This field is only applicable to channels
 // @param isSlowModeEnabled True, if the slow mode is enabled in the supergroup
 // @param isChannel True, if the supergroup is a channel
-// @param isBroadcastGroup True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on number of members
+// @param isBroadcastGroup True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on the number of members
 // @param isVerified True, if the supergroup or channel is verified
 // @param restrictionReason If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 // @param isScam True, if many users reported this supergroup or channel as a scam
@@ -86,13 +86,13 @@ func (supergroup *Supergroup) UnmarshalJSON(b []byte) error {
 		AccessHash        JSONInt64 `json:"access_hash"`          // Supergroup or channel access hash
 		Username          string    `json:"username"`             // Username of the supergroup or channel; empty for private supergroups or channels
 		Date              int32     `json:"date"`                 // Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was created, in case the user is not a member
-		MemberCount       int32     `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
+		MemberCount       int32     `json:"member_count"`         // Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats, getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules
 		HasLinkedChat     bool      `json:"has_linked_chat"`      // True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel
 		HasLocation       bool      `json:"has_location"`         // True, if the supergroup is connected to a location, i.e. the supergroup is a location-based supergroup
 		SignMessages      bool      `json:"sign_messages"`        // True, if messages sent to the channel need to contain information about the sender. This field is only applicable to channels
 		IsSlowModeEnabled bool      `json:"is_slow_mode_enabled"` // True, if the slow mode is enabled in the supergroup
 		IsChannel         bool      `json:"is_channel"`           // True, if the supergroup is a channel
-		IsBroadcastGroup  bool      `json:"is_broadcast_group"`   // True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on number of members
+		IsBroadcastGroup  bool      `json:"is_broadcast_group"`   // True, if the supergroup is a broadcast group, i.e. only administrators can send messages and there is no limit on the number of members
 		IsVerified        bool      `json:"is_verified"`          // True, if the supergroup or channel is verified
 		RestrictionReason string    `json:"restriction_reason"`   // If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be restricted
 		IsScam            bool      `json:"is_scam"`              // True, if many users reported this supergroup or channel as a scam

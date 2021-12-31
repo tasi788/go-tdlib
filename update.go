@@ -33,26 +33,26 @@ const (
 	UpdateChatPermissionsType                UpdateEnum = "updateChatPermissions"
 	UpdateChatLastMessageType                UpdateEnum = "updateChatLastMessage"
 	UpdateChatPositionType                   UpdateEnum = "updateChatPosition"
-	UpdateChatDefaultMessageSenderIdType     UpdateEnum = "updateChatDefaultMessageSenderId"
-	UpdateChatHasProtectedContentType        UpdateEnum = "updateChatHasProtectedContent"
-	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
-	UpdateChatIsBlockedType                  UpdateEnum = "updateChatIsBlocked"
-	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
-	UpdateChatVideoChatType                  UpdateEnum = "updateChatVideoChat"
-	UpdateChatDefaultDisableNotificationType UpdateEnum = "updateChatDefaultDisableNotification"
 	UpdateChatReadInboxType                  UpdateEnum = "updateChatReadInbox"
 	UpdateChatReadOutboxType                 UpdateEnum = "updateChatReadOutbox"
-	UpdateChatUnreadMentionCountType         UpdateEnum = "updateChatUnreadMentionCount"
-	UpdateChatNotificationSettingsType       UpdateEnum = "updateChatNotificationSettings"
-	UpdateScopeNotificationSettingsType      UpdateEnum = "updateScopeNotificationSettings"
-	UpdateChatMessageTtlSettingType          UpdateEnum = "updateChatMessageTtlSetting"
 	UpdateChatActionBarType                  UpdateEnum = "updateChatActionBar"
-	UpdateChatThemeType                      UpdateEnum = "updateChatTheme"
+	UpdateChatDraftMessageType               UpdateEnum = "updateChatDraftMessage"
+	UpdateChatMessageSenderType              UpdateEnum = "updateChatMessageSender"
+	UpdateChatMessageTtlType                 UpdateEnum = "updateChatMessageTtl"
+	UpdateChatNotificationSettingsType       UpdateEnum = "updateChatNotificationSettings"
 	UpdateChatPendingJoinRequestsType        UpdateEnum = "updateChatPendingJoinRequests"
 	UpdateChatReplyMarkupType                UpdateEnum = "updateChatReplyMarkup"
-	UpdateChatDraftMessageType               UpdateEnum = "updateChatDraftMessage"
+	UpdateChatThemeType                      UpdateEnum = "updateChatTheme"
+	UpdateChatUnreadMentionCountType         UpdateEnum = "updateChatUnreadMentionCount"
+	UpdateChatVideoChatType                  UpdateEnum = "updateChatVideoChat"
+	UpdateChatDefaultDisableNotificationType UpdateEnum = "updateChatDefaultDisableNotification"
+	UpdateChatHasProtectedContentType        UpdateEnum = "updateChatHasProtectedContent"
+	UpdateChatHasScheduledMessagesType       UpdateEnum = "updateChatHasScheduledMessages"
+	UpdateChatIsBlockedType                  UpdateEnum = "updateChatIsBlocked"
+	UpdateChatIsMarkedAsUnreadType           UpdateEnum = "updateChatIsMarkedAsUnread"
 	UpdateChatFiltersType                    UpdateEnum = "updateChatFilters"
 	UpdateChatOnlineMemberCountType          UpdateEnum = "updateChatOnlineMemberCount"
+	UpdateScopeNotificationSettingsType      UpdateEnum = "updateScopeNotificationSettings"
 	UpdateNotificationType                   UpdateEnum = "updateNotification"
 	UpdateNotificationGroupType              UpdateEnum = "updateNotificationGroup"
 	UpdateActiveNotificationsType            UpdateEnum = "updateActiveNotifications"
@@ -211,41 +211,6 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatPosition)
 		return &updateChatPosition, err
 
-	case UpdateChatDefaultMessageSenderIdType:
-		var updateChatDefaultMessageSenderId UpdateChatDefaultMessageSenderId
-		err := json.Unmarshal(*rawMsg, &updateChatDefaultMessageSenderId)
-		return &updateChatDefaultMessageSenderId, err
-
-	case UpdateChatHasProtectedContentType:
-		var updateChatHasProtectedContent UpdateChatHasProtectedContent
-		err := json.Unmarshal(*rawMsg, &updateChatHasProtectedContent)
-		return &updateChatHasProtectedContent, err
-
-	case UpdateChatIsMarkedAsUnreadType:
-		var updateChatIsMarkedAsUnread UpdateChatIsMarkedAsUnread
-		err := json.Unmarshal(*rawMsg, &updateChatIsMarkedAsUnread)
-		return &updateChatIsMarkedAsUnread, err
-
-	case UpdateChatIsBlockedType:
-		var updateChatIsBlocked UpdateChatIsBlocked
-		err := json.Unmarshal(*rawMsg, &updateChatIsBlocked)
-		return &updateChatIsBlocked, err
-
-	case UpdateChatHasScheduledMessagesType:
-		var updateChatHasScheduledMessages UpdateChatHasScheduledMessages
-		err := json.Unmarshal(*rawMsg, &updateChatHasScheduledMessages)
-		return &updateChatHasScheduledMessages, err
-
-	case UpdateChatVideoChatType:
-		var updateChatVideoChat UpdateChatVideoChat
-		err := json.Unmarshal(*rawMsg, &updateChatVideoChat)
-		return &updateChatVideoChat, err
-
-	case UpdateChatDefaultDisableNotificationType:
-		var updateChatDefaultDisableNotification UpdateChatDefaultDisableNotification
-		err := json.Unmarshal(*rawMsg, &updateChatDefaultDisableNotification)
-		return &updateChatDefaultDisableNotification, err
-
 	case UpdateChatReadInboxType:
 		var updateChatReadInbox UpdateChatReadInbox
 		err := json.Unmarshal(*rawMsg, &updateChatReadInbox)
@@ -256,35 +221,30 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatReadOutbox)
 		return &updateChatReadOutbox, err
 
-	case UpdateChatUnreadMentionCountType:
-		var updateChatUnreadMentionCount UpdateChatUnreadMentionCount
-		err := json.Unmarshal(*rawMsg, &updateChatUnreadMentionCount)
-		return &updateChatUnreadMentionCount, err
-
-	case UpdateChatNotificationSettingsType:
-		var updateChatNotificationSettings UpdateChatNotificationSettings
-		err := json.Unmarshal(*rawMsg, &updateChatNotificationSettings)
-		return &updateChatNotificationSettings, err
-
-	case UpdateScopeNotificationSettingsType:
-		var updateScopeNotificationSettings UpdateScopeNotificationSettings
-		err := json.Unmarshal(*rawMsg, &updateScopeNotificationSettings)
-		return &updateScopeNotificationSettings, err
-
-	case UpdateChatMessageTtlSettingType:
-		var updateChatMessageTtlSetting UpdateChatMessageTtlSetting
-		err := json.Unmarshal(*rawMsg, &updateChatMessageTtlSetting)
-		return &updateChatMessageTtlSetting, err
-
 	case UpdateChatActionBarType:
 		var updateChatActionBar UpdateChatActionBar
 		err := json.Unmarshal(*rawMsg, &updateChatActionBar)
 		return &updateChatActionBar, err
 
-	case UpdateChatThemeType:
-		var updateChatTheme UpdateChatTheme
-		err := json.Unmarshal(*rawMsg, &updateChatTheme)
-		return &updateChatTheme, err
+	case UpdateChatDraftMessageType:
+		var updateChatDraftMessage UpdateChatDraftMessage
+		err := json.Unmarshal(*rawMsg, &updateChatDraftMessage)
+		return &updateChatDraftMessage, err
+
+	case UpdateChatMessageSenderType:
+		var updateChatMessageSender UpdateChatMessageSender
+		err := json.Unmarshal(*rawMsg, &updateChatMessageSender)
+		return &updateChatMessageSender, err
+
+	case UpdateChatMessageTtlType:
+		var updateChatMessageTtl UpdateChatMessageTtl
+		err := json.Unmarshal(*rawMsg, &updateChatMessageTtl)
+		return &updateChatMessageTtl, err
+
+	case UpdateChatNotificationSettingsType:
+		var updateChatNotificationSettings UpdateChatNotificationSettings
+		err := json.Unmarshal(*rawMsg, &updateChatNotificationSettings)
+		return &updateChatNotificationSettings, err
 
 	case UpdateChatPendingJoinRequestsType:
 		var updateChatPendingJoinRequests UpdateChatPendingJoinRequests
@@ -296,10 +256,45 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		err := json.Unmarshal(*rawMsg, &updateChatReplyMarkup)
 		return &updateChatReplyMarkup, err
 
-	case UpdateChatDraftMessageType:
-		var updateChatDraftMessage UpdateChatDraftMessage
-		err := json.Unmarshal(*rawMsg, &updateChatDraftMessage)
-		return &updateChatDraftMessage, err
+	case UpdateChatThemeType:
+		var updateChatTheme UpdateChatTheme
+		err := json.Unmarshal(*rawMsg, &updateChatTheme)
+		return &updateChatTheme, err
+
+	case UpdateChatUnreadMentionCountType:
+		var updateChatUnreadMentionCount UpdateChatUnreadMentionCount
+		err := json.Unmarshal(*rawMsg, &updateChatUnreadMentionCount)
+		return &updateChatUnreadMentionCount, err
+
+	case UpdateChatVideoChatType:
+		var updateChatVideoChat UpdateChatVideoChat
+		err := json.Unmarshal(*rawMsg, &updateChatVideoChat)
+		return &updateChatVideoChat, err
+
+	case UpdateChatDefaultDisableNotificationType:
+		var updateChatDefaultDisableNotification UpdateChatDefaultDisableNotification
+		err := json.Unmarshal(*rawMsg, &updateChatDefaultDisableNotification)
+		return &updateChatDefaultDisableNotification, err
+
+	case UpdateChatHasProtectedContentType:
+		var updateChatHasProtectedContent UpdateChatHasProtectedContent
+		err := json.Unmarshal(*rawMsg, &updateChatHasProtectedContent)
+		return &updateChatHasProtectedContent, err
+
+	case UpdateChatHasScheduledMessagesType:
+		var updateChatHasScheduledMessages UpdateChatHasScheduledMessages
+		err := json.Unmarshal(*rawMsg, &updateChatHasScheduledMessages)
+		return &updateChatHasScheduledMessages, err
+
+	case UpdateChatIsBlockedType:
+		var updateChatIsBlocked UpdateChatIsBlocked
+		err := json.Unmarshal(*rawMsg, &updateChatIsBlocked)
+		return &updateChatIsBlocked, err
+
+	case UpdateChatIsMarkedAsUnreadType:
+		var updateChatIsMarkedAsUnread UpdateChatIsMarkedAsUnread
+		err := json.Unmarshal(*rawMsg, &updateChatIsMarkedAsUnread)
+		return &updateChatIsMarkedAsUnread, err
 
 	case UpdateChatFiltersType:
 		var updateChatFilters UpdateChatFilters
@@ -310,6 +305,11 @@ func unmarshalUpdate(rawMsg *json.RawMessage) (Update, error) {
 		var updateChatOnlineMemberCount UpdateChatOnlineMemberCount
 		err := json.Unmarshal(*rawMsg, &updateChatOnlineMemberCount)
 		return &updateChatOnlineMemberCount, err
+
+	case UpdateScopeNotificationSettingsType:
+		var updateScopeNotificationSettings UpdateScopeNotificationSettings
+		err := json.Unmarshal(*rawMsg, &updateScopeNotificationSettings)
+		return &updateScopeNotificationSettings, err
 
 	case UpdateNotificationType:
 		var updateNotification UpdateNotification
@@ -1243,249 +1243,6 @@ func (updateChatPosition *UpdateChatPosition) GetUpdateEnum() UpdateEnum {
 	return UpdateChatPositionType
 }
 
-// UpdateChatDefaultMessageSenderId The default message sender that is chosen to send messages in a chat has changed
-type UpdateChatDefaultMessageSenderId struct {
-	tdCommon
-	ChatId                 int64         `json:"chat_id"`                   // Chat identifier
-	DefaultMessageSenderId MessageSender `json:"default_message_sender_id"` // New value of default_message_sender_id; may be null if the user can't change message sender
-}
-
-// MessageType return the string telegram-type of UpdateChatDefaultMessageSenderId
-func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) MessageType() string {
-	return "updateChatDefaultMessageSenderId"
-}
-
-// NewUpdateChatDefaultMessageSenderId creates a new UpdateChatDefaultMessageSenderId
-//
-// @param chatId Chat identifier
-// @param defaultMessageSenderId New value of default_message_sender_id; may be null if the user can't change message sender
-func NewUpdateChatDefaultMessageSenderId(chatId int64, defaultMessageSenderId MessageSender) *UpdateChatDefaultMessageSenderId {
-	updateChatDefaultMessageSenderIdTemp := UpdateChatDefaultMessageSenderId{
-		tdCommon:               tdCommon{Type: "updateChatDefaultMessageSenderId"},
-		ChatId:                 chatId,
-		DefaultMessageSenderId: defaultMessageSenderId,
-	}
-
-	return &updateChatDefaultMessageSenderIdTemp
-}
-
-// UnmarshalJSON unmarshal to json
-func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) UnmarshalJSON(b []byte) error {
-	var objMap map[string]*json.RawMessage
-	err := json.Unmarshal(b, &objMap)
-	if err != nil {
-		return err
-	}
-	tempObj := struct {
-		tdCommon
-		ChatId int64 `json:"chat_id"` // Chat identifier
-
-	}{}
-	err = json.Unmarshal(b, &tempObj)
-	if err != nil {
-		return err
-	}
-
-	updateChatDefaultMessageSenderId.tdCommon = tempObj.tdCommon
-	updateChatDefaultMessageSenderId.ChatId = tempObj.ChatId
-
-	fieldDefaultMessageSenderId, _ := unmarshalMessageSender(objMap["default_message_sender_id"])
-	updateChatDefaultMessageSenderId.DefaultMessageSenderId = fieldDefaultMessageSenderId
-
-	return nil
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatDefaultMessageSenderId *UpdateChatDefaultMessageSenderId) GetUpdateEnum() UpdateEnum {
-	return UpdateChatDefaultMessageSenderIdType
-}
-
-// UpdateChatHasProtectedContent A chat content was allowed or restricted for saving
-type UpdateChatHasProtectedContent struct {
-	tdCommon
-	ChatId              int64 `json:"chat_id"`               // Chat identifier
-	HasProtectedContent bool  `json:"has_protected_content"` // New value of has_protected_content
-}
-
-// MessageType return the string telegram-type of UpdateChatHasProtectedContent
-func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) MessageType() string {
-	return "updateChatHasProtectedContent"
-}
-
-// NewUpdateChatHasProtectedContent creates a new UpdateChatHasProtectedContent
-//
-// @param chatId Chat identifier
-// @param hasProtectedContent New value of has_protected_content
-func NewUpdateChatHasProtectedContent(chatId int64, hasProtectedContent bool) *UpdateChatHasProtectedContent {
-	updateChatHasProtectedContentTemp := UpdateChatHasProtectedContent{
-		tdCommon:            tdCommon{Type: "updateChatHasProtectedContent"},
-		ChatId:              chatId,
-		HasProtectedContent: hasProtectedContent,
-	}
-
-	return &updateChatHasProtectedContentTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) GetUpdateEnum() UpdateEnum {
-	return UpdateChatHasProtectedContentType
-}
-
-// UpdateChatIsMarkedAsUnread A chat was marked as unread or was read
-type UpdateChatIsMarkedAsUnread struct {
-	tdCommon
-	ChatId           int64 `json:"chat_id"`             // Chat identifier
-	IsMarkedAsUnread bool  `json:"is_marked_as_unread"` // New value of is_marked_as_unread
-}
-
-// MessageType return the string telegram-type of UpdateChatIsMarkedAsUnread
-func (updateChatIsMarkedAsUnread *UpdateChatIsMarkedAsUnread) MessageType() string {
-	return "updateChatIsMarkedAsUnread"
-}
-
-// NewUpdateChatIsMarkedAsUnread creates a new UpdateChatIsMarkedAsUnread
-//
-// @param chatId Chat identifier
-// @param isMarkedAsUnread New value of is_marked_as_unread
-func NewUpdateChatIsMarkedAsUnread(chatId int64, isMarkedAsUnread bool) *UpdateChatIsMarkedAsUnread {
-	updateChatIsMarkedAsUnreadTemp := UpdateChatIsMarkedAsUnread{
-		tdCommon:         tdCommon{Type: "updateChatIsMarkedAsUnread"},
-		ChatId:           chatId,
-		IsMarkedAsUnread: isMarkedAsUnread,
-	}
-
-	return &updateChatIsMarkedAsUnreadTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatIsMarkedAsUnread *UpdateChatIsMarkedAsUnread) GetUpdateEnum() UpdateEnum {
-	return UpdateChatIsMarkedAsUnreadType
-}
-
-// UpdateChatIsBlocked A chat was blocked or unblocked
-type UpdateChatIsBlocked struct {
-	tdCommon
-	ChatId    int64 `json:"chat_id"`    // Chat identifier
-	IsBlocked bool  `json:"is_blocked"` // New value of is_blocked
-}
-
-// MessageType return the string telegram-type of UpdateChatIsBlocked
-func (updateChatIsBlocked *UpdateChatIsBlocked) MessageType() string {
-	return "updateChatIsBlocked"
-}
-
-// NewUpdateChatIsBlocked creates a new UpdateChatIsBlocked
-//
-// @param chatId Chat identifier
-// @param isBlocked New value of is_blocked
-func NewUpdateChatIsBlocked(chatId int64, isBlocked bool) *UpdateChatIsBlocked {
-	updateChatIsBlockedTemp := UpdateChatIsBlocked{
-		tdCommon:  tdCommon{Type: "updateChatIsBlocked"},
-		ChatId:    chatId,
-		IsBlocked: isBlocked,
-	}
-
-	return &updateChatIsBlockedTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatIsBlocked *UpdateChatIsBlocked) GetUpdateEnum() UpdateEnum {
-	return UpdateChatIsBlockedType
-}
-
-// UpdateChatHasScheduledMessages A chat's has_scheduled_messages field has changed
-type UpdateChatHasScheduledMessages struct {
-	tdCommon
-	ChatId               int64 `json:"chat_id"`                // Chat identifier
-	HasScheduledMessages bool  `json:"has_scheduled_messages"` // New value of has_scheduled_messages
-}
-
-// MessageType return the string telegram-type of UpdateChatHasScheduledMessages
-func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) MessageType() string {
-	return "updateChatHasScheduledMessages"
-}
-
-// NewUpdateChatHasScheduledMessages creates a new UpdateChatHasScheduledMessages
-//
-// @param chatId Chat identifier
-// @param hasScheduledMessages New value of has_scheduled_messages
-func NewUpdateChatHasScheduledMessages(chatId int64, hasScheduledMessages bool) *UpdateChatHasScheduledMessages {
-	updateChatHasScheduledMessagesTemp := UpdateChatHasScheduledMessages{
-		tdCommon:             tdCommon{Type: "updateChatHasScheduledMessages"},
-		ChatId:               chatId,
-		HasScheduledMessages: hasScheduledMessages,
-	}
-
-	return &updateChatHasScheduledMessagesTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) GetUpdateEnum() UpdateEnum {
-	return UpdateChatHasScheduledMessagesType
-}
-
-// UpdateChatVideoChat A chat video chat state has changed
-type UpdateChatVideoChat struct {
-	tdCommon
-	ChatId    int64      `json:"chat_id"`    // Chat identifier
-	VideoChat *VideoChat `json:"video_chat"` // New value of video_chat
-}
-
-// MessageType return the string telegram-type of UpdateChatVideoChat
-func (updateChatVideoChat *UpdateChatVideoChat) MessageType() string {
-	return "updateChatVideoChat"
-}
-
-// NewUpdateChatVideoChat creates a new UpdateChatVideoChat
-//
-// @param chatId Chat identifier
-// @param videoChat New value of video_chat
-func NewUpdateChatVideoChat(chatId int64, videoChat *VideoChat) *UpdateChatVideoChat {
-	updateChatVideoChatTemp := UpdateChatVideoChat{
-		tdCommon:  tdCommon{Type: "updateChatVideoChat"},
-		ChatId:    chatId,
-		VideoChat: videoChat,
-	}
-
-	return &updateChatVideoChatTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatVideoChat *UpdateChatVideoChat) GetUpdateEnum() UpdateEnum {
-	return UpdateChatVideoChatType
-}
-
-// UpdateChatDefaultDisableNotification The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
-type UpdateChatDefaultDisableNotification struct {
-	tdCommon
-	ChatId                     int64 `json:"chat_id"`                      // Chat identifier
-	DefaultDisableNotification bool  `json:"default_disable_notification"` // The new default_disable_notification value
-}
-
-// MessageType return the string telegram-type of UpdateChatDefaultDisableNotification
-func (updateChatDefaultDisableNotification *UpdateChatDefaultDisableNotification) MessageType() string {
-	return "updateChatDefaultDisableNotification"
-}
-
-// NewUpdateChatDefaultDisableNotification creates a new UpdateChatDefaultDisableNotification
-//
-// @param chatId Chat identifier
-// @param defaultDisableNotification The new default_disable_notification value
-func NewUpdateChatDefaultDisableNotification(chatId int64, defaultDisableNotification bool) *UpdateChatDefaultDisableNotification {
-	updateChatDefaultDisableNotificationTemp := UpdateChatDefaultDisableNotification{
-		tdCommon:                   tdCommon{Type: "updateChatDefaultDisableNotification"},
-		ChatId:                     chatId,
-		DefaultDisableNotification: defaultDisableNotification,
-	}
-
-	return &updateChatDefaultDisableNotificationTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatDefaultDisableNotification *UpdateChatDefaultDisableNotification) GetUpdateEnum() UpdateEnum {
-	return UpdateChatDefaultDisableNotificationType
-}
-
 // UpdateChatReadInbox Incoming messages were read or the number of unread messages has been changed
 type UpdateChatReadInbox struct {
 	tdCommon
@@ -1551,155 +1308,6 @@ func (updateChatReadOutbox *UpdateChatReadOutbox) GetUpdateEnum() UpdateEnum {
 	return UpdateChatReadOutboxType
 }
 
-// UpdateChatUnreadMentionCount The chat unread_mention_count has changed
-type UpdateChatUnreadMentionCount struct {
-	tdCommon
-	ChatId             int64 `json:"chat_id"`              // Chat identifier
-	UnreadMentionCount int32 `json:"unread_mention_count"` // The number of unread mention messages left in the chat
-}
-
-// MessageType return the string telegram-type of UpdateChatUnreadMentionCount
-func (updateChatUnreadMentionCount *UpdateChatUnreadMentionCount) MessageType() string {
-	return "updateChatUnreadMentionCount"
-}
-
-// NewUpdateChatUnreadMentionCount creates a new UpdateChatUnreadMentionCount
-//
-// @param chatId Chat identifier
-// @param unreadMentionCount The number of unread mention messages left in the chat
-func NewUpdateChatUnreadMentionCount(chatId int64, unreadMentionCount int32) *UpdateChatUnreadMentionCount {
-	updateChatUnreadMentionCountTemp := UpdateChatUnreadMentionCount{
-		tdCommon:           tdCommon{Type: "updateChatUnreadMentionCount"},
-		ChatId:             chatId,
-		UnreadMentionCount: unreadMentionCount,
-	}
-
-	return &updateChatUnreadMentionCountTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatUnreadMentionCount *UpdateChatUnreadMentionCount) GetUpdateEnum() UpdateEnum {
-	return UpdateChatUnreadMentionCountType
-}
-
-// UpdateChatNotificationSettings Notification settings for a chat were changed
-type UpdateChatNotificationSettings struct {
-	tdCommon
-	ChatId               int64                     `json:"chat_id"`               // Chat identifier
-	NotificationSettings *ChatNotificationSettings `json:"notification_settings"` // The new notification settings
-}
-
-// MessageType return the string telegram-type of UpdateChatNotificationSettings
-func (updateChatNotificationSettings *UpdateChatNotificationSettings) MessageType() string {
-	return "updateChatNotificationSettings"
-}
-
-// NewUpdateChatNotificationSettings creates a new UpdateChatNotificationSettings
-//
-// @param chatId Chat identifier
-// @param notificationSettings The new notification settings
-func NewUpdateChatNotificationSettings(chatId int64, notificationSettings *ChatNotificationSettings) *UpdateChatNotificationSettings {
-	updateChatNotificationSettingsTemp := UpdateChatNotificationSettings{
-		tdCommon:             tdCommon{Type: "updateChatNotificationSettings"},
-		ChatId:               chatId,
-		NotificationSettings: notificationSettings,
-	}
-
-	return &updateChatNotificationSettingsTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatNotificationSettings *UpdateChatNotificationSettings) GetUpdateEnum() UpdateEnum {
-	return UpdateChatNotificationSettingsType
-}
-
-// UpdateScopeNotificationSettings Notification settings for some type of chats were updated
-type UpdateScopeNotificationSettings struct {
-	tdCommon
-	Scope                NotificationSettingsScope  `json:"scope"`                 // Types of chats for which notification settings were updated
-	NotificationSettings *ScopeNotificationSettings `json:"notification_settings"` // The new notification settings
-}
-
-// MessageType return the string telegram-type of UpdateScopeNotificationSettings
-func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) MessageType() string {
-	return "updateScopeNotificationSettings"
-}
-
-// NewUpdateScopeNotificationSettings creates a new UpdateScopeNotificationSettings
-//
-// @param scope Types of chats for which notification settings were updated
-// @param notificationSettings The new notification settings
-func NewUpdateScopeNotificationSettings(scope NotificationSettingsScope, notificationSettings *ScopeNotificationSettings) *UpdateScopeNotificationSettings {
-	updateScopeNotificationSettingsTemp := UpdateScopeNotificationSettings{
-		tdCommon:             tdCommon{Type: "updateScopeNotificationSettings"},
-		Scope:                scope,
-		NotificationSettings: notificationSettings,
-	}
-
-	return &updateScopeNotificationSettingsTemp
-}
-
-// UnmarshalJSON unmarshal to json
-func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) UnmarshalJSON(b []byte) error {
-	var objMap map[string]*json.RawMessage
-	err := json.Unmarshal(b, &objMap)
-	if err != nil {
-		return err
-	}
-	tempObj := struct {
-		tdCommon
-		NotificationSettings *ScopeNotificationSettings `json:"notification_settings"` // The new notification settings
-	}{}
-	err = json.Unmarshal(b, &tempObj)
-	if err != nil {
-		return err
-	}
-
-	updateScopeNotificationSettings.tdCommon = tempObj.tdCommon
-	updateScopeNotificationSettings.NotificationSettings = tempObj.NotificationSettings
-
-	fieldScope, _ := unmarshalNotificationSettingsScope(objMap["scope"])
-	updateScopeNotificationSettings.Scope = fieldScope
-
-	return nil
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) GetUpdateEnum() UpdateEnum {
-	return UpdateScopeNotificationSettingsType
-}
-
-// UpdateChatMessageTtlSetting The message Time To Live setting for a chat was changed
-type UpdateChatMessageTtlSetting struct {
-	tdCommon
-	ChatId            int64 `json:"chat_id"`             // Chat identifier
-	MessageTtlSetting int32 `json:"message_ttl_setting"` // New value of message_ttl_setting
-}
-
-// MessageType return the string telegram-type of UpdateChatMessageTtlSetting
-func (updateChatMessageTtlSetting *UpdateChatMessageTtlSetting) MessageType() string {
-	return "updateChatMessageTtlSetting"
-}
-
-// NewUpdateChatMessageTtlSetting creates a new UpdateChatMessageTtlSetting
-//
-// @param chatId Chat identifier
-// @param messageTtlSetting New value of message_ttl_setting
-func NewUpdateChatMessageTtlSetting(chatId int64, messageTtlSetting int32) *UpdateChatMessageTtlSetting {
-	updateChatMessageTtlSettingTemp := UpdateChatMessageTtlSetting{
-		tdCommon:          tdCommon{Type: "updateChatMessageTtlSetting"},
-		ChatId:            chatId,
-		MessageTtlSetting: messageTtlSetting,
-	}
-
-	return &updateChatMessageTtlSettingTemp
-}
-
-// GetUpdateEnum return the enum type of this object
-func (updateChatMessageTtlSetting *UpdateChatMessageTtlSetting) GetUpdateEnum() UpdateEnum {
-	return UpdateChatMessageTtlSettingType
-}
-
 // UpdateChatActionBar The chat action bar was changed
 type UpdateChatActionBar struct {
 	tdCommon
@@ -1757,35 +1365,157 @@ func (updateChatActionBar *UpdateChatActionBar) GetUpdateEnum() UpdateEnum {
 	return UpdateChatActionBarType
 }
 
-// UpdateChatTheme The chat theme was changed
-type UpdateChatTheme struct {
+// UpdateChatDraftMessage A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
+type UpdateChatDraftMessage struct {
 	tdCommon
-	ChatId    int64  `json:"chat_id"`    // Chat identifier
-	ThemeName string `json:"theme_name"` // The new name of the chat theme; may be empty if theme was reset to default
+	ChatId       int64          `json:"chat_id"`       // Chat identifier
+	DraftMessage *DraftMessage  `json:"draft_message"` // The new draft message; may be null
+	Positions    []ChatPosition `json:"positions"`     // The new chat positions in the chat lists
 }
 
-// MessageType return the string telegram-type of UpdateChatTheme
-func (updateChatTheme *UpdateChatTheme) MessageType() string {
-	return "updateChatTheme"
+// MessageType return the string telegram-type of UpdateChatDraftMessage
+func (updateChatDraftMessage *UpdateChatDraftMessage) MessageType() string {
+	return "updateChatDraftMessage"
 }
 
-// NewUpdateChatTheme creates a new UpdateChatTheme
+// NewUpdateChatDraftMessage creates a new UpdateChatDraftMessage
 //
 // @param chatId Chat identifier
-// @param themeName The new name of the chat theme; may be empty if theme was reset to default
-func NewUpdateChatTheme(chatId int64, themeName string) *UpdateChatTheme {
-	updateChatThemeTemp := UpdateChatTheme{
-		tdCommon:  tdCommon{Type: "updateChatTheme"},
-		ChatId:    chatId,
-		ThemeName: themeName,
+// @param draftMessage The new draft message; may be null
+// @param positions The new chat positions in the chat lists
+func NewUpdateChatDraftMessage(chatId int64, draftMessage *DraftMessage, positions []ChatPosition) *UpdateChatDraftMessage {
+	updateChatDraftMessageTemp := UpdateChatDraftMessage{
+		tdCommon:     tdCommon{Type: "updateChatDraftMessage"},
+		ChatId:       chatId,
+		DraftMessage: draftMessage,
+		Positions:    positions,
 	}
 
-	return &updateChatThemeTemp
+	return &updateChatDraftMessageTemp
 }
 
 // GetUpdateEnum return the enum type of this object
-func (updateChatTheme *UpdateChatTheme) GetUpdateEnum() UpdateEnum {
-	return UpdateChatThemeType
+func (updateChatDraftMessage *UpdateChatDraftMessage) GetUpdateEnum() UpdateEnum {
+	return UpdateChatDraftMessageType
+}
+
+// UpdateChatMessageSender The message sender that is selected to send messages in a chat has changed
+type UpdateChatMessageSender struct {
+	tdCommon
+	ChatId          int64         `json:"chat_id"`           // Chat identifier
+	MessageSenderId MessageSender `json:"message_sender_id"` // New value of message_sender_id; may be null if the user can't change message sender
+}
+
+// MessageType return the string telegram-type of UpdateChatMessageSender
+func (updateChatMessageSender *UpdateChatMessageSender) MessageType() string {
+	return "updateChatMessageSender"
+}
+
+// NewUpdateChatMessageSender creates a new UpdateChatMessageSender
+//
+// @param chatId Chat identifier
+// @param messageSenderId New value of message_sender_id; may be null if the user can't change message sender
+func NewUpdateChatMessageSender(chatId int64, messageSenderId MessageSender) *UpdateChatMessageSender {
+	updateChatMessageSenderTemp := UpdateChatMessageSender{
+		tdCommon:        tdCommon{Type: "updateChatMessageSender"},
+		ChatId:          chatId,
+		MessageSenderId: messageSenderId,
+	}
+
+	return &updateChatMessageSenderTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateChatMessageSender *UpdateChatMessageSender) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		ChatId int64 `json:"chat_id"` // Chat identifier
+
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateChatMessageSender.tdCommon = tempObj.tdCommon
+	updateChatMessageSender.ChatId = tempObj.ChatId
+
+	fieldMessageSenderId, _ := unmarshalMessageSender(objMap["message_sender_id"])
+	updateChatMessageSender.MessageSenderId = fieldMessageSenderId
+
+	return nil
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatMessageSender *UpdateChatMessageSender) GetUpdateEnum() UpdateEnum {
+	return UpdateChatMessageSenderType
+}
+
+// UpdateChatMessageTtl The message Time To Live setting for a chat was changed
+type UpdateChatMessageTtl struct {
+	tdCommon
+	ChatId     int64 `json:"chat_id"`     // Chat identifier
+	MessageTtl int32 `json:"message_ttl"` // New value of message_ttl
+}
+
+// MessageType return the string telegram-type of UpdateChatMessageTtl
+func (updateChatMessageTtl *UpdateChatMessageTtl) MessageType() string {
+	return "updateChatMessageTtl"
+}
+
+// NewUpdateChatMessageTtl creates a new UpdateChatMessageTtl
+//
+// @param chatId Chat identifier
+// @param messageTtl New value of message_ttl
+func NewUpdateChatMessageTtl(chatId int64, messageTtl int32) *UpdateChatMessageTtl {
+	updateChatMessageTtlTemp := UpdateChatMessageTtl{
+		tdCommon:   tdCommon{Type: "updateChatMessageTtl"},
+		ChatId:     chatId,
+		MessageTtl: messageTtl,
+	}
+
+	return &updateChatMessageTtlTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatMessageTtl *UpdateChatMessageTtl) GetUpdateEnum() UpdateEnum {
+	return UpdateChatMessageTtlType
+}
+
+// UpdateChatNotificationSettings Notification settings for a chat were changed
+type UpdateChatNotificationSettings struct {
+	tdCommon
+	ChatId               int64                     `json:"chat_id"`               // Chat identifier
+	NotificationSettings *ChatNotificationSettings `json:"notification_settings"` // The new notification settings
+}
+
+// MessageType return the string telegram-type of UpdateChatNotificationSettings
+func (updateChatNotificationSettings *UpdateChatNotificationSettings) MessageType() string {
+	return "updateChatNotificationSettings"
+}
+
+// NewUpdateChatNotificationSettings creates a new UpdateChatNotificationSettings
+//
+// @param chatId Chat identifier
+// @param notificationSettings The new notification settings
+func NewUpdateChatNotificationSettings(chatId int64, notificationSettings *ChatNotificationSettings) *UpdateChatNotificationSettings {
+	updateChatNotificationSettingsTemp := UpdateChatNotificationSettings{
+		tdCommon:             tdCommon{Type: "updateChatNotificationSettings"},
+		ChatId:               chatId,
+		NotificationSettings: notificationSettings,
+	}
+
+	return &updateChatNotificationSettingsTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatNotificationSettings *UpdateChatNotificationSettings) GetUpdateEnum() UpdateEnum {
+	return UpdateChatNotificationSettingsType
 }
 
 // UpdateChatPendingJoinRequests The chat pending join requests were changed
@@ -1850,38 +1580,252 @@ func (updateChatReplyMarkup *UpdateChatReplyMarkup) GetUpdateEnum() UpdateEnum {
 	return UpdateChatReplyMarkupType
 }
 
-// UpdateChatDraftMessage A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the draft. If the user has changed the content of the draft, this update mustn't be applied
-type UpdateChatDraftMessage struct {
+// UpdateChatTheme The chat theme was changed
+type UpdateChatTheme struct {
 	tdCommon
-	ChatId       int64          `json:"chat_id"`       // Chat identifier
-	DraftMessage *DraftMessage  `json:"draft_message"` // The new draft message; may be null
-	Positions    []ChatPosition `json:"positions"`     // The new chat positions in the chat lists
+	ChatId    int64  `json:"chat_id"`    // Chat identifier
+	ThemeName string `json:"theme_name"` // The new name of the chat theme; may be empty if theme was reset to default
 }
 
-// MessageType return the string telegram-type of UpdateChatDraftMessage
-func (updateChatDraftMessage *UpdateChatDraftMessage) MessageType() string {
-	return "updateChatDraftMessage"
+// MessageType return the string telegram-type of UpdateChatTheme
+func (updateChatTheme *UpdateChatTheme) MessageType() string {
+	return "updateChatTheme"
 }
 
-// NewUpdateChatDraftMessage creates a new UpdateChatDraftMessage
+// NewUpdateChatTheme creates a new UpdateChatTheme
 //
 // @param chatId Chat identifier
-// @param draftMessage The new draft message; may be null
-// @param positions The new chat positions in the chat lists
-func NewUpdateChatDraftMessage(chatId int64, draftMessage *DraftMessage, positions []ChatPosition) *UpdateChatDraftMessage {
-	updateChatDraftMessageTemp := UpdateChatDraftMessage{
-		tdCommon:     tdCommon{Type: "updateChatDraftMessage"},
-		ChatId:       chatId,
-		DraftMessage: draftMessage,
-		Positions:    positions,
+// @param themeName The new name of the chat theme; may be empty if theme was reset to default
+func NewUpdateChatTheme(chatId int64, themeName string) *UpdateChatTheme {
+	updateChatThemeTemp := UpdateChatTheme{
+		tdCommon:  tdCommon{Type: "updateChatTheme"},
+		ChatId:    chatId,
+		ThemeName: themeName,
 	}
 
-	return &updateChatDraftMessageTemp
+	return &updateChatThemeTemp
 }
 
 // GetUpdateEnum return the enum type of this object
-func (updateChatDraftMessage *UpdateChatDraftMessage) GetUpdateEnum() UpdateEnum {
-	return UpdateChatDraftMessageType
+func (updateChatTheme *UpdateChatTheme) GetUpdateEnum() UpdateEnum {
+	return UpdateChatThemeType
+}
+
+// UpdateChatUnreadMentionCount The chat unread_mention_count has changed
+type UpdateChatUnreadMentionCount struct {
+	tdCommon
+	ChatId             int64 `json:"chat_id"`              // Chat identifier
+	UnreadMentionCount int32 `json:"unread_mention_count"` // The number of unread mention messages left in the chat
+}
+
+// MessageType return the string telegram-type of UpdateChatUnreadMentionCount
+func (updateChatUnreadMentionCount *UpdateChatUnreadMentionCount) MessageType() string {
+	return "updateChatUnreadMentionCount"
+}
+
+// NewUpdateChatUnreadMentionCount creates a new UpdateChatUnreadMentionCount
+//
+// @param chatId Chat identifier
+// @param unreadMentionCount The number of unread mention messages left in the chat
+func NewUpdateChatUnreadMentionCount(chatId int64, unreadMentionCount int32) *UpdateChatUnreadMentionCount {
+	updateChatUnreadMentionCountTemp := UpdateChatUnreadMentionCount{
+		tdCommon:           tdCommon{Type: "updateChatUnreadMentionCount"},
+		ChatId:             chatId,
+		UnreadMentionCount: unreadMentionCount,
+	}
+
+	return &updateChatUnreadMentionCountTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatUnreadMentionCount *UpdateChatUnreadMentionCount) GetUpdateEnum() UpdateEnum {
+	return UpdateChatUnreadMentionCountType
+}
+
+// UpdateChatVideoChat A chat video chat state has changed
+type UpdateChatVideoChat struct {
+	tdCommon
+	ChatId    int64      `json:"chat_id"`    // Chat identifier
+	VideoChat *VideoChat `json:"video_chat"` // New value of video_chat
+}
+
+// MessageType return the string telegram-type of UpdateChatVideoChat
+func (updateChatVideoChat *UpdateChatVideoChat) MessageType() string {
+	return "updateChatVideoChat"
+}
+
+// NewUpdateChatVideoChat creates a new UpdateChatVideoChat
+//
+// @param chatId Chat identifier
+// @param videoChat New value of video_chat
+func NewUpdateChatVideoChat(chatId int64, videoChat *VideoChat) *UpdateChatVideoChat {
+	updateChatVideoChatTemp := UpdateChatVideoChat{
+		tdCommon:  tdCommon{Type: "updateChatVideoChat"},
+		ChatId:    chatId,
+		VideoChat: videoChat,
+	}
+
+	return &updateChatVideoChatTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatVideoChat *UpdateChatVideoChat) GetUpdateEnum() UpdateEnum {
+	return UpdateChatVideoChatType
+}
+
+// UpdateChatDefaultDisableNotification The value of the default disable_notification parameter, used when a message is sent to the chat, was changed
+type UpdateChatDefaultDisableNotification struct {
+	tdCommon
+	ChatId                     int64 `json:"chat_id"`                      // Chat identifier
+	DefaultDisableNotification bool  `json:"default_disable_notification"` // The new default_disable_notification value
+}
+
+// MessageType return the string telegram-type of UpdateChatDefaultDisableNotification
+func (updateChatDefaultDisableNotification *UpdateChatDefaultDisableNotification) MessageType() string {
+	return "updateChatDefaultDisableNotification"
+}
+
+// NewUpdateChatDefaultDisableNotification creates a new UpdateChatDefaultDisableNotification
+//
+// @param chatId Chat identifier
+// @param defaultDisableNotification The new default_disable_notification value
+func NewUpdateChatDefaultDisableNotification(chatId int64, defaultDisableNotification bool) *UpdateChatDefaultDisableNotification {
+	updateChatDefaultDisableNotificationTemp := UpdateChatDefaultDisableNotification{
+		tdCommon:                   tdCommon{Type: "updateChatDefaultDisableNotification"},
+		ChatId:                     chatId,
+		DefaultDisableNotification: defaultDisableNotification,
+	}
+
+	return &updateChatDefaultDisableNotificationTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatDefaultDisableNotification *UpdateChatDefaultDisableNotification) GetUpdateEnum() UpdateEnum {
+	return UpdateChatDefaultDisableNotificationType
+}
+
+// UpdateChatHasProtectedContent A chat content was allowed or restricted for saving
+type UpdateChatHasProtectedContent struct {
+	tdCommon
+	ChatId              int64 `json:"chat_id"`               // Chat identifier
+	HasProtectedContent bool  `json:"has_protected_content"` // New value of has_protected_content
+}
+
+// MessageType return the string telegram-type of UpdateChatHasProtectedContent
+func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) MessageType() string {
+	return "updateChatHasProtectedContent"
+}
+
+// NewUpdateChatHasProtectedContent creates a new UpdateChatHasProtectedContent
+//
+// @param chatId Chat identifier
+// @param hasProtectedContent New value of has_protected_content
+func NewUpdateChatHasProtectedContent(chatId int64, hasProtectedContent bool) *UpdateChatHasProtectedContent {
+	updateChatHasProtectedContentTemp := UpdateChatHasProtectedContent{
+		tdCommon:            tdCommon{Type: "updateChatHasProtectedContent"},
+		ChatId:              chatId,
+		HasProtectedContent: hasProtectedContent,
+	}
+
+	return &updateChatHasProtectedContentTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatHasProtectedContent *UpdateChatHasProtectedContent) GetUpdateEnum() UpdateEnum {
+	return UpdateChatHasProtectedContentType
+}
+
+// UpdateChatHasScheduledMessages A chat's has_scheduled_messages field has changed
+type UpdateChatHasScheduledMessages struct {
+	tdCommon
+	ChatId               int64 `json:"chat_id"`                // Chat identifier
+	HasScheduledMessages bool  `json:"has_scheduled_messages"` // New value of has_scheduled_messages
+}
+
+// MessageType return the string telegram-type of UpdateChatHasScheduledMessages
+func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) MessageType() string {
+	return "updateChatHasScheduledMessages"
+}
+
+// NewUpdateChatHasScheduledMessages creates a new UpdateChatHasScheduledMessages
+//
+// @param chatId Chat identifier
+// @param hasScheduledMessages New value of has_scheduled_messages
+func NewUpdateChatHasScheduledMessages(chatId int64, hasScheduledMessages bool) *UpdateChatHasScheduledMessages {
+	updateChatHasScheduledMessagesTemp := UpdateChatHasScheduledMessages{
+		tdCommon:             tdCommon{Type: "updateChatHasScheduledMessages"},
+		ChatId:               chatId,
+		HasScheduledMessages: hasScheduledMessages,
+	}
+
+	return &updateChatHasScheduledMessagesTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatHasScheduledMessages *UpdateChatHasScheduledMessages) GetUpdateEnum() UpdateEnum {
+	return UpdateChatHasScheduledMessagesType
+}
+
+// UpdateChatIsBlocked A chat was blocked or unblocked
+type UpdateChatIsBlocked struct {
+	tdCommon
+	ChatId    int64 `json:"chat_id"`    // Chat identifier
+	IsBlocked bool  `json:"is_blocked"` // New value of is_blocked
+}
+
+// MessageType return the string telegram-type of UpdateChatIsBlocked
+func (updateChatIsBlocked *UpdateChatIsBlocked) MessageType() string {
+	return "updateChatIsBlocked"
+}
+
+// NewUpdateChatIsBlocked creates a new UpdateChatIsBlocked
+//
+// @param chatId Chat identifier
+// @param isBlocked New value of is_blocked
+func NewUpdateChatIsBlocked(chatId int64, isBlocked bool) *UpdateChatIsBlocked {
+	updateChatIsBlockedTemp := UpdateChatIsBlocked{
+		tdCommon:  tdCommon{Type: "updateChatIsBlocked"},
+		ChatId:    chatId,
+		IsBlocked: isBlocked,
+	}
+
+	return &updateChatIsBlockedTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatIsBlocked *UpdateChatIsBlocked) GetUpdateEnum() UpdateEnum {
+	return UpdateChatIsBlockedType
+}
+
+// UpdateChatIsMarkedAsUnread A chat was marked as unread or was read
+type UpdateChatIsMarkedAsUnread struct {
+	tdCommon
+	ChatId           int64 `json:"chat_id"`             // Chat identifier
+	IsMarkedAsUnread bool  `json:"is_marked_as_unread"` // New value of is_marked_as_unread
+}
+
+// MessageType return the string telegram-type of UpdateChatIsMarkedAsUnread
+func (updateChatIsMarkedAsUnread *UpdateChatIsMarkedAsUnread) MessageType() string {
+	return "updateChatIsMarkedAsUnread"
+}
+
+// NewUpdateChatIsMarkedAsUnread creates a new UpdateChatIsMarkedAsUnread
+//
+// @param chatId Chat identifier
+// @param isMarkedAsUnread New value of is_marked_as_unread
+func NewUpdateChatIsMarkedAsUnread(chatId int64, isMarkedAsUnread bool) *UpdateChatIsMarkedAsUnread {
+	updateChatIsMarkedAsUnreadTemp := UpdateChatIsMarkedAsUnread{
+		tdCommon:         tdCommon{Type: "updateChatIsMarkedAsUnread"},
+		ChatId:           chatId,
+		IsMarkedAsUnread: isMarkedAsUnread,
+	}
+
+	return &updateChatIsMarkedAsUnreadTemp
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateChatIsMarkedAsUnread *UpdateChatIsMarkedAsUnread) GetUpdateEnum() UpdateEnum {
+	return UpdateChatIsMarkedAsUnreadType
 }
 
 // UpdateChatFilters The list of chat filters or a chat filter has changed
@@ -1941,6 +1885,62 @@ func NewUpdateChatOnlineMemberCount(chatId int64, onlineMemberCount int32) *Upda
 // GetUpdateEnum return the enum type of this object
 func (updateChatOnlineMemberCount *UpdateChatOnlineMemberCount) GetUpdateEnum() UpdateEnum {
 	return UpdateChatOnlineMemberCountType
+}
+
+// UpdateScopeNotificationSettings Notification settings for some type of chats were updated
+type UpdateScopeNotificationSettings struct {
+	tdCommon
+	Scope                NotificationSettingsScope  `json:"scope"`                 // Types of chats for which notification settings were updated
+	NotificationSettings *ScopeNotificationSettings `json:"notification_settings"` // The new notification settings
+}
+
+// MessageType return the string telegram-type of UpdateScopeNotificationSettings
+func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) MessageType() string {
+	return "updateScopeNotificationSettings"
+}
+
+// NewUpdateScopeNotificationSettings creates a new UpdateScopeNotificationSettings
+//
+// @param scope Types of chats for which notification settings were updated
+// @param notificationSettings The new notification settings
+func NewUpdateScopeNotificationSettings(scope NotificationSettingsScope, notificationSettings *ScopeNotificationSettings) *UpdateScopeNotificationSettings {
+	updateScopeNotificationSettingsTemp := UpdateScopeNotificationSettings{
+		tdCommon:             tdCommon{Type: "updateScopeNotificationSettings"},
+		Scope:                scope,
+		NotificationSettings: notificationSettings,
+	}
+
+	return &updateScopeNotificationSettingsTemp
+}
+
+// UnmarshalJSON unmarshal to json
+func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) UnmarshalJSON(b []byte) error {
+	var objMap map[string]*json.RawMessage
+	err := json.Unmarshal(b, &objMap)
+	if err != nil {
+		return err
+	}
+	tempObj := struct {
+		tdCommon
+		NotificationSettings *ScopeNotificationSettings `json:"notification_settings"` // The new notification settings
+	}{}
+	err = json.Unmarshal(b, &tempObj)
+	if err != nil {
+		return err
+	}
+
+	updateScopeNotificationSettings.tdCommon = tempObj.tdCommon
+	updateScopeNotificationSettings.NotificationSettings = tempObj.NotificationSettings
+
+	fieldScope, _ := unmarshalNotificationSettingsScope(objMap["scope"])
+	updateScopeNotificationSettings.Scope = fieldScope
+
+	return nil
+}
+
+// GetUpdateEnum return the enum type of this object
+func (updateScopeNotificationSettings *UpdateScopeNotificationSettings) GetUpdateEnum() UpdateEnum {
+	return UpdateScopeNotificationSettingsType
 }
 
 // UpdateNotification A notification was changed
@@ -4160,41 +4160,6 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatDefaultMessageSenderIdType:
-		var update UpdateChatDefaultMessageSenderId
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatHasProtectedContentType:
-		var update UpdateChatHasProtectedContent
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatIsMarkedAsUnreadType:
-		var update UpdateChatIsMarkedAsUnread
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatIsBlockedType:
-		var update UpdateChatIsBlocked
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatHasScheduledMessagesType:
-		var update UpdateChatHasScheduledMessages
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatVideoChatType:
-		var update UpdateChatVideoChat
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatDefaultDisableNotificationType:
-		var update UpdateChatDefaultDisableNotification
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
 	case UpdateChatReadInboxType:
 		var update UpdateChatReadInbox
 		err = json.Unmarshal(result.Raw, &update)
@@ -4205,33 +4170,28 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatUnreadMentionCountType:
-		var update UpdateChatUnreadMentionCount
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatNotificationSettingsType:
-		var update UpdateChatNotificationSettings
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateScopeNotificationSettingsType:
-		var update UpdateScopeNotificationSettings
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
-	case UpdateChatMessageTtlSettingType:
-		var update UpdateChatMessageTtlSetting
-		err = json.Unmarshal(result.Raw, &update)
-		return &update, err
-
 	case UpdateChatActionBarType:
 		var update UpdateChatActionBar
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatThemeType:
-		var update UpdateChatTheme
+	case UpdateChatDraftMessageType:
+		var update UpdateChatDraftMessage
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatMessageSenderType:
+		var update UpdateChatMessageSender
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatMessageTtlType:
+		var update UpdateChatMessageTtl
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatNotificationSettingsType:
+		var update UpdateChatNotificationSettings
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -4245,8 +4205,43 @@ func (client *Client) TestUseUpdate() (Update, error) {
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
-	case UpdateChatDraftMessageType:
-		var update UpdateChatDraftMessage
+	case UpdateChatThemeType:
+		var update UpdateChatTheme
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatUnreadMentionCountType:
+		var update UpdateChatUnreadMentionCount
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatVideoChatType:
+		var update UpdateChatVideoChat
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatDefaultDisableNotificationType:
+		var update UpdateChatDefaultDisableNotification
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatHasProtectedContentType:
+		var update UpdateChatHasProtectedContent
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatHasScheduledMessagesType:
+		var update UpdateChatHasScheduledMessages
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatIsBlockedType:
+		var update UpdateChatIsBlocked
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateChatIsMarkedAsUnreadType:
+		var update UpdateChatIsMarkedAsUnread
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 
@@ -4257,6 +4252,11 @@ func (client *Client) TestUseUpdate() (Update, error) {
 
 	case UpdateChatOnlineMemberCountType:
 		var update UpdateChatOnlineMemberCount
+		err = json.Unmarshal(result.Raw, &update)
+		return &update, err
+
+	case UpdateScopeNotificationSettingsType:
+		var update UpdateScopeNotificationSettings
 		err = json.Unmarshal(result.Raw, &update)
 		return &update, err
 

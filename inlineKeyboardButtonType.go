@@ -281,7 +281,7 @@ func (inlineKeyboardButtonTypeBuy *InlineKeyboardButtonTypeBuy) GetInlineKeyboar
 	return InlineKeyboardButtonTypeBuyType
 }
 
-// InlineKeyboardButtonTypeUser A button to open a chat with a user
+// InlineKeyboardButtonTypeUser A button with a user reference to be handled in the same way as textEntityTypeMentionName entities
 type InlineKeyboardButtonTypeUser struct {
 	tdCommon
 	UserId int64 `json:"user_id"` // User identifier

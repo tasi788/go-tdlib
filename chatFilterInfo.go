@@ -10,7 +10,7 @@ type ChatFilterInfo struct {
 	tdCommon
 	Id       int32  `json:"id"`        // Unique chat filter identifier
 	Title    string `json:"title"`     // The title of the filter; 1-12 characters without line feeds
-	IconName string `json:"icon_name"` // The icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
+	IconName string `json:"icon_name"` // The chosen or default icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
 }
 
 // MessageType return the string telegram-type of ChatFilterInfo
@@ -22,7 +22,7 @@ func (chatFilterInfo *ChatFilterInfo) MessageType() string {
 //
 // @param id Unique chat filter identifier
 // @param title The title of the filter; 1-12 characters without line feeds
-// @param iconName The icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
+// @param iconName The chosen or default icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work"
 func NewChatFilterInfo(id int32, title string, iconName string) *ChatFilterInfo {
 	chatFilterInfoTemp := ChatFilterInfo{
 		tdCommon: tdCommon{Type: "chatFilterInfo"},

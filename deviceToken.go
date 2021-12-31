@@ -103,7 +103,7 @@ func unmarshalDeviceToken(rawMsg *json.RawMessage) (DeviceToken, error) {
 // DeviceTokenFirebaseCloudMessaging A token for Firebase Cloud Messaging
 type DeviceTokenFirebaseCloudMessaging struct {
 	tdCommon
-	Token   string `json:"token"`   // Device registration token; may be empty to de-register a device
+	Token   string `json:"token"`   // Device registration token; may be empty to deregister a device
 	Encrypt bool   `json:"encrypt"` // True, if push notifications must be additionally encrypted
 }
 
@@ -114,7 +114,7 @@ func (deviceTokenFirebaseCloudMessaging *DeviceTokenFirebaseCloudMessaging) Mess
 
 // NewDeviceTokenFirebaseCloudMessaging creates a new DeviceTokenFirebaseCloudMessaging
 //
-// @param token Device registration token; may be empty to de-register a device
+// @param token Device registration token; may be empty to deregister a device
 // @param encrypt True, if push notifications must be additionally encrypted
 func NewDeviceTokenFirebaseCloudMessaging(token string, encrypt bool) *DeviceTokenFirebaseCloudMessaging {
 	deviceTokenFirebaseCloudMessagingTemp := DeviceTokenFirebaseCloudMessaging{
@@ -134,7 +134,7 @@ func (deviceTokenFirebaseCloudMessaging *DeviceTokenFirebaseCloudMessaging) GetD
 // DeviceTokenApplePush A token for Apple Push Notification service
 type DeviceTokenApplePush struct {
 	tdCommon
-	DeviceToken  string `json:"device_token"`   // Device token; may be empty to de-register a device
+	DeviceToken  string `json:"device_token"`   // Device token; may be empty to deregister a device
 	IsAppSandbox bool   `json:"is_app_sandbox"` // True, if App Sandbox is enabled
 }
 
@@ -145,7 +145,7 @@ func (deviceTokenApplePush *DeviceTokenApplePush) MessageType() string {
 
 // NewDeviceTokenApplePush creates a new DeviceTokenApplePush
 //
-// @param deviceToken Device token; may be empty to de-register a device
+// @param deviceToken Device token; may be empty to deregister a device
 // @param isAppSandbox True, if App Sandbox is enabled
 func NewDeviceTokenApplePush(deviceToken string, isAppSandbox bool) *DeviceTokenApplePush {
 	deviceTokenApplePushTemp := DeviceTokenApplePush{
@@ -165,7 +165,7 @@ func (deviceTokenApplePush *DeviceTokenApplePush) GetDeviceTokenEnum() DeviceTok
 // DeviceTokenApplePushVoIP A token for Apple Push Notification service VoIP notifications
 type DeviceTokenApplePushVoIP struct {
 	tdCommon
-	DeviceToken  string `json:"device_token"`   // Device token; may be empty to de-register a device
+	DeviceToken  string `json:"device_token"`   // Device token; may be empty to deregister a device
 	IsAppSandbox bool   `json:"is_app_sandbox"` // True, if App Sandbox is enabled
 	Encrypt      bool   `json:"encrypt"`        // True, if push notifications must be additionally encrypted
 }
@@ -177,7 +177,7 @@ func (deviceTokenApplePushVoIP *DeviceTokenApplePushVoIP) MessageType() string {
 
 // NewDeviceTokenApplePushVoIP creates a new DeviceTokenApplePushVoIP
 //
-// @param deviceToken Device token; may be empty to de-register a device
+// @param deviceToken Device token; may be empty to deregister a device
 // @param isAppSandbox True, if App Sandbox is enabled
 // @param encrypt True, if push notifications must be additionally encrypted
 func NewDeviceTokenApplePushVoIP(deviceToken string, isAppSandbox bool, encrypt bool) *DeviceTokenApplePushVoIP {
@@ -199,7 +199,7 @@ func (deviceTokenApplePushVoIP *DeviceTokenApplePushVoIP) GetDeviceTokenEnum() D
 // DeviceTokenWindowsPush A token for Windows Push Notification Services
 type DeviceTokenWindowsPush struct {
 	tdCommon
-	AccessToken string `json:"access_token"` // The access token that will be used to send notifications; may be empty to de-register a device
+	AccessToken string `json:"access_token"` // The access token that will be used to send notifications; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenWindowsPush
@@ -209,7 +209,7 @@ func (deviceTokenWindowsPush *DeviceTokenWindowsPush) MessageType() string {
 
 // NewDeviceTokenWindowsPush creates a new DeviceTokenWindowsPush
 //
-// @param accessToken The access token that will be used to send notifications; may be empty to de-register a device
+// @param accessToken The access token that will be used to send notifications; may be empty to deregister a device
 func NewDeviceTokenWindowsPush(accessToken string) *DeviceTokenWindowsPush {
 	deviceTokenWindowsPushTemp := DeviceTokenWindowsPush{
 		tdCommon:    tdCommon{Type: "deviceTokenWindowsPush"},
@@ -227,7 +227,7 @@ func (deviceTokenWindowsPush *DeviceTokenWindowsPush) GetDeviceTokenEnum() Devic
 // DeviceTokenMicrosoftPush A token for Microsoft Push Notification Service
 type DeviceTokenMicrosoftPush struct {
 	tdCommon
-	ChannelUri string `json:"channel_uri"` // Push notification channel URI; may be empty to de-register a device
+	ChannelUri string `json:"channel_uri"` // Push notification channel URI; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenMicrosoftPush
@@ -237,7 +237,7 @@ func (deviceTokenMicrosoftPush *DeviceTokenMicrosoftPush) MessageType() string {
 
 // NewDeviceTokenMicrosoftPush creates a new DeviceTokenMicrosoftPush
 //
-// @param channelUri Push notification channel URI; may be empty to de-register a device
+// @param channelUri Push notification channel URI; may be empty to deregister a device
 func NewDeviceTokenMicrosoftPush(channelUri string) *DeviceTokenMicrosoftPush {
 	deviceTokenMicrosoftPushTemp := DeviceTokenMicrosoftPush{
 		tdCommon:   tdCommon{Type: "deviceTokenMicrosoftPush"},
@@ -255,7 +255,7 @@ func (deviceTokenMicrosoftPush *DeviceTokenMicrosoftPush) GetDeviceTokenEnum() D
 // DeviceTokenMicrosoftPushVoIP A token for Microsoft Push Notification Service VoIP channel
 type DeviceTokenMicrosoftPushVoIP struct {
 	tdCommon
-	ChannelUri string `json:"channel_uri"` // Push notification channel URI; may be empty to de-register a device
+	ChannelUri string `json:"channel_uri"` // Push notification channel URI; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenMicrosoftPushVoIP
@@ -265,7 +265,7 @@ func (deviceTokenMicrosoftPushVoIP *DeviceTokenMicrosoftPushVoIP) MessageType() 
 
 // NewDeviceTokenMicrosoftPushVoIP creates a new DeviceTokenMicrosoftPushVoIP
 //
-// @param channelUri Push notification channel URI; may be empty to de-register a device
+// @param channelUri Push notification channel URI; may be empty to deregister a device
 func NewDeviceTokenMicrosoftPushVoIP(channelUri string) *DeviceTokenMicrosoftPushVoIP {
 	deviceTokenMicrosoftPushVoIPTemp := DeviceTokenMicrosoftPushVoIP{
 		tdCommon:   tdCommon{Type: "deviceTokenMicrosoftPushVoIP"},
@@ -283,7 +283,7 @@ func (deviceTokenMicrosoftPushVoIP *DeviceTokenMicrosoftPushVoIP) GetDeviceToken
 // DeviceTokenWebPush A token for web Push API
 type DeviceTokenWebPush struct {
 	tdCommon
-	Endpoint        string `json:"endpoint"`         // Absolute URL exposed by the push service where the application server can send push messages; may be empty to de-register a device
+	Endpoint        string `json:"endpoint"`         // Absolute URL exposed by the push service where the application server can send push messages; may be empty to deregister a device
 	P256dhBase64url string `json:"p256dh_base64url"` // Base64url-encoded P-256 elliptic curve Diffie-Hellman public key
 	AuthBase64url   string `json:"auth_base64url"`   // Base64url-encoded authentication secret
 }
@@ -295,7 +295,7 @@ func (deviceTokenWebPush *DeviceTokenWebPush) MessageType() string {
 
 // NewDeviceTokenWebPush creates a new DeviceTokenWebPush
 //
-// @param endpoint Absolute URL exposed by the push service where the application server can send push messages; may be empty to de-register a device
+// @param endpoint Absolute URL exposed by the push service where the application server can send push messages; may be empty to deregister a device
 // @param p256dhBase64url Base64url-encoded P-256 elliptic curve Diffie-Hellman public key
 // @param authBase64url Base64url-encoded authentication secret
 func NewDeviceTokenWebPush(endpoint string, p256dhBase64url string, authBase64url string) *DeviceTokenWebPush {
@@ -317,7 +317,7 @@ func (deviceTokenWebPush *DeviceTokenWebPush) GetDeviceTokenEnum() DeviceTokenEn
 // DeviceTokenSimplePush A token for Simple Push API for Firefox OS
 type DeviceTokenSimplePush struct {
 	tdCommon
-	Endpoint string `json:"endpoint"` // Absolute URL exposed by the push service where the application server can send push messages; may be empty to de-register a device
+	Endpoint string `json:"endpoint"` // Absolute URL exposed by the push service where the application server can send push messages; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenSimplePush
@@ -327,7 +327,7 @@ func (deviceTokenSimplePush *DeviceTokenSimplePush) MessageType() string {
 
 // NewDeviceTokenSimplePush creates a new DeviceTokenSimplePush
 //
-// @param endpoint Absolute URL exposed by the push service where the application server can send push messages; may be empty to de-register a device
+// @param endpoint Absolute URL exposed by the push service where the application server can send push messages; may be empty to deregister a device
 func NewDeviceTokenSimplePush(endpoint string) *DeviceTokenSimplePush {
 	deviceTokenSimplePushTemp := DeviceTokenSimplePush{
 		tdCommon: tdCommon{Type: "deviceTokenSimplePush"},
@@ -345,7 +345,7 @@ func (deviceTokenSimplePush *DeviceTokenSimplePush) GetDeviceTokenEnum() DeviceT
 // DeviceTokenUbuntuPush A token for Ubuntu Push Client service
 type DeviceTokenUbuntuPush struct {
 	tdCommon
-	Token string `json:"token"` // Token; may be empty to de-register a device
+	Token string `json:"token"` // Token; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenUbuntuPush
@@ -355,7 +355,7 @@ func (deviceTokenUbuntuPush *DeviceTokenUbuntuPush) MessageType() string {
 
 // NewDeviceTokenUbuntuPush creates a new DeviceTokenUbuntuPush
 //
-// @param token Token; may be empty to de-register a device
+// @param token Token; may be empty to deregister a device
 func NewDeviceTokenUbuntuPush(token string) *DeviceTokenUbuntuPush {
 	deviceTokenUbuntuPushTemp := DeviceTokenUbuntuPush{
 		tdCommon: tdCommon{Type: "deviceTokenUbuntuPush"},
@@ -373,7 +373,7 @@ func (deviceTokenUbuntuPush *DeviceTokenUbuntuPush) GetDeviceTokenEnum() DeviceT
 // DeviceTokenBlackBerryPush A token for BlackBerry Push Service
 type DeviceTokenBlackBerryPush struct {
 	tdCommon
-	Token string `json:"token"` // Token; may be empty to de-register a device
+	Token string `json:"token"` // Token; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenBlackBerryPush
@@ -383,7 +383,7 @@ func (deviceTokenBlackBerryPush *DeviceTokenBlackBerryPush) MessageType() string
 
 // NewDeviceTokenBlackBerryPush creates a new DeviceTokenBlackBerryPush
 //
-// @param token Token; may be empty to de-register a device
+// @param token Token; may be empty to deregister a device
 func NewDeviceTokenBlackBerryPush(token string) *DeviceTokenBlackBerryPush {
 	deviceTokenBlackBerryPushTemp := DeviceTokenBlackBerryPush{
 		tdCommon: tdCommon{Type: "deviceTokenBlackBerryPush"},
@@ -401,7 +401,7 @@ func (deviceTokenBlackBerryPush *DeviceTokenBlackBerryPush) GetDeviceTokenEnum()
 // DeviceTokenTizenPush A token for Tizen Push Service
 type DeviceTokenTizenPush struct {
 	tdCommon
-	RegId string `json:"reg_id"` // Push service registration identifier; may be empty to de-register a device
+	RegId string `json:"reg_id"` // Push service registration identifier; may be empty to deregister a device
 }
 
 // MessageType return the string telegram-type of DeviceTokenTizenPush
@@ -411,7 +411,7 @@ func (deviceTokenTizenPush *DeviceTokenTizenPush) MessageType() string {
 
 // NewDeviceTokenTizenPush creates a new DeviceTokenTizenPush
 //
-// @param regId Push service registration identifier; may be empty to de-register a device
+// @param regId Push service registration identifier; may be empty to deregister a device
 func NewDeviceTokenTizenPush(regId string) *DeviceTokenTizenPush {
 	deviceTokenTizenPushTemp := DeviceTokenTizenPush{
 		tdCommon: tdCommon{Type: "deviceTokenTizenPush"},

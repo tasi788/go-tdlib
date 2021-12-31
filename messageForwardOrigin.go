@@ -92,11 +92,11 @@ func (messageForwardOriginUser *MessageForwardOriginUser) GetMessageForwardOrigi
 	return MessageForwardOriginUserType
 }
 
-// MessageForwardOriginChat The message was originally sent by an anonymous chat administrator on behalf of the chat
+// MessageForwardOriginChat The message was originally sent on behalf of a chat
 type MessageForwardOriginChat struct {
 	tdCommon
 	SenderChatId    int64  `json:"sender_chat_id"`   // Identifier of the chat that originally sent the message
-	AuthorSignature string `json:"author_signature"` // Original message author signature
+	AuthorSignature string `json:"author_signature"` // For messages originally sent by an anonymous chat administrator, original message author signature
 }
 
 // MessageType return the string telegram-type of MessageForwardOriginChat
@@ -107,7 +107,7 @@ func (messageForwardOriginChat *MessageForwardOriginChat) MessageType() string {
 // NewMessageForwardOriginChat creates a new MessageForwardOriginChat
 //
 // @param senderChatId Identifier of the chat that originally sent the message
-// @param authorSignature Original message author signature
+// @param authorSignature For messages originally sent by an anonymous chat administrator, original message author signature
 func NewMessageForwardOriginChat(senderChatId int64, authorSignature string) *MessageForwardOriginChat {
 	messageForwardOriginChatTemp := MessageForwardOriginChat{
 		tdCommon:        tdCommon{Type: "messageForwardOriginChat"},

@@ -18,7 +18,7 @@ const (
 	SuggestedActionEnableArchiveAndMuteNewChatsType SuggestedActionEnum = "suggestedActionEnableArchiveAndMuteNewChats"
 	SuggestedActionCheckPasswordType                SuggestedActionEnum = "suggestedActionCheckPassword"
 	SuggestedActionCheckPhoneNumberType             SuggestedActionEnum = "suggestedActionCheckPhoneNumber"
-	SuggestedActionSeeTicksHintType                 SuggestedActionEnum = "suggestedActionSeeTicksHint"
+	SuggestedActionViewChecksHintType               SuggestedActionEnum = "suggestedActionViewChecksHint"
 	SuggestedActionConvertToBroadcastGroupType      SuggestedActionEnum = "suggestedActionConvertToBroadcastGroup"
 	SuggestedActionSetPasswordType                  SuggestedActionEnum = "suggestedActionSetPassword"
 )
@@ -50,10 +50,10 @@ func unmarshalSuggestedAction(rawMsg *json.RawMessage) (SuggestedAction, error) 
 		err := json.Unmarshal(*rawMsg, &suggestedActionCheckPhoneNumber)
 		return &suggestedActionCheckPhoneNumber, err
 
-	case SuggestedActionSeeTicksHintType:
-		var suggestedActionSeeTicksHint SuggestedActionSeeTicksHint
-		err := json.Unmarshal(*rawMsg, &suggestedActionSeeTicksHint)
-		return &suggestedActionSeeTicksHint, err
+	case SuggestedActionViewChecksHintType:
+		var suggestedActionViewChecksHint SuggestedActionViewChecksHint
+		err := json.Unmarshal(*rawMsg, &suggestedActionViewChecksHint)
+		return &suggestedActionViewChecksHint, err
 
 	case SuggestedActionConvertToBroadcastGroupType:
 		var suggestedActionConvertToBroadcastGroup SuggestedActionConvertToBroadcastGroup
@@ -95,7 +95,7 @@ func (suggestedActionEnableArchiveAndMuteNewChats *SuggestedActionEnableArchiveA
 	return SuggestedActionEnableArchiveAndMuteNewChatsType
 }
 
-// SuggestedActionCheckPassword Suggests the user to check whether 2-step verification password is still remembered
+// SuggestedActionCheckPassword Suggests the user to check whether they still remember their 2-step verification password
 type SuggestedActionCheckPassword struct {
 	tdCommon
 }
@@ -145,29 +145,29 @@ func (suggestedActionCheckPhoneNumber *SuggestedActionCheckPhoneNumber) GetSugge
 	return SuggestedActionCheckPhoneNumberType
 }
 
-// SuggestedActionSeeTicksHint Suggests the user to see a hint about meaning of one and two ticks on sent message
-type SuggestedActionSeeTicksHint struct {
+// SuggestedActionViewChecksHint Suggests the user to view a hint about the meaning of one and two check marks on sent messages
+type SuggestedActionViewChecksHint struct {
 	tdCommon
 }
 
-// MessageType return the string telegram-type of SuggestedActionSeeTicksHint
-func (suggestedActionSeeTicksHint *SuggestedActionSeeTicksHint) MessageType() string {
-	return "suggestedActionSeeTicksHint"
+// MessageType return the string telegram-type of SuggestedActionViewChecksHint
+func (suggestedActionViewChecksHint *SuggestedActionViewChecksHint) MessageType() string {
+	return "suggestedActionViewChecksHint"
 }
 
-// NewSuggestedActionSeeTicksHint creates a new SuggestedActionSeeTicksHint
+// NewSuggestedActionViewChecksHint creates a new SuggestedActionViewChecksHint
 //
-func NewSuggestedActionSeeTicksHint() *SuggestedActionSeeTicksHint {
-	suggestedActionSeeTicksHintTemp := SuggestedActionSeeTicksHint{
-		tdCommon: tdCommon{Type: "suggestedActionSeeTicksHint"},
+func NewSuggestedActionViewChecksHint() *SuggestedActionViewChecksHint {
+	suggestedActionViewChecksHintTemp := SuggestedActionViewChecksHint{
+		tdCommon: tdCommon{Type: "suggestedActionViewChecksHint"},
 	}
 
-	return &suggestedActionSeeTicksHintTemp
+	return &suggestedActionViewChecksHintTemp
 }
 
 // GetSuggestedActionEnum return the enum type of this object
-func (suggestedActionSeeTicksHint *SuggestedActionSeeTicksHint) GetSuggestedActionEnum() SuggestedActionEnum {
-	return SuggestedActionSeeTicksHintType
+func (suggestedActionViewChecksHint *SuggestedActionViewChecksHint) GetSuggestedActionEnum() SuggestedActionEnum {
+	return SuggestedActionViewChecksHintType
 }
 
 // SuggestedActionConvertToBroadcastGroup Suggests the user to convert specified supergroup to a broadcast group

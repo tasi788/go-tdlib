@@ -23,12 +23,12 @@ type WebPage struct {
 	Author             string         `json:"author"`               // Author of the content
 	Animation          *Animation     `json:"animation"`            // Preview of the content as an animation, if available; may be null
 	Audio              *Audio         `json:"audio"`                // Preview of the content as an audio file, if available; may be null
-	Document           *Document      `json:"document"`             // Preview of the content as a document, if available (currently only available for small PDF files and ZIP archives); may be null
+	Document           *Document      `json:"document"`             // Preview of the content as a document, if available; may be null
 	Sticker            *Sticker       `json:"sticker"`              // Preview of the content as a sticker for small WEBP files, if available; may be null
 	Video              *Video         `json:"video"`                // Preview of the content as a video, if available; may be null
 	VideoNote          *VideoNote     `json:"video_note"`           // Preview of the content as a video note, if available; may be null
 	VoiceNote          *VoiceNote     `json:"voice_note"`           // Preview of the content as a voice note, if available; may be null
-	InstantViewVersion int32          `json:"instant_view_version"` // Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
+	InstantViewVersion int32          `json:"instant_view_version"` // Version of instant view, available for the web page (currently, can be 1 or 2), 0 if none
 }
 
 // MessageType return the string telegram-type of WebPage
@@ -53,12 +53,12 @@ func (webPage *WebPage) MessageType() string {
 // @param author Author of the content
 // @param animation Preview of the content as an animation, if available; may be null
 // @param audio Preview of the content as an audio file, if available; may be null
-// @param document Preview of the content as a document, if available (currently only available for small PDF files and ZIP archives); may be null
+// @param document Preview of the content as a document, if available; may be null
 // @param sticker Preview of the content as a sticker for small WEBP files, if available; may be null
 // @param video Preview of the content as a video, if available; may be null
 // @param videoNote Preview of the content as a video note, if available; may be null
 // @param voiceNote Preview of the content as a voice note, if available; may be null
-// @param instantViewVersion Version of instant view, available for the web page (currently can be 1 or 2), 0 if none
+// @param instantViewVersion Version of instant view, available for the web page (currently, can be 1 or 2), 0 if none
 func NewWebPage(url string, displayUrl string, typeParam string, siteName string, title string, description *FormattedText, photo *Photo, embedUrl string, embedType string, embedWidth int32, embedHeight int32, duration int32, author string, animation *Animation, audio *Audio, document *Document, sticker *Sticker, video *Video, videoNote *VideoNote, voiceNote *VoiceNote, instantViewVersion int32) *WebPage {
 	webPageTemp := WebPage{
 		tdCommon:           tdCommon{Type: "webPage"},

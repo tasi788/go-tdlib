@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-// ChatInviteLinkMembers Contains a list of chat members joined a chat by an invite link
+// ChatInviteLinkMembers Contains a list of chat members joined a chat via an invite link
 type ChatInviteLinkMembers struct {
 	tdCommon
 	TotalCount int32                  `json:"total_count"` // Approximate total count of chat members found
-	Members    []ChatInviteLinkMember `json:"members"`     // List of chat members, joined a chat by an invite link
+	Members    []ChatInviteLinkMember `json:"members"`     // List of chat members, joined a chat via an invite link
 }
 
 // MessageType return the string telegram-type of ChatInviteLinkMembers
@@ -20,7 +20,7 @@ func (chatInviteLinkMembers *ChatInviteLinkMembers) MessageType() string {
 // NewChatInviteLinkMembers creates a new ChatInviteLinkMembers
 //
 // @param totalCount Approximate total count of chat members found
-// @param members List of chat members, joined a chat by an invite link
+// @param members List of chat members, joined a chat via an invite link
 func NewChatInviteLinkMembers(totalCount int32, members []ChatInviteLinkMember) *ChatInviteLinkMembers {
 	chatInviteLinkMembersTemp := ChatInviteLinkMembers{
 		tdCommon:   tdCommon{Type: "chatInviteLinkMembers"},
@@ -31,7 +31,7 @@ func NewChatInviteLinkMembers(totalCount int32, members []ChatInviteLinkMember) 
 	return &chatInviteLinkMembersTemp
 }
 
-// GetChatInviteLinkMembers Returns chat members joined a chat by an invite link. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
+// GetChatInviteLinkMembers Returns chat members joined a chat via an invite link. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
 // @param chatId Chat identifier
 // @param inviteLink Invite link for which to return chat members
 // @param offsetMember A chat member from which to return next chat members; pass null to get results from the beginning

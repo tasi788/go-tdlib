@@ -100,7 +100,7 @@ func (client *Client) GetTrendingStickerSets(offset int32, limit int32) (*Sticke
 	return &stickerSets, err
 }
 
-// GetAttachedStickerSets Returns a list of sticker sets attached to a file. Currently only photos and videos can have attached sticker sets
+// GetAttachedStickerSets Returns a list of sticker sets attached to a file. Currently, only photos and videos can have attached sticker sets
 // @param fileId File identifier
 func (client *Client) GetAttachedStickerSets(fileId int32) (*StickerSets, error) {
 	result, err := client.SendAndCatch(UpdateData{

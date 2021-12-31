@@ -141,7 +141,7 @@ func (client *Client) UploadFile(file InputFile, fileType FileType, priority int
 	return &fileDummy, err
 }
 
-// UploadStickerFile Uploads a PNG image with a sticker; returns the uploaded file
+// UploadStickerFile Uploads a file with a sticker; returns the uploaded file
 // @param userId Sticker file owner; ignored for regular users
 // @param sticker Sticker file to upload
 func (client *Client) UploadStickerFile(userId int64, sticker InputSticker) (*File, error) {

@@ -154,7 +154,7 @@ func (client *Client) SearchChatMessages(chatId int64, query string, senderId Me
 // @param offsetChatId The chat identifier of the last found message, or 0 for the first request
 // @param offsetMessageId The message identifier of the last found message, or 0 for the first request
 // @param limit The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
-// @param filter Additional filter for messages to search; pass null to search for all messages. Filters searchMessagesFilterCall, searchMessagesFilterMissedCall, searchMessagesFilterMention, searchMessagesFilterUnreadMention, searchMessagesFilterFailedToSend and searchMessagesFilterPinned are unsupported in this function
+// @param filter Additional filter for messages to search; pass null to search for all messages. Filters searchMessagesFilterMention, searchMessagesFilterUnreadMention, searchMessagesFilterFailedToSend and searchMessagesFilterPinned are unsupported in this function
 // @param minDate If not 0, the minimum date of the messages to return
 // @param maxDate If not 0, the maximum date of the messages to return
 func (client *Client) SearchMessages(chatList ChatList, query string, offsetDate int32, offsetChatId int64, offsetMessageId int64, limit int32, filter SearchMessagesFilter, minDate int32, maxDate int32) (*Messages, error) {
@@ -187,7 +187,7 @@ func (client *Client) SearchMessages(chatList ChatList, query string, offsetDate
 // SearchCallMessages Searches for call messages. Returns the results in reverse chronological order (i. e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib
 // @param fromMessageId Identifier of the message from which to search; use 0 to get results from the last message
 // @param limit The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit
-// @param onlyMissed If true, returns only messages with missed calls
+// @param onlyMissed If true, returns only messages with missed/declined calls
 func (client *Client) SearchCallMessages(fromMessageId int64, limit int32, onlyMissed bool) (*Messages, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":           "searchCallMessages",
@@ -272,7 +272,7 @@ func (client *Client) GetChatScheduledMessages(chatId int64) (*Messages, error) 
 	return &messages, err
 }
 
-// SendMessageAlbum Sends 2-10 messages grouped together into an album. Currently only audio, document, photo and video messages can be grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns sent messages
+// SendMessageAlbum Sends 2-10 messages grouped together into an album. Currently, only audio, document, photo and video messages can be grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns sent messages
 // @param chatId Target chat
 // @param messageThreadId If not 0, a message thread identifier in which the messages will be sent
 // @param replyToMessageId Identifier of a message to reply to or 0

@@ -148,7 +148,7 @@ func (authenticationCodeTypeCall *AuthenticationCodeTypeCall) GetAuthenticationC
 	return AuthenticationCodeTypeCallType
 }
 
-// AuthenticationCodeTypeFlashCall An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number from which the call was made is the code that should be entered automatically
+// AuthenticationCodeTypeFlashCall An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number that calls is the code that must be entered automatically
 type AuthenticationCodeTypeFlashCall struct {
 	tdCommon
 	Pattern string `json:"pattern"` // Pattern of the phone number from which the call will be made
@@ -176,7 +176,7 @@ func (authenticationCodeTypeFlashCall *AuthenticationCodeTypeFlashCall) GetAuthe
 	return AuthenticationCodeTypeFlashCallType
 }
 
-// AuthenticationCodeTypeMissedCall An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number from which the call was made is the code that should be entered manually by the user
+// AuthenticationCodeTypeMissedCall An authentication code is delivered by an immediately canceled call to the specified phone number. The last digits of the phone number that calls are the code that must be entered manually by the user
 type AuthenticationCodeTypeMissedCall struct {
 	tdCommon
 	PhoneNumberPrefix string `json:"phone_number_prefix"` // Prefix of the phone number from which the call will be made

@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// ChatJoinRequests Contains a list of chat join requests
+// ChatJoinRequests Contains a list of requests to join a chat
 type ChatJoinRequests struct {
 	tdCommon
 	TotalCount int32             `json:"total_count"` // Approximate total count of requests found
@@ -36,7 +36,7 @@ func NewChatJoinRequests(totalCount int32, requests []ChatJoinRequest) *ChatJoin
 // @param inviteLink Invite link for which to return join requests. If empty, all join requests will be returned. Requires administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links
 // @param query A query to search for in the first names, last names and usernames of the users to return
 // @param offsetRequest A chat join request from which to return next requests; pass null to get results from the beginning
-// @param limit The maximum number of chat join requests to return
+// @param limit The maximum number of requests to join the chat to return
 func (client *Client) GetChatJoinRequests(chatId int64, inviteLink string, query string, offsetRequest *ChatJoinRequest, limit int32) (*ChatJoinRequests, error) {
 	result, err := client.SendAndCatch(UpdateData{
 		"@type":          "getChatJoinRequests",

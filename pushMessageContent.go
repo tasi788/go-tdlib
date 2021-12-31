@@ -943,7 +943,7 @@ func (pushMessageContentChatDeleteMember *PushMessageContentChatDeleteMember) Ge
 	return PushMessageContentChatDeleteMemberType
 }
 
-// PushMessageContentChatJoinByLink A new member joined the chat by invite link
+// PushMessageContentChatJoinByLink A new member joined the chat via an invite link
 type PushMessageContentChatJoinByLink struct {
 	tdCommon
 }

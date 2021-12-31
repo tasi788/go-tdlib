@@ -139,7 +139,7 @@ func unmarshalInputMessageContent(rawMsg *json.RawMessage) (InputMessageContent,
 // InputMessageText A text message
 type InputMessageText struct {
 	tdCommon
-	Text                  *FormattedText `json:"text"`                     // Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
+	Text                  *FormattedText `json:"text"`                     // Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
 	DisableWebPagePreview bool           `json:"disable_web_page_preview"` // True, if rich web page previews for URLs in the message text must be disabled
 	ClearDraft            bool           `json:"clear_draft"`              // True, if a chat message draft must be deleted
 }
@@ -151,7 +151,7 @@ func (inputMessageText *InputMessageText) MessageType() string {
 
 // NewInputMessageText creates a new InputMessageText
 //
-// @param text Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
+// @param text Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually
 // @param disableWebPagePreview True, if rich web page previews for URLs in the message text must be disabled
 // @param clearDraft True, if a chat message draft must be deleted
 func NewInputMessageText(text *FormattedText, disableWebPagePreview bool, clearDraft bool) *InputMessageText {
@@ -1068,7 +1068,7 @@ type InputMessageForwarded struct {
 	FromChatId  int64               `json:"from_chat_id"`  // Identifier for the chat this forwarded message came from
 	MessageId   int64               `json:"message_id"`    // Identifier of the message to forward
 	InGameShare bool                `json:"in_game_share"` // True, if a game message is being shared from a launched game; applies only to game messages
-	CopyOptions *MessageCopyOptions `json:"copy_options"`  // Options to be used to copy content of the message without reference to the original sender; pass null to try to forward the message as usual
+	CopyOptions *MessageCopyOptions `json:"copy_options"`  // Options to be used to copy content of the message without reference to the original sender; pass null to forward the message as usual
 }
 
 // MessageType return the string telegram-type of InputMessageForwarded
@@ -1081,7 +1081,7 @@ func (inputMessageForwarded *InputMessageForwarded) MessageType() string {
 // @param fromChatId Identifier for the chat this forwarded message came from
 // @param messageId Identifier of the message to forward
 // @param inGameShare True, if a game message is being shared from a launched game; applies only to game messages
-// @param copyOptions Options to be used to copy content of the message without reference to the original sender; pass null to try to forward the message as usual
+// @param copyOptions Options to be used to copy content of the message without reference to the original sender; pass null to forward the message as usual
 func NewInputMessageForwarded(fromChatId int64, messageId int64, inGameShare bool, copyOptions *MessageCopyOptions) *InputMessageForwarded {
 	inputMessageForwardedTemp := InputMessageForwarded{
 		tdCommon:    tdCommon{Type: "inputMessageForwarded"},

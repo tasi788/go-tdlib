@@ -27,6 +27,7 @@ const (
 	TextEntityTypeItalicType         TextEntityTypeEnum = "textEntityTypeItalic"
 	TextEntityTypeUnderlineType      TextEntityTypeEnum = "textEntityTypeUnderline"
 	TextEntityTypeStrikethroughType  TextEntityTypeEnum = "textEntityTypeStrikethrough"
+	TextEntityTypeSpoilerType        TextEntityTypeEnum = "textEntityTypeSpoiler"
 	TextEntityTypeCodeType           TextEntityTypeEnum = "textEntityTypeCode"
 	TextEntityTypePreType            TextEntityTypeEnum = "textEntityTypePre"
 	TextEntityTypePreCodeType        TextEntityTypeEnum = "textEntityTypePreCode"
@@ -106,6 +107,11 @@ func unmarshalTextEntityType(rawMsg *json.RawMessage) (TextEntityType, error) {
 		var textEntityTypeStrikethrough TextEntityTypeStrikethrough
 		err := json.Unmarshal(*rawMsg, &textEntityTypeStrikethrough)
 		return &textEntityTypeStrikethrough, err
+
+	case TextEntityTypeSpoilerType:
+		var textEntityTypeSpoiler TextEntityTypeSpoiler
+		err := json.Unmarshal(*rawMsg, &textEntityTypeSpoiler)
+		return &textEntityTypeSpoiler, err
 
 	case TextEntityTypeCodeType:
 		var textEntityTypeCode TextEntityTypeCode
@@ -440,6 +446,31 @@ func NewTextEntityTypeStrikethrough() *TextEntityTypeStrikethrough {
 // GetTextEntityTypeEnum return the enum type of this object
 func (textEntityTypeStrikethrough *TextEntityTypeStrikethrough) GetTextEntityTypeEnum() TextEntityTypeEnum {
 	return TextEntityTypeStrikethroughType
+}
+
+// TextEntityTypeSpoiler A spoiler text. Not supported in secret chats
+type TextEntityTypeSpoiler struct {
+	tdCommon
+}
+
+// MessageType return the string telegram-type of TextEntityTypeSpoiler
+func (textEntityTypeSpoiler *TextEntityTypeSpoiler) MessageType() string {
+	return "textEntityTypeSpoiler"
+}
+
+// NewTextEntityTypeSpoiler creates a new TextEntityTypeSpoiler
+//
+func NewTextEntityTypeSpoiler() *TextEntityTypeSpoiler {
+	textEntityTypeSpoilerTemp := TextEntityTypeSpoiler{
+		tdCommon: tdCommon{Type: "textEntityTypeSpoiler"},
+	}
+
+	return &textEntityTypeSpoilerTemp
+}
+
+// GetTextEntityTypeEnum return the enum type of this object
+func (textEntityTypeSpoiler *TextEntityTypeSpoiler) GetTextEntityTypeEnum() TextEntityTypeEnum {
+	return TextEntityTypeSpoilerType
 }
 
 // TextEntityTypeCode Text that must be formatted as if inside a code HTML tag
