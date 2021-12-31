@@ -215,13 +215,13 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 			ViewCount    int32  `json:"view_count"`
 			ForwardCount int32  `json:"forward_count"`
 			ReplyInfo    struct {
-				Type           string `json:"@type"`
-				ReplyCount     int32  `json:"reply_count"`
-				RecentRepliers []struct {
+				Type             string `json:"@type"`
+				ReplyCount       int32  `json:"reply_count"`
+				RecentReplierIds []struct {
 					Type   string `json:"@type"`
 					ChatID int64  `json:"chat_id"`
 					UserID int64  `json:"user_id"`
-				} `json:"recent_repliers"`
+				} `json:"recent_repliers_ids"`
 				LastReadInboxMessageID  int64 `json:"last_read_inbox_message_id"`
 				LastReadOutboxMessageID int64 `json:"last_read_outbox_message_id"`
 				LastMessageID           int64 `json:"last_message_id"`
@@ -235,15 +235,15 @@ func (message *Message) UnmarshalJSON(b []byte) error {
 
 		message.InteractionInfo = NewMessageInteractionInfo(infoObj.ViewCount, infoObj.ForwardCount, nil)
 		message.InteractionInfo.ReplyInfo = NewMessageReplyInfo(infoObj.ReplyInfo.ReplyCount, nil, infoObj.ReplyInfo.LastReadInboxMessageID, infoObj.ReplyInfo.LastReadOutboxMessageID, infoObj.ReplyInfo.LastMessageID)
-		for _, reply := range infoObj.ReplyInfo.RecentRepliers {
+		for _, reply := range infoObj.ReplyInfo.RecentReplierIds {
 			switch reply.Type {
 			case "messageSenderUser":
 				{
-					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderUser(reply.UserID))
+					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderUser(reply.UserID))
 				}
 			case "messageSenderChat":
 				{
-					message.InteractionInfo.ReplyInfo.RecentRepliers = append(message.InteractionInfo.ReplyInfo.RecentRepliers, NewMessageSenderChat(reply.ChatID))
+					message.InteractionInfo.ReplyInfo.RecentReplierIds = append(message.InteractionInfo.ReplyInfo.RecentReplierIds, NewMessageSenderChat(reply.ChatID))
 				}
 			default:
 				return fmt.Errorf("Error unmarshaling, unknown messageSender type:" + reply.Type)
