@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/c0re100/go-tdlib"
+	"github.com/tasi788/go-tdlib"
 )
 
 func main() {
