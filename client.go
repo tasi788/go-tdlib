@@ -4,7 +4,7 @@ package tdlib
 //#cgo darwin CFLAGS: -I/usr/local/include
 //#cgo windows CFLAGS: -IE:/src/tdlib -IE:/src/tdlib/build
 //#cgo linux LDFLAGS: -L/usr/local/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdapi -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
-//#cgo darwin LDFLAGS: -L/usr/local/lib -L/usr/local/opt/openssl/lib -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdapi -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
+//#cgo darwin LDFLAGS: -L/usr/local/lib -L/opt/homebrew/opt/openssl@3 -ltdjson_static -ltdjson_private -ltdclient -ltdcore -ltdapi -ltdactor -ltddb -ltdsqlite -ltdnet -ltdutils -lstdc++ -lssl -lcrypto -ldl -lz -lm
 //#cgo windows LDFLAGS: -LE:/src/tdlib/build/Release -ltdjson
 //#include <stdlib.h>
 //#include <td/telegram/td_json_client.h>
